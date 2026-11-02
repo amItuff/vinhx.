@@ -1,627 +1,146 @@
-:root {
-  --card-bg: rgba(20, 22, 27, 0.65);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --text-main: #f2f3f5;
-  --text-sub: #949ba4;
-  --discord-green: #248046;
-  --discord-green-hover: #1a6334;
-  --fb-brand: #1877f2;
+/* =========================================================================
+   1. ĐỒNG BỒ THỜI GIAN VIỆT NAM (GMT+7)
+   ========================================================================= */
+function updateVNClock() {
+  const now = new Date();
+  const timeStr = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  }).format(now);
+  document.getElementById('vn-clock-display').textContent = `VN (GMT+7) ${timeStr}`;
+}
+setInterval(updateVNClock, 1000);
+updateVNClock();
+
+/* =========================================================================
+   2. TỰ ĐỘNG PHÁT NHẠC VÀ ĐIỀU KHIỂN SOUNDCLOUD WIDGET
+   ========================================================================= */
+const iframe = document.getElementById('sc-hidden-frame');
+const widget = SC.Widget(iframe);
+let maxTrackMs = 162000;
+let soundStarted = false;
+
+function formatSec(ms) {
+  const total = Math.floor(ms / 1000);
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
+// Khi widget sẵn sàng
+widget.bind(SC.Widget.Events.READY, () => {
+  widget.setVolume(85);
 
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-}
+  widget.getDuration((d) => {
+    if (d > 0) {
+      maxTrackMs = d;
+      document.getElementById('time-max').textContent = formatSec(d);
+    }
+  });
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: var(--text-main);
-  background-color: #0b0c0e;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
+  widget.getCurrentSound((sound) => {
+    if (sound?.artwork_url) {
+      const art = sound.artwork_url.replace('-large', '-t500x500');
+      document.getElementById('sc-thumb').src = art;
+      document.getElementById('disk-image').src = art;
+    }
+  });
+});
 
-/* Tối ưu render phần cứng để mượt mà không tụt FPS */
-.bg-layer, .glass-card, .audio-player-panel, .avatar-face {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
+// Chạm vào Enter Screen để kích hoạt phát nhạc ngay
+document.getElementById('enter-screen').addEventListener('click', function () {
+  this.classList.add('dismissed');
+  soundStarted = true;
+  widget.play();
+});
 
-/* Background GIF mượt */
-.bg-layer {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  background: url('https://i.pinimg.com/originals/b9/4e/18/b94e18ea40626f10bc67eaba042ec415.gif') center center / cover no-repeat;
-  will-change: transform;
-}
+// Bắt tương tác chạm đầu tiên trên Mobile phòng trường hợp lướt thẳng
+['touchstart', 'click', 'scroll'].forEach((event) => {
+  window.addEventListener(event, () => {
+    if (!soundStarted) {
+      soundStarted = true;
+      document.getElementById('enter-screen').classList.add('dismissed');
+      widget.play();
+    }
+  }, { once: true, passive: true });
+});
 
-.bg-vignette {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(circle at center, rgba(11, 13, 16, 0.4) 0%, rgba(6, 7, 9, 0.88) 100%);
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
-}
+widget.bind(SC.Widget.Events.PLAY, () => {
+  document.getElementById('ctrl-play-icon').className = 'fa-solid fa-pause';
+  document.getElementById('disk-image').classList.remove('paused');
+  document.querySelector('.disk-container').classList.add('playing');
+});
 
-/* Màn hình Enter Screen */
-#enter-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  background: rgba(8, 9, 12, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-#enter-screen.dismissed {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.enter-box {
-  text-align: center;
-}
-.enter-title {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-style: italic;
-  font-size: 2.2rem;
-  letter-spacing: 2px;
-  color: #fff;
-  animation: glowPulse 2s infinite ease-in-out;
-}
-.enter-sub {
-  font-size: 0.72rem;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--text-sub);
-  margin-top: 6px;
-  font-family: 'JetBrains Mono', monospace;
-}
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.45; transform: scale(0.99); }
-  50% { opacity: 1; transform: scale(1.02); }
-}
+widget.bind(SC.Widget.Events.PAUSE, () => {
+  document.getElementById('ctrl-play-icon').className = 'fa-solid fa-play';
+  document.getElementById('disk-image').classList.add('paused');
+  document.querySelector('.disk-container').classList.remove('playing');
+});
 
-/* ================= HERO SECTION ================= */
-.hero-view {
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  text-align: center;
-  padding: 20px;
-}
+widget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+  document.getElementById('time-curr').textContent = formatSec(data.currentPosition);
+  if (maxTrackMs > 0) {
+    const pct = (data.currentPosition / maxTrackMs) * 100;
+    document.getElementById('progress-bar-val').style.width = `${Math.min(100, pct)}%`;
+  }
+});
 
-.avatar-orbit {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+widget.bind(SC.Widget.Events.FINISH, () => {
+  widget.seekTo(0);
+  widget.play();
+});
 
-.avatar-face {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.85);
-  position: relative;
-  z-index: 2;
-  background: #111214;
-}
+document.getElementById('ctrl-play').addEventListener('click', () => widget.toggle());
+document.getElementById('ctrl-prev').addEventListener('click', () => { widget.seekTo(0); widget.play(); });
+document.getElementById('ctrl-next').addEventListener('click', () => { widget.seekTo(0); widget.play(); });
 
-.dark-aura {
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.7) 0%, rgba(147, 51, 234, 0.25) 60%, transparent 80%);
-  filter: blur(5px);
-  z-index: 1;
-  animation: auraAnim 3s infinite alternate ease-in-out;
-}
-@keyframes auraAnim {
-  0% { transform: scale(0.96); opacity: 0.55; }
-  100% { transform: scale(1.05); opacity: 0.95; }
-}
+document.getElementById('progress-bar-slot').addEventListener('click', function (e) {
+  const rect = this.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  widget.seekTo(ratio * maxTrackMs);
+});
 
-/* Badge 10 năm Discord trên Avatar */
-.ten-year-badge-bubble {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  z-index: 10;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #111214;
-  border: 2px solid #f23f43;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 10px rgba(242, 63, 67, 0.7);
-}
-.badge-num {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
-}
+document.getElementById('vol-range').addEventListener('input', function () {
+  widget.setVolume(Number(this.value));
+});
 
-.hero-name {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-style: italic;
-  font-size: 3.8rem;
-  font-weight: 400;
-  line-height: 1;
-  color: #ffffff;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.75);
-  margin-bottom: 8px;
+/* =========================================================================
+   3. TỰ ĐỘNG ĐỒNG BỘ AVATAR TỪ DISCORD ID: 1054712893037355018
+   ========================================================================= */
+const DISCORD_USER_ID = '1054712893037355018';
+async function syncDiscordAvatar() {
+  try {
+    const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data?.discord_user?.avatar) {
+        const hash = json.data.discord_user.avatar;
+        const ext = hash.startsWith('a_') ? 'gif' : 'png';
+        const url = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${hash}.${ext}?size=256`;
+        document.getElementById('main-avatar').src = url;
+        document.getElementById('card-avatar').src = url;
+      }
+    }
+  } catch (_) {}
 }
+syncDiscordAvatar();
 
-.hero-tagline {
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.65);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 500;
-  margin-bottom: 22px;
-}
-
-.social-cluster {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.social-circle {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.social-circle:hover {
-  background: rgba(255, 255, 255, 0.25);
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.scroll-down-hint {
-  position: absolute;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 0.65rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-family: 'JetBrains Mono', monospace;
-  transition: color 0.2s;
-}
-.scroll-down-hint:hover {
-  color: #fff;
-}
-.scroll-down-hint i {
-  animation: floatDown 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
-}
-@keyframes floatDown {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(5px); }
-}
-
-/* ================= CARDS SECTION ================= */
-.cards-view {
-  min-height: 100vh;
-  max-width: 490px;
-  margin: 0 auto;
-  padding: 40px 16px 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 12px;
-}
-
-.glass-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--card-border);
-  border-radius: 14px;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
-}
-.glass-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.card-body-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-  flex: 1;
-}
-
-.avatar-mini-wrap {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-}
-.avatar-mini {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #111214;
-}
-
-.status-indicator {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 2.5px solid #14161b;
-}
-.status-indicator.dnd {
-  background-color: #f23f43;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.status-indicator.dnd::after {
-  content: '';
-  width: 6px;
-  height: 2px;
-  background-color: #fff;
-  border-radius: 1px;
-}
-
-.fb-logo-brand {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #1877f2, #0d65d9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 1.75rem;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(24, 119, 242, 0.35);
-}
-
-.square-thumb {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.info-block {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.category-label {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.user-headline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.user-display {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-.discord-subline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 2px;
-}
-.handle-name {
-  font-size: 0.76rem;
-  color: var(--text-sub);
-}
-
-/* Dải badge Discord dùng ảnh thật */
-.guild-tag-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  padding: 3px 7px;
-}
-.tag-icon {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-  display: block;
-  pointer-events: none;
-}
-
-.title-bold {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.sub-muted {
-  font-size: 0.76rem;
-  color: var(--text-sub);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.discord-btn {
-  background-color: var(--discord-green);
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  padding: 7px 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  flex-shrink: 0;
-  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.discord-btn:hover {
-  background-color: var(--discord-green-hover);
-}
-
-/* ================= AUDIO PLAYER ================= */
-.audio-player-panel {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 4px;
-}
-
-.disk-container {
-  position: relative;
-  width: 62px;
-  height: 62px;
-  flex-shrink: 0;
-}
-.disk-spinner {
-  width: 62px;
-  height: 62px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  animation: spinDisk 12s linear infinite;
-  animation-play-state: running;
-}
-.disk-spinner.paused {
-  animation-play-state: paused;
-}
-@keyframes spinDisk {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.audio-bars {
-  position: absolute;
-  bottom: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 10px;
-  background: rgba(10, 11, 14, 0.9);
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-.bar {
-  width: 2px;
-  height: 3px;
-  background: #fff;
-  border-radius: 1px;
-}
-.playing .bar:nth-child(1) { animation: barHop 0.6s infinite ease-in-out; }
-.playing .bar:nth-child(2) { animation: barHop 0.8s infinite ease-in-out 0.2s; }
-.playing .bar:nth-child(3) { animation: barHop 0.5s infinite ease-in-out 0.4s; }
-@keyframes barHop {
-  0%, 100% { height: 3px; }
-  50% { height: 9px; }
-}
-
-.player-controls {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.track-headline {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-style: italic;
-  font-size: 1.25rem;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.progress-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  color: var(--text-sub);
-}
-
-.progress-bar-slot {
-  flex: 1;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
-  cursor: pointer;
-}
-.progress-bar-val {
-  height: 100%;
-  width: 0%;
-  background: #ffffff;
-  border-radius: 3px;
-}
-
-.controls-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 2px;
-}
-.buttons-pack {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.tool-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.68rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.tool-btn.play-active {
-  width: 32px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.18);
-}
-.tool-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.volume-tool {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  max-width: 140px;
-  color: var(--text-sub);
-  font-size: 0.68rem;
-}
-.vol-range {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-  outline: none;
-  cursor: pointer;
-}
-.vol-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #fff;
-  cursor: pointer;
-}
-
-/* ================= VN GMT+7 HUD ================= */
-.vn-clock-badge {
-  position: fixed;
-  bottom: 16px;
-  left: 18px;
-  z-index: 50;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  pointer-events: none;
-}
-
-#sc-hidden-frame {
-  position: fixed;
-  width: 1px;
-  height: 1px;
-  bottom: -10px;
-  left: -10px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Tối ưu Mobile */
-@media (max-width: 600px) {
-  .hero-name { font-size: 3.2rem; }
-  .cards-view { padding: 20px 14px 70px; }
-  .vn-clock-badge { bottom: 12px; left: 14px; font-size: 0.65rem; }
-}
+/* =========================================================================
+   4. CHỐNG COPY VÀ BẢO VỆ SOURCE CODE
+   ========================================================================= */
+if (window.top !== window.self) window.top.location = window.self.location;
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('keydown', (e) => {
+  const k = e.key?.toLowerCase();
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(k)) ||
+    (e.ctrlKey && ['u', 's', 'c', 'a', 'p'].includes(k))
+  ) {
+    e.preventDefault();
+    return false;
+  }
+});
