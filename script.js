@@ -78,7 +78,6 @@ document.getElementById('enter-screen').addEventListener('click', function () {
   }, { once: true, passive: true });
 });
 
-// CHỈ XOAY ĐĨA KHI SOUNDCLOUD THỰC SỰ ĐANG PHÁT ÂM THANH
 widget.bind(SC.Widget.Events.PLAY, () => {
   playIcon.className = 'fa-solid fa-pause';
   diskImage.classList.add('running');
@@ -119,7 +118,14 @@ document.getElementById('vol-range').addEventListener('input', function () {
 });
 
 /* =========================================================================
-   4. CHỐNG COPY VÀ BẢO VỆ SOURCE CODE
+   4. GIỮ CỐ ĐỊNH AVATAR BẠN YÊU CẦU (KHÔNG BỊ LỖI ĐÈ AVATAR MẶC ĐỊNH)
+   ========================================================================= */
+const FIXED_AVATAR = "https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg";
+document.getElementById('main-avatar').src = FIXED_AVATAR;
+document.getElementById('card-avatar').src = FIXED_AVATAR;
+
+/* =========================================================================
+   5. CHỐNG COPY VÀ BẢO VỆ SOURCE CODE
    ========================================================================= */
 if (window.top !== window.self) window.top.location = window.self.location;
 document.addEventListener('contextmenu', (e) => e.preventDefault());
