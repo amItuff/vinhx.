@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <!-- Background GIF và lớp phủ tối ưu (không tụt FPS) -->
+  <!-- Background GIF và lớp phủ tối ưu -->
   <div class="bg-layer"></div>
   <div class="bg-vignette"></div>
 
@@ -33,7 +33,8 @@
   <main class="hero-view">
     <div class="avatar-orbit">
       <div class="dark-aura"></div>
-      <img id="main-avatar" class="avatar-face" src="https://images.squarespace-cdn.com/content/v1/54fc8146e4b02a22841f4df7/1598462744654-K3B5K62R45A3S7C71PZP/Patrick_Star_in_hoodie.png" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" alt="vinhx" />
+      <!-- Avatar mới của bạn -->
+      <img id="main-avatar" class="avatar-face" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="vinhx" />
     </div>
 
     <h1 class="hero-name">vinhx</h1>
@@ -51,7 +52,7 @@
       </a>
     </div>
 
-    <!-- Nút cuộn dùng JS để KHÔNG bị hiện #cards-view trên URL -->
+    <!-- Nút cuộn không bị dính #cards-view trên URL -->
     <div id="scroll-hint-btn" class="scroll-down-hint">
       <span>SCROLL</span>
       <i class="fa-solid fa-chevron-down"></i>
@@ -61,11 +62,12 @@
   <!-- ================= TẦNG 2: CARDS & NHẠC ================= -->
   <section id="cards-view" class="cards-view">
 
-    <!-- THẺ 1: DISCORD PROFILE ĐẦY ĐỦ 4 BADGE CHUẨN ACC -->
+    <!-- THẺ 1: DISCORD PROFILE VỚI 4 BADGE ĐỒ HỌA CHUẨN ACC -->
     <div class="glass-card">
       <div class="card-body-left">
         <div class="avatar-mini-wrap">
-          <img id="card-avatar" class="avatar-mini" src="https://images.squarespace-cdn.com/content/v1/54fc8146e4b02a22841f4df7/1598462744654-K3B5K62R45A3S7C71PZP/Patrick_Star_in_hoodie.png" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" alt="vinhx" />
+          <!-- Avatar nhỏ mới của bạn -->
+          <img id="card-avatar" class="avatar-mini" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="vinhx" />
           <div class="status-indicator dnd" title="Do Not Disturb"></div>
         </div>
 
@@ -76,7 +78,7 @@
             <span class="handle-name">nntv_1.</span>
           </div>
 
-          <!-- ĐẦY ĐỦ 4 BADGE THEO ĐÚNG LINK RAW TRÊN GITHUB -->
+          <!-- ĐẦY ĐỦ 4 BADGE THEO ĐÚNG LINK TRÊN GITHUB -->
           <div class="badges-row">
             <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/subscriptions/badges/silver.png" alt="Silver Nitro" title="Nitro Silver" />
             <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/gifting/legend.png" alt="Legend Gift" title="Gifting Legend" />
@@ -141,7 +143,7 @@
         <div class="controls-toolbar">
           <div class="buttons-pack">
             <button id="ctrl-prev" class="tool-btn" title="Restart"><i class="fa-solid fa-backward-step"></i></button>
-            <button id="ctrl-play" class="tool-btn play-active" title="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-play"></i></button>
+            <button id="ctrl-play" class="tool-btn play-active" title="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-pause"></i></button>
             <button id="ctrl-next" class="tool-btn" title="Loop"><i class="fa-solid fa-forward-step"></i></button>
           </div>
 
