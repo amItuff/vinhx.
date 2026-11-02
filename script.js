@@ -1,5 +1,5 @@
 /* =========================================================================
-   1. ĐỒNG BỒ THỜI GIAN VIỆT NAM (GMT+7)
+   1. ĐỒNG BỘ THỜI GIAN VIỆT NAM (GMT+7)
    ========================================================================= */
 function updateVNClock() {
   const now = new Date();
@@ -16,10 +16,21 @@ setInterval(updateVNClock, 1000);
 updateVNClock();
 
 /* =========================================================================
-   2. TỰ ĐỘNG PHÁT NHẠC VÀ ĐIỀU KHIỂN SOUNDCLOUD WIDGET
+   2. CUỘN TRANG MƯỢT KHÔNG DÍNH HASH #CARDS-VIEW TRÊN URL
+   ========================================================================= */
+document.getElementById('scroll-hint-btn').addEventListener('click', () => {
+  document.getElementById('cards-view').scrollIntoView({ behavior: 'smooth' });
+});
+
+/* =========================================================================
+   3. ĐIỀU KHIỂN SOUNDCLOUD & CHỈ XOAY ĐĨA KHI PHÁT THẬT
    ========================================================================= */
 const iframe = document.getElementById('sc-hidden-frame');
 const widget = SC.Widget(iframe);
+const diskImage = document.getElementById('disk-image');
+const diskBox = document.querySelector('.disk-container');
+const playIcon = document.getElementById('ctrl-play-icon');
+
 let maxTrackMs = 162000;
 let soundStarted = false;
 
@@ -30,7 +41,6 @@ function formatSec(ms) {
   return `${m}:${s < 10 ? '0' : ''}${s}`;
 }
 
-// Khi widget sẵn sàng
 widget.bind(SC.Widget.Events.READY, () => {
   widget.setVolume(85);
 
@@ -45,20 +55,20 @@ widget.bind(SC.Widget.Events.READY, () => {
     if (sound?.artwork_url) {
       const art = sound.artwork_url.replace('-large', '-t500x500');
       document.getElementById('sc-thumb').src = art;
-      document.getElementById('disk-image').src = art;
+      diskImage.src = art;
     }
   });
 });
 
-// Chạm vào Enter Screen để kích hoạt phát nhạc ngay
+// Chạm để vào trang và phát nhạc
 document.getElementById('enter-screen').addEventListener('click', function () {
   this.classList.add('dismissed');
   soundStarted = true;
   widget.play();
 });
 
-// Bắt tương tác chạm đầu tiên trên Mobile phòng trường hợp lướt thẳng
-['touchstart', 'click', 'scroll'].forEach((event) => {
+// Bắt tương tác chạm phòng trường hợp người dùng lướt thẳng
+['touchstart', 'click'].forEach((event) => {
   window.addEventListener(event, () => {
     if (!soundStarted) {
       soundStarted = true;
@@ -68,16 +78,17 @@ document.getElementById('enter-screen').addEventListener('click', function () {
   }, { once: true, passive: true });
 });
 
+// CHỈ XOAY ĐĨA KHI SOUNDCLOUD THỰC SỰ ĐANG PHÁT ÂM THANH
 widget.bind(SC.Widget.Events.PLAY, () => {
-  document.getElementById('ctrl-play-icon').className = 'fa-solid fa-pause';
-  document.getElementById('disk-image').classList.remove('paused');
-  document.querySelector('.disk-container').classList.add('playing');
+  playIcon.className = 'fa-solid fa-pause';
+  diskImage.classList.add('running');
+  diskBox.classList.add('playing');
 });
 
 widget.bind(SC.Widget.Events.PAUSE, () => {
-  document.getElementById('ctrl-play-icon').className = 'fa-solid fa-play';
-  document.getElementById('disk-image').classList.add('paused');
-  document.querySelector('.disk-container').classList.remove('playing');
+  playIcon.className = 'fa-solid fa-play';
+  diskImage.classList.remove('running');
+  diskBox.classList.remove('playing');
 });
 
 widget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
@@ -106,27 +117,6 @@ document.getElementById('progress-bar-slot').addEventListener('click', function 
 document.getElementById('vol-range').addEventListener('input', function () {
   widget.setVolume(Number(this.value));
 });
-
-/* =========================================================================
-   3. TỰ ĐỘNG ĐỒNG BỘ AVATAR TỪ DISCORD ID: 1054712893037355018
-   ========================================================================= */
-const DISCORD_USER_ID = '1054712893037355018';
-async function syncDiscordAvatar() {
-  try {
-    const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
-    if (res.ok) {
-      const json = await res.json();
-      if (json.success && json.data?.discord_user?.avatar) {
-        const hash = json.data.discord_user.avatar;
-        const ext = hash.startsWith('a_') ? 'gif' : 'png';
-        const url = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${hash}.${ext}?size=256`;
-        document.getElementById('main-avatar').src = url;
-        document.getElementById('card-avatar').src = url;
-      }
-    }
-  } catch (_) {}
-}
-syncDiscordAvatar();
 
 /* =========================================================================
    4. CHỐNG COPY VÀ BẢO VỆ SOURCE CODE
