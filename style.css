@@ -405,7 +405,7 @@ body {
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.15);
   animation: spinDisk 12s linear infinite;
-  animation-play-state: paused; /* MẶC ĐỊNH DỪNG, CHỈ XOAY KHI NHẠC ĐANG PHÁT THẬT */
+  animation-play-state: paused;
   will-change: transform;
 }
 .disk-spinner.running {
@@ -569,6 +569,24 @@ body {
   left: -10px;
   opacity: 0;
   pointer-events: none;
+}
+
+/* ================= ẨN TRIỆT ĐỂ HUY HIỆU & POPUP NETLIFY (KHÔNG CẦN PRO) ================= */
+[data-netlify-drawer],
+#netlify-drawer,
+.netlify-badge,
+div[id*="netlify"],
+div[class*="netlify"],
+iframe[src*="netlify.com"],
+a[href*="netlify.com"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  z-index: -99999 !important;
 }
 
 @media (max-width: 600px) {
