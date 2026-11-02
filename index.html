@@ -6,21 +6,18 @@
   <meta name="referrer" content="no-referrer" />
   <title>vinhx</title>
 
-  <!-- Google Fonts: Hỗ trợ tiếng Việt đầy đủ -->
+  <!-- Google Fonts tiếng Việt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap&subset=latin,vietnamese" rel="stylesheet">
   
-  <!-- FontAwesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <!-- File CSS riêng -->
   <link rel="stylesheet" href="style.css" />
-  <!-- SoundCloud Widget API -->
   <script src="https://w.soundcloud.com/player/api.js"></script>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
 
-  <!-- Màn hình chạm kích hoạt âm thanh tự phát -->
+  <!-- Màn hình click để vào web và phát nhạc -->
   <div id="enter-screen">
     <div class="enter-box">
       <div class="enter-title">click to enter...</div>
@@ -28,20 +25,15 @@
     </div>
   </div>
 
-  <!-- Background GIF và Overlay chống lóa -->
+  <!-- Background GIF & Overlay -->
   <div class="bg-layer"></div>
   <div class="bg-vignette"></div>
 
-  <!-- ================= TẦNG 1: HERO ================= -->
+  <!-- ================= TẦNG 1: HERO (ĐÃ XÓA SỐ 10 TRÊN ĐẦU) ================= -->
   <main class="hero-view">
     <div class="avatar-orbit">
       <div class="dark-aura"></div>
       <img id="main-avatar" class="avatar-face" src="https://images.squarespace-cdn.com/content/v1/54fc8146e4b02a22841f4df7/1598462744654-K3B5K62R45A3S7C71PZP/Patrick_Star_in_hoodie.png" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" alt="vinhx" />
-      
-      <!-- Badge 10 năm góc 1 giờ trên avatar -->
-      <div class="ten-year-badge-bubble" title="10 Years on Discord">
-        <span class="badge-num">10</span>
-      </div>
     </div>
 
     <h1 class="hero-name">vinhx</h1>
@@ -65,10 +57,10 @@
     </a>
   </main>
 
-  <!-- ================= TẦNG 2: THẺ CARDS & PLAYER ================= -->
+  <!-- ================= TẦNG 2: CARDS & NHẠC ================= -->
   <section id="cards-view" class="cards-view">
 
-    <!-- THẺ 1: DISCORD PROFILE CHUẨN TỪNG CHI TIẾT -->
+    <!-- THẺ 1: DISCORD PROFILE VỚI 4 HUY HIỆU ĐỒ HỌA CHUẨN -->
     <div class="glass-card">
       <div class="card-body-left">
         <div class="avatar-mini-wrap">
@@ -80,24 +72,22 @@
           <span class="category-label">DISCORD</span>
           <div class="user-headline">
             <span class="user-display">vinhx</span>
+            <span class="handle-name">nntv_1.</span>
           </div>
 
-          <div class="discord-subline">
-            <span class="handle-name">nntv_1.</span>
-            <!-- Dải Clan Tag Pack Icons chuẩn theo hồ sơ: Turbo, Gift, Sword, Gamepad -->
-            <div class="guild-tag-badge">
-              <span class="tag-icon" title="Turbo">🛞</span>
-              <span class="tag-icon" title="Gift">🎁</span>
-              <span class="tag-icon" title="Sword">🗡️</span>
-              <span class="tag-icon" title="Gamepad">🎮</span>
-            </div>
+          <!-- DÃY HUY HIỆU CHUẨN TÀI KHOẢN CỦA BẠN (ẢNH THẬT, KHÔNG DÙNG EMOJI) -->
+          <div class="badges-row">
+            <img class="badge-icon" src="silver.png" onerror="this.src='https://cdn.jsdelivr.net/gh/mezotv/discord-badges@main/assets/nitro-tiers/silver.png'" title="Clan Tag / Turbo" alt="Turbo" />
+            <img class="badge-icon" src="legend.png" onerror="this.src='https://cdn.jsdelivr.net/gh/mezotv/discord-badges@main/assets/gifting/legend.png'" title="Gifting Legend" alt="Legend" />
+            <img class="badge-icon" src="eternal.svg" onerror="this.src='https://cdn.jsdelivr.net/gh/mezotv/discord-badges@main/assets/game-time/eternal.svg'" title="Game Time: Eternal (5000h+)" alt="Eternal" />
+            <img class="badge-icon" src="universalist.svg" onerror="this.src='https://cdn.jsdelivr.net/gh/mezotv/discord-badges@main/assets/game-variety/universalist.svg'" title="Game Variety: Universalist" alt="Universalist" />
           </div>
         </div>
       </div>
       <a href="https://discord.com/users/1054712893037355018" target="_blank" class="discord-btn">PROFILE</a>
     </div>
 
-    <!-- THẺ 2: HOẠT ĐỘNG SOUNDCLOUD -->
+    <!-- THẺ 2: SOUNDCLOUD ACTIVITY -->
     <div class="glass-card">
       <div class="card-body-left">
         <img id="sc-thumb" class="square-thumb" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Track Art" />
@@ -124,7 +114,7 @@
       <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" class="discord-btn">CONNECT</a>
     </div>
 
-    <!-- TRÌNH PHÁT NHẠC CUSTOM -->
+    <!-- CUSTOM AUDIO PLAYER ĐỒNG BỘ SOUNDCLOUD -->
     <div class="audio-player-panel">
       <div class="disk-container">
         <img id="disk-image" class="disk-spinner" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Disk" />
@@ -178,7 +168,6 @@
     src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/parsg/par-sg-cigarette-ft-cigar&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false">
   </iframe>
 
-  <!-- File Script riêng -->
   <script src="script.js"></script>
 </body>
 </html>
