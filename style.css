@@ -382,22 +382,15 @@ body {
   color: var(--text-sub);
 }
 
-/* Dải badge Discord dùng ảnh thật */
 .guild-tag-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 3px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  padding: 3px 7px;
-}
-.tag-icon {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-  display: block;
-  pointer-events: none;
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-size: 0.65rem;
 }
 
 .title-bold {
