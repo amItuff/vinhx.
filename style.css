@@ -1,5 +1,5 @@
 :root {
-  --card-bg: rgba(20, 22, 27, 0.65);
+  --card-bg: rgba(22, 24, 30, 0.78);
   --card-border: rgba(255, 255, 255, 0.08);
   --text-main: #f2f3f5;
   --text-sub: #949ba4;
@@ -31,43 +31,35 @@ body {
   min-height: 100vh;
 }
 
-/* Tăng tốc render bằng card đồ họa GPU */
-.bg-layer, .glass-card, .audio-player-panel, .avatar-face {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
+/* Background GIF mượt, tách riêng thread render */
 .bg-layer {
   position: fixed;
   inset: 0;
   z-index: -2;
   background: url('https://i.pinimg.com/originals/b9/4e/18/b94e18ea40626f10bc67eaba042ec415.gif') center center / cover no-repeat;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
 }
 
+/* Lớp phủ điện ảnh - bỏ blur toàn màn hình để chống tụt khung hình */
 .bg-vignette {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle at center, rgba(11, 13, 16, 0.4) 0%, rgba(6, 7, 9, 0.88) 100%);
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
+  background: radial-gradient(circle at center, rgba(11, 13, 16, 0.45) 0%, rgba(6, 7, 9, 0.92) 100%);
 }
 
-/* Màn hình Enter Screen kích hoạt âm thanh */
+/* Màn hình Enter Screen */
 #enter-screen {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background: rgba(8, 9, 12, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(8, 9, 12, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 #enter-screen.dismissed {
   opacity: 0;
@@ -83,7 +75,6 @@ body {
   font-size: 2.2rem;
   letter-spacing: 2px;
   color: #fff;
-  animation: glowPulse 2s infinite ease-in-out;
 }
 .enter-sub {
   font-size: 0.72rem;
@@ -92,10 +83,6 @@ body {
   color: var(--text-sub);
   margin-top: 6px;
   font-family: 'JetBrains Mono', monospace;
-}
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.45; transform: scale(0.99); }
-  50% { opacity: 1; transform: scale(1.02); }
 }
 
 /* ================= HERO SECTION ================= */
@@ -136,14 +123,8 @@ body {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.7) 0%, rgba(147, 51, 234, 0.25) 60%, transparent 80%);
-  filter: blur(5px);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(147, 51, 234, 0.2) 60%, transparent 80%);
   z-index: 1;
-  animation: auraAnim 3s infinite alternate ease-in-out;
-}
-@keyframes auraAnim {
-  0% { transform: scale(0.96); opacity: 0.55; }
-  100% { transform: scale(1.05); opacity: 0.95; }
 }
 
 .hero-name {
@@ -184,7 +165,7 @@ body {
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   font-size: 0.95rem;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 .social-circle:hover {
   background: rgba(255, 255, 255, 0.25);
@@ -205,15 +186,15 @@ body {
   font-size: 0.65rem;
   letter-spacing: 3px;
   text-transform: uppercase;
-  text-decoration: none;
   font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
   transition: color 0.2s;
 }
 .scroll-down-hint:hover {
   color: #fff;
 }
 .scroll-down-hint i {
-  animation: floatDown 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  animation: floatDown 1.8s infinite ease-in-out;
 }
 @keyframes floatDown {
   0%, 100% { transform: translateY(0); }
@@ -234,8 +215,6 @@ body {
 
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--card-border);
   border-radius: 14px;
   padding: 14px 16px;
@@ -243,12 +222,13 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  contain: paint;
 }
 .glass-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .card-body-left {
@@ -348,7 +328,7 @@ body {
   color: var(--text-sub);
 }
 
-/* KHỐI HIỂN THỊ 4 HUY HIỆU ĐỒ HỌA CHUẨN DISCORD */
+/* DÃY 4 HUY HIỆU ĐỒ HỌA CHUẨN DISCORD */
 .badges-row {
   display: flex;
   align-items: center;
@@ -362,12 +342,12 @@ body {
   object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s ease;
   cursor: pointer;
+  flex-shrink: 0;
 }
-
 .badge-icon:hover {
-  transform: scale(1.22);
+  transform: scale(1.25);
 }
 
 .title-bold {
@@ -397,7 +377,7 @@ body {
   border-radius: 6px;
   text-decoration: none;
   flex-shrink: 0;
-  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.2s ease;
 }
 .discord-btn:hover {
   background-color: var(--discord-green-hover);
@@ -425,11 +405,13 @@ body {
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.15);
   animation: spinDisk 12s linear infinite;
+  animation-play-state: paused; /* MẶC ĐỊNH DỪNG, CHỈ XOAY KHI NHẠC ĐANG PHÁT THẬT */
+  will-change: transform;
+}
+.disk-spinner.running {
   animation-play-state: running;
 }
-.disk-spinner.paused {
-  animation-play-state: paused;
-}
+
 @keyframes spinDisk {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
