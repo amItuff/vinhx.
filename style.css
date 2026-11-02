@@ -5,7 +5,6 @@
   --text-sub: #949ba4;
   --discord-green: #248046;
   --discord-green-hover: #1a6334;
-  --fb-brand: #1877f2;
 }
 
 * {
@@ -32,7 +31,7 @@ body {
   min-height: 100vh;
 }
 
-/* Tối ưu render phần cứng để mượt mà không tụt FPS */
+/* Tăng tốc render bằng card đồ họa GPU */
 .bg-layer, .glass-card, .audio-player-panel, .avatar-face {
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
@@ -40,13 +39,11 @@ body {
   -webkit-backface-visibility: hidden;
 }
 
-/* Background GIF mượt */
 .bg-layer {
   position: fixed;
   inset: 0;
   z-index: -2;
   background: url('https://i.pinimg.com/originals/b9/4e/18/b94e18ea40626f10bc67eaba042ec415.gif') center center / cover no-repeat;
-  will-change: transform;
 }
 
 .bg-vignette {
@@ -58,7 +55,7 @@ body {
   -webkit-backdrop-filter: blur(1.5px);
 }
 
-/* Màn hình Enter Screen */
+/* Màn hình Enter Screen kích hoạt âm thanh */
 #enter-screen {
   position: fixed;
   inset: 0;
@@ -147,30 +144,6 @@ body {
 @keyframes auraAnim {
   0% { transform: scale(0.96); opacity: 0.55; }
   100% { transform: scale(1.05); opacity: 0.95; }
-}
-
-/* Badge 10 năm Discord trên Avatar */
-.ten-year-badge-bubble {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  z-index: 10;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #111214;
-  border: 2px solid #f23f43;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 10px rgba(242, 63, 67, 0.7);
-}
-.badge-num {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
 }
 
 .hero-name {
@@ -362,7 +335,7 @@ body {
 
 .user-headline {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
 }
 .user-display {
@@ -370,27 +343,31 @@ body {
   font-weight: 600;
   color: #fff;
 }
-
-.discord-subline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 2px;
-}
 .handle-name {
   font-size: 0.76rem;
   color: var(--text-sub);
 }
 
-.guild-tag-badge {
-  display: inline-flex;
+/* KHỐI HIỂN THỊ 4 HUY HIỆU ĐỒ HỌA CHUẨN DISCORD */
+.badges-row {
+  display: flex;
   align-items: center;
-  gap: 3px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  padding: 1px 5px;
-  font-size: 0.65rem;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.badge-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.badge-icon:hover {
+  transform: scale(1.22);
 }
 
 .title-bold {
@@ -612,7 +589,6 @@ body {
   pointer-events: none;
 }
 
-/* Tối ưu Mobile */
 @media (max-width: 600px) {
   .hero-name { font-size: 3.2rem; }
   .cards-view { padding: 20px 14px 70px; }
