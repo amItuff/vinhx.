@@ -2,14 +2,15 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="referrer" content="no-referrer" />
-  <title>Vinh — Profile</title>
+  <title>vinhx — profile</title>
 
-  <!-- Google Fonts giống hệt web mẫu -->
+  <!-- Google Fonts hỗ trợ trọn vẹn bảng mã tiếng Việt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap&subset=latin,vietnamese" rel="stylesheet">
+  
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <!-- SoundCloud Widget API -->
@@ -17,108 +18,70 @@
 
   <style>
     :root {
-      --card-bg: rgba(28, 30, 34, 0.55);
-      --card-border: rgba(255, 255, 255, 0.09);
+      --card-bg: rgba(22, 24, 29, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
       --text-main: #f2f3f5;
-      --text-sub: #a0a5b1;
+      --text-sub: #949ba4;
       --discord-green: #248046;
       --discord-green-hover: #1a6334;
+      --fb-blue: #1877f2;
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      /* Chặn bôi đen copy văn bản */
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
       -webkit-user-drag: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html {
       scroll-behavior: smooth;
+      font-size: 16px;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: var(--text-main);
-      background-color: #0b0c0e;
+      background-color: #0d0e12;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    /* Tùy chỉnh thanh cuộn */
     ::-webkit-scrollbar {
-      width: 5px;
+      width: 4px;
     }
     ::-webkit-scrollbar-track {
-      background: #0b0c0e;
+      background: #0d0e12;
     }
     ::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
+      border-radius: 4px;
     }
 
-    /* Màn hình Click to Enter */
-    #enter-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(8, 9, 12, 0.92);
-      backdrop-filter: blur(18px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
-    }
-    #enter-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    .enter-text {
-      font-family: 'Instrument Serif', serif;
-      font-style: italic;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      color: #fff;
-      animation: pulseText 2s infinite ease-in-out;
-    }
-    .enter-sub {
-      font-size: 0.75rem;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--text-sub);
-      margin-top: 8px;
-    }
-
-    @keyframes pulseText {
-      0%, 100% { opacity: 0.4; transform: scale(0.98); }
-      50% { opacity: 1; transform: scale(1.02); }
-    }
-
-    /* Background GIF cố định */
+    /* Background Banner GIF mới - êm mắt */
     .bg-wrapper {
       position: fixed;
       inset: 0;
       z-index: -2;
-      background: url('https://i.pinimg.com/originals/73/09/1f/73091f5ab6b6091ca8132937433c0e3e.gif') center center / cover no-repeat;
-      transform: scale(1.03);
+      background: url('https://i.pinimg.com/originals/b9/4e/18/b94e18ea40626f10bc67eaba042ec415.gif') center center / cover no-repeat;
+      transform: scale(1.02);
     }
 
-    /* Lớp phủ tối Vignette giống ketonocarry.lol */
+    /* Lớp phủ điện ảnh tối màu */
     .bg-overlay {
       position: fixed;
       inset: 0;
       z-index: -1;
-      background: radial-gradient(circle at center, rgba(15, 17, 21, 0.38) 0%, rgba(8, 10, 14, 0.82) 100%);
-      backdrop-filter: blur(2px);
+      background: radial-gradient(circle at center, rgba(13, 15, 18, 0.45) 0%, rgba(7, 8, 10, 0.88) 100%);
+      backdrop-filter: blur(1.5px);
     }
 
-    /* ================= TẦNG 1: HERO SECTION ================= */
+    /* ================= TẦNG 1: HERO ================= */
     .hero-section {
       height: 100vh;
       width: 100%;
@@ -131,216 +94,236 @@
       padding: 20px;
     }
 
-    .avatar-container {
+    .avatar-wrapper {
       position: relative;
-      width: 122px;
-      height: 122px;
-      margin-bottom: 18px;
+      width: 110px;
+      height: 110px;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .hero-avatar {
-      width: 102px;
-      height: 102px;
+    .avatar-img {
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+      position: relative;
+      z-index: 1;
+      background: #111214;
     }
 
-    .avatar-decoration {
+    /* Hiệu ứng viền hào quang bóng tối giống trên profile */
+    .avatar-aura {
       position: absolute;
-      inset: 0;
-      width: 122px;
-      height: 122px;
-      pointer-events: none;
-      z-index: 2;
-      display: none;
+      inset: -4px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(147, 51, 234, 0.2) 60%, transparent 80%);
+      filter: blur(4px);
+      z-index: 0;
+      animation: pulseAura 3s infinite alternate ease-in-out;
     }
 
-    .hero-name {
-      font-family: 'Instrument Serif', serif;
+    @keyframes pulseAura {
+      0% { transform: scale(0.96); opacity: 0.5; }
+      100% { transform: scale(1.04); opacity: 0.9; }
+    }
+
+    .hero-title {
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
-      font-size: 4.2rem;
+      font-size: 3.8rem;
       font-weight: 400;
       line-height: 1;
       color: #ffffff;
-      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
-      margin-bottom: 10px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      margin-bottom: 8px;
     }
 
-    .hero-bio {
-      font-size: 0.92rem;
-      color: rgba(255, 255, 255, 0.72);
-      letter-spacing: 0.5px;
+    .hero-desc {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 500;
       margin-bottom: 22px;
     }
 
-    .social-row {
+    .social-links {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
 
-    .social-icon {
-      width: 34px;
-      height: 34px;
+    .social-btn {
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.15);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.85);
       text-decoration: none;
       font-size: 0.95rem;
       transition: all 0.25s ease;
     }
 
-    .social-icon:hover {
+    .social-btn:hover {
       background: rgba(255, 255, 255, 0.25);
       color: #fff;
-      transform: translateY(-3px);
+      transform: translateY(-2px);
     }
 
-    .scroll-indicator {
+    .scroll-hint {
       position: absolute;
-      bottom: 32px;
+      bottom: 28px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.68rem;
-      letter-spacing: 4px;
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.65rem;
+      letter-spacing: 3px;
       text-transform: uppercase;
       text-decoration: none;
-      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
       transition: color 0.2s;
     }
-    .scroll-indicator:hover {
+    .scroll-hint:hover {
       color: #fff;
     }
-    .scroll-indicator i {
-      animation: bounceDown 1.8s infinite;
+    .scroll-hint i {
+      animation: floatDown 1.8s infinite;
     }
 
-    @keyframes bounceDown {
+    @keyframes floatDown {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(5px); }
     }
 
-    /* ================= TẦNG 2: CARDS & PLAYER ================= */
-    .content-section {
+    /* ================= TẦNG 2: THẺ CARDS & PLAYER ================= */
+    .details-section {
       min-height: 100vh;
-      max-width: 550px;
+      max-width: 480px;
       margin: 0 auto;
-      padding: 60px 18px 90px;
+      padding: 40px 16px 80px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .glass-card {
+    .glass-box {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 14px 18px;
+      padding: 14px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-      transition: transform 0.25s ease, border-color 0.25s ease;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
-    .glass-card:hover {
+    .glass-box:hover {
       transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.18);
     }
 
-    .card-left {
+    .box-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       min-width: 0;
       flex: 1;
     }
 
-    .card-avatar-wrap {
+    .box-avatar-wrap {
       position: relative;
-      width: 62px;
-      height: 62px;
+      width: 52px;
+      height: 52px;
       flex-shrink: 0;
+    }
+
+    .box-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #111214;
+    }
+
+    /* Nút chấm đỏ Do Not Disturb */
+    .dnd-dot {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: #f23f43;
+      border: 2.5px solid #16181d;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
-    .card-avatar {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      object-fit: cover;
+    .dnd-dot::after {
+      content: '';
+      width: 6px;
+      height: 2px;
+      background-color: #fff;
+      border-radius: 1px;
     }
 
-    .card-avatar-square {
-      width: 56px;
-      height: 56px;
+    /* Khối Logo Facebook */
+    .fb-logo-square {
+      width: 52px;
+      height: 52px;
       border-radius: 12px;
+      background: linear-gradient(145deg, #1877f2, #0d65d9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 1.75rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(24, 119, 242, 0.35);
+    }
+
+    .sc-thumb-square {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
       object-fit: cover;
       flex-shrink: 0;
     }
 
-    .card-decoration {
-      position: absolute;
-      inset: 0;
-      width: 62px;
-      height: 62px;
-      pointer-events: none;
-      display: none;
-    }
-
-    .status-dot {
-      position: absolute;
-      bottom: 3px;
-      right: 3px;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 2.5px solid #1c1e22;
-      background-color: #23a55a; /* Mặc định online */
-      z-index: 3;
-    }
-    .status-dot.online { background-color: #23a55a; }
-    .status-dot.idle { background-color: #f0b232; }
-    .status-dot.dnd { background-color: #f23f43; }
-    .status-dot.offline { background-color: #80848e; }
-
-    .card-info {
+    .box-info {
       display: flex;
       flex-direction: column;
       gap: 2px;
       min-width: 0;
     }
 
-    .card-label {
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 2px;
+    .box-tag {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 1.8px;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.42);
+      color: rgba(255, 255, 255, 0.45);
     }
 
-    .card-title {
-      font-size: 0.96rem;
+    .box-title {
+      font-size: 0.95rem;
       font-weight: 600;
       color: #fff;
       white-space: nowrap;
@@ -348,117 +331,133 @@
       text-overflow: ellipsis;
     }
 
-    .card-sub {
-      font-size: 0.78rem;
-      color: rgba(255, 255, 255, 0.55);
+    .box-sub {
+      font-size: 0.76rem;
+      color: var(--text-sub);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    /* Hàng Discord Badges */
-    .badge-list {
+    /* Dải huy hiệu Discord chuẩn của ID 1054712893037355018 */
+    .discord-badge-bar {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 5px;
+      gap: 6px;
       margin-top: 4px;
     }
 
-    .badge-item {
-      width: 18px;
-      height: 18px;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
-      transition: transform 0.2s ease;
-    }
-    .badge-item:hover {
-      transform: scale(1.2);
+    /* Huy hiệu 10 Năm Discord (Red Circle 10) */
+    .ten-year-badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #111214;
+      border: 1.8px solid #f23f43;
+      color: #f2f3f5;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 6px rgba(242, 63, 67, 0.6);
+      flex-shrink: 0;
     }
 
-    /* Nút JOIN giống Discord */
-    .join-btn {
+    /* Cụm Tag Icon [ 🛞 🎁 🗡️ 🎮 ] */
+    .tag-icons-pill {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 1px 6px;
+      font-size: 0.68rem;
+      line-height: 1.2;
+    }
+
+    .action-btn {
       background-color: var(--discord-green);
       color: #fff;
       font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.8px;
       text-transform: uppercase;
-      padding: 7px 15px;
+      padding: 7px 14px;
       border-radius: 6px;
       text-decoration: none;
       flex-shrink: 0;
       transition: background-color 0.2s ease;
     }
-    .join-btn:hover {
+    .action-btn:hover {
       background-color: var(--discord-green-hover);
     }
 
     /* ================= CUSTOM MUSIC PLAYER ================= */
-    .player-wrapper {
-      margin-top: 12px;
+    .player-section {
+      margin-top: 10px;
       display: flex;
       align-items: center;
-      gap: 18px;
-      padding: 10px 6px;
+      gap: 14px;
+      padding: 8px 4px;
     }
 
-    .player-art-box {
+    .player-disk-box {
       position: relative;
-      width: 66px;
-      height: 66px;
+      width: 62px;
+      height: 62px;
       flex-shrink: 0;
     }
 
-    .player-art {
-      width: 66px;
-      height: 66px;
+    .player-disk {
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-      animation: spinDisk 14s linear infinite;
-      animation-play-state: paused;
-    }
-    .player-art.playing {
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      animation: rotateDisk 12s linear infinite;
       animation-play-state: running;
     }
+    .player-disk.paused {
+      animation-play-state: paused;
+    }
 
-    @keyframes spinDisk {
+    @keyframes rotateDisk {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
 
-    .equalizer {
+    .mini-equalizer {
       position: absolute;
-      bottom: -4px;
+      bottom: -3px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       align-items: flex-end;
       gap: 2px;
-      height: 12px;
-      background: rgba(15, 17, 21, 0.85);
-      padding: 2px 5px;
-      border-radius: 6px;
+      height: 10px;
+      background: rgba(10, 11, 14, 0.9);
+      padding: 2px 4px;
+      border-radius: 4px;
     }
-    .eq-bar {
+    .mini-eq-bar {
       width: 2px;
       height: 3px;
       background: #fff;
       border-radius: 1px;
     }
-    .playing .eq-bar:nth-child(1) { animation: eqAnim 0.6s infinite ease-in-out; }
-    .playing .eq-bar:nth-child(2) { animation: eqAnim 0.8s infinite ease-in-out 0.2s; }
-    .playing .eq-bar:nth-child(3) { animation: eqAnim 0.5s infinite ease-in-out 0.4s; }
-    .playing .eq-bar:nth-child(4) { animation: eqAnim 0.7s infinite ease-in-out 0.1s; }
+    .playing .mini-eq-bar:nth-child(1) { animation: eqJump 0.6s infinite ease-in-out; }
+    .playing .mini-eq-bar:nth-child(2) { animation: eqJump 0.8s infinite ease-in-out 0.2s; }
+    .playing .mini-eq-bar:nth-child(3) { animation: eqJump 0.5s infinite ease-in-out 0.4s; }
 
-    @keyframes eqAnim {
+    @keyframes eqJump {
       0%, 100% { height: 3px; }
-      50% { height: 10px; }
+      50% { height: 9px; }
     }
 
-    .player-main {
+    .player-controls-wrap {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -466,57 +465,55 @@
       min-width: 0;
     }
 
-    .player-song-title {
-      font-family: 'Instrument Serif', serif;
+    .player-track-name {
+      font-family: 'Instrument Serif', Georgia, serif;
       font-style: italic;
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .progress-row {
+    .progress-line-box {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.68rem;
-      color: rgba(255, 255, 255, 0.55);
+      color: var(--text-sub);
     }
 
-    .progress-bar-bg {
+    .progress-bar {
       flex: 1;
       height: 3px;
       background: rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
+      border-radius: 3px;
       cursor: pointer;
       position: relative;
-      overflow: hidden;
     }
 
     .progress-bar-fill {
       height: 100%;
       width: 0%;
       background: #ffffff;
-      border-radius: 4px;
-      transition: width 0.15s linear;
+      border-radius: 3px;
     }
 
-    .controls-row {
+    .player-bottom-btns {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-top: 2px;
     }
 
-    .ctrl-buttons {
+    .btn-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .ctrl-btn {
+    .round-btn {
       width: 28px;
       height: 28px;
       border-radius: 50%;
@@ -526,30 +523,29 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background 0.2s;
     }
-    .ctrl-btn.play-main {
+    .round-btn.play-toggle {
       width: 32px;
       height: 32px;
       background: rgba(255, 255, 255, 0.18);
     }
-    .ctrl-btn:hover {
+    .round-btn:hover {
       background: rgba(255, 255, 255, 0.3);
     }
 
-    .volume-box {
+    .vol-ctrl {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex: 1;
-      max-width: 190px;
-      color: rgba(255, 255, 255, 0.55);
-      font-size: 0.72rem;
+      gap: 6px;
+      max-width: 140px;
+      color: var(--text-sub);
+      font-size: 0.68rem;
     }
 
-    .volume-slider {
+    .vol-range {
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
@@ -559,37 +555,32 @@
       outline: none;
       cursor: pointer;
     }
-    .volume-slider::-webkit-slider-thumb {
+    .vol-range::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: #fff;
       cursor: pointer;
     }
 
-    /* ================= GÓC TRÁI DƯỚI: COUNTER & ĐỒNG HỒ ================= */
-    .bottom-left-hud {
+    /* ================= GÓC DƯỚI TRÁI: VIETNAM TIME (GMT+7) ================= */
+    .vn-time-hud {
       position: fixed;
       bottom: 16px;
-      left: 20px;
+      left: 18px;
       z-index: 50;
-      display: flex;
-      align-items: center;
-      gap: 14px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem;
-      color: rgba(255, 255, 255, 0.55);
-      pointer-events: none;
-    }
-    .hud-item {
+      color: rgba(255, 255, 255, 0.5);
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      pointer-events: none;
     }
 
-    /* Ẩn iframe SoundCloud gốc */
-    #sc-widget-iframe {
+    /* Iframe SoundCloud ẩn */
+    #sc-audio-bridge {
       position: fixed;
       width: 1px;
       height: 1px;
@@ -598,128 +589,144 @@
       opacity: 0;
       pointer-events: none;
     }
+
+    /* Tối ưu điện thoại */
+    @media (max-width: 600px) {
+      .hero-title {
+        font-size: 3.2rem;
+      }
+      .details-section {
+        padding: 20px 14px 70px;
+      }
+      .vn-time-hud {
+        bottom: 12px;
+        left: 14px;
+        font-size: 0.65rem;
+      }
+    }
   </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
 
-  <!-- Màn hình chờ kích hoạt nhạc -->
-  <div id="enter-overlay">
-    <div class="enter-text">click to enter...</div>
-    <div class="enter-sub">vinhx portfolio</div>
-  </div>
-
-  <!-- Hình nền GIF & Lớp phủ -->
+  <!-- Background GIF & Overlay -->
   <div class="bg-wrapper"></div>
   <div class="bg-overlay"></div>
 
-  <!-- ================= TẦNG 1: HERO ================= -->
+  <!-- TẦNG 1: HERO -->
   <section class="hero-section">
-    <div class="avatar-container">
-      <img id="hero-avatar" class="hero-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" />
-      <img id="hero-decoration" class="avatar-decoration" src="" alt="Decoration" />
+    <div class="avatar-wrapper">
+      <div class="avatar-aura"></div>
+      <!-- Avatar Patrick Star Hoodie đen mặc định theo hồ sơ thực tế -->
+      <img id="main-avatar" class="avatar-img" src="https://images.squarespace-cdn.com/content/v1/54fc8146e4b02a22841f4df7/1598462744654-K3B5K62R45A3S7C71PZP/Patrick_Star_in_hoodie.png" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" alt="vinhx" />
     </div>
 
-    <h1 id="hero-name" class="hero-name">Vinh</h1>
-    <p id="hero-bio" class="hero-bio">Building tools, breaking limits.</p>
+    <h1 class="hero-title">vinhx</h1>
+    <p class="hero-desc">Contact below</p>
 
-    <div class="social-row">
-      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="social-icon" title="Facebook">
+    <div class="social-links">
+      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="social-btn" title="Facebook">
         <i class="fa-brands fa-facebook-f"></i>
       </a>
-      <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="social-icon" title="Discord">
+      <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="social-btn" title="Discord">
         <i class="fa-brands fa-discord"></i>
       </a>
-      <a href="https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar" target="_blank" rel="noopener noreferrer" class="social-icon" title="SoundCloud">
+      <a href="https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar" target="_blank" rel="noopener noreferrer" class="social-btn" title="SoundCloud">
         <i class="fa-brands fa-soundcloud"></i>
       </a>
     </div>
 
-    <a href="#details" class="scroll-indicator">
+    <a href="#content" class="scroll-hint">
       <span>SCROLL</span>
       <i class="fa-solid fa-chevron-down"></i>
     </a>
   </section>
 
-  <!-- ================= TẦNG 2: THẺ DISCORD & NHẠC ================= -->
-  <section id="details" class="content-section">
+  <!-- TẦNG 2: THẺ CHI TIẾT & NHẠC -->
+  <section id="content" class="details-section">
 
-    <!-- CARD 1: DISCORD PROFILE & BADGES -->
-    <div class="glass-card">
-      <div class="card-left">
-        <div class="card-avatar-wrap">
-          <img id="card-avatar" class="card-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar" />
-          <img id="card-decoration" class="card-decoration" src="" alt="Decoration" />
-          <span id="discord-status-dot" class="status-dot dnd"></span>
+    <!-- THẺ 1: DISCORD PROFILE THẬT -->
+    <div class="glass-box">
+      <div class="box-left">
+        <div class="box-avatar-wrap">
+          <img id="card-discord-avatar" class="box-avatar" src="https://images.squarespace-cdn.com/content/v1/54fc8146e4b02a22841f4df7/1598462744654-K3B5K62R45A3S7C71PZP/Patrick_Star_in_hoodie.png" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'" alt="vinhx" />
+          <div class="dnd-dot" title="Do Not Disturb"></div>
         </div>
-        <div class="card-info">
-          <span class="card-label">DISCORD</span>
-          <span id="discord-username" class="card-title">vinhx</span>
-          <span id="discord-status-text" class="card-sub">do not disturb</span>
-          <div id="badge-container" class="badge-list"></div>
+        <div class="box-info">
+          <span class="box-tag">DISCORD</span>
+          <span class="box-title">vinhx</span>
+          <span class="box-sub">do not disturb</span>
+          <!-- Dãy badge thật: 10 Years Account Age Badge + Clan Tag Pack -->
+          <div class="discord-badge-bar">
+            <div class="ten-year-badge" title="10 Years on Discord">10</div>
+            <div class="tag-icons-pill" title="Badge Pack Icons">
+              <span>🛞</span><span>🎁</span><span>🗡️</span><span>🎮</span>
+            </div>
+          </div>
         </div>
       </div>
-      <a href="https://discord.com/users/1054712893037355018" target="_blank" class="join-btn">PROFILE</a>
+      <a href="https://discord.com/users/1054712893037355018" target="_blank" class="action-btn">PROFILE</a>
     </div>
 
-    <!-- CARD 2: LISTENING TO SOUNDCLOUD -->
-    <div class="glass-card">
-      <div class="card-left">
-        <img id="sc-card-art" class="card-avatar-square" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Track Art" />
-        <div class="card-info">
-          <span class="card-label">LISTENING TO SOUNDCLOUD</span>
-          <span id="sc-card-title" class="card-title">PAR SG - cigarette ft. Cigar</span>
-          <span id="sc-card-artist" class="card-sub">PAR SG</span>
+    <!-- THẺ 2: SOUNDCLOUD ACTIVITY -->
+    <div class="glass-box">
+      <div class="box-left">
+        <img id="track-art-box" class="sc-thumb-square" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Track Art" />
+        <div class="box-info">
+          <span class="box-tag">LISTENING TO SOUNDCLOUD</span>
+          <span id="sc-track-title" class="box-title">PAR SG - cigarette ft. Cigar</span>
+          <span class="box-sub">PAR SG</span>
         </div>
       </div>
     </div>
 
-    <!-- CARD 3: FACEBOOK PROFILE CARD -->
-    <div class="glass-card">
-      <div class="card-left">
-        <img id="fb-card-avatar" class="card-avatar-square" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Facebook" />
-        <div class="card-info">
-          <span class="card-label">SOCIAL NETWORK</span>
-          <span class="card-title">Tri Vinh Nguyen</span>
-          <span class="card-sub">facebook.com/trivinhnguyenuwu</span>
+    <!-- THẺ 3: FACEBOOK CHUẨN LOGO -->
+    <div class="glass-box">
+      <div class="box-left">
+        <div class="fb-logo-square">
+          <i class="fa-brands fa-facebook-f"></i>
+        </div>
+        <div class="box-info">
+          <span class="box-tag">SOCIAL NETWORK</span>
+          <span class="box-title">Tri Vinh Nguyen</span>
+          <span class="box-sub">facebook.com/trivinhnguyenuwu</span>
         </div>
       </div>
-      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" class="join-btn">CONNECT</a>
+      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" class="action-btn">CONNECT</a>
     </div>
 
-    <!-- CUSTOM AUDIO PLAYER (ĐỒNG BỘ SOUNDCLOUD) -->
-    <div class="player-wrapper">
-      <div id="art-box" class="player-art-box">
-        <img id="player-art" class="player-art" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Now Playing" />
-        <div class="equalizer">
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
+    <!-- CUSTOM AUDIO PLAYER ĐỒNG BỘ SOUNDCLOUD -->
+    <div class="player-section">
+      <div class="player-disk-box">
+        <img id="rotating-disk" class="player-disk" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Playing" />
+        <div class="mini-equalizer">
+          <div class="mini-eq-bar"></div>
+          <div class="mini-eq-bar"></div>
+          <div class="mini-eq-bar"></div>
         </div>
       </div>
 
-      <div class="player-main">
-        <span class="card-label">NOW PLAYING</span>
-        <div id="player-title" class="player-song-title">cigarette ft. Cigar — PAR SG</div>
+      <div class="player-controls-wrap">
+        <span class="box-tag">NOW PLAYING</span>
+        <div id="player-title" class="player-track-name">PAR SG - cigarette ft. Cigar</div>
 
-        <div class="progress-row">
-          <span id="current-time">0:00</span>
-          <div id="progress-container" class="progress-bar-bg">
+        <div class="progress-line-box">
+          <span id="curr-time">0:00</span>
+          <div id="progress-track" class="progress-bar">
             <div id="progress-fill" class="progress-bar-fill"></div>
           </div>
-          <span id="total-time">2:42</span>
+          <span id="max-time">2:42</span>
         </div>
 
-        <div class="controls-row">
-          <div class="ctrl-buttons">
-            <button id="btn-prev" class="ctrl-btn" title="Restart"><i class="fa-solid fa-backward-step"></i></button>
-            <button id="btn-play" class="ctrl-btn play-main" title="Play/Pause"><i id="play-icon" class="fa-solid fa-play"></i></button>
-            <button id="btn-next" class="ctrl-btn" title="Loop"><i class="fa-solid fa-forward-step"></i></button>
+        <div class="player-bottom-btns">
+          <div class="btn-group">
+            <button id="btn-restart" class="round-btn" title="Restart"><i class="fa-solid fa-backward-step"></i></button>
+            <button id="btn-toggle" class="round-btn play-toggle" title="Play/Pause"><i id="play-symbol" class="fa-solid fa-pause"></i></button>
+            <button id="btn-loop" class="round-btn" title="Loop"><i class="fa-solid fa-forward-step"></i></button>
           </div>
 
-          <div class="volume-box">
+          <div class="vol-ctrl">
             <i class="fa-solid fa-volume-low"></i>
-            <input id="volume-slider" type="range" class="volume-slider" min="0" max="100" value="80" />
+            <input id="vol-slider" type="range" class="vol-range" min="0" max="100" value="85" />
             <i class="fa-solid fa-volume-high"></i>
           </div>
         </div>
@@ -728,290 +735,164 @@
 
   </section>
 
-  <!-- HUD GÓC TRÁI DƯỚI: LƯỢT XEM & ĐỒNG HỒ -->
-  <div class="bottom-left-hud">
-    <div class="hud-item">
-      <i class="fa-regular fa-eye"></i>
-      <span id="view-count">2,506</span>
-    </div>
-    <div class="hud-item">
-      <i class="fa-regular fa-clock"></i>
-      <span id="live-clock">00:00:00</span>
-    </div>
+  <!-- ĐỒNG HỒ VIỆT NAM (GMT+7) GÓC TRÁI DƯỚI -->
+  <div class="vn-time-hud">
+    <i class="fa-solid fa-clock"></i>
+    <span id="vn-clock-text">VN (GMT+7) --:--:--</span>
   </div>
 
-  <!-- Iframe SoundCloud ẩn điều khiển qua API -->
+  <!-- Iframe SoundCloud kích hoạt tự phát nhạc -->
   <iframe
-    id="sc-widget-iframe"
+    id="sc-audio-bridge"
     allow="autoplay"
-    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/parsg/par-sg-cigarette-ft-cigar&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false">
+    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/parsg/par-sg-cigarette-ft-cigar&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false">
   </iframe>
 
   <script>
     /* =========================================================================
-       1. CẤU HÌNH CÁ NHÂN CỦA BẠN
+       1. CẬP NHẬT THỜI GIAN VIỆT NAM (GMT+7)
        ========================================================================= */
-    const CONFIG = {
-      discordId: '1054712893037355018',
-      defaultName: 'Vinh',
-      defaultUsername: 'vinhx',
-      defaultBio: 'Vui Lòng Không Làm Phiền',
-      // Bộ huy hiệu (Badges) hiển thị giống ketonocarry.lol + tự động gộp thêm badge thật từ Discord
-      showcaseBadges: [
-        { name: 'Discord Nitro', url: 'https://cdn.discordapp.com/badge-icons/2ba85e8026a8614b640c2837bcdfe21b.png' },
-        { name: 'Server Boosting', url: 'https://cdn.discordapp.com/badge-icons/ec92202290b48d0879b7413d2dde3bab.png' },
-        { name: 'HypeSquad Brilliance', url: 'https://cdn.discordapp.com/badge-icons/011940fd013da3f7fb926e4a1cd2e618.png' },
-        { name: 'Active Developer', url: 'https://cdn.discordapp.com/badge-icons/6bdc42827a38498929a4920da12695d9.png' },
-        { name: 'Completed a Quest', url: 'https://cdn.discordapp.com/badge-icons/7d9ae358c8c5e118768335dbe68b4fb8.png' },
-        { name: 'Early Supporter', url: 'https://cdn.discordapp.com/badge-icons/7060786766c9c840eb3019e725d2b358.png' },
-        { name: 'Originally Known As', url: 'https://cdn.discordapp.com/badge-icons/6de6d34650760ba5551a79732e98ed60.png' }
-      ]
-    };
-
-    /* =========================================================================
-       2. ĐỒNG BỘ DISCORD PROFILE & BADGES (TỰ ĐỘNG LẤY TỪ ID 1054712893037355018)
-       ========================================================================= */
-    async function loadDiscordProfile() {
-      const badgeContainer = document.getElementById('badge-container');
-      const renderedUrls = new Set();
-
-      const addBadge = (url, title) => {
-        if (!url || renderedUrls.has(url)) return;
-        renderedUrls.add(url);
-        const img = document.createElement('img');
-        img.className = 'badge-item';
-        img.src = url;
-        img.title = title || 'Discord Badge';
-        badgeContainer.appendChild(img);
+    function refreshVNTime() {
+      const now = new Date();
+      const options = {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
       };
-
-      // 1. Thử lấy thông tin gốc + Badges thật qua Dstn Profile API
-      try {
-        const res = await fetch(`https://dcdn.dstn.to/profile/${CONFIG.discordId}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.user) {
-            const u = data.user;
-            const displayName = u.global_name || u.username || CONFIG.defaultName;
-            document.getElementById('hero-name').textContent = displayName;
-            document.getElementById('discord-username').textContent = u.username || displayName;
-
-            if (u.bio) {
-              document.getElementById('hero-bio').textContent = u.bio;
-            }
-
-            if (u.avatar) {
-              const ext = u.avatar.startsWith('a_') ? 'gif' : 'png';
-              const avatarUrl = `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${ext}?size=256`;
-              document.getElementById('hero-avatar').src = avatarUrl;
-              document.getElementById('card-avatar').src = avatarUrl;
-              document.getElementById('fb-card-avatar').src = avatarUrl;
-            }
-
-            if (u.avatar_decoration_data?.asset) {
-              const decoUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png?size=240&passthrough=true`;
-              const heroDeco = document.getElementById('hero-decoration');
-              const cardDeco = document.getElementById('card-decoration');
-              heroDeco.src = decoUrl;
-              cardDeco.src = decoUrl;
-              heroDeco.style.display = 'block';
-              cardDeco.style.display = 'block';
-            }
-          }
-
-          // Hiển thị toàn bộ badge thật trên tài khoản của bạn
-          if (Array.isArray(data.badges)) {
-            data.badges.forEach((b) => {
-              if (b.icon) {
-                addBadge(`https://cdn.discordapp.com/badge-icons/${b.icon}.png`, b.description);
-              }
-            });
-          }
-        }
-      } catch (_) {}
-
-      // 2. Bổ sung bộ badge từ CONFIG để dải huy hiệu đầy đặn như ketonocarry.lol
-      CONFIG.showcaseBadges.forEach((b) => addBadge(b.url, b.name));
-
-      // 3. Lấy trạng thái Online / DND / Idle thời gian thực qua Lanyard API
-      try {
-        const lanyardRes = await fetch(`https://api.lanyard.rest/v1/users/${CONFIG.discordId}`);
-        if (lanyardRes.ok) {
-          const lanyardJson = await lanyardRes.json();
-          if (lanyardJson.success && lanyardJson.data) {
-            const d = lanyardJson.data;
-            const status = d.discord_status || 'dnd';
-            const dot = document.getElementById('discord-status-dot');
-            dot.className = `status-dot ${status}`;
-            document.getElementById('discord-status-text').textContent = status;
-
-            if (d.discord_user?.avatar) {
-              const ext = d.discord_user.avatar.startsWith('a_') ? 'gif' : 'png';
-              const av = `https://cdn.discordapp.com/avatars/${CONFIG.discordId}/${d.discord_user.avatar}.${ext}?size=256`;
-              document.getElementById('hero-avatar').src = av;
-              document.getElementById('card-avatar').src = av;
-              document.getElementById('fb-card-avatar').src = av;
-            }
-          }
-        }
-      } catch (_) {}
+      const formatted = new Intl.DateTimeFormat('en-GB', options).format(now);
+      document.getElementById('vn-clock-text').textContent = `VN (GMT+7) ${formatted}`;
     }
+    setInterval(refreshVNTime, 1000);
+    refreshVNTime();
 
     /* =========================================================================
-       3. ĐIỀU KHIỂN NHẠC SOUNDCLOUD (PAR SG - CIGARETTE FT. CIGAR)
+       2. ĐỒNG BỘ DỮ LIỆU DISCORD ID: 1054712893037355018
        ========================================================================= */
-    const iframeElement = document.getElementById('sc-widget-iframe');
-    const scWidget = SC.Widget(iframeElement);
-    let isPlaying = false;
-    let durationMs = 162000; // 2:42 mặc định
+    const DISCORD_UID = '1054712893037355018';
 
-    function formatTime(ms) {
-      const totalSec = Math.floor(ms / 1000);
-      const min = Math.floor(totalSec / 60);
-      const sec = totalSec % 60;
-      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    async function fetchDiscordData() {
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_UID}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            const user = json.data.discord_user;
+            if (user?.avatar) {
+              const ext = user.avatar.startsWith('a_') ? 'gif' : 'png';
+              const pfpUrl = `https://cdn.discordapp.com/avatars/${DISCORD_UID}/${user.avatar}.${ext}?size=256`;
+              document.getElementById('main-avatar').src = pfpUrl;
+              document.getElementById('card-discord-avatar').src = pfpUrl;
+            }
+          }
+        }
+      } catch (_) {}
+    }
+    fetchDiscordData();
+
+    /* =========================================================================
+       3. TỰ ĐỘNG PHÁT NHẠC & ĐIỀU KHIỂN SOUNDCLOUD
+       ========================================================================= */
+    const scIframe = document.getElementById('sc-audio-bridge');
+    const player = SC.Widget(scIframe);
+    let totalDuration = 162000;
+    let audioInitiated = false;
+
+    function formatMSS(ms) {
+      const sec = Math.floor(ms / 1000);
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    scWidget.bind(SC.Widget.Events.READY, () => {
-      scWidget.setVolume(80);
+    // Tự động phát khi widget sẵn sàng
+    player.bind(SC.Widget.Events.READY, () => {
+      player.setVolume(85);
+      player.play();
 
-      scWidget.getDuration((d) => {
+      player.getDuration((d) => {
         if (d > 0) {
-          durationMs = d;
-          document.getElementById('total-time').textContent = formatTime(d);
+          totalDuration = d;
+          document.getElementById('max-time').textContent = formatMSS(d);
         }
       });
 
-      scWidget.getCurrentSound((sound) => {
-        if (sound) {
-          if (sound.title) {
-            document.getElementById('sc-card-title').textContent = sound.title;
-            document.getElementById('player-title').textContent = sound.title;
-          }
-          if (sound.user?.username) {
-            document.getElementById('sc-card-artist').textContent = sound.user.username;
-          }
-          if (sound.artwork_url) {
-            const hiResArt = sound.artwork_url.replace('-large', '-t500x500');
-            document.getElementById('sc-card-art').src = hiResArt;
-            document.getElementById('player-art').src = hiResArt;
-          }
+      player.getCurrentSound((s) => {
+        if (s?.artwork_url) {
+          const cover = s.artwork_url.replace('-large', '-t500x500');
+          document.getElementById('track-art-box').src = cover;
+          document.getElementById('rotating-disk').src = cover;
         }
       });
     });
 
-    scWidget.bind(SC.Widget.Events.PLAY, () => {
-      isPlaying = true;
-      document.getElementById('play-icon').className = 'fa-solid fa-pause';
-      document.getElementById('player-art').classList.add('playing');
-      document.getElementById('art-box').classList.add('playing');
+    // Dự phòng: Mở khóa âm thanh ngay ở lần chạm/cuộn đầu tiên trên điện thoại nếu trình duyệt chặn tự phát
+    function triggerFirstInteraction() {
+      if (!audioInitiated) {
+        audioInitiated = true;
+        player.play();
+      }
+    }
+    ['click', 'touchstart', 'scroll', 'pointerdown'].forEach((evt) => {
+      window.addEventListener(evt, triggerFirstInteraction, { once: true, passive: true });
     });
 
-    scWidget.bind(SC.Widget.Events.PAUSE, () => {
-      isPlaying = false;
-      document.getElementById('play-icon').className = 'fa-solid fa-play';
-      document.getElementById('player-art').classList.remove('playing');
-      document.getElementById('art-box').classList.remove('playing');
+    player.bind(SC.Widget.Events.PLAY, () => {
+      document.getElementById('play-symbol').className = 'fa-solid fa-pause';
+      document.getElementById('rotating-disk').classList.remove('paused');
+      document.querySelector('.player-disk-box').classList.add('playing');
     });
 
-    scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
-      document.getElementById('current-time').textContent = formatTime(e.currentPosition);
-      if (durationMs > 0) {
-        const pct = (e.currentPosition / durationMs) * 100;
+    player.bind(SC.Widget.Events.PAUSE, () => {
+      document.getElementById('play-symbol').className = 'fa-solid fa-play';
+      document.getElementById('rotating-disk').classList.add('paused');
+      document.querySelector('.player-disk-box').classList.remove('playing');
+    });
+
+    player.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
+      document.getElementById('curr-time').textContent = formatMSS(e.currentPosition);
+      if (totalDuration > 0) {
+        const pct = (e.currentPosition / totalDuration) * 100;
         document.getElementById('progress-fill').style.width = `${Math.min(100, pct)}%`;
       }
     });
 
-    scWidget.bind(SC.Widget.Events.FINISH, () => {
-      scWidget.seekTo(0);
-      scWidget.play();
+    player.bind(SC.Widget.Events.FINISH, () => {
+      player.seekTo(0);
+      player.play();
     });
 
-    // Click màn hình chờ để vào web và phát nhạc ngay
-    document.getElementById('enter-overlay').addEventListener('click', function () {
-      this.classList.add('hidden');
-      scWidget.play();
-    });
+    document.getElementById('btn-toggle').addEventListener('click', () => player.toggle());
+    document.getElementById('btn-restart').addEventListener('click', () => { player.seekTo(0); player.play(); });
+    document.getElementById('btn-loop').addEventListener('click', () => { player.seekTo(0); player.play(); });
 
-    document.getElementById('btn-play').addEventListener('click', () => {
-      scWidget.toggle();
-    });
-
-    document.getElementById('btn-prev').addEventListener('click', () => {
-      scWidget.seekTo(0);
-      scWidget.play();
-    });
-
-    document.getElementById('btn-next').addEventListener('click', () => {
-      scWidget.seekTo(0);
-      scWidget.play();
-    });
-
-    document.getElementById('progress-container').addEventListener('click', function (e) {
+    document.getElementById('progress-track').addEventListener('click', function(e) {
       const rect = this.getBoundingClientRect();
-      const clickRatio = (e.clientX - rect.left) / rect.width;
-      scWidget.seekTo(clickRatio * durationMs);
+      const pos = (e.clientX - rect.left) / rect.width;
+      player.seekTo(pos * totalDuration);
     });
 
-    document.getElementById('volume-slider').addEventListener('input', function () {
-      scWidget.setVolume(Number(this.value));
+    document.getElementById('vol-slider').addEventListener('input', function() {
+      player.setVolume(Number(this.value));
     });
 
     /* =========================================================================
-       4. ĐỒNG HỒ THỜI GIAN THỰC & VIEW COUNTER
+       4. CHỐNG SAO CHÉP & BẢO VỆ MÃ NGUỒN
        ========================================================================= */
-    function updateClock() {
-      const now = new Date();
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      const ss = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('live-clock').textContent = `${hh}:${mm}:${ss}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // Tăng nhẹ lượt xem lưu vào máy khách
-    const savedViews = Number(localStorage.getItem('vinhx_views') || 2506) + 1;
-    localStorage.setItem('vinhx_views', savedViews);
-    document.getElementById('view-count').textContent = savedViews.toLocaleString('en-US');
-
-    /* =========================================================================
-       5. HỆ THỐNG CHỐNG COPY & CHẶN VIEW SOURCE / DEVTOOLS
-       ========================================================================= */
-    // Chặn bị nhúng vào iframe của web thứ 3 (Anti-Frame)
-    if (window.top !== window.self) {
-      window.top.location = window.self.location;
-    }
-
-    // Chặn chuột phải
+    if (window.top !== window.self) window.top.location = window.self.location;
     document.addEventListener('contextmenu', (e) => e.preventDefault());
-
-    // Chặn toàn bộ phím tắt F12, Ctrl+U, Ctrl+Shift+I/J/C, Ctrl+S, Ctrl+C, Ctrl+P
     document.addEventListener('keydown', (e) => {
       const k = e.key?.toLowerCase();
       if (
         e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && ['i', 'j', 'c', 'k'].includes(k)) ||
-        (e.metaKey && e.altKey && ['i', 'j', 'c', 'u'].includes(k)) ||
-        (e.ctrlKey && ['u', 's', 'p', 'a', 'c'].includes(k))
+        (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(k)) ||
+        (e.ctrlKey && ['u', 's', 'c', 'a', 'p'].includes(k))
       ) {
         e.preventDefault();
-        e.stopPropagation();
         return false;
       }
     });
-
-    // Bẫy phát hiện mở DevTools & Console
-    setInterval(() => {
-      const widthThreshold = window.outerWidth - window.innerWidth > 160;
-      const heightThreshold = window.outerHeight - window.innerHeight > 160;
-      if (widthThreshold || heightThreshold) {
-        console.clear();
-      }
-    }, 1000);
-
-    // Khởi chạy tải thông tin Discord
-    loadDiscordProfile();
   </script>
 </body>
 </html>
