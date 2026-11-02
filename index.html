@@ -6,10 +6,10 @@
   <meta name="referrer" content="no-referrer" />
   <title>vinhx</title>
 
-  <!-- Google Fonts tiếng Việt -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap&subset=latin,vietnamese" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=latin,vietnamese" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
@@ -17,7 +17,7 @@
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
 
-  <!-- Màn hình click để vào web và phát nhạc -->
+  <!-- Màn hình click để vào web và kích hoạt phát nhạc -->
   <div id="enter-screen">
     <div class="enter-box">
       <div class="enter-title">click to enter...</div>
@@ -25,11 +25,11 @@
     </div>
   </div>
 
-  <!-- Background GIF & Overlay -->
+  <!-- Background GIF và lớp phủ tối ưu (không tụt FPS) -->
   <div class="bg-layer"></div>
   <div class="bg-vignette"></div>
 
-  <!-- ================= TẦNG 1: HERO (ĐÃ XÓA SỐ 10 TRÊN ĐẦU) ================= -->
+  <!-- ================= TẦNG 1: HERO ================= -->
   <main class="hero-view">
     <div class="avatar-orbit">
       <div class="dark-aura"></div>
@@ -51,16 +51,17 @@
       </a>
     </div>
 
-    <a href="#cards-view" class="scroll-down-hint">
+    <!-- Nút cuộn dùng JS để KHÔNG bị hiện #cards-view trên URL -->
+    <div id="scroll-hint-btn" class="scroll-down-hint">
       <span>SCROLL</span>
       <i class="fa-solid fa-chevron-down"></i>
-    </a>
+    </div>
   </main>
 
   <!-- ================= TẦNG 2: CARDS & NHẠC ================= -->
   <section id="cards-view" class="cards-view">
 
-    <!-- THẺ 1: DISCORD PROFILE VỚI 4 HUY HIỆU ĐỒ HỌA CHUẨN -->
+    <!-- THẺ 1: DISCORD PROFILE ĐẦY ĐỦ 4 BADGE CHUẨN ACC -->
     <div class="glass-card">
       <div class="card-body-left">
         <div class="avatar-mini-wrap">
@@ -75,12 +76,12 @@
             <span class="handle-name">nntv_1.</span>
           </div>
 
-          <!-- DÃY HUY HIỆU CHUẨN TÀI KHOẢN CỦA BẠN (ẢNH THẬT, KHÔNG DÙNG EMOJI) -->
+          <!-- ĐẦY ĐỦ 4 BADGE THEO ĐÚNG LINK RAW TRÊN GITHUB -->
           <div class="badges-row">
-            <img class="badge-icon" src="silver.png" onerror="this.src='https://cdn.jsdelivr.net/gh/mezotv/discord-badges@main/assets/nitro-tiers/silver.png'" title="Clan Tag / Turbo" alt="Turbo" />
-            <img class="badge-icon" src="legend.png" onerror="this.src='https://cdn.jsdelivr.net/gh/mezotv/discord-badges@main/assets/gifting/legend.png'" title="Gifting Legend" alt="Legend" />
-            <img class="badge-icon" src="eternal.svg" onerror="this.src='https://cdn.jsdelivr.net/gh/mezotv/discord-badges@main/assets/game-time/eternal.svg'" title="Game Time: Eternal (5000h+)" alt="Eternal" />
-            <img class="badge-icon" src="universalist.svg" onerror="this.src='https://cdn.jsdelivr.net/gh/mezotv/discord-badges@main/assets/game-variety/universalist.svg'" title="Game Variety: Universalist" alt="Universalist" />
+            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/subscriptions/badges/silver.png" alt="Silver Nitro" title="Nitro Silver" />
+            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/gifting/legend.png" alt="Legend Gift" title="Gifting Legend" />
+            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/game-time/eternal.svg" alt="Eternal" title="Game Time: Eternal" />
+            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/game-variety/universalist.svg" alt="Universalist" title="Game Variety: Universalist" />
           </div>
         </div>
       </div>
@@ -140,7 +141,7 @@
         <div class="controls-toolbar">
           <div class="buttons-pack">
             <button id="ctrl-prev" class="tool-btn" title="Restart"><i class="fa-solid fa-backward-step"></i></button>
-            <button id="ctrl-play" class="tool-btn play-active" title="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-pause"></i></button>
+            <button id="ctrl-play" class="tool-btn play-active" title="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-play"></i></button>
             <button id="ctrl-next" class="tool-btn" title="Loop"><i class="fa-solid fa-forward-step"></i></button>
           </div>
 
