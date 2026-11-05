@@ -21,7 +21,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* HIỆU ỨNG FOCUS CHO BÀN PHÍM (TAB ACCESSIBILITY) */
+/* ACCESSIBILITY FOCUS RING */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--accent-purple) !important;
   outline-offset: 3px !important;
@@ -40,7 +40,7 @@ body {
   min-height: 100vh;
 }
 
-/* Background GIF mượt */
+/* Background GIF */
 .bg-layer {
   position: fixed;
   inset: 0;
@@ -50,7 +50,7 @@ body {
   will-change: transform;
 }
 
-/* Lớp vignette tối hơn để chữ luôn tương phản rõ trên lửa */
+/* Lớp Vignette điện ảnh */
 .bg-vignette {
   position: fixed;
   inset: 0;
@@ -112,7 +112,7 @@ body {
   transform: scale(1.08);
 }
 
-/* Nút âm thanh nổi */
+/* Nút âm thanh nổi góc phải */
 .floating-audio-btn {
   position: fixed;
   top: 18px;
@@ -290,7 +290,7 @@ body {
   50% { transform: translateY(5px); }
 }
 
-/* ================= CARDS SECTION & HIỆU ỨNG CUỘN TỚI (SCROLL REVEAL) ================= */
+/* ================= CARDS SECTION & SCROLL REVEAL ================= */
 .cards-view {
   min-height: 100vh;
   max-width: 530px;
@@ -301,7 +301,6 @@ body {
   gap: 16px;
 }
 
-/* Lớp reveal: Mặc định mờ và hạ thấp 20px */
 .reveal-card {
   opacity: 0;
   transform: translateY(22px);
@@ -331,7 +330,7 @@ body {
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6), 0 0 15px rgba(168, 85, 247, 0.15);
 }
 
-/* NHẤT QUÁN TOÀN BỘ TIÊU ĐỀ BẰNG MÀU TÍM MONO CHUẨN */
+/* NHẤT QUÁN TIÊU ĐỀ TÍM MONO */
 .section-badge, .category-label {
   font-size: 0.68rem !important;
   font-weight: 700 !important;
@@ -344,7 +343,7 @@ body {
   gap: 6px;
 }
 
-/* 1. THẺ ABOUT ME NỔI BẬT */
+/* 1. ABOUT ME CARD */
 .about-card-special {
   border: 1px solid rgba(168, 85, 247, 0.25);
   background: linear-gradient(180deg, rgba(28, 22, 38, 0.9) 0%, rgba(18, 20, 26, 0.92) 100%);
@@ -400,7 +399,7 @@ body {
 }
 .about-text strong { color: #ffffff; }
 
-/* 3 Ô THỐNG KÊ (STATS GRID) */
+/* STATS GRID */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -473,7 +472,7 @@ body {
   color: #fff;
 }
 
-/* 2. THẺ SKILLS PHÂN NHÓM & RATING VỚI TOOLTIP */
+/* 2. SKILLS CARD */
 .skill-category-block {
   display: flex;
   flex-direction: column;
@@ -552,7 +551,7 @@ body {
 }
 .skill-dots .dot.active { background: var(--accent-purple); }
 
-/* TOOLTIP NẰM BÊN TRÊN KHI HOVER SKILL */
+/* TOOLTIP HOVER */
 .skill-item::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -578,7 +577,7 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* 3. THẺ FEATURED PROJECTS CÓ ẢNH BÌA, TAG, NÚT */
+/* 3. FEATURED PROJECTS CARD */
 .projects-container {
   display: flex;
   flex-direction: column;
@@ -699,6 +698,18 @@ body {
 .p-btn-gh:hover {
   color: #fff;
   border-color: rgba(255, 255, 255, 0.3);
+}
+.p-btn-features {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #d8b4fe;
+  cursor: pointer;
+}
+.p-btn-features:hover {
+  background: rgba(168, 85, 247, 0.28);
+  border-color: #c084fc;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 /* 4 & 5. DISCORD & FACEBOOK CARDS */
@@ -939,6 +950,147 @@ body {
   background: #fff;
   cursor: pointer;
 }
+
+/* ================= MODAL DANH SÁCH TÍNH NĂNG BOT ================= */
+.bot-modal-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.bot-modal-wrapper.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.bot-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 5, 8, 0.82);
+  backdrop-filter: blur(8px);
+}
+.bot-modal-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  background: rgba(18, 20, 28, 0.96);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(168, 85, 247, 0.2);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bot-modal-wrapper.hidden .bot-modal-content {
+  transform: translateY(20px) scale(0.96);
+}
+.bot-modal-header {
+  padding: 14px 18px;
+  background: rgba(28, 22, 38, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.bot-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #c084fc;
+}
+.bot-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-sub);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+.bot-modal-close:hover { color: #fff; }
+
+.bot-features-list {
+  padding: 14px 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.feature-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px 12px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.feature-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+.feature-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.feature-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.feature-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #fff;
+}
+.feature-desc {
+  font-size: 0.74rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+.bot-modal-footer {
+  padding: 12px 18px;
+  background: rgba(22, 24, 32, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.bot-join-modal-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: #5865f2;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.bot-join-modal-btn:hover { background: #4752c4; }
 
 /* ================= GMAIL POPUP MODAL GÓC DƯỚI ================= */
 .floating-mail-btn {
