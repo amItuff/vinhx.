@@ -23,7 +23,95 @@ document.getElementById('scroll-hint-btn').addEventListener('click', () => {
 });
 
 /* =========================================================================
-   3. PLAYLIST SOUNDCLOUD & QUẢN LÝ PHÁT NHẠC
+   3. SAO CHÉP EMAIL & HIỂN THỊ TOAST POPUP KÈM DẤU TICK
+   ========================================================================= */
+const EMAIL_TO_COPY = "nguyenngoctrivinh72@gmail.com";
+const copyEmailBtn = document.getElementById('copy-email-btn');
+const copyToast = document.getElementById('copy-toast');
+let toastTimer = null;
+
+copyEmailBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(EMAIL_TO_COPY).then(() => {
+    // Hiển thị toast
+    copyToast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      copyToast.classList.remove('show');
+    }, 2800);
+  });
+});
+
+/* =========================================================================
+   4. QUẢN LÝ GMAIL POPUP MODAL Ở GÓC MÀN HÌNH
+   ========================================================================= */
+const openGmailBtn = document.getElementById('open-gmail-modal');
+const closeGmailBtn = document.getElementById('close-gmail-btn');
+const minimizeGmailBtn = document.getElementById('minimize-gmail-btn');
+const gmailPopup = document.getElementById('gmail-popup');
+
+function toggleGmailPopup(show) {
+  if (show) {
+    gmailPopup.classList.remove('hidden');
+    openGmailBtn.style.display = 'none';
+  } else {
+    gmailPopup.classList.add('hidden');
+    openGmailBtn.style.display = 'flex';
+  }
+}
+
+openGmailBtn.addEventListener('click', () => toggleGmailPopup(true));
+closeGmailBtn.addEventListener('click', () => toggleGmailPopup(false));
+minimizeGmailBtn.addEventListener('click', () => toggleGmailPopup(false));
+
+/* =========================================================================
+   5. XỬ LÝ GỬI THƯ AJAX QUA FORMSPREE (mrppjobo)
+   ========================================================================= */
+const contactForm = document.getElementById('contact-form');
+const formStatus = document.getElementById('form-status');
+const formSubmitBtn = document.getElementById('form-submit-btn');
+
+contactForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  formSubmitBtn.disabled = true;
+  formStatus.style.color = '#eab308';
+  formStatus.textContent = 'Đang gửi thư...';
+
+  const formData = new FormData(contactForm);
+
+  try {
+    const response = await fetch(contactForm.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      formStatus.style.color = '#22c55e';
+      formStatus.textContent = 'Đã gửi thành công!';
+      contactForm.reset();
+      setTimeout(() => {
+        toggleGmailPopup(false);
+        formStatus.textContent = '';
+      }, 2000);
+    } else {
+      const data = await response.json();
+      formStatus.style.color = '#ef4444';
+      if (data && data.errors) {
+        formStatus.textContent = data.errors.map(err => err.message).join(', ');
+      } else {
+        formStatus.textContent = 'Lỗi gửi thư. Vui lòng thử lại!';
+      }
+    }
+  } catch (err) {
+    formStatus.style.color = '#ef4444';
+    formStatus.textContent = 'Lỗi kết nối!';
+  } finally {
+    formSubmitBtn.disabled = false;
+  }
+});
+
+/* =========================================================================
+   6. PLAYLIST SOUNDCLOUD & QUẢN LÝ PHÁT NHẠC
    ========================================================================= */
 const PLAYLIST = [
   {
@@ -99,7 +187,7 @@ widget.bind(SC.Widget.Events.READY, () => {
   });
 });
 
-// Chạm để vào trang và kích hoạt âm thanh
+// Chạm để vào trang và phát nhạc
 document.getElementById('enter-screen').addEventListener('click', function () {
   this.classList.add('dismissed');
   soundStarted = true;
@@ -166,7 +254,7 @@ document.getElementById('vol-range').addEventListener('input', function () {
 });
 
 /* =========================================================================
-   4. NÚT BẬT TẮT ÂM THANH NỔI (FLOATING SOUND TOGGLE)
+   7. NÚT ÂM THANH NỔI (MUTE/UNMUTE)
    ========================================================================= */
 floatingToggleBtn.addEventListener('click', () => {
   isMuted = !isMuted;
@@ -182,53 +270,14 @@ floatingToggleBtn.addEventListener('click', () => {
 });
 
 /* =========================================================================
-   5. XỬ LÝ SUBMIT FORM LIÊN HỆ GMAIL TRỰC TIẾP
-   ========================================================================= */
-const contactForm = document.getElementById('contact-form');
-const formStatus = document.getElementById('form-status');
-const formSubmitBtn = document.getElementById('form-submit-btn');
-
-contactForm.addEventListener('submit', async function (e) {
-  e.preventDefault();
-  formSubmitBtn.disabled = true;
-  formStatus.style.color = '#eab308';
-  formStatus.textContent = 'Đang gửi thư...';
-
-  const formData = new FormData(contactForm);
-
-  try {
-    const response = await fetch(contactForm.action, {
-      method: 'POST',
-      body: formData,
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (response.ok) {
-      formStatus.style.color = '#22c55e';
-      formStatus.textContent = 'Đã gửi thành công vào hộp thư!';
-      contactForm.reset();
-    } else {
-      formStatus.style.color = '#ef4444';
-      formStatus.textContent = 'Lỗi gửi thư. Vui lòng thử lại sau.';
-    }
-  } catch (err) {
-    formStatus.style.color = '#ef4444';
-    formStatus.textContent = 'Không thể kết nối. Thử lại sau!';
-  } finally {
-    formSubmitBtn.disabled = false;
-    setTimeout(() => { formStatus.textContent = ''; }, 6000);
-  }
-});
-
-/* =========================================================================
-   6. CỐ ĐỊNH AVATAR
+   8. CỐ ĐỊNH AVATAR
    ========================================================================= */
 const FIXED_AVATAR = "https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg";
 document.getElementById('main-avatar').src = FIXED_AVATAR;
 document.getElementById('card-avatar').src = FIXED_AVATAR;
 
 /* =========================================================================
-   7. BẢO VỆ NỘI DUNG CƠ BẢN
+   9. BẢO VỆ SOURCE CODE
    ========================================================================= */
 if (window.top !== window.self) window.top.location = window.self.location;
 document.addEventListener('contextmenu', (e) => e.preventDefault());
