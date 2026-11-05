@@ -16,23 +16,45 @@ setInterval(updateVNClock, 1000);
 updateVNClock();
 
 /* =========================================================================
-   2. CUỘN TRANG MƯỢT KHÔNG DÍNH HASH #CARDS-VIEW TRÊN URL
+   2. CUỘN TRANG MƯỢT
    ========================================================================= */
 document.getElementById('scroll-hint-btn').addEventListener('click', () => {
   document.getElementById('cards-view').scrollIntoView({ behavior: 'smooth' });
 });
 
 /* =========================================================================
-   3. ĐIỀU KHIỂN SOUNDCLOUD & CHỈ XOAY ĐĨA KHI PHÁT THẬT
+   3. PLAYLIST SOUNDCLOUD & QUẢN LÝ PHÁT NHẠC
    ========================================================================= */
+const PLAYLIST = [
+  {
+    title: "PAR SG - cigarette ft. Cigar",
+    url: "https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar"
+  },
+  {
+    title: "Hành Tinh Buồn Tênh",
+    url: "https://soundcloud.com/viet-music-chill/hanh-tinh-buon-tenh"
+  },
+  {
+    title: "Lofi Hip Hop Chill Beats",
+    url: "https://soundcloud.com/chillhopdotcom/chillhop-essentials-spring-2023"
+  }
+];
+
+let currentTrackIndex = 0;
+let soundStarted = false;
+let isMuted = false;
+let currentVolume = 85;
+let maxTrackMs = 162000;
+
 const iframe = document.getElementById('sc-hidden-frame');
 const widget = SC.Widget(iframe);
 const diskImage = document.getElementById('disk-image');
 const diskBox = document.querySelector('.disk-container');
 const playIcon = document.getElementById('ctrl-play-icon');
-
-let maxTrackMs = 162000;
-let soundStarted = false;
+const trackNameEl = document.getElementById('track-name');
+const trackCounterEl = document.getElementById('track-counter');
+const floatingToggleBtn = document.getElementById('floating-audio-toggle');
+const floatIcon = document.getElementById('float-audio-icon');
 
 function formatSec(ms) {
   const total = Math.floor(ms / 1000);
@@ -41,8 +63,26 @@ function formatSec(ms) {
   return `${m}:${s < 10 ? '0' : ''}${s}`;
 }
 
+function updateTrackUI() {
+  trackNameEl.textContent = PLAYLIST[currentTrackIndex].title;
+  trackCounterEl.textContent = `${currentTrackIndex + 1} / ${PLAYLIST.length}`;
+}
+
+function loadTrack(index) {
+  currentTrackIndex = index;
+  updateTrackUI();
+  widget.load(PLAYLIST[currentTrackIndex].url, {
+    auto_play: true,
+    show_artwork: true,
+    callback: () => {
+      widget.setVolume(isMuted ? 0 : currentVolume);
+    }
+  });
+}
+
 widget.bind(SC.Widget.Events.READY, () => {
-  widget.setVolume(85);
+  widget.setVolume(currentVolume);
+  updateTrackUI();
 
   widget.getDuration((d) => {
     if (d > 0) {
@@ -54,20 +94,18 @@ widget.bind(SC.Widget.Events.READY, () => {
   widget.getCurrentSound((sound) => {
     if (sound?.artwork_url) {
       const art = sound.artwork_url.replace('-large', '-t500x500');
-      document.getElementById('sc-thumb').src = art;
       diskImage.src = art;
     }
   });
 });
 
-// Chạm để vào trang và phát nhạc
+// Chạm để vào trang và kích hoạt âm thanh
 document.getElementById('enter-screen').addEventListener('click', function () {
   this.classList.add('dismissed');
   soundStarted = true;
   widget.play();
 });
 
-// Bắt tương tác chạm phòng trường hợp người dùng lướt thẳng
 ['touchstart', 'click'].forEach((event) => {
   window.addEventListener(event, () => {
     if (!soundStarted) {
@@ -99,13 +137,22 @@ widget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
 });
 
 widget.bind(SC.Widget.Events.FINISH, () => {
-  widget.seekTo(0);
-  widget.play();
+  nextTrack();
 });
 
+function nextTrack() {
+  currentTrackIndex = (currentTrackIndex + 1) % PLAYLIST.length;
+  loadTrack(currentTrackIndex);
+}
+
+function prevTrack() {
+  currentTrackIndex = (currentTrackIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
+  loadTrack(currentTrackIndex);
+}
+
 document.getElementById('ctrl-play').addEventListener('click', () => widget.toggle());
-document.getElementById('ctrl-prev').addEventListener('click', () => { widget.seekTo(0); widget.play(); });
-document.getElementById('ctrl-next').addEventListener('click', () => { widget.seekTo(0); widget.play(); });
+document.getElementById('ctrl-next').addEventListener('click', nextTrack);
+document.getElementById('ctrl-prev').addEventListener('click', prevTrack);
 
 document.getElementById('progress-bar-slot').addEventListener('click', function (e) {
   const rect = this.getBoundingClientRect();
@@ -114,18 +161,74 @@ document.getElementById('progress-bar-slot').addEventListener('click', function 
 });
 
 document.getElementById('vol-range').addEventListener('input', function () {
-  widget.setVolume(Number(this.value));
+  currentVolume = Number(this.value);
+  if (!isMuted) widget.setVolume(currentVolume);
 });
 
 /* =========================================================================
-   4. GIỮ CỐ ĐỊNH AVATAR BẠN YÊU CẦU (KHÔNG BỊ LỖI ĐÈ AVATAR MẶC ĐỊNH)
+   4. NÚT BẬT TẮT ÂM THANH NỔI (FLOATING SOUND TOGGLE)
+   ========================================================================= */
+floatingToggleBtn.addEventListener('click', () => {
+  isMuted = !isMuted;
+  if (isMuted) {
+    widget.setVolume(0);
+    floatIcon.className = 'fa-solid fa-volume-xmark';
+    floatingToggleBtn.classList.add('muted');
+  } else {
+    widget.setVolume(currentVolume);
+    floatIcon.className = 'fa-solid fa-volume-high';
+    floatingToggleBtn.classList.remove('muted');
+  }
+});
+
+/* =========================================================================
+   5. XỬ LÝ SUBMIT FORM LIÊN HỆ GMAIL TRỰC TIẾP
+   ========================================================================= */
+const contactForm = document.getElementById('contact-form');
+const formStatus = document.getElementById('form-status');
+const formSubmitBtn = document.getElementById('form-submit-btn');
+
+contactForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  formSubmitBtn.disabled = true;
+  formStatus.style.color = '#eab308';
+  formStatus.textContent = 'Đang gửi thư...';
+
+  const formData = new FormData(contactForm);
+
+  try {
+    const response = await fetch(contactForm.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      formStatus.style.color = '#22c55e';
+      formStatus.textContent = 'Đã gửi thành công vào hộp thư!';
+      contactForm.reset();
+    } else {
+      formStatus.style.color = '#ef4444';
+      formStatus.textContent = 'Lỗi gửi thư. Vui lòng thử lại sau.';
+    }
+  } catch (err) {
+    formStatus.style.color = '#ef4444';
+    formStatus.textContent = 'Không thể kết nối. Thử lại sau!';
+  } finally {
+    formSubmitBtn.disabled = false;
+    setTimeout(() => { formStatus.textContent = ''; }, 6000);
+  }
+});
+
+/* =========================================================================
+   6. CỐ ĐỊNH AVATAR
    ========================================================================= */
 const FIXED_AVATAR = "https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg";
 document.getElementById('main-avatar').src = FIXED_AVATAR;
 document.getElementById('card-avatar').src = FIXED_AVATAR;
 
 /* =========================================================================
-   5. CHỐNG COPY VÀ BẢO VỆ SOURCE CODE
+   7. BẢO VỆ NỘI DUNG CƠ BẢN
    ========================================================================= */
 if (window.top !== window.self) window.top.location = window.self.location;
 document.addEventListener('contextmenu', (e) => e.preventDefault());
