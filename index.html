@@ -8,10 +8,10 @@
   <!-- MÃ XÁC MINH GOOGLE SEARCH CONSOLE -->
   <meta name="google-site-verification" content="Z77-r76faPhTg1uc2TFHpSoOqsLd_WRSPCJMKu4T0wg" />
 
-  <!-- SEO & THÔNG TIN TÌM KIẾM -->
+  <!-- SEO & THÔNG TIN -->
   <title>vinhx — Personal Portfolio</title>
   <meta name="description" content="Không gian cá nhân và Portfolio của Vinh (vinhx). Lập trình viên, bot automation, kết nối mạng xã hội và nghe nhạc trực tiếp." />
-  <meta name="keywords" content="vinhx, vinh, portfolio vinhx, nntv_1, trivinhnguyen, python developer, discord bot" />
+  <meta name="keywords" content="vinhx, vinh, portfolio vinhx, nntv_1, trivinhnguyen" />
   <meta name="author" content="vinhx" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://vinhx.info/" />
@@ -21,7 +21,7 @@
   <link rel="shortcut icon" type="image/jpeg" href="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
   <link rel="apple-touch-icon" href="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
 
-  <!-- OPEN GRAPH (Sử dụng URL ảnh Pinterest sẵn có) -->
+  <!-- THEME & OG (Ảnh Pinterest giữ nguyên) -->
   <meta name="theme-color" content="#7c3aed" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vinhx.info/" />
@@ -36,18 +36,17 @@
   <meta name="twitter:description" content="Không gian cá nhân và Portfolio của Vinh (vinhx)." />
   <meta name="twitter:image" content="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
 
-  <!-- Google Fonts -->
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=latin,vietnamese" rel="stylesheet">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://w.soundcloud.com/player/api.js"></script>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
 
-  <!-- Màn hình click để vào web -->
+  <!-- Màn hình click to enter -->
   <div id="enter-screen">
     <div class="enter-box">
       <div class="enter-title">click to enter...</div>
@@ -58,7 +57,7 @@
     </div>
   </div>
 
-  <!-- Nút bật/tắt âm thanh nổi (Floating Audio Toggle) -->
+  <!-- Nút âm thanh nổi góc trên bên phải -->
   <button id="floating-audio-toggle" class="floating-audio-btn" title="Bật/Tắt âm thanh">
     <i id="float-audio-icon" class="fa-solid fa-volume-high"></i>
   </button>
@@ -66,6 +65,17 @@
   <!-- Background GIF và lớp phủ điện ảnh -->
   <div class="bg-layer"></div>
   <div class="bg-vignette"></div>
+
+  <!-- TOAST THÔNG BÁO SAO CHÉP EMAIL VỚI ICON TICK XANH -->
+  <div id="copy-toast" class="copy-toast">
+    <div class="toast-tick-circle">
+      <i class="fa-solid fa-check"></i>
+    </div>
+    <div class="toast-text-group">
+      <span class="toast-title">Đã sao chép email!</span>
+      <span class="toast-sub">nguyenngoctrivinh72@gmail.com</span>
+    </div>
+  </div>
 
   <!-- ================= HERO SECTION ================= -->
   <main class="hero-view">
@@ -84,9 +94,10 @@
       <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="social-circle" title="Discord">
         <i class="fa-brands fa-discord"></i>
       </a>
-      <a href="mailto:nguyenngoctrivinh72@gmail.com" class="social-circle" title="Gửi Email trực tiếp">
+      <!-- Nút Email sao chép địa chỉ khi click -->
+      <button id="copy-email-btn" class="social-circle email-copy-trigger" type="button" title="Nhấn để sao chép Email">
         <i class="fa-regular fa-envelope"></i>
-      </a>
+      </button>
       <a href="https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar" target="_blank" rel="noopener noreferrer" class="social-circle" title="SoundCloud">
         <i class="fa-brands fa-soundcloud"></i>
       </a>
@@ -98,18 +109,18 @@
     </div>
   </main>
 
-  <!-- ================= CARDS & PORTFOLIO CONTENT ================= -->
+  <!-- ================= CARDS SECTION ================= -->
   <section id="cards-view" class="cards-view">
 
     <!-- THẺ ABOUT -->
     <div class="glass-card content-card">
       <div class="section-badge"><i class="fa-regular fa-user"></i> ABOUT ME</div>
       <p class="about-text">
-        Mình là <strong>Vinh (vinhx)</strong>. Đam mê lập trình tự động hóa với Python, phát triển web tối giản, bot Discord và tối ưu hạ tầng mạng/cloud.
+        Mình là <strong>Vinh (vinhx)</strong>. Đam mê lập trình tự động hóa với Python, phát triển web tối giản, bot Discord và tối ưu hạ tầng cloud.
       </p>
     </div>
 
-    <!-- THẺ SKILLS NỔI BẬT -->
+    <!-- THẺ SKILLS -->
     <div class="glass-card content-card">
       <div class="section-badge"><i class="fa-solid fa-code"></i> SKILLS & TECH STACK</div>
       <div class="skills-grid">
@@ -141,50 +152,6 @@
           <a href="https://discord.com/users/1054712893037355018" class="project-link" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
         </div>
       </div>
-    </div>
-
-    <!-- FORM LIÊN HỆ GMAIL TRỰC TIẾP -->
-    <div class="glass-card content-card">
-      <div class="gmail-header">
-        <div class="gmail-title">
-          <i class="fa-solid fa-envelope"></i> Gửi thư cho Vinh (New Message)
-        </div>
-        <div class="gmail-controls">
-          <span class="ctrl-dot"></span>
-          <span class="ctrl-dot"></span>
-          <span class="ctrl-dot"></span>
-        </div>
-      </div>
-
-      <form id="contact-form" action="https://formspree.io/f/mqaeveqz" method="POST" class="gmail-form">
-        <!-- Chuyển hướng hoặc cấu hình nhận email -->
-        <input type="hidden" name="_to" value="nguyenngoctrivinh72@gmail.com" />
-        <input type="hidden" name="_subject" value="Tin nhắn liên hệ mới từ Portfolio vinhx.info" />
-
-        <div class="gmail-field">
-          <span class="field-label">To:</span>
-          <span class="field-val">nguyenngoctrivinh72@gmail.com</span>
-        </div>
-
-        <div class="gmail-field">
-          <span class="field-label">From:</span>
-          <input type="email" name="email" required placeholder="Email của bạn..." class="gmail-input" />
-        </div>
-
-        <div class="gmail-field">
-          <span class="field-label">Subject:</span>
-          <input type="text" name="subject" required placeholder="Tiêu đề thư..." class="gmail-input" />
-        </div>
-
-        <textarea name="message" required placeholder="Nhập nội dung thư tại đây..." class="gmail-textarea" rows="4"></textarea>
-
-        <div class="gmail-footer">
-          <button type="submit" id="form-submit-btn" class="send-mail-btn">
-            <span>Send</span> <i class="fa-solid fa-paper-plane"></i>
-          </button>
-          <span id="form-status" class="form-status-text"></span>
-        </div>
-      </form>
     </div>
 
     <!-- THẺ DISCORD PROFILE -->
@@ -271,6 +238,52 @@
     </div>
 
   </section>
+
+  <!-- ================= GMAIL POPUP Ở GÓC DƯỚI MÀN HÌNH ================= -->
+  <!-- Nút tròn thu nhỏ ở góc màn hình -->
+  <button id="open-gmail-modal" class="floating-mail-btn" title="Soạn thư gửi Vinh">
+    <i class="fa-solid fa-envelope"></i>
+  </button>
+
+  <!-- Hộp thoại Gmail Popup -->
+  <div id="gmail-popup" class="gmail-popup-wrapper hidden">
+    <div class="gmail-popup-header">
+      <div class="gmail-popup-title">
+        <i class="fa-solid fa-envelope"></i> Gửi thư cho Vinh (New Message)
+      </div>
+      <div class="gmail-popup-actions">
+        <button id="minimize-gmail-btn" type="button" class="gmail-header-btn" title="Thu nhỏ"><i class="fa-solid fa-minus"></i></button>
+        <button id="close-gmail-btn" type="button" class="gmail-header-btn" title="Đóng"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <!-- Dùng trực tiếp endpoint của bạn: mrppjobo -->
+    <form id="contact-form" action="https://formspree.io/f/mrppjobo" method="POST" class="gmail-popup-body">
+      <div class="gmail-field">
+        <span class="field-label">To:</span>
+        <span class="field-val">nguyenngoctrivinh72@gmail.com</span>
+      </div>
+
+      <div class="gmail-field">
+        <span class="field-label">From:</span>
+        <input type="email" name="email" required placeholder="Email của bạn..." class="gmail-input" />
+      </div>
+
+      <div class="gmail-field">
+        <span class="field-label">Subject:</span>
+        <input type="text" name="subject" required placeholder="Tiêu đề..." class="gmail-input" />
+      </div>
+
+      <textarea name="message" required placeholder="Nhập nội dung thư..." class="gmail-textarea" rows="5"></textarea>
+
+      <div class="gmail-popup-footer">
+        <button type="submit" id="form-submit-btn" class="send-mail-btn">
+          <span>Send</span> <i class="fa-solid fa-paper-plane"></i>
+        </button>
+        <span id="form-status" class="form-status-text"></span>
+      </div>
+    </form>
+  </div>
 
   <!-- ĐỒNG HỒ VIỆT NAM (GMT+7) -->
   <div class="vn-clock-badge">
