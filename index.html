@@ -8,7 +8,6 @@
   <!-- MÃ XÁC MINH GOOGLE SEARCH CONSOLE -->
   <meta name="google-site-verification" content="Z77-r76faPhTg1uc2TFHpSoOqsLd_WRSPCJMKu4T0wg" />
 
-  <!-- SEO & THÔNG TIN -->
   <title>vinhx — Personal Portfolio</title>
   <meta name="description" content="Không gian cá nhân và Portfolio của Vinh (vinhx). Lập trình viên, bot automation, kết nối mạng xã hội và nghe nhạc trực tiếp." />
   <meta name="keywords" content="vinhx, vinh, portfolio vinhx, nntv_1, trivinhnguyen" />
@@ -21,7 +20,7 @@
   <link rel="shortcut icon" type="image/jpeg" href="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
   <link rel="apple-touch-icon" href="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
 
-  <!-- THEME & OG (Ảnh Pinterest giữ nguyên) -->
+  <!-- THEME & OG -->
   <meta name="theme-color" content="#7c3aed" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vinhx.info/" />
@@ -30,16 +29,10 @@
   <meta property="og:description" content="Không gian cá nhân và Portfolio chính thức của Vinh. Khám phá kỹ năng, dự án và chill cùng playlist nhạc trực tiếp." />
   <meta property="og:image" content="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="vinhx — Personal Portfolio" />
-  <meta name="twitter:description" content="Không gian cá nhân và Portfolio của Vinh (vinhx)." />
-  <meta name="twitter:image" content="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
-
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=latin,vietnamese" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap&subset=latin,vietnamese" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://w.soundcloud.com/player/api.js"></script>
@@ -66,7 +59,7 @@
   <div class="bg-layer"></div>
   <div class="bg-vignette"></div>
 
-  <!-- TOAST THÔNG BÁO SAO CHÉP EMAIL VỚI ICON TICK XANH -->
+  <!-- TOAST THÔNG BÁO SAO CHÉP EMAIL KÈM ICON TICK XANH -->
   <div id="copy-toast" class="copy-toast">
     <div class="toast-tick-circle">
       <i class="fa-solid fa-check"></i>
@@ -94,7 +87,6 @@
       <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="social-circle" title="Discord">
         <i class="fa-brands fa-discord"></i>
       </a>
-      <!-- Nút Email sao chép địa chỉ khi click -->
       <button id="copy-email-btn" class="social-circle email-copy-trigger" type="button" title="Nhấn để sao chép Email">
         <i class="fa-regular fa-envelope"></i>
       </button>
@@ -112,50 +104,187 @@
   <!-- ================= CARDS SECTION ================= -->
   <section id="cards-view" class="cards-view">
 
-    <!-- THẺ ABOUT -->
-    <div class="glass-card content-card">
+    <!-- 1. THẺ ABOUT ME (NỔI BẬT NHẤT) -->
+    <div class="glass-card reveal-card about-card-special">
       <div class="section-badge"><i class="fa-regular fa-user"></i> ABOUT ME</div>
-      <p class="about-text">
-        Mình là <strong>Vinh (vinhx)</strong>. Đam mê lập trình tự động hóa với Python, phát triển web tối giản, bot Discord và tối ưu hạ tầng cloud.
-      </p>
+
+      <div class="about-hero-row">
+        <img class="about-avatar-img" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="Vinh" />
+        <div class="about-meta">
+          <div class="status-badge-online">
+            <span class="status-pulse-dot"></span>
+            <span>Available for freelance</span>
+          </div>
+          <p class="about-text">
+            Mình là <strong>Vinh (vinhx)</strong>. Đam mê xây dựng các hệ thống tự động hóa, bot Discord, tối ưu giao diện web tối giản và hạ tầng Cloud hiện đại.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3 Ô SỐ LIỆU NỔI BẬT -->
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-number">2+</span>
+          <span class="stat-label">Năm kinh nghiệm</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number">10+</span>
+          <span class="stat-label">Bots & Scripts</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-number">99.9%</span>
+          <span class="stat-label">Uptime Serv</span>
+        </div>
+      </div>
+
+      <!-- NÚT HÀNH ĐỘNG -->
+      <div class="about-actions-row">
+        <button id="about-contact-btn" class="about-btn primary"><i class="fa-solid fa-paper-plane"></i> Liên hệ ngay</button>
+        <a href="mailto:nguyenngoctrivinh72@gmail.com?subject=Yêu cầu CV từ Portfolio" class="about-btn secondary"><i class="fa-solid fa-download"></i> Tải CV</a>
+      </div>
     </div>
 
-    <!-- THẺ SKILLS -->
-    <div class="glass-card content-card">
+    <!-- 2. THẺ SKILLS & TECH STACK (PHÂN NHÓM + RATING + TOOLTIP) -->
+    <div class="glass-card reveal-card skills-card-clean">
       <div class="section-badge"><i class="fa-solid fa-code"></i> SKILLS & TECH STACK</div>
-      <div class="skills-grid">
-        <span class="skill-pill"><i class="fa-brands fa-python"></i> Python (Bot & Crawler)</span>
-        <span class="skill-pill"><i class="fa-brands fa-js"></i> JavaScript (ES6+)</span>
-        <span class="skill-pill"><i class="fa-brands fa-html5"></i> HTML5 & CSS3</span>
-        <span class="skill-pill"><i class="fa-brands fa-git-alt"></i> Git & GitHub</span>
-        <span class="skill-pill"><i class="fa-solid fa-network-wired"></i> REST API & Webhooks</span>
-        <span class="skill-pill"><i class="fa-solid fa-cloud"></i> Vercel & Cloudflare</span>
+
+      <!-- Nhóm Backend -->
+      <div class="skill-category-block">
+        <span class="category-subhead"><i class="fa-solid fa-server"></i> Backend & Scripting</span>
+        <div class="skills-grid">
+          <div class="skill-item" data-tooltip="Tự động hóa, Crawler, discord.py, API scripting">
+            <div class="skill-main">
+              <i class="fa-brands fa-python skill-logo python"></i>
+              <span class="skill-name">Python</span>
+            </div>
+            <div class="skill-detail">
+              <span class="skill-tag-freq">Daily</span>
+              <span class="skill-dots"><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot"></i></span>
+            </div>
+          </div>
+
+          <div class="skill-item" data-tooltip="RESTful API, Webhook endpoints, JSON handling">
+            <div class="skill-main">
+              <i class="fa-solid fa-network-wired skill-logo api"></i>
+              <span class="skill-name">REST API</span>
+            </div>
+            <div class="skill-detail">
+              <span class="skill-tag-freq">Daily</span>
+              <span class="skill-dots"><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nhóm Frontend -->
+      <div class="skill-category-block">
+        <span class="category-subhead"><i class="fa-solid fa-palette"></i> Frontend & UI</span>
+        <div class="skills-grid">
+          <div class="skill-item" data-tooltip="ES6+, Xử lý DOM, Async/Await, Web Audio">
+            <div class="skill-main">
+              <i class="fa-brands fa-js skill-logo js"></i>
+              <span class="skill-name">JavaScript</span>
+            </div>
+            <div class="skill-detail">
+              <span class="skill-tag-freq">Daily</span>
+              <span class="skill-dots"><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot"></i></span>
+            </div>
+          </div>
+
+          <div class="skill-item" data-tooltip="Semantic HTML, Flexbox, CSS Grid, Glassmorphism">
+            <div class="skill-main">
+              <i class="fa-brands fa-html5 skill-logo html"></i>
+              <span class="skill-name">HTML5 / CSS3</span>
+            </div>
+            <div class="skill-detail">
+              <span class="skill-tag-freq">Daily</span>
+              <span class="skill-dots"><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nhóm DevOps & Tools -->
+      <div class="skill-category-block">
+        <span class="category-subhead"><i class="fa-solid fa-screwdriver-wrench"></i> DevOps & Infrastructure</span>
+        <div class="skills-grid">
+          <div class="skill-item" data-tooltip="Version Control, Branching, GitHub Actions">
+            <div class="skill-main">
+              <i class="fa-brands fa-git-alt skill-logo git"></i>
+              <span class="skill-name">Git & GitHub</span>
+            </div>
+            <div class="skill-detail">
+              <span class="skill-tag-freq">Daily</span>
+              <span class="skill-dots"><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot"></i></span>
+            </div>
+          </div>
+
+          <div class="skill-item" data-tooltip="Deploy dự án, quản lý Custom Domain, Edge CDN">
+            <div class="skill-main">
+              <i class="fa-solid fa-cloud skill-logo cloud"></i>
+              <span class="skill-name">Vercel & DNS</span>
+            </div>
+            <div class="skill-detail">
+              <span class="skill-tag-freq">Frequent</span>
+              <span class="skill-dots"><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot"></i></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- THẺ PROJECTS -->
-    <div class="glass-card content-card">
+    <!-- 3. THẺ FEATURED PROJECTS (CÓ ẢNH BÌA, STATUS, NÚT RÕ RÀNG) -->
+    <div class="glass-card reveal-card projects-card-wrapper">
       <div class="section-badge"><i class="fa-solid fa-diagram-project"></i> FEATURED PROJECTS</div>
-      <div class="projects-list">
-        <div class="project-item">
-          <div class="project-info">
-            <span class="project-title">Personal Portfolio (vinhx.info)</span>
-            <span class="project-desc">Trang cá nhân responsive Glassmorphism, tích hợp SoundCloud Player và liên kết hệ thống.</span>
+
+      <div class="projects-container">
+        <!-- Project 1 -->
+        <div class="project-showcase-item">
+          <div class="project-cover-wrap">
+            <img class="project-cover-img" src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80" alt="vinhx.info preview" />
+            <span class="project-status-tag live"><i class="fa-solid fa-circle"></i> LIVE</span>
           </div>
-          <a href="https://vinhx.info" class="project-link" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          <div class="project-details">
+            <h3 class="project-heading">vinhx — Personal Portfolio Space</h3>
+            <p class="project-paragraph">Trang cá nhân responsive Glassmorphism, tích hợp SoundCloud Player tùy chỉnh, tối ưu chuẩn SEO và DNS Vercel.</p>
+            <div class="project-tags-row">
+              <span class="p-tag">HTML5/CSS3</span>
+              <span class="p-tag">JavaScript ES6</span>
+              <span class="p-tag">SoundCloud API</span>
+              <span class="p-tag">Vercel</span>
+            </div>
+            <div class="project-action-buttons">
+              <a href="https://vinhx.info" target="_blank" class="p-btn p-btn-demo"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem demo</a>
+              <a href="https://github.com/amltuff/vinhx." target="_blank" class="p-btn p-btn-gh"><i class="fa-brands fa-github"></i> GitHub</a>
+            </div>
+          </div>
         </div>
-        <div class="project-item">
-          <div class="project-info">
-            <span class="project-title">Discord Automation & Bot</span>
-            <span class="project-desc">Bot Discord crawl tin tức tự động, tích hợp webhooks và quản lý thông báo.</span>
+
+        <!-- Project 2 -->
+        <div class="project-showcase-item">
+          <div class="project-cover-wrap">
+            <img class="project-cover-img" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80" alt="Discord Bot preview" />
+            <span class="project-status-tag live"><i class="fa-solid fa-circle"></i> LIVE</span>
           </div>
-          <a href="https://discord.com/users/1054712893037355018" class="project-link" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          <div class="project-details">
+            <h3 class="project-heading">Discord Webhook & Multi-badge Sync</h3>
+            <p class="project-paragraph">Hệ thống đồng bộ hóa trạng thái tài khoản Discord, render chuỗi danh hiệu cá nhân và cảnh báo sự kiện thông qua Webhook.</p>
+            <div class="project-tags-row">
+              <span class="p-tag">Python</span>
+              <span class="p-tag">discord.py</span>
+              <span class="p-tag">REST Webhooks</span>
+            </div>
+            <div class="project-action-buttons">
+              <a href="https://discord.com/users/1054712893037355018" target="_blank" class="p-btn p-btn-demo"><i class="fa-brands fa-discord"></i> Xem Profile</a>
+              <a href="https://github.com/amltuff" target="_blank" class="p-btn p-btn-gh"><i class="fa-brands fa-github"></i> GitHub</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- THẺ DISCORD PROFILE -->
-    <div class="glass-card">
+    <!-- 4. THẺ DISCORD PROFILE -->
+    <div class="glass-card reveal-card">
       <div class="card-body-left">
         <div class="avatar-mini-wrap">
           <img id="card-avatar" class="avatar-mini" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="vinhx" />
@@ -180,8 +309,8 @@
       <a href="https://discord.com/users/1054712893037355018" target="_blank" class="action-btn">PROFILE</a>
     </div>
 
-    <!-- THẺ FACEBOOK -->
-    <div class="glass-card">
+    <!-- 5. THẺ FACEBOOK -->
+    <div class="glass-card reveal-card">
       <div class="card-body-left">
         <div class="fb-logo-brand">
           <i class="fa-brands fa-facebook-f"></i>
@@ -195,8 +324,8 @@
       <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" class="action-btn">CONNECT</a>
     </div>
 
-    <!-- AUDIO PLAYER NÂNG CẤP VỚI PLAYLIST -->
-    <div class="audio-player-panel">
+    <!-- 6. AUDIO PLAYER NÂNG CẤP VỚI PLAYLIST -->
+    <div class="audio-player-panel reveal-card">
       <div class="disk-container">
         <img id="disk-image" class="disk-spinner" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Disk" />
         <div class="audio-bars">
@@ -240,12 +369,10 @@
   </section>
 
   <!-- ================= GMAIL POPUP Ở GÓC DƯỚI MÀN HÌNH ================= -->
-  <!-- Nút tròn thu nhỏ ở góc màn hình -->
   <button id="open-gmail-modal" class="floating-mail-btn" title="Soạn thư gửi Vinh">
     <i class="fa-solid fa-envelope"></i>
   </button>
 
-  <!-- Hộp thoại Gmail Popup -->
   <div id="gmail-popup" class="gmail-popup-wrapper hidden">
     <div class="gmail-popup-header">
       <div class="gmail-popup-title">
@@ -257,7 +384,6 @@
       </div>
     </div>
 
-    <!-- Dùng trực tiếp endpoint của bạn: mrppjobo -->
     <form id="contact-form" action="https://formspree.io/f/mrppjobo" method="POST" class="gmail-popup-body">
       <div class="gmail-field">
         <span class="field-label">To:</span>
