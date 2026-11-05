@@ -104,7 +104,7 @@
   <!-- ================= CARDS SECTION ================= -->
   <section id="cards-view" class="cards-view">
 
-    <!-- 1. THẺ ABOUT ME (NỔI BẬT NHẤT) -->
+    <!-- 1. THẺ ABOUT ME -->
     <div class="glass-card reveal-card about-card-special">
       <div class="section-badge"><i class="fa-regular fa-user"></i> ABOUT ME</div>
 
@@ -139,12 +139,12 @@
 
       <!-- NÚT HÀNH ĐỘNG -->
       <div class="about-actions-row">
-        <button id="about-contact-btn" class="about-btn primary"><i class="fa-solid fa-paper-plane"></i> Liên hệ ngay</button>
+        <button id="about-contact-btn" type="button" class="about-btn primary"><i class="fa-solid fa-paper-plane"></i> Liên hệ ngay</button>
         <a href="mailto:nguyenngoctrivinh72@gmail.com?subject=Yêu cầu CV từ Portfolio" class="about-btn secondary"><i class="fa-solid fa-download"></i> Tải CV</a>
       </div>
     </div>
 
-    <!-- 2. THẺ SKILLS & TECH STACK (PHÂN NHÓM + RATING + TOOLTIP) -->
+    <!-- 2. THẺ SKILLS & TECH STACK -->
     <div class="glass-card reveal-card skills-card-clean">
       <div class="section-badge"><i class="fa-solid fa-code"></i> SKILLS & TECH STACK</div>
 
@@ -226,14 +226,14 @@
             </div>
             <div class="skill-detail">
               <span class="skill-tag-freq">Frequent</span>
-              <span class="skill-dots"><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot"></i></span>
+              <span class="skill-dots"><i class="dot active"></i><i class="dot active"></i><i class="dot active"></i><i class="dot"></i><i class="dot"></i></span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 3. THẺ FEATURED PROJECTS (CÓ ẢNH BÌA, STATUS, NÚT RÕ RÀNG) -->
+    <!-- 3. THẺ FEATURED PROJECTS -->
     <div class="glass-card reveal-card projects-card-wrapper">
       <div class="section-badge"><i class="fa-solid fa-diagram-project"></i> FEATURED PROJECTS</div>
 
@@ -254,29 +254,34 @@
               <span class="p-tag">Vercel</span>
             </div>
             <div class="project-action-buttons">
-              <a href="https://vinhx.info" target="_blank" class="p-btn p-btn-demo"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem demo</a>
-              <a href="https://github.com/amltuff/vinhx." target="_blank" class="p-btn p-btn-gh"><i class="fa-brands fa-github"></i> GitHub</a>
+              <a href="https://vinhx.info" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem demo</a>
+              <a href="https://github.com/amltuff/vinhx." target="_blank" rel="noopener noreferrer" class="p-btn p-btn-gh"><i class="fa-brands fa-github"></i> GitHub</a>
             </div>
           </div>
         </div>
 
-        <!-- Project 2 -->
+        <!-- Project 2: Discord Multi-Tool & Badge Utility Bot -->
         <div class="project-showcase-item">
           <div class="project-cover-wrap">
             <img class="project-cover-img" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80" alt="Discord Bot preview" />
             <span class="project-status-tag live"><i class="fa-solid fa-circle"></i> LIVE</span>
           </div>
           <div class="project-details">
-            <h3 class="project-heading">Discord Webhook & Multi-badge Sync</h3>
-            <p class="project-paragraph">Hệ thống đồng bộ hóa trạng thái tài khoản Discord, render chuỗi danh hiệu cá nhân và cảnh báo sự kiện thông qua Webhook.</p>
+            <h3 class="project-heading">Discord Multi-Tool & Badge Utility Bot</h3>
+            <p class="project-paragraph">Bộ công cụ bot Discord tự động hóa đa năng: cày badge, tự động làm nhiệm vụ, treo voice stream 24/7 và giám sát bảo mật tài khoản.</p>
             <div class="project-tags-row">
               <span class="p-tag">Python</span>
               <span class="p-tag">discord.py</span>
-              <span class="p-tag">REST Webhooks</span>
+              <span class="p-tag">Automation</span>
+              <span class="p-tag">Bot Toolkit</span>
             </div>
             <div class="project-action-buttons">
-              <a href="https://discord.com/users/1054712893037355018" target="_blank" class="p-btn p-btn-demo"><i class="fa-brands fa-discord"></i> Xem Profile</a>
-              <a href="https://github.com/amltuff" target="_blank" class="p-btn p-btn-gh"><i class="fa-brands fa-github"></i> GitHub</a>
+              <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo">
+                <i class="fa-brands fa-discord"></i> Join Server
+              </a>
+              <button id="open-bot-features-btn" type="button" class="p-btn p-btn-features">
+                <i class="fa-solid fa-list-check"></i> Xem tính năng bot
+              </button>
             </div>
           </div>
         </div>
@@ -306,7 +311,7 @@
           </div>
         </div>
       </div>
-      <a href="https://discord.com/users/1054712893037355018" target="_blank" class="action-btn">PROFILE</a>
+      <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="action-btn">PROFILE</a>
     </div>
 
     <!-- 5. THẺ FACEBOOK -->
@@ -321,7 +326,7 @@
           <span class="sub-muted">facebook.com/trivinhnguyenuwu</span>
         </div>
       </div>
-      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" class="action-btn">CONNECT</a>
+      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="action-btn">CONNECT</a>
     </div>
 
     <!-- 6. AUDIO PLAYER NÂNG CẤP VỚI PLAYLIST -->
@@ -367,6 +372,102 @@
     </div>
 
   </section>
+
+  <!-- ================= MODAL XEM CHI TIẾT TÍNH NĂNG BOT DISCORD ================= -->
+  <div id="bot-features-modal" class="bot-modal-wrapper hidden">
+    <div class="bot-modal-overlay"></div>
+    <div class="bot-modal-content">
+      <div class="bot-modal-header">
+        <div class="bot-modal-title">
+          <i class="fa-brands fa-discord"></i>
+          <span>DANH SÁCH TÍNH NĂNG BOT DISCORD</span>
+        </div>
+        <button id="close-bot-features-btn" type="button" class="bot-modal-close" title="Đóng">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="bot-features-list">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-gift"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Auto Quest</span>
+            <span class="feature-desc">Hoàn thành nhiệm vụ Discord và tự động claim quà nhanh chóng.</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Badge Spoofer</span>
+            <span class="feature-desc">Tùy chỉnh game & giờ chơi mở khóa huy hiệu (Badge), còn lại giữ nguyên hết.</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Treo Stream Voice</span>
+            <span class="feature-desc">Phát sóng stream thoại 24/7 không gián đoạn để cày Streaming Badge.</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-gamepad"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Custom Rich Presence (RPC)</span>
+            <span class="feature-desc">Tùy biến ảnh GIF, trạng thái game, status cá nhân & các nút bấm tương tác.</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-trophy"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Auto Giveaway</span>
+            <span class="feature-desc">Tự động tham gia giveaway trên các server & nhận thông báo khi trúng giải.</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-certificate"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Huy Hiệu HypeSquad</span>
+            <span class="feature-desc">Trực tiếp gán/chuyển đổi huy hiệu Bravery, Brilliance, Balance hoặc gỡ badge.</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-broom"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Sao Lưu & Dọn Dẹp</span>
+            <span class="feature-desc">Xuất dữ liệu tài khoản an toàn, dọn sạch tin nhắn rác & rời server không dùng.</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-user-shield"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Giám Sát & Bảo Mật</span>
+            <span class="feature-desc">Kiểm tra các phiên đăng nhập lạ & gom thông báo nhắc tên (mention) tập trung.</span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-key"></i></div>
+          <div class="feature-info">
+            <span class="feature-name">Quản Lý Token</span>
+            <span class="feature-desc">Lưu trữ mã hóa, kiểm tra tính hợp lệ hoặc xóa token một cách an toàn.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bot-modal-footer">
+        <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer" class="bot-join-modal-btn">
+          <i class="fa-brands fa-discord"></i> Tham gia Discord Server ngay
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- ================= GMAIL POPUP Ở GÓC DƯỚI MÀN HÌNH ================= -->
   <button id="open-gmail-modal" class="floating-mail-btn" title="Soạn thư gửi Vinh">
