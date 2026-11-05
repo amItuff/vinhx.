@@ -3,8 +3,10 @@
   --card-border: rgba(255, 255, 255, 0.08);
   --text-main: #f2f3f5;
   --text-sub: #949ba4;
+  --accent-purple: #a855f7;
   --discord-green: #248046;
   --discord-green-hover: #1a6334;
+  --gmail-red: #ea4335;
 }
 
 * {
@@ -31,7 +33,7 @@ body {
   min-height: 100vh;
 }
 
-/* Background GIF mượt, tách riêng thread render */
+/* Background GIF */
 .bg-layer {
   position: fixed;
   inset: 0;
@@ -41,7 +43,6 @@ body {
   will-change: transform;
 }
 
-/* Lớp phủ điện ảnh - bỏ blur toàn màn hình để chống tụt khung hình */
 .bg-vignette {
   position: fixed;
   inset: 0;
@@ -49,7 +50,7 @@ body {
   background: radial-gradient(circle at center, rgba(11, 13, 16, 0.45) 0%, rgba(6, 7, 9, 0.92) 100%);
 }
 
-/* Màn hình Enter Screen (nền đen đặc) */
+/* Màn hình Enter */
 #enter-screen {
   position: fixed;
   inset: 0;
@@ -66,9 +67,7 @@ body {
   visibility: hidden;
   pointer-events: none;
 }
-.enter-box {
-  text-align: center;
-}
+.enter-box { text-align: center; }
 .enter-title {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic;
@@ -84,8 +83,6 @@ body {
   margin-top: 6px;
   font-family: 'JetBrains Mono', monospace;
 }
-
-/* Nút Play ở màn hình Enter */
 .enter-play {
   margin-top: 26px;
   width: 58px;
@@ -100,12 +97,40 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  transition: background 0.25s, transform 0.25s;
 }
 .enter-play:hover {
   background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.7);
   transform: scale(1.08);
+}
+
+/* NÚT BẬT TẮT ÂM THANH NỔI (FLOATING TOGGLE) */
+.floating-audio-btn {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 900;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(20, 22, 28, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.floating-audio-btn:hover {
+  transform: scale(1.08);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(30, 34, 42, 0.9);
+}
+.floating-audio-btn.muted {
+  color: #f23f43;
 }
 
 /* ================= HERO SECTION ================= */
@@ -120,7 +145,6 @@ body {
   text-align: center;
   padding: 20px;
 }
-
 .avatar-orbit {
   position: relative;
   width: 110px;
@@ -130,7 +154,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 .avatar-face {
   width: 96px;
   height: 96px;
@@ -141,7 +164,6 @@ body {
   z-index: 2;
   background: #111214;
 }
-
 .dark-aura {
   position: absolute;
   inset: -4px;
@@ -149,7 +171,6 @@ body {
   background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(147, 51, 234, 0.2) 60%, transparent 80%);
   z-index: 1;
 }
-
 .hero-name {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic;
@@ -160,7 +181,6 @@ body {
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.75);
   margin-bottom: 8px;
 }
-
 .hero-tagline {
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.65);
@@ -169,13 +189,11 @@ body {
   font-weight: 500;
   margin-bottom: 22px;
 }
-
 .social-cluster {
   display: flex;
   align-items: center;
   gap: 14px;
 }
-
 .social-circle {
   width: 36px;
   height: 36px;
@@ -195,7 +213,6 @@ body {
   color: #fff;
   transform: translateY(-2px);
 }
-
 .scroll-down-hint {
   position: absolute;
   bottom: 28px;
@@ -213,12 +230,8 @@ body {
   cursor: pointer;
   transition: color 0.2s;
 }
-.scroll-down-hint:hover {
-  color: #fff;
-}
-.scroll-down-hint i {
-  animation: floatDown 1.8s infinite ease-in-out;
-}
+.scroll-down-hint:hover { color: #fff; }
+.scroll-down-hint i { animation: floatDown 1.8s infinite ease-in-out; }
 @keyframes floatDown {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(5px); }
@@ -227,27 +240,27 @@ body {
 /* ================= CARDS SECTION ================= */
 .cards-view {
   min-height: 100vh;
-  max-width: 490px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 40px 16px 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .glass-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 14px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
   transition: transform 0.2s ease, border-color 0.2s ease;
-  contain: paint;
+  backdrop-filter: blur(10px);
 }
 .glass-card:hover {
   transform: translateY(-2px);
@@ -262,6 +275,193 @@ body {
   flex: 1;
 }
 
+/* THẺ NỘI DUNG (ABOUT, SKILLS, PROJECTS) */
+.content-card {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.section-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.about-text {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #d1d5db;
+}
+.about-text strong { color: #fff; }
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+.skill-pill {
+  font-size: 0.72rem;
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.project-title {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #fff;
+}
+.project-desc {
+  font-size: 0.72rem;
+  color: var(--text-sub);
+}
+.project-link {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+.project-link:hover { color: #fff; }
+
+/* GMAIL-STYLE CONTACT FORM */
+.gmail-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+.gmail-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.gmail-title i { color: var(--gmail-red); }
+.gmail-controls {
+  display: flex;
+  gap: 5px;
+}
+.ctrl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.gmail-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gmail-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 4px 0;
+}
+.field-label {
+  color: var(--text-sub);
+  font-family: 'JetBrains Mono', monospace;
+  width: 55px;
+  flex-shrink: 0;
+}
+.field-val {
+  color: #cbd5e1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+}
+.gmail-input, .gmail-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 0.78rem;
+  font-family: inherit;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.gmail-input::placeholder, .gmail-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+.gmail-textarea {
+  width: 100%;
+  resize: vertical;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 8px;
+  margin-top: 4px;
+}
+.gmail-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+.send-mail-btn {
+  background: var(--gmail-red);
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.send-mail-btn:hover { opacity: 0.9; }
+.send-mail-btn:active { transform: scale(0.98); }
+.form-status-text {
+  font-size: 0.72rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* AVATAR & SOCIAL ICONS */
 .avatar-mini-wrap {
   position: relative;
   width: 52px;
@@ -275,7 +475,6 @@ body {
   object-fit: cover;
   background: #111214;
 }
-
 .status-indicator {
   position: absolute;
   bottom: 0px;
@@ -298,7 +497,6 @@ body {
   background-color: #fff;
   border-radius: 1px;
 }
-
 .fb-logo-brand {
   width: 52px;
   height: 52px;
@@ -310,24 +508,13 @@ body {
   color: #ffffff;
   font-size: 1.75rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(24, 119, 242, 0.35);
 }
-
-.square-thumb {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
 .info-block {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 }
-
 .category-label {
   font-size: 0.6rem;
   font-weight: 700;
@@ -335,7 +522,6 @@ body {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.45);
 }
-
 .user-headline {
   display: flex;
   align-items: baseline;
@@ -350,61 +536,40 @@ body {
   font-size: 0.76rem;
   color: var(--text-sub);
 }
-
-/* DÃY 4 HUY HIỆU ĐỒ HỌA CHUẨN DISCORD */
 .badges-row {
   display: flex;
   align-items: center;
   gap: 6px;
   margin-top: 4px;
 }
-
 .badge-icon {
   width: 20px;
   height: 20px;
   object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-  transition: transform 0.2s ease;
-  cursor: pointer;
-  flex-shrink: 0;
 }
-.badge-icon:hover {
-  transform: scale(1.25);
-}
-
 .title-bold {
   font-size: 0.95rem;
   font-weight: 600;
   color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .sub-muted {
   font-size: 0.76rem;
   color: var(--text-sub);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-
-.discord-btn {
+.action-btn {
   background-color: var(--discord-green);
   color: #fff;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  padding: 7px 14px;
+  padding: 8px 14px;
   border-radius: 6px;
   text-decoration: none;
   flex-shrink: 0;
   transition: background-color 0.2s ease;
 }
-.discord-btn:hover {
-  background-color: var(--discord-green-hover);
-}
+.action-btn:hover { background-color: var(--discord-green-hover); }
 
 /* ================= AUDIO PLAYER ================= */
 .audio-player-panel {
@@ -412,9 +577,8 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 8px 4px;
+  padding: 10px 4px;
 }
-
 .disk-container {
   position: relative;
   width: 62px;
@@ -429,17 +593,12 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.15);
   animation: spinDisk 12s linear infinite;
   animation-play-state: paused;
-  will-change: transform;
 }
-.disk-spinner.running {
-  animation-play-state: running;
-}
-
+.disk-spinner.running { animation-play-state: running; }
 @keyframes spinDisk {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
 .audio-bars {
   position: absolute;
   bottom: -3px;
@@ -474,7 +633,16 @@ body {
   gap: 6px;
   min-width: 0;
 }
-
+.player-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.track-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-sub);
+}
 .track-headline {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic;
@@ -484,7 +652,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .progress-container {
   display: flex;
   align-items: center;
@@ -493,7 +660,6 @@ body {
   font-size: 0.68rem;
   color: var(--text-sub);
 }
-
 .progress-bar-slot {
   flex: 1;
   height: 3px;
@@ -507,7 +673,6 @@ body {
   background: #ffffff;
   border-radius: 3px;
 }
-
 .controls-toolbar {
   display: flex;
   align-items: center;
@@ -538,15 +703,13 @@ body {
   height: 32px;
   background: rgba(255, 255, 255, 0.18);
 }
-.tool-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
+.tool-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
 .volume-tool {
   display: flex;
   align-items: center;
   gap: 6px;
-  max-width: 140px;
+  max-width: 130px;
   color: var(--text-sub);
   font-size: 0.68rem;
 }
@@ -569,7 +732,7 @@ body {
   cursor: pointer;
 }
 
-/* ================= VN GMT+7 HUD ================= */
+/* VN CLOCK */
 .vn-clock-badge {
   position: fixed;
   bottom: 16px;
@@ -592,24 +755,6 @@ body {
   left: -10px;
   opacity: 0;
   pointer-events: none;
-}
-
-/* ================= ẨN TRIỆT ĐỂ HUY HIỆU & POPUP NETLIFY (KHÔNG CẦN PRO) ================= */
-[data-netlify-drawer],
-#netlify-drawer,
-.netlify-badge,
-div[id*="netlify"],
-div[class*="netlify"],
-iframe[src*="netlify.com"],
-a[href*="netlify.com"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  position: absolute !important;
-  z-index: -99999 !important;
 }
 
 @media (max-width: 600px) {
