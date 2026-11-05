@@ -136,7 +136,33 @@ contactForm.addEventListener('submit', async function (e) {
 });
 
 /* =========================================================================
-   7. PLAYLIST SOUNDCLOUD & QUẢN LÝ PHÁT NHẠC
+   7. BẬT / TẮT MODAL TÍNH NĂNG BOT DISCORD
+   ========================================================================= */
+const openBotFeaturesBtn = document.getElementById('open-bot-features-btn');
+const closeBotFeaturesBtn = document.getElementById('close-bot-features-btn');
+const botFeaturesModal = document.getElementById('bot-features-modal');
+const botModalOverlay = document.querySelector('.bot-modal-overlay');
+
+function toggleBotModal(show) {
+  if (show) {
+    botFeaturesModal.classList.remove('hidden');
+  } else {
+    botFeaturesModal.classList.add('hidden');
+  }
+}
+
+if (openBotFeaturesBtn) {
+  openBotFeaturesBtn.addEventListener('click', () => toggleBotModal(true));
+}
+if (closeBotFeaturesBtn) {
+  closeBotFeaturesBtn.addEventListener('click', () => toggleBotModal(false));
+}
+if (botModalOverlay) {
+  botModalOverlay.addEventListener('click', () => toggleBotModal(false));
+}
+
+/* =========================================================================
+   8. PLAYLIST SOUNDCLOUD & QUẢN LÝ PHÁT NHẠC
    ========================================================================= */
 const PLAYLIST = [
   {
@@ -278,7 +304,7 @@ document.getElementById('vol-range').addEventListener('input', function () {
 });
 
 /* =========================================================================
-   8. NÚT ÂM THANH NỔI (MUTE/UNMUTE)
+   9. NÚT ÂM THANH NỔI (MUTE/UNMUTE)
    ========================================================================= */
 floatingToggleBtn.addEventListener('click', () => {
   isMuted = !isMuted;
@@ -294,14 +320,14 @@ floatingToggleBtn.addEventListener('click', () => {
 });
 
 /* =========================================================================
-   9. CỐ ĐỊNH AVATAR
+   10. CỐ ĐỊNH AVATAR
    ========================================================================= */
 const FIXED_AVATAR = "https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg";
 document.getElementById('main-avatar').src = FIXED_AVATAR;
 document.getElementById('card-avatar').src = FIXED_AVATAR;
 
 /* =========================================================================
-   10. BẢO VỆ NỘI DUNG CƠ BẢN
+   11. BẢO VỆ NỘI DUNG CƠ BẢN
    ========================================================================= */
 if (window.top !== window.self) window.top.location = window.self.location;
 document.addEventListener('contextmenu', (e) => e.preventDefault());
