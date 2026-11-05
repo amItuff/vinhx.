@@ -104,7 +104,7 @@ body {
   transform: scale(1.08);
 }
 
-/* NÚT BẬT TẮT ÂM THANH NỔI (FLOATING TOGGLE) */
+/* NÚT BẬT TẮT ÂM THANH NỔI GÓC PHẢI */
 .floating-audio-btn {
   position: fixed;
   top: 18px;
@@ -129,8 +129,62 @@ body {
   border-color: rgba(255, 255, 255, 0.3);
   background: rgba(30, 34, 42, 0.9);
 }
-.floating-audio-btn.muted {
-  color: #f23f43;
+.floating-audio-btn.muted { color: #f23f43; }
+
+/* TOAST THÔNG BÁO SAO CHÉP EMAIL */
+.copy-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-30px);
+  z-index: 10000;
+  background: rgba(20, 23, 29, 0.95);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.copy-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast-tick-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  animation: tickPop 0.4s ease-out;
+}
+@keyframes tickPop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+.toast-text-group {
+  display: flex;
+  flex-direction: column;
+}
+.toast-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+}
+.toast-sub {
+  font-size: 0.68rem;
+  color: var(--text-sub);
+  font-family: 'JetBrains Mono', monospace;
 }
 
 /* ================= HERO SECTION ================= */
@@ -206,6 +260,7 @@ body {
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   font-size: 0.95rem;
+  cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
 }
 .social-circle:hover {
@@ -275,7 +330,7 @@ body {
   flex: 1;
 }
 
-/* THẺ NỘI DUNG (ABOUT, SKILLS, PROJECTS) */
+/* CONTENT CARDS */
 .content-card {
   flex-direction: column;
   align-items: flex-start;
@@ -354,112 +409,6 @@ body {
   transition: color 0.2s;
 }
 .project-link:hover { color: #fff; }
-
-/* GMAIL-STYLE CONTACT FORM */
-.gmail-header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 8px;
-  margin-bottom: 4px;
-}
-.gmail-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #e5e7eb;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.gmail-title i { color: var(--gmail-red); }
-.gmail-controls {
-  display: flex;
-  gap: 5px;
-}
-.ctrl-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.gmail-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.gmail-field {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 4px 0;
-}
-.field-label {
-  color: var(--text-sub);
-  font-family: 'JetBrains Mono', monospace;
-  width: 55px;
-  flex-shrink: 0;
-}
-.field-val {
-  color: #cbd5e1;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-}
-.gmail-input, .gmail-textarea {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff;
-  font-size: 0.78rem;
-  font-family: inherit;
-  -webkit-user-select: text;
-  user-select: text;
-}
-.gmail-input::placeholder, .gmail-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-.gmail-textarea {
-  width: 100%;
-  resize: vertical;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 6px;
-  padding: 8px;
-  margin-top: 4px;
-}
-.gmail-footer {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 4px;
-}
-.send-mail-btn {
-  background: var(--gmail-red);
-  color: #fff;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-  padding: 7px 16px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
-}
-.send-mail-btn:hover { opacity: 0.9; }
-.send-mail-btn:active { transform: scale(0.98); }
-.form-status-text {
-  font-size: 0.72rem;
-  font-family: 'JetBrains Mono', monospace;
-}
 
 /* AVATAR & SOCIAL ICONS */
 .avatar-mini-wrap {
@@ -732,6 +681,162 @@ body {
   cursor: pointer;
 }
 
+/* ================= GMAIL POPUP MODAL GÓC DƯỚI ================= */
+.floating-mail-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ea4335, #c5221f);
+  box-shadow: 0 4px 16px rgba(234, 67, 53, 0.4);
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s;
+}
+.floating-mail-btn:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(234, 67, 53, 0.6);
+}
+
+.gmail-popup-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  background: rgba(18, 20, 26, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  transform-origin: bottom right;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gmail-popup-wrapper.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.7) translateY(20px);
+  pointer-events: none;
+}
+.gmail-popup-header {
+  background: rgba(30, 33, 42, 0.9);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.gmail-popup-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #f3f4f6;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.gmail-popup-title i { color: var(--gmail-red); }
+.gmail-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.gmail-header-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-sub);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+.gmail-header-btn:hover { color: #fff; }
+
+.gmail-popup-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gmail-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4px 0;
+}
+.field-label {
+  color: var(--text-sub);
+  font-family: 'JetBrains Mono', monospace;
+  width: 50px;
+  flex-shrink: 0;
+}
+.field-val {
+  color: #cbd5e1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+}
+.gmail-input, .gmail-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 0.78rem;
+  font-family: inherit;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.gmail-input::placeholder, .gmail-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+.gmail-textarea {
+  width: 100%;
+  resize: vertical;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 8px;
+  margin-top: 4px;
+}
+.gmail-popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.send-mail-btn {
+  background: var(--gmail-red);
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.send-mail-btn:hover { opacity: 0.9; }
+.send-mail-btn:active { transform: scale(0.98); }
+.form-status-text {
+  font-size: 0.72rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
 /* VN CLOCK */
 .vn-clock-badge {
   position: fixed;
@@ -761,4 +866,6 @@ body {
   .hero-name { font-size: 3.2rem; }
   .cards-view { padding: 20px 14px 70px; }
   .vn-clock-badge { bottom: 12px; left: 14px; font-size: 0.65rem; }
+  .floating-mail-btn { bottom: 14px; right: 14px; width: 44px; height: 44px; }
+  .gmail-popup-wrapper { right: 14px; bottom: 14px; }
 }
