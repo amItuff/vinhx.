@@ -23,7 +23,29 @@ document.getElementById('scroll-hint-btn').addEventListener('click', () => {
 });
 
 /* =========================================================================
-   3. SAO CHÉP EMAIL & HIỂN THỊ TOAST POPUP KÈM DẤU TICK
+   3. HIỆU ỨNG CUỘN TỚI (INTERSECTION OBSERVER - SCROLL REVEAL STAGGERED)
+   ========================================================================= */
+const revealElements = document.querySelectorAll('.reveal-card');
+
+const revealObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      observer.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.15,
+  rootMargin: '0px 0px -40px 0px'
+});
+
+revealElements.forEach((el, index) => {
+  el.style.transitionDelay = `${(index % 3) * 0.12}s`;
+  revealObserver.observe(el);
+});
+
+/* =========================================================================
+   4. SAO CHÉP EMAIL & TOAST THÔNG BÁO KÈM DẤU TICK
    ========================================================================= */
 const EMAIL_TO_COPY = "nguyenngoctrivinh72@gmail.com";
 const copyEmailBtn = document.getElementById('copy-email-btn');
@@ -32,7 +54,6 @@ let toastTimer = null;
 
 copyEmailBtn.addEventListener('click', () => {
   navigator.clipboard.writeText(EMAIL_TO_COPY).then(() => {
-    // Hiển thị toast
     copyToast.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
@@ -42,12 +63,13 @@ copyEmailBtn.addEventListener('click', () => {
 });
 
 /* =========================================================================
-   4. QUẢN LÝ GMAIL POPUP MODAL Ở GÓC MÀN HÌNH
+   5. QUẢN LÝ GMAIL POPUP MODAL Ở GÓC MÀN HÌNH
    ========================================================================= */
 const openGmailBtn = document.getElementById('open-gmail-modal');
 const closeGmailBtn = document.getElementById('close-gmail-btn');
 const minimizeGmailBtn = document.getElementById('minimize-gmail-btn');
 const gmailPopup = document.getElementById('gmail-popup');
+const aboutContactBtn = document.getElementById('about-contact-btn');
 
 function toggleGmailPopup(show) {
   if (show) {
@@ -62,9 +84,12 @@ function toggleGmailPopup(show) {
 openGmailBtn.addEventListener('click', () => toggleGmailPopup(true));
 closeGmailBtn.addEventListener('click', () => toggleGmailPopup(false));
 minimizeGmailBtn.addEventListener('click', () => toggleGmailPopup(false));
+if (aboutContactBtn) {
+  aboutContactBtn.addEventListener('click', () => toggleGmailPopup(true));
+}
 
 /* =========================================================================
-   5. XỬ LÝ GỬI THƯ AJAX QUA FORMSPREE (mrppjobo)
+   6. XỬ LÝ SUBMIT AJAX CHO FORMSPREE (mrppjobo)
    ========================================================================= */
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
@@ -111,7 +136,7 @@ contactForm.addEventListener('submit', async function (e) {
 });
 
 /* =========================================================================
-   6. PLAYLIST SOUNDCLOUD & QUẢN LÝ PHÁT NHẠC
+   7. PLAYLIST SOUNDCLOUD & QUẢN LÝ PHÁT NHẠC
    ========================================================================= */
 const PLAYLIST = [
   {
@@ -187,7 +212,6 @@ widget.bind(SC.Widget.Events.READY, () => {
   });
 });
 
-// Chạm để vào trang và phát nhạc
 document.getElementById('enter-screen').addEventListener('click', function () {
   this.classList.add('dismissed');
   soundStarted = true;
@@ -254,7 +278,7 @@ document.getElementById('vol-range').addEventListener('input', function () {
 });
 
 /* =========================================================================
-   7. NÚT ÂM THANH NỔI (MUTE/UNMUTE)
+   8. NÚT ÂM THANH NỔI (MUTE/UNMUTE)
    ========================================================================= */
 floatingToggleBtn.addEventListener('click', () => {
   isMuted = !isMuted;
@@ -270,14 +294,14 @@ floatingToggleBtn.addEventListener('click', () => {
 });
 
 /* =========================================================================
-   8. CỐ ĐỊNH AVATAR
+   9. CỐ ĐỊNH AVATAR
    ========================================================================= */
 const FIXED_AVATAR = "https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg";
 document.getElementById('main-avatar').src = FIXED_AVATAR;
 document.getElementById('card-avatar').src = FIXED_AVATAR;
 
 /* =========================================================================
-   9. BẢO VỆ SOURCE CODE
+   10. BẢO VỆ NỘI DUNG CƠ BẢN
    ========================================================================= */
 if (window.top !== window.self) window.top.location = window.self.location;
 document.addEventListener('contextmenu', (e) => e.preventDefault());
