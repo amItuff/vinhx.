@@ -65,32 +65,47 @@ revealElements.forEach((el, index) => {
 });
 
 /* =========================================================================
-   4. RENDER BIỂU ĐỒ GITHUB CONTRIBUTIONS (CHÍNH XÁC THEO ẢNH CỦA AMLTUFF)
+   4. RENDER BIỂU ĐỒ GITHUB VẼ CHỮ "vinhx" VÀ TRÁI TIM BẰNG CHẤM XANH
    ========================================================================= */
 function renderGitHubHeatmap() {
   const container = document.getElementById('gh-heatmap');
   if (!container) return;
+  container.innerHTML = '';
 
-  const totalCols = 32; // Số tuần hiển thị
-  const totalCells = totalCols * 7;
-  
-  // Tạo mảng đóng góp mô phỏng sát với dữ liệu 42 commits của bạn (tập trung gần đây)
-  for (let i = 0; i < totalCells; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'contrib-cell';
+  // Ma trận 7 hàng chuẩn GitHub: 1 là chấm xanh sáng, 0 là ô tối
+  // Vẽ lần lượt: v - i - n - h - x - khoảng trống - trái tim
+  const artPattern = [
+    // Hàng 0
+    [1,0,0,0,1, 0, 1, 0, 1,1,1,0, 0, 1,0,0,0, 0, 1,0,0,0,1, 0, 0, 0,1,1,0,1,1,0],
+    // Hàng 1
+    [1,0,0,0,1, 0, 0, 0, 1,0,0,1, 0, 1,0,0,0, 0, 0,1,0,1,0, 0, 0, 1,1,1,1,1,1,1],
+    // Hàng 2
+    [0,1,0,1,0, 0, 1, 0, 1,0,0,1, 0, 1,1,1,0, 0, 0,0,1,0,0, 0, 0, 1,1,1,1,1,1,1],
+    // Hàng 3
+    [0,1,0,1,0, 0, 1, 0, 1,0,0,1, 0, 1,0,0,1, 0, 0,1,0,1,0, 0, 0, 0,1,1,1,1,1,0],
+    // Hàng 4
+    [0,0,1,0,0, 0, 1, 0, 1,0,0,1, 0, 1,0,0,1, 0, 1,0,0,0,1, 0, 0, 0,0,1,1,1,0,0],
+    // Hàng 5
+    [0,0,0,0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0,0, 0, 0,0,0,0,0, 0, 0, 0,0,0,1,0,0,0],
+    // Hàng 6
+    [0,0,0,0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0,0, 0, 0,0,0,0,0, 0, 0, 0,0,0,0,0,0,0]
+  ];
 
-    // Các tuần gần đây (ở cuối bảng) có nhiều commit xanh
-    if (i > totalCells - 21) {
-      const rand = Math.random();
-      if (rand > 0.6) cell.classList.add('lvl-3');
-      else if (rand > 0.3) cell.classList.add('lvl-2');
-      else cell.classList.add('lvl-1');
-    } else if (i === 115) {
-      // 1 commit lẻ tẻ ở giữa năm
-      cell.classList.add('lvl-1');
+  const rows = 7;
+  const cols = artPattern[0].length;
+
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows; r++) {
+      const cell = document.createElement('div');
+      cell.className = 'contrib-cell';
+
+      const val = artPattern[r][c];
+      if (val === 1) {
+        cell.classList.add('lvl-4'); // Xanh sáng lá cây (#39d353)
+      }
+
+      container.appendChild(cell);
     }
-
-    container.appendChild(cell);
   }
 }
 renderGitHubHeatmap();
