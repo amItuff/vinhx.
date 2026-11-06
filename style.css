@@ -1,5 +1,5 @@
 :root {
-  --card-bg: rgba(18, 20, 26, 0.88);
+  --card-bg: rgba(18, 20, 26, 0.92);
   --card-border: rgba(255, 255, 255, 0.1);
   --text-main: #f9fafb;
   --text-sub: #a1a1aa;
@@ -21,7 +21,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ACCESSIBILITY FOCUS RING */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--accent-purple) !important;
   outline-offset: 3px !important;
@@ -50,15 +49,14 @@ body {
   will-change: transform;
 }
 
-/* Lớp Vignette điện ảnh */
 .bg-vignette {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle at center, rgba(8, 10, 14, 0.6) 0%, rgba(4, 5, 7, 0.96) 100%);
+  background: radial-gradient(circle at center, rgba(8, 10, 14, 0.65) 0%, rgba(4, 5, 7, 0.98) 100%);
 }
 
-/* Màn hình Enter Screen */
+/* Enter Screen */
 #enter-screen {
   position: fixed;
   inset: 0;
@@ -112,12 +110,17 @@ body {
   transform: scale(1.08);
 }
 
-/* Nút âm thanh nổi góc phải */
-.floating-audio-btn {
+/* CỤM ĐIỀU KHIỂN NỔI GÓC PHẢI */
+.floating-top-controls {
   position: fixed;
   top: 18px;
   right: 18px;
   z-index: 900;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ctrl-floating-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -128,16 +131,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.floating-audio-btn:hover {
+.ctrl-floating-btn:hover {
   transform: scale(1.08);
   border-color: rgba(255, 255, 255, 0.35);
   background: rgba(30, 34, 42, 0.95);
 }
-.floating-audio-btn.muted { color: #f23f43; }
+.lang-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #c084fc;
+}
+.ctrl-floating-btn.muted { color: #f23f43; }
 
 /* TOAST COPY EMAIL */
 .copy-toast {
@@ -290,12 +299,12 @@ body {
   50% { transform: translateY(5px); }
 }
 
-/* ================= CARDS SECTION & SCROLL REVEAL ================= */
+/* ================= CARDS SECTION ================= */
 .cards-view {
   min-height: 100vh;
   max-width: 530px;
   margin: 0 auto;
-  padding: 40px 16px 90px;
+  padding: 40px 16px 100px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -330,7 +339,7 @@ body {
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6), 0 0 15px rgba(168, 85, 247, 0.15);
 }
 
-/* NHẤT QUÁN TIÊU ĐỀ TÍM MONO */
+/* TIÊU ĐỀ SECTION */
 .section-badge, .category-label {
   font-size: 0.68rem !important;
   font-weight: 700 !important;
@@ -346,7 +355,7 @@ body {
 /* 1. ABOUT ME CARD */
 .about-card-special {
   border: 1px solid rgba(168, 85, 247, 0.25);
-  background: linear-gradient(180deg, rgba(28, 22, 38, 0.9) 0%, rgba(18, 20, 26, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(28, 22, 38, 0.92) 0%, rgba(18, 20, 26, 0.94) 100%);
 }
 .about-hero-row {
   display: flex;
@@ -393,7 +402,7 @@ body {
   50% { opacity: 0.4; transform: scale(0.8); }
 }
 .about-text {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1.6;
   color: #e4e4e7;
 }
@@ -472,7 +481,50 @@ body {
   color: #fff;
 }
 
-/* 2. SKILLS CARD */
+/* 2. TIMELINE STYLES */
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  padding-left: 14px;
+  border-left: 1.5px solid rgba(168, 85, 247, 0.3);
+  margin-left: 6px;
+}
+.timeline-item {
+  position: relative;
+}
+.timeline-dot {
+  position: absolute;
+  left: -20px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #0b0c0e;
+  border: 2px solid var(--accent-purple);
+}
+.timeline-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+}
+.timeline-title {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 1px;
+}
+.timeline-sub {
+  font-size: 0.76rem;
+  color: var(--text-sub);
+  line-height: 1.45;
+  margin-top: 2px;
+}
+
+/* 3. SKILLS CARD */
 .skill-category-block {
   display: flex;
   flex-direction: column;
@@ -551,7 +603,6 @@ body {
 }
 .skill-dots .dot.active { background: var(--accent-purple); }
 
-/* TOOLTIP HOVER */
 .skill-item::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -577,7 +628,63 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* 3. FEATURED PROJECTS CARD */
+/* 4. GITHUB STATS BOX */
+.github-stats-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.github-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gh-user {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+}
+.gh-visit-link {
+  font-size: 0.72rem;
+  color: var(--accent-purple);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.gh-visit-link:hover { text-decoration: underline; }
+.gh-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 8px;
+}
+.gh-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.gh-metric-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+}
+.gh-metric-label {
+  font-size: 0.65rem;
+  color: var(--text-sub);
+}
+
+/* 5. PROJECTS CARD & TERMINAL PREVIEWS */
 .projects-container {
   display: flex;
   flex-direction: column;
@@ -594,22 +701,52 @@ body {
   border-color: rgba(168, 85, 247, 0.4);
   transform: translateY(-2px);
 }
+
 .project-cover-wrap {
   position: relative;
   width: 100%;
-  height: 130px;
-  background: #111;
-  overflow: hidden;
+  padding: 12px 14px;
+  background: #0d0f14;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: 'JetBrains Mono', monospace;
 }
-.project-cover-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.35s ease;
+.project-cover-portfolio {
+  background: radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.25) 0%, #0d0f14 70%);
 }
-.project-showcase-item:hover .project-cover-img {
-  transform: scale(1.04);
+.project-cover-bot {
+  background: radial-gradient(circle at 20% 80%, rgba(88, 101, 242, 0.25) 0%, #0d0f14 70%);
 }
+
+.terminal-mockup-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.t-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.t-dot.red { background: #ff5f56; }
+.t-dot.yellow { background: #ffbd2e; }
+.t-dot.green { background: #27c93f; }
+.t-title {
+  font-size: 0.65rem;
+  color: var(--text-sub);
+  margin-left: 4px;
+}
+.terminal-preview-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.72rem;
+  color: #a1a1aa;
+}
+.text-green { color: #4ade80 !important; }
+.text-purple { color: #c084fc !important; }
+.text-yellow { color: #facc15 !important; }
+
 .project-status-tag {
   position: absolute;
   top: 10px;
@@ -647,6 +784,21 @@ body {
   line-height: 1.5;
   color: #d4d4d8;
 }
+
+/* DÒNG KẾT QUẢ THỰC TẾ (IMPACT) */
+.project-impact-line {
+  font-size: 0.76rem;
+  color: #f4f4f5;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.project-impact-line strong { color: #fff; }
+
 .project-tags-row {
   display: flex;
   flex-wrap: wrap;
@@ -712,7 +864,7 @@ body {
   transform: translateY(-1px);
 }
 
-/* 4 & 5. DISCORD & FACEBOOK CARDS */
+/* 6 & 7. DISCORD & FACEBOOK */
 .card-body-left {
   display: flex;
   align-items: center;
@@ -813,7 +965,7 @@ body {
 }
 .action-btn:hover { background-color: var(--discord-green-hover); }
 
-/* 6. AUDIO PLAYER */
+/* 8. AUDIO PLAYER */
 .audio-player-panel {
   margin-top: 10px;
   display: flex;
@@ -949,6 +1101,44 @@ body {
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
+}
+
+/* 9. FOOTER */
+.portfolio-footer {
+  text-align: center;
+  margin-top: 10px;
+}
+.footer-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-bottom: 16px;
+}
+.footer-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.footer-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+.footer-links {
+  display: flex;
+  gap: 12px;
+}
+.footer-links a {
+  color: var(--text-sub);
+  text-decoration: none;
+  font-size: 0.74rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: #fff; }
+.footer-copy {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 /* ================= MODAL DANH SÁCH TÍNH NĂNG BOT ================= */
@@ -1092,20 +1282,20 @@ body {
 }
 .bot-join-modal-btn:hover { background: #4752c4; }
 
-/* ================= GMAIL POPUP MODAL GÓC DƯỚI ================= */
+/* ================= GMAIL POPUP (TỐI ƯU KHÔNG ĐÈ THẺ, NỀN BACKDROP) ================= */
 .floating-mail-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 999;
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background: linear-gradient(135deg, #ea4335, #c5221f);
-  box-shadow: 0 4px 16px rgba(234, 67, 53, 0.4);
+  box-shadow: 0 4px 16px rgba(234, 67, 53, 0.45);
   border: none;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1117,38 +1307,51 @@ body {
   box-shadow: 0 6px 20px rgba(234, 67, 53, 0.6);
 }
 
-.gmail-popup-wrapper {
+/* LỚP BACKDROP CHE CHỐNG ĐÈ CHỮ */
+.gmail-modal-backdrop {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  width: 380px;
-  max-width: calc(100vw - 32px);
-  background: rgba(18, 20, 26, 0.95);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
-  overflow: hidden;
-  transform-origin: bottom right;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  inset: 0;
+  z-index: 100000;
+  background: rgba(5, 7, 10, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-.gmail-popup-wrapper.hidden {
+.gmail-modal-backdrop.hidden {
   opacity: 0;
   visibility: hidden;
-  transform: scale(0.7) translateY(20px);
   pointer-events: none;
 }
+
+.gmail-popup-wrapper {
+  position: relative;
+  width: 420px;
+  max-width: 100%;
+  background: rgba(18, 20, 26, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+  transform: translateY(0);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gmail-modal-backdrop.hidden .gmail-popup-wrapper {
+  transform: translateY(20px) scale(0.96);
+}
+
 .gmail-popup-header {
-  background: rgba(30, 33, 42, 0.9);
-  padding: 10px 14px;
+  background: rgba(30, 33, 42, 0.95);
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .gmail-popup-title {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: #f3f4f6;
   display: flex;
@@ -1161,7 +1364,7 @@ body {
   background: transparent;
   border: none;
   color: var(--text-sub);
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   cursor: pointer;
   padding: 4px;
   transition: color 0.2s;
@@ -1169,29 +1372,30 @@ body {
 .gmail-header-btn:hover { color: #fff; }
 
 .gmail-popup-body {
-  padding: 12px 14px 14px;
+  padding: 14px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 .gmail-field {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   padding: 4px 0;
 }
 .field-label {
   color: var(--text-sub);
   font-family: 'JetBrains Mono', monospace;
-  width: 50px;
+  width: 52px;
   flex-shrink: 0;
 }
-.field-val {
-  color: #cbd5e1;
+.field-val.highlight-target {
+  color: #c084fc;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
+  font-size: 0.74rem;
+  font-weight: 500;
 }
 .gmail-input, .gmail-textarea {
   flex: 1;
@@ -1199,7 +1403,7 @@ body {
   border: none;
   outline: none;
   color: #fff;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-family: inherit;
   -webkit-user-select: text;
   user-select: text;
@@ -1210,10 +1414,10 @@ body {
 .gmail-textarea {
   width: 100%;
   resize: vertical;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  padding: 8px;
+  border-radius: 8px;
+  padding: 10px;
   margin-top: 4px;
 }
 .gmail-popup-footer {
@@ -1228,8 +1432,8 @@ body {
   border: none;
   outline: none;
   border-radius: 6px;
-  padding: 7px 18px;
-  font-size: 0.75rem;
+  padding: 8px 20px;
+  font-size: 0.78rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -1244,15 +1448,47 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
+/* NÚT BACK TO TOP */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 850;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(20, 22, 28, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+}
+.back-to-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+}
+.back-to-top-btn:hover {
+  background: rgba(168, 85, 247, 0.3);
+  border-color: var(--accent-purple);
+  transform: translateY(-2px);
+}
+
 /* VN CLOCK */
 .vn-clock-badge {
   position: fixed;
   bottom: 16px;
-  left: 18px;
+  left: 68px;
   z-index: 50;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1271,9 +1507,9 @@ body {
 
 @media (max-width: 600px) {
   .hero-name { font-size: 3.2rem; }
-  .cards-view { padding: 20px 14px 80px; }
-  .vn-clock-badge { bottom: 12px; left: 14px; font-size: 0.65rem; }
-  .floating-mail-btn { bottom: 14px; right: 14px; width: 44px; height: 44px; }
-  .gmail-popup-wrapper { right: 14px; bottom: 14px; }
+  .cards-view { padding: 20px 14px 90px; }
+  .vn-clock-badge { display: none; }
+  .floating-mail-btn { bottom: 16px; right: 16px; width: 44px; height: 44px; }
   .skills-grid { grid-template-columns: 1fr; }
+  .back-to-top-btn { bottom: 16px; left: 16px; }
 }
