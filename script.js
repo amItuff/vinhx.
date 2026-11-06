@@ -17,7 +17,7 @@ setInterval(updateVNClock, 1000);
 updateVNClock();
 
 /* =========================================================================
-   2. CUỘN TRANG MƯỢT & NÚT LÊN ĐẦU TRANG (BACK TO TOP)
+   2. CUỘN TRANG & NÚT LÊN ĐẦU TRANG
    ========================================================================= */
 const scrollHintBtn = document.getElementById('scroll-hint-btn');
 const backToTopBtn = document.getElementById('back-to-top-btn');
@@ -30,7 +30,7 @@ if (scrollHintBtn) {
 
 if (backToTopBtn) {
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 400) {
+    if (window.scrollY > 350) {
       backToTopBtn.classList.add('visible');
     } else {
       backToTopBtn.classList.remove('visible');
@@ -43,7 +43,7 @@ if (backToTopBtn) {
 }
 
 /* =========================================================================
-   3. HIỆU ỨNG CUỘN TỚI (INTERSECTION OBSERVER - SCROLL REVEAL STAGGERED)
+   3. HIỆU ỨNG CUỘN TỚI (SCROLL REVEAL)
    ========================================================================= */
 const revealElements = document.querySelectorAll('.reveal-card');
 
@@ -55,104 +55,45 @@ const revealObserver = new IntersectionObserver((entries, observer) => {
     }
   });
 }, {
-  threshold: 0.12,
-  rootMargin: '0px 0px -40px 0px'
+  threshold: 0.1,
+  rootMargin: '0px 0px -30px 0px'
 });
 
 revealElements.forEach((el, index) => {
-  el.style.transitionDelay = `${(index % 3) * 0.1}s`;
+  el.style.transitionDelay = `${(index % 3) * 0.08}s`;
   revealObserver.observe(el);
 });
 
 /* =========================================================================
-   4. CHUYỂN ĐỔI NGÔN NGỮ (BILINGUAL TOGGLE VI / EN)
+   4. RENDER BIỂU ĐỒ GITHUB CONTRIBUTIONS (CHÍNH XÁC THEO ẢNH CỦA AMLTUFF)
    ========================================================================= */
-const i18nData = {
-  vi: {
-    hero_tagline: "Bot Automation & Frontend Developer",
-    scroll_btn: "PORTFOLIO",
-    about_badge: "ABOUT ME",
-    status_freelance: "Available for freelance",
-    about_desc: "Mình là <strong>Vinh (vinhx)</strong>. Mình chuyên xây dựng bot tự động hóa Discord, script cào dữ liệu (crawler) và phát triển các trang web tối giản, tốc độ cao giúp tiết kiệm hàng giờ vận hành thủ công cho khách hàng.",
-    stat_exp: "Năm kinh nghiệm",
-    stat_bots: "Bots & Tools",
-    stat_uptime: "System Uptime",
-    btn_contact_now: "Liên hệ ngay",
-    btn_download_cv: "Tải CV",
-    timeline_badge: "TIMELINE & HÀNH TRÌNH",
-    tl_2026_title: "Multi-tool Discord & Vercel Projects",
-    tl_2026_desc: "Triển khai bot cày badge đa tài khoản, phát triển web portfolio và tối ưu DNS Cloudflare/Vercel.",
-    tl_2025_title: "Tự động hóa Scripting & API",
-    tl_2025_desc: "Xây dựng crawler dữ liệu, tự động làm nhiệm vụ và quản lý webhook Discord tập trung.",
-    tl_2024_title: "Bắt đầu Lập trình Python & Web",
-    tl_2024_desc: "Khởi đầu với cú pháp Python, kiến trúc REST API và lập trình giao diện Web chuẩn Responsive.",
-    skills_badge: "SKILLS & TECH STACK",
-    github_badge: "HOẠT ĐỘNG CODE GITHUB",
-    gh_open_source: "Open Source",
-    gh_commit_streak: "Commit Streak",
-    gh_code_style: "Code Quality",
-    projects_badge: "FEATURED PROJECTS",
-    p1_desc: "Trang cá nhân responsive hiệu ứng Glassmorphism, tích hợp SoundCloud Player tùy chỉnh, tối ưu chuẩn SEO và kiến trúc máy chủ Vercel.",
-    p1_impact: "<strong>Kết quả:</strong> Tải trang tức thì (<0.5s), chuẩn 100% SEO Google Search Console.",
-    btn_demo: "Xem demo",
-    p2_desc: "Bộ công cụ bot Discord tự động hóa đa năng: cày badge, tự động claim nhiệm vụ, treo voice stream 24/7 và cảnh báo bảo mật tài khoản.",
-    p2_impact: "<strong>Kết quả:</strong> Tự động 100% chu trình nhận quà, tiết kiệm hàng giờ thao tác thủ công.",
-    btn_view_features: "Xem tính năng bot",
-    toast_title: "Đã sao chép email!",
-    mail_header: "Gửi thư cho Vinh (New Message)"
-  },
-  en: {
-    hero_tagline: "Bot Automation & Frontend Developer",
-    scroll_btn: "EXPLORE",
-    about_badge: "ABOUT ME",
-    status_freelance: "Available for freelance",
-    about_desc: "I'm <strong>Vinh (vinhx)</strong>. I specialize in Discord automation bots, web crawlers, and high-performance minimalist websites that save clients countless hours of manual work.",
-    stat_exp: "Years Experience",
-    stat_bots: "Bots & Tools",
-    stat_uptime: "System Uptime",
-    btn_contact_now: "Contact Now",
-    btn_download_cv: "Get Resume",
-    timeline_badge: "TIMELINE & JOURNEY",
-    tl_2026_title: "Multi-tool Discord & Vercel Projects",
-    tl_2026_desc: "Deployed multi-account badge bots, personal portfolio, and managed Edge DNS setups.",
-    tl_2025_title: "Automation Scripting & APIs",
-    tl_2025_desc: "Built custom data scrapers, automated quest claims, and unified webhooks.",
-    tl_2024_title: "Started Python & Web Dev",
-    tl_2024_desc: "Explored Python fundamentals, RESTful architecture, and modern responsive UI styling.",
-    skills_badge: "SKILLS & TECH STACK",
-    github_badge: "GITHUB ACTIVITY",
-    gh_open_source: "Open Source",
-    gh_commit_streak: "Commit Streak",
-    gh_code_style: "Code Quality",
-    projects_badge: "FEATURED PROJECTS",
-    p1_desc: "Minimalist responsive Glassmorphism portfolio, custom embedded SoundCloud Player, verified SEO and CDN caching.",
-    p1_impact: "<strong>Impact:</strong> Instant loading (<0.5s), 100% verified on Google Search Console.",
-    btn_demo: "Live Demo",
-    p2_desc: "All-in-one Discord automation bot: badge spoofer, auto quests claimer, 24/7 voice stream loop and security inspector.",
-    p2_impact: "<strong>Impact:</strong> 100% automated claiming, saving hours of repetitive manual efforts.",
-    btn_view_features: "Bot Features",
-    toast_title: "Email Copied!",
-    mail_header: "Direct Message to Vinh"
+function renderGitHubHeatmap() {
+  const container = document.getElementById('gh-heatmap');
+  if (!container) return;
+
+  const totalCols = 32; // Số tuần hiển thị
+  const totalCells = totalCols * 7;
+  
+  // Tạo mảng đóng góp mô phỏng sát với dữ liệu 42 commits của bạn (tập trung gần đây)
+  for (let i = 0; i < totalCells; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'contrib-cell';
+
+    // Các tuần gần đây (ở cuối bảng) có nhiều commit xanh
+    if (i > totalCells - 21) {
+      const rand = Math.random();
+      if (rand > 0.6) cell.classList.add('lvl-3');
+      else if (rand > 0.3) cell.classList.add('lvl-2');
+      else cell.classList.add('lvl-1');
+    } else if (i === 115) {
+      // 1 commit lẻ tẻ ở giữa năm
+      cell.classList.add('lvl-1');
+    }
+
+    container.appendChild(cell);
   }
-};
-
-let currentLang = 'vi';
-const langToggleBtn = document.getElementById('lang-toggle-btn');
-const langLabel = document.getElementById('lang-label');
-
-if (langToggleBtn) {
-  langToggleBtn.addEventListener('click', () => {
-    currentLang = currentLang === 'vi' ? 'en' : 'vi';
-    langLabel.textContent = currentLang === 'vi' ? 'EN' : 'VI';
-    
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (i18nData[currentLang][key]) {
-        el.innerHTML = i18nData[currentLang][key];
-      }
-    });
-  });
 }
+renderGitHubHeatmap();
 
 /* =========================================================================
    5. SAO CHÉP EMAIL & TOAST POPUP
@@ -169,13 +110,13 @@ if (copyEmailBtn && copyToast) {
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
         copyToast.classList.remove('show');
-      }, 2800);
+      }, 2500);
     });
   });
 }
 
 /* =========================================================================
-   6. QUẢN LÝ GMAIL POPUP MODAL (KHÔNG ĐÈ THẺ)
+   6. QUẢN LÝ GMAIL POPUP MODAL (ĐEN MỜ, KHÔNG ĐÈ THẺ)
    ========================================================================= */
 const openGmailBtn = document.getElementById('open-gmail-modal');
 const closeGmailBtn = document.getElementById('close-gmail-btn');
@@ -196,7 +137,6 @@ if (openGmailBtn) openGmailBtn.addEventListener('click', () => toggleGmailPopup(
 if (closeGmailBtn) closeGmailBtn.addEventListener('click', () => toggleGmailPopup(false));
 if (aboutContactBtn) aboutContactBtn.addEventListener('click', () => toggleGmailPopup(true));
 
-// Đóng modal khi bấm ra ngoài nền backdrop
 if (gmailModalContainer) {
   gmailModalContainer.addEventListener('click', (e) => {
     if (e.target === gmailModalContainer) toggleGmailPopup(false);
@@ -204,7 +144,7 @@ if (gmailModalContainer) {
 }
 
 /* =========================================================================
-   7. XỬ LÝ SUBMIT AJAX CHO FORMSPREE (mrppjobo)
+   7. XỬ LÝ GỬI THƯ QUA FORMSPREE (mrppjobo)
    ========================================================================= */
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
@@ -215,7 +155,7 @@ if (contactForm) {
     e.preventDefault();
     formSubmitBtn.disabled = true;
     formStatus.style.color = '#eab308';
-    formStatus.textContent = currentLang === 'vi' ? 'Đang gửi...' : 'Sending...';
+    formStatus.textContent = 'Đang gửi...';
 
     const formData = new FormData(contactForm);
 
@@ -227,25 +167,25 @@ if (contactForm) {
       });
 
       if (response.ok) {
-        formStatus.style.color = '#22c55e';
-        formStatus.textContent = currentLang === 'vi' ? 'Đã gửi thành công!' : 'Message sent!';
+        formStatus.style.color = '#3fb950';
+        formStatus.textContent = 'Đã gửi thành công!';
         contactForm.reset();
         setTimeout(() => {
           toggleGmailPopup(false);
           formStatus.textContent = '';
-        }, 2200);
+        }, 2000);
       } else {
         const data = await response.json();
         formStatus.style.color = '#ef4444';
         if (data && data.errors) {
           formStatus.textContent = data.errors.map(err => err.message).join(', ');
         } else {
-          formStatus.textContent = 'Error! Try again.';
+          formStatus.textContent = 'Lỗi gửi thư. Vui lòng thử lại!';
         }
       }
     } catch (err) {
       formStatus.style.color = '#ef4444';
-      formStatus.textContent = 'Connection error!';
+      formStatus.textContent = 'Lỗi kết nối!';
     } finally {
       formSubmitBtn.disabled = false;
     }
@@ -438,7 +378,7 @@ document.getElementById('main-avatar').src = FIXED_AVATAR;
 document.getElementById('card-avatar').src = FIXED_AVATAR;
 
 /* =========================================================================
-   12. BẢO VỆ NỘI DUNG CƠ BẢN
+   12. BẢO VỆ SOURCE CODE
    ========================================================================= */
 if (window.top !== window.self) window.top.location = window.self.location;
 document.addEventListener('contextmenu', (e) => e.preventDefault());
