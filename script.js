@@ -1,4 +1,71 @@
 /* =========================================================================
+   0. CHẶN TRIỆT ĐỂ VIEW-PAGE-SOURCE & CÁC WEB SOI MÃ NGUỒN BÊN THỨ 3
+   ========================================================================= */
+(function blockThirdPartyScrapers() {
+  const BLACKLIST_PATTERNS = [
+    'view-page-source',
+    'viewsource',
+    'page-source',
+    'codebeautify',
+    'archive.org',
+    'cachedview',
+    'web-capture',
+    '2read.net',
+    'urlbox',
+    'croxyproxy',
+    'translate.googleusercontent',
+    'proxysite',
+    'hidefree',
+    'hidester'
+  ];
+
+  const currentReferrer = (document.referrer || '').toLowerCase();
+  const currentHost = (window.location.hostname || '').toLowerCase();
+  
+  // 1. Kiểm tra nếu trang đang bị nhúng trong iframe của bên thứ 3
+  let isFramed = false;
+  try {
+    isFramed = window.self !== window.top;
+  } catch (e) {
+    isFramed = true;
+  }
+
+  // 2. Kiểm tra nếu nằm trong danh sách đen referrer hoặc host proxy
+  const isBlacklisted = BLACKLIST_PATTERNS.some(domain => 
+    currentReferrer.includes(domain) || currentHost.includes(domain)
+  );
+
+  // 3. Kiểm tra nguồn tổ tiên (ancestorOrigins nếu trình duyệt hỗ trợ)
+  let ancestorBlocked = false;
+  if (window.location.ancestorOrigins && window.location.ancestorOrigins.length > 0) {
+    for (let i = 0; i < window.location.ancestorOrigins.length; i++) {
+      const origin = window.location.ancestorOrigins[i].toLowerCase();
+      if (BLACKLIST_PATTERNS.some(d => origin.includes(d)) || !origin.includes('vinhx.info')) {
+        ancestorBlocked = true;
+        break;
+      }
+    }
+  }
+
+  if (isFramed || isBlacklisted || ancestorBlocked) {
+    // Xóa sạch DOM ngay lập tức để trang thứ 3 không lấy được giao diện
+    try {
+      if (document.documentElement) {
+        document.documentElement.innerHTML = '<!DOCTYPE html><html><head><title>Access Denied</title></head><body style="background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;"><h3>Direct Access Only: https://vinhx.info</h3></body></html>';
+      }
+    } catch (_) {}
+
+    // Thoát khỏi frame và điều hướng thẳng về domain gốc
+    try {
+      window.top.location.href = 'https://vinhx.info';
+    } catch (_) {
+      window.location.href = 'https://vinhx.info';
+    }
+    throw new Error('Third-party source inspection blocked.');
+  }
+})();
+
+/* =========================================================================
    1. ĐỒNG BỘ THỜI GIAN VIỆT NAM (GMT+7)
    ========================================================================= */
 function updateVNClock() {
@@ -72,8 +139,6 @@ function renderGitHubHeatmap() {
   if (!container) return;
   container.innerHTML = '';
 
-  // Ma trận 7 hàng chuẩn GitHub: 1 là chấm xanh sáng, 0 là ô tối
-  // Vẽ lần lượt: v - i - n - h - x - khoảng trống - trái tim
   const artPattern = [
     // Hàng 0
     [1,0,0,0,1, 0, 1, 0, 1,1,1,0, 0, 1,0,0,0, 0, 1,0,0,0,1, 0, 0, 0,1,1,0,1,1,0],
@@ -101,7 +166,7 @@ function renderGitHubHeatmap() {
 
       const val = artPattern[r][c];
       if (val === 1) {
-        cell.classList.add('lvl-4'); // Xanh sáng lá cây (#39d353)
+        cell.classList.add('lvl-4');
       }
 
       container.appendChild(cell);
@@ -393,9 +458,8 @@ document.getElementById('main-avatar').src = FIXED_AVATAR;
 document.getElementById('card-avatar').src = FIXED_AVATAR;
 
 /* =========================================================================
-   12. BẢO VỆ SOURCE CODE
+   12. BẢO VỆ SOURCE CODE & PHÍM TẮT
    ========================================================================= */
-if (window.top !== window.self) window.top.location = window.self.location;
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 document.addEventListener('keydown', (e) => {
   const k = e.key?.toLowerCase();
