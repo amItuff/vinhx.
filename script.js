@@ -458,17 +458,10 @@ document.getElementById('main-avatar').src = FIXED_AVATAR;
 document.getElementById('card-avatar').src = FIXED_AVATAR;
 
 /* =========================================================================
-   12. BẢO VỆ SOURCE CODE & PHÍM TẮT
+   12. PHÍM ESC ĐÓNG POPUP
    ========================================================================= */
-document.addEventListener('contextmenu', (e) => e.preventDefault());
 document.addEventListener('keydown', (e) => {
-  const k = e.key?.toLowerCase();
-  if (
-    e.key === 'F12' ||
-    (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(k)) ||
-    (e.ctrlKey && ['u', 's', 'c', 'a', 'p'].includes(k))
-  ) {
-    e.preventDefault();
-    return false;
-  }
+  if (e.key !== 'Escape') return;
+  if (!botFeaturesModal.classList.contains('hidden')) toggleBotModal(false);
+  if (!gmailModalContainer.classList.contains('hidden')) toggleGmailPopup(false);
 });

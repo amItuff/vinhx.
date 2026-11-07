@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="referrer" content="no-referrer" />
 
   <!-- MÃ XÁC MINH GOOGLE SEARCH CONSOLE -->
@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://w.soundcloud.com/player/api.js"></script>
 </head>
-<body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+<body>
 
   <!-- Màn hình click to enter -->
   <div id="enter-screen">
@@ -52,7 +52,7 @@
 
   <!-- Nút âm thanh nổi góc trên -->
   <div class="floating-top-controls">
-    <button id="floating-audio-toggle" class="ctrl-floating-btn" title="Bật/Tắt âm thanh">
+    <button id="floating-audio-toggle" class="ctrl-floating-btn" title="Bật/Tắt âm thanh" aria-label="Bật/Tắt âm thanh">
       <i id="float-audio-icon" class="fa-solid fa-volume-high"></i>
     </button>
   </div>
@@ -80,16 +80,16 @@
     <p class="hero-tagline">Discord Bots & Web Scripting</p>
 
     <div class="social-cluster">
-      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="social-circle" title="Facebook">
+      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="social-circle" title="Facebook" aria-label="Facebook">
         <i class="fa-brands fa-facebook-f"></i>
       </a>
-      <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="social-circle" title="Discord">
+      <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="social-circle" title="Discord" aria-label="Discord">
         <i class="fa-brands fa-discord"></i>
       </a>
-      <button id="copy-email-btn" class="social-circle email-copy-trigger" type="button" title="Sao chép Email">
+      <button id="copy-email-btn" class="social-circle email-copy-trigger" type="button" title="Sao chép Email" aria-label="Sao chép Email">
         <i class="fa-regular fa-envelope"></i>
       </button>
-      <a href="https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar" target="_blank" rel="noopener noreferrer" class="social-circle" title="SoundCloud">
+      <a href="https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar" target="_blank" rel="noopener noreferrer" class="social-circle" title="SoundCloud" aria-label="SoundCloud">
         <i class="fa-brands fa-soundcloud"></i>
       </a>
     </div>
@@ -321,14 +321,14 @@
 
         <div class="controls-toolbar">
           <div class="buttons-pack">
-            <button id="ctrl-prev" class="tool-btn" title="Bài trước"><i class="fa-solid fa-backward-step"></i></button>
-            <button id="ctrl-play" class="tool-btn play-active" title="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-pause"></i></button>
-            <button id="ctrl-next" class="tool-btn" title="Bài tiếp theo"><i class="fa-solid fa-forward-step"></i></button>
+            <button id="ctrl-prev" class="tool-btn" title="Bài trước" aria-label="Bài trước"><i class="fa-solid fa-backward-step"></i></button>
+            <button id="ctrl-play" class="tool-btn play-active" title="Play/Pause" aria-label="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-pause"></i></button>
+            <button id="ctrl-next" class="tool-btn" title="Bài tiếp theo" aria-label="Bài tiếp theo"><i class="fa-solid fa-forward-step"></i></button>
           </div>
 
           <div class="volume-tool">
             <i class="fa-solid fa-volume-low"></i>
-            <input id="vol-range" type="range" class="vol-range" min="0" max="100" value="85" />
+            <input id="vol-range" type="range" class="vol-range" aria-label="Âm lượng" min="0" max="100" value="85" />
             <i class="fa-solid fa-volume-high"></i>
           </div>
         </div>
@@ -352,7 +352,7 @@
   </section>
 
   <!-- NÚT CUỘN LÊN ĐẦU TRANG -->
-  <button id="back-to-top-btn" class="back-to-top-btn" title="Lên đầu trang">
+  <button id="back-to-top-btn" class="back-to-top-btn" title="Lên đầu trang" aria-label="Lên đầu trang">
     <i class="fa-solid fa-chevron-up"></i>
   </button>
 
@@ -364,7 +364,7 @@
         <div class="bot-modal-title">
           <span>TÍNH NĂNG BOT DISCORD</span>
         </div>
-        <button id="close-bot-features-btn" type="button" class="bot-modal-close" title="Đóng">
+        <button id="close-bot-features-btn" type="button" class="bot-modal-close" title="Đóng" aria-label="Đóng">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -452,7 +452,7 @@
   </div>
 
   <!-- ================= GMAIL POPUP (ĐEN TRONG SUỐT, ẨN EMAIL) ================= -->
-  <button id="open-gmail-modal" class="floating-mail-btn" title="Soạn thư">
+  <button id="open-gmail-modal" class="floating-mail-btn" title="Soạn thư" aria-label="Soạn thư">
     <i class="fa-solid fa-envelope"></i>
   </button>
 
@@ -462,7 +462,7 @@
         <div class="gmail-popup-title">
           <i class="fa-solid fa-envelope"></i> Gửi thư trực tiếp (New Message)
         </div>
-        <button id="close-gmail-btn" type="button" class="gmail-header-btn" title="Đóng"><i class="fa-solid fa-xmark"></i></button>
+        <button id="close-gmail-btn" type="button" class="gmail-header-btn" title="Đóng" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <form id="contact-form" action="https://formspree.io/f/mrppjobo" method="POST" class="gmail-popup-body">
@@ -502,6 +502,7 @@
   <!-- Iframe SoundCloud ẩn -->
   <iframe
     id="sc-hidden-frame"
+    title="SoundCloud player"
     allow="autoplay"
     src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/parsg/par-sg-cigarette-ft-cigar&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false">
   </iframe>
