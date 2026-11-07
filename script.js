@@ -1,467 +1,590 @@
-/* =========================================================================
-   0. CHẶN TRIỆT ĐỂ VIEW-PAGE-SOURCE & CÁC WEB SOI MÃ NGUỒN BÊN THỨ 3
-   ========================================================================= */
-(function blockThirdPartyScrapers() {
-  const BLACKLIST_PATTERNS = [
-    'view-page-source',
-    'viewsource',
-    'page-source',
-    'codebeautify',
-    'archive.org',
-    'cachedview',
-    'web-capture',
-    '2read.net',
-    'urlbox',
-    'croxyproxy',
-    'translate.googleusercontent',
-    'proxysite',
-    'hidefree',
-    'hidester'
+// vinhx.info
+
+// Bail out when the page is framed or opened through a source viewer / proxy.
+(function guardFraming() {
+  const blocked = [
+    'view-page-source', 'viewsource', 'page-source', 'codebeautify', 'archive.org',
+    'cachedview', 'web-capture', '2read.net', 'urlbox', 'croxyproxy',
+    'translate.googleusercontent', 'proxysite', 'hidefree', 'hidester'
   ];
+  const ref = (document.referrer || '').toLowerCase();
+  const host = (location.hostname || '').toLowerCase();
 
-  const currentReferrer = (document.referrer || '').toLowerCase();
-  const currentHost = (window.location.hostname || '').toLowerCase();
-  
-  // 1. Kiểm tra nếu trang đang bị nhúng trong iframe của bên thứ 3
-  let isFramed = false;
-  try {
-    isFramed = window.self !== window.top;
-  } catch (e) {
-    isFramed = true;
-  }
+  let framed = false;
+  try { framed = window.self !== window.top; } catch (_) { framed = true; }
 
-  // 2. Kiểm tra nếu nằm trong danh sách đen referrer hoặc host proxy
-  const isBlacklisted = BLACKLIST_PATTERNS.some(domain => 
-    currentReferrer.includes(domain) || currentHost.includes(domain)
-  );
+  const listed = blocked.some((d) => ref.includes(d) || host.includes(d));
 
-  // 3. Kiểm tra nguồn tổ tiên (ancestorOrigins nếu trình duyệt hỗ trợ)
-  let ancestorBlocked = false;
-  if (window.location.ancestorOrigins && window.location.ancestorOrigins.length > 0) {
-    for (let i = 0; i < window.location.ancestorOrigins.length; i++) {
-      const origin = window.location.ancestorOrigins[i].toLowerCase();
-      if (BLACKLIST_PATTERNS.some(d => origin.includes(d)) || !origin.includes('vinhx.info')) {
-        ancestorBlocked = true;
-        break;
-      }
+  let badAncestor = false;
+  const anc = location.ancestorOrigins;
+  if (anc && anc.length) {
+    for (let i = 0; i < anc.length; i++) {
+      const o = anc[i].toLowerCase();
+      if (blocked.some((d) => o.includes(d)) || !o.includes('vinhx.info')) { badAncestor = true; break; }
     }
   }
 
-  if (isFramed || isBlacklisted || ancestorBlocked) {
-    // Xóa sạch DOM ngay lập tức để trang thứ 3 không lấy được giao diện
+  if (framed || listed || badAncestor) {
     try {
-      if (document.documentElement) {
-        document.documentElement.innerHTML = '<!DOCTYPE html><html><head><title>Access Denied</title></head><body style="background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;"><h3>Direct Access Only: https://vinhx.info</h3></body></html>';
-      }
+      document.documentElement.innerHTML = '<head><title>Access Denied</title></head><body style="background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;"><h3>Direct Access Only: https://vinhx.info</h3></body>';
     } catch (_) {}
-
-    // Thoát khỏi frame và điều hướng thẳng về domain gốc
-    try {
-      window.top.location.href = 'https://vinhx.info';
-    } catch (_) {
-      window.location.href = 'https://vinhx.info';
-    }
-    throw new Error('Third-party source inspection blocked.');
+    try { window.top.location.href = 'https://vinhx.info'; } catch (_) { location.href = 'https://vinhx.info'; }
+    throw new Error('blocked');
   }
 })();
 
-/* =========================================================================
-   1. ĐỒNG BỘ THỜI GIAN VIỆT NAM (GMT+7)
-   ========================================================================= */
-function updateVNClock() {
-  const now = new Date();
-  const timeStr = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Asia/Ho_Chi_Minh',
-    hour12: false,
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  }).format(now);
-  const el = document.getElementById('vn-clock-display');
-  if (el) el.textContent = `VN (GMT+7) ${timeStr}`;
+const $ = (id) => document.getElementById(id);
+const root = document.documentElement;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------------------------------------------------------------------------
+// Language
+// ---------------------------------------------------------------------------
+const STRINGS = {
+  vi: {
+    'enter.kicker': 'Portfolio cá nhân',
+    'enter.sound': 'Vào trang',
+    'enter.silent': 'Vào không nhạc',
+    'hero.scroll': 'Cuộn xuống',
+    'toast.title': 'Đã sao chép email!',
+    'toast.sub': 'Dán vào ứng dụng email để gửi thư.',
+    'about.badge': 'Giới thiệu',
+    'about.status': 'Nhận làm freelance',
+    'about.text': 'Mình là <strong>Vinh (vinhx)</strong>. Chuyên viết bot Discord, script tự động hóa bằng Python và xây dựng giao diện web tối giản, tốc độ cao.',
+    'about.contact': 'Gửi tin nhắn',
+    'gh.badge': 'Hoạt động GitHub',
+    'gh.view': 'Xem hồ sơ',
+    'gh.sub': '<strong>42 lượt đóng góp</strong> trong năm qua',
+    'gh.less': 'Ít',
+    'gh.more': 'Nhiều',
+    'skills.badge': 'Kỹ năng & công nghệ',
+    'projects.badge': 'Dự án nổi bật',
+    'p1.title': 'Portfolio cá nhân',
+    'p1.desc': 'Trang portfolio cá nhân responsive bằng HTML/CSS/JS thuần, tích hợp SoundCloud Player và form liên hệ trực tiếp.',
+    'p2.desc': 'Công cụ tự động hóa Discord: hỗ trợ làm nhiệm vụ, treo stream voice 24/7, spoofer giờ chơi và các tiện ích bảo mật tài khoản.',
+    'p.visit': 'Xem trang',
+    'p.repo': 'Mã nguồn',
+    'p.join': 'Vào server',
+    'p.features': 'Xem tính năng bot',
+    'discord.profile': 'Hồ sơ',
+    'fb.label': 'Mạng xã hội',
+    'fb.connect': 'Kết nối',
+    'player.label': 'Đang phát',
+    'bot.title': 'Tính năng bot Discord',
+    'bot.join': 'Vào server Discord',
+    'f1.desc': 'Hoàn thành nhiệm vụ Discord và tự động claim quà.',
+    'f2.desc': 'Tùy chỉnh game & giờ chơi mở khóa huy hiệu, còn lại giữ nguyên hết.',
+    'f3.name': 'Treo Stream Voice',
+    'f3.desc': 'Phát sóng stream thoại 24/7 cày Streaming Badge.',
+    'f4.desc': 'Tùy biến ảnh GIF, game, status & các nút bấm tương tác.',
+    'f5.desc': 'Tự động tham gia giveaway & nhận thông báo khi trúng giải.',
+    'f6.name': 'Huy Hiệu HypeSquad',
+    'f6.desc': 'Trực tiếp gắn huy hiệu Bravery, Brilliance, Balance hoặc gỡ badge.',
+    'f7.name': 'Sao Lưu & Dọn Dẹp',
+    'f7.desc': 'Xuất dữ liệu tài khoản, dọn sạch tin nhắn & server rác.',
+    'f8.name': 'Giám Sát & Bảo Mật',
+    'f8.desc': 'Kiểm tra phiên đăng nhập & gom nhắc tên tập trung.',
+    'f9.name': 'Quản Lý Token',
+    'f9.desc': 'Lưu, kiểm tra hoặc xóa token an toàn.',
+    'mail.title': 'Gửi tin nhắn',
+    'mail.to': 'Đến:',
+    'mail.from': 'Từ:',
+    'mail.subject': 'Tiêu đề:',
+    'mail.fromPh': 'Email của bạn...',
+    'mail.subjectPh': 'Tiêu đề...',
+    'mail.bodyPh': 'Nội dung tin nhắn...',
+    'mail.send': 'Gửi',
+    'mail.sending': 'Đang gửi...',
+    'mail.sent': 'Đã gửi thành công!',
+    'mail.error': 'Lỗi gửi thư. Vui lòng thử lại!',
+    'mail.network': 'Lỗi kết nối!',
+    'ui.mute': 'Bật/Tắt âm thanh',
+    'ui.copyEmail': 'Sao chép email',
+    'ui.prev': 'Bài trước',
+    'ui.next': 'Bài tiếp theo',
+    'ui.volume': 'Âm lượng',
+    'ui.top': 'Lên đầu trang',
+    'ui.close': 'Đóng',
+    'ui.compose': 'Soạn thư',
+    'status.online': 'Đang hoạt động',
+    'status.idle': 'Vắng mặt',
+    'status.dnd': 'Không làm phiền',
+    'status.offline': 'Ngoại tuyến',
+    'presence.playing': 'Đang chơi',
+    'presence.listening': 'Đang nghe'
+  },
+  en: {
+    'enter.kicker': 'Personal portfolio',
+    'enter.sound': 'Enter',
+    'enter.silent': 'Enter without sound',
+    'hero.scroll': 'Scroll',
+    'toast.title': 'Email copied!',
+    'toast.sub': 'Paste it into your mail app.',
+    'about.badge': 'About me',
+    'about.status': 'Available for freelance',
+    'about.text': 'I\'m <strong>Vinh (vinhx)</strong>. I build Discord bots, Python automation scripts and minimal, fast websites.',
+    'about.contact': 'Send a message',
+    'gh.badge': 'GitHub activity',
+    'gh.view': 'View profile',
+    'gh.sub': '<strong>42 contributions</strong> in the last year',
+    'gh.less': 'Less',
+    'gh.more': 'More',
+    'skills.badge': 'Skills & tech stack',
+    'projects.badge': 'Featured projects',
+    'p1.title': 'Personal Portfolio',
+    'p1.desc': 'A responsive portfolio in plain HTML/CSS/JS, with a built-in SoundCloud player and a direct contact form.',
+    'p2.desc': 'Discord automation toolkit: quest helper, 24/7 voice streaming, playtime spoofer and account security utilities.',
+    'p.visit': 'Visit site',
+    'p.repo': 'Repository',
+    'p.join': 'Join server',
+    'p.features': 'Bot features',
+    'discord.profile': 'Profile',
+    'fb.label': 'Social network',
+    'fb.connect': 'Connect',
+    'player.label': 'Now playing',
+    'bot.title': 'Discord bot features',
+    'bot.join': 'Join Discord server',
+    'f1.desc': 'Completes Discord quests and claims the rewards for you.',
+    'f2.desc': 'Set a custom game and playtime to unlock badges; nothing else changes.',
+    'f3.name': '24/7 Voice Stream',
+    'f3.desc': 'Keeps a voice stream running around the clock for the Streaming badge.',
+    'f4.desc': 'Customize GIF art, game, status and interactive buttons.',
+    'f5.desc': 'Joins giveaways automatically and notifies you when you win.',
+    'f6.name': 'HypeSquad Badge',
+    'f6.desc': 'Set Bravery, Brilliance or Balance directly, or remove the badge.',
+    'f7.name': 'Backup & Cleanup',
+    'f7.desc': 'Export account data, clear messages and leave junk servers.',
+    'f8.name': 'Monitoring & Security',
+    'f8.desc': 'Review login sessions and collect mentions in one place.',
+    'f9.name': 'Token Manager',
+    'f9.desc': 'Save, check or delete tokens safely.',
+    'mail.title': 'New message',
+    'mail.to': 'To:',
+    'mail.from': 'From:',
+    'mail.subject': 'Subject:',
+    'mail.fromPh': 'Your email...',
+    'mail.subjectPh': 'Subject...',
+    'mail.bodyPh': 'Your message...',
+    'mail.send': 'Send',
+    'mail.sending': 'Sending...',
+    'mail.sent': 'Sent, thank you!',
+    'mail.error': 'Couldn\'t send. Please try again.',
+    'mail.network': 'Network error.',
+    'ui.mute': 'Mute / unmute',
+    'ui.copyEmail': 'Copy email',
+    'ui.prev': 'Previous track',
+    'ui.next': 'Next track',
+    'ui.volume': 'Volume',
+    'ui.top': 'Back to top',
+    'ui.close': 'Close',
+    'ui.compose': 'Write a message',
+    'status.online': 'Online',
+    'status.idle': 'Idle',
+    'status.dnd': 'Do not disturb',
+    'status.offline': 'Offline',
+    'presence.playing': 'Playing',
+    'presence.listening': 'Listening to'
+  }
+};
+
+function storedLang() {
+  try { return localStorage.getItem('lang'); } catch (_) { return null; }
 }
-setInterval(updateVNClock, 1000);
-updateVNClock();
 
-/* =========================================================================
-   2. CUỘN TRANG & NÚT LÊN ĐẦU TRANG
-   ========================================================================= */
-const scrollHintBtn = document.getElementById('scroll-hint-btn');
-const backToTopBtn = document.getElementById('back-to-top-btn');
+let lang = storedLang() || ((navigator.language || 'vi').toLowerCase().startsWith('vi') ? 'vi' : 'en');
+const t = (key) => STRINGS[lang][key] ?? STRINGS.vi[key] ?? key;
 
-if (scrollHintBtn) {
-  scrollHintBtn.addEventListener('click', () => {
-    document.getElementById('cards-view').scrollIntoView({ behavior: 'smooth' });
+function applyLang(next) {
+  lang = STRINGS[next] ? next : 'vi';
+  root.lang = lang;
+  try { localStorage.setItem('lang', lang); } catch (_) {}
+
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  document.querySelectorAll('[data-i18n-label]').forEach((el) => {
+    const v = t(el.dataset.i18nLabel);
+    el.setAttribute('aria-label', v);
+    if (el.hasAttribute('title')) el.title = v;
   });
+  document.querySelectorAll('.lang-toggle button').forEach((b) => {
+    b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+  });
+
+  renderPresence();
 }
 
-if (backToTopBtn) {
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 350) {
-      backToTopBtn.classList.add('visible');
-    } else {
-      backToTopBtn.classList.remove('visible');
-    }
+document.querySelectorAll('.lang-toggle button').forEach((b) => {
+  b.addEventListener('click', (e) => {
+    e.stopPropagation();
+    applyLang(b.dataset.lang);
   });
+});
 
-  backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+// ---------------------------------------------------------------------------
+// Intro screen
+// ---------------------------------------------------------------------------
+const enterScreen = $('enter-screen');
+let entered = false;
+let soundStarted = false;
+
+root.classList.add('is-locked');
+
+function enterSite(withSound) {
+  if (entered) return;
+  entered = true;
+
+  if (withSound) {
+    soundStarted = true;
+    if (widget) widget.play();
+  }
+
+  enterScreen.classList.add('is-leaving');
+  document.body.classList.add('is-entered');
+  root.classList.remove('is-locked');
+  setTimeout(() => enterScreen.classList.add('is-gone'), reduceMotion ? 0 : 1200);
 }
 
-/* =========================================================================
-   3. HIỆU ỨNG CUỘN TỚI (SCROLL REVEAL)
-   ========================================================================= */
-const revealElements = document.querySelectorAll('.reveal-card');
+enterScreen.addEventListener('click', (e) => {
+  if (e.target.closest('.lang-toggle')) return;
+  enterSite(!e.target.closest('#enter-silent'));
+});
 
-const revealObserver = new IntersectionObserver((entries, observer) => {
+document.addEventListener('keydown', (e) => {
+  if (!entered && e.key === 'Enter' && !e.target.closest('.lang-toggle, #enter-silent')) {
+    e.preventDefault();
+    enterSite(true);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Clock
+// ---------------------------------------------------------------------------
+const clockFmt = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Asia/Ho_Chi_Minh', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'
+});
+function tickClock() {
+  $('vn-clock-display').textContent = `VN (GMT+7) ${clockFmt.format(new Date())}`;
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+// ---------------------------------------------------------------------------
+// Scrolling
+// ---------------------------------------------------------------------------
+const backToTopBtn = $('back-to-top-btn');
+
+$('scroll-hint-btn').addEventListener('click', () => {
+  $('cards-view').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+});
+
+window.addEventListener('scroll', () => {
+  backToTopBtn.classList.toggle('visible', window.scrollY > 350);
+}, { passive: true });
+
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+});
+
+// Cards fade in as they enter the viewport; cards arriving together are staggered.
+const revealObserver = new IntersectionObserver((entries, obs) => {
+  let n = 0;
   entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('revealed');
-      observer.unobserve(entry.target);
-    }
+    if (!entry.isIntersecting) return;
+    entry.target.style.transitionDelay = `${n++ * 90}ms`;
+    entry.target.classList.add('revealed');
+    obs.unobserve(entry.target);
   });
-}, {
-  threshold: 0.1,
-  rootMargin: '0px 0px -30px 0px'
-});
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-revealElements.forEach((el, index) => {
-  el.style.transitionDelay = `${(index % 3) * 0.08}s`;
-  revealObserver.observe(el);
-});
+document.querySelectorAll('.reveal-card').forEach((el) => revealObserver.observe(el));
 
-/* =========================================================================
-   4. RENDER BIỂU ĐỒ GITHUB VẼ CHỮ "vinhx" VÀ TRÁI TIM BẰNG CHẤM XANH
-   ========================================================================= */
-function renderGitHubHeatmap() {
-  const container = document.getElementById('gh-heatmap');
-  if (!container) return;
-  container.innerHTML = '';
-
-  const artPattern = [
-    // Hàng 0
+// ---------------------------------------------------------------------------
+// GitHub grid (draws "vinhx" and a heart)
+// ---------------------------------------------------------------------------
+(function drawHeatmap() {
+  const grid = $('gh-heatmap');
+  const art = [
     [1,0,0,0,1, 0, 1, 0, 1,1,1,0, 0, 1,0,0,0, 0, 1,0,0,0,1, 0, 0, 0,1,1,0,1,1,0],
-    // Hàng 1
     [1,0,0,0,1, 0, 0, 0, 1,0,0,1, 0, 1,0,0,0, 0, 0,1,0,1,0, 0, 0, 1,1,1,1,1,1,1],
-    // Hàng 2
     [0,1,0,1,0, 0, 1, 0, 1,0,0,1, 0, 1,1,1,0, 0, 0,0,1,0,0, 0, 0, 1,1,1,1,1,1,1],
-    // Hàng 3
     [0,1,0,1,0, 0, 1, 0, 1,0,0,1, 0, 1,0,0,1, 0, 0,1,0,1,0, 0, 0, 0,1,1,1,1,1,0],
-    // Hàng 4
     [0,0,1,0,0, 0, 1, 0, 1,0,0,1, 0, 1,0,0,1, 0, 1,0,0,0,1, 0, 0, 0,0,1,1,1,0,0],
-    // Hàng 5
     [0,0,0,0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0,0, 0, 0,0,0,0,0, 0, 0, 0,0,0,1,0,0,0],
-    // Hàng 6
     [0,0,0,0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0,0, 0, 0,0,0,0,0, 0, 0, 0,0,0,0,0,0,0]
   ];
-
-  const rows = 7;
-  const cols = artPattern[0].length;
-
-  for (let c = 0; c < cols; c++) {
-    for (let r = 0; r < rows; r++) {
+  const frag = document.createDocumentFragment();
+  for (let c = 0; c < art[0].length; c++) {
+    for (let r = 0; r < art.length; r++) {
       const cell = document.createElement('div');
-      cell.className = 'contrib-cell';
-
-      const val = artPattern[r][c];
-      if (val === 1) {
-        cell.classList.add('lvl-4');
-      }
-
-      container.appendChild(cell);
+      cell.className = art[r][c] ? 'contrib-cell lvl-4' : 'contrib-cell';
+      cell.style.setProperty('--c', c);
+      frag.appendChild(cell);
     }
   }
+  grid.appendChild(frag);
+})();
+
+// ---------------------------------------------------------------------------
+// Email (kept out of the HTML so scrapers don't pick it up)
+// ---------------------------------------------------------------------------
+const emailAddress = ['nguyenngoctrivinh72', 'gmail.com'].join('@');
+const toast = $('copy-toast');
+let toastTimer;
+
+$('copy-email-btn').addEventListener('click', () => {
+  navigator.clipboard.writeText(emailAddress).then(() => {
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+  }).catch(() => openGmail());
+});
+
+// ---------------------------------------------------------------------------
+// Modals
+// ---------------------------------------------------------------------------
+const FOCUSABLE = 'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])';
+let activeModal = null;
+let returnFocus = null;
+
+function openModal(el) {
+  returnFocus = document.activeElement;
+  activeModal = el;
+  el.classList.remove('hidden');
+  root.classList.add('is-locked');
+  const first = el.querySelector('input, textarea') || el.querySelector(FOCUSABLE);
+  setTimeout(() => first && first.focus({ preventScroll: true }), 60);
 }
-renderGitHubHeatmap();
 
-/* =========================================================================
-   5. SAO CHÉP EMAIL & TOAST POPUP
-   ========================================================================= */
-const EMAIL_TO_COPY = "nguyenngoctrivinh72@gmail.com";
-const copyEmailBtn = document.getElementById('copy-email-btn');
-const copyToast = document.getElementById('copy-toast');
-let toastTimer = null;
+function closeModal(el) {
+  el.classList.add('hidden');
+  if (activeModal === el) activeModal = null;
+  root.classList.remove('is-locked');
+  if (returnFocus && document.contains(returnFocus)) returnFocus.focus({ preventScroll: true });
+}
 
-if (copyEmailBtn && copyToast) {
-  copyEmailBtn.addEventListener('click', () => {
-    navigator.clipboard.writeText(EMAIL_TO_COPY).then(() => {
-      copyToast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        copyToast.classList.remove('show');
-      }, 2500);
+document.addEventListener('keydown', (e) => {
+  if (!activeModal) return;
+  if (e.key === 'Escape') {
+    activeModal === gmailModal ? closeGmail() : closeModal(activeModal);
+    return;
+  }
+  if (e.key !== 'Tab') return;
+  const items = [...activeModal.querySelectorAll(FOCUSABLE)].filter((n) => n.offsetParent !== null);
+  if (!items.length) return;
+  const first = items[0];
+  const last = items[items.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+
+// contact form
+const gmailModal = $('gmail-modal-container');
+const mailFab = $('open-gmail-modal');
+
+function openGmail() { mailFab.classList.add('is-hidden'); openModal(gmailModal); }
+function closeGmail() { mailFab.classList.remove('is-hidden'); closeModal(gmailModal); }
+
+mailFab.addEventListener('click', openGmail);
+$('about-contact-btn').addEventListener('click', openGmail);
+$('footer-contact-btn').addEventListener('click', openGmail);
+$('close-gmail-btn').addEventListener('click', closeGmail);
+gmailModal.addEventListener('click', (e) => { if (e.target === gmailModal) closeGmail(); });
+
+const contactForm = $('contact-form');
+const formStatus = $('form-status');
+const submitBtn = $('form-submit-btn');
+
+function setStatus(key, color) {
+  formStatus.style.color = color;
+  formStatus.textContent = key ? t(key) : '';
+}
+
+contactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  submitBtn.disabled = true;
+  setStatus('mail.sending', '#eab308');
+
+  try {
+    const res = await fetch(contactForm.action, {
+      method: 'POST',
+      body: new FormData(contactForm),
+      headers: { Accept: 'application/json' }
     });
-  });
-}
 
-/* =========================================================================
-   6. QUẢN LÝ GMAIL POPUP MODAL (ĐEN MỜ, KHÔNG ĐÈ THẺ)
-   ========================================================================= */
-const openGmailBtn = document.getElementById('open-gmail-modal');
-const closeGmailBtn = document.getElementById('close-gmail-btn');
-const gmailModalContainer = document.getElementById('gmail-modal-container');
-const aboutContactBtn = document.getElementById('about-contact-btn');
-
-function toggleGmailPopup(show) {
-  if (show) {
-    gmailModalContainer.classList.remove('hidden');
-    openGmailBtn.style.display = 'none';
-  } else {
-    gmailModalContainer.classList.add('hidden');
-    openGmailBtn.style.display = 'flex';
-  }
-}
-
-if (openGmailBtn) openGmailBtn.addEventListener('click', () => toggleGmailPopup(true));
-if (closeGmailBtn) closeGmailBtn.addEventListener('click', () => toggleGmailPopup(false));
-if (aboutContactBtn) aboutContactBtn.addEventListener('click', () => toggleGmailPopup(true));
-
-if (gmailModalContainer) {
-  gmailModalContainer.addEventListener('click', (e) => {
-    if (e.target === gmailModalContainer) toggleGmailPopup(false);
-  });
-}
-
-/* =========================================================================
-   7. XỬ LÝ GỬI THƯ QUA FORMSPREE (mrppjobo)
-   ========================================================================= */
-const contactForm = document.getElementById('contact-form');
-const formStatus = document.getElementById('form-status');
-const formSubmitBtn = document.getElementById('form-submit-btn');
-
-if (contactForm) {
-  contactForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    formSubmitBtn.disabled = true;
-    formStatus.style.color = '#eab308';
-    formStatus.textContent = 'Đang gửi...';
-
-    const formData = new FormData(contactForm);
-
-    try {
-      const response = await fetch(contactForm.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (response.ok) {
-        formStatus.style.color = '#3fb950';
-        formStatus.textContent = 'Đã gửi thành công!';
-        contactForm.reset();
-        setTimeout(() => {
-          toggleGmailPopup(false);
-          formStatus.textContent = '';
-        }, 2000);
-      } else {
-        const data = await response.json();
-        formStatus.style.color = '#ef4444';
-        if (data && data.errors) {
-          formStatus.textContent = data.errors.map(err => err.message).join(', ');
-        } else {
-          formStatus.textContent = 'Lỗi gửi thư. Vui lòng thử lại!';
-        }
-      }
-    } catch (err) {
+    if (res.ok) {
+      setStatus('mail.sent', '#3fb950');
+      contactForm.reset();
+      setTimeout(() => { closeGmail(); setStatus('', ''); }, 2000);
+    } else {
+      const data = await res.json().catch(() => null);
       formStatus.style.color = '#ef4444';
-      formStatus.textContent = 'Lỗi kết nối!';
-    } finally {
-      formSubmitBtn.disabled = false;
+      formStatus.textContent = data?.errors ? data.errors.map((er) => er.message).join(', ') : t('mail.error');
     }
-  });
-}
-
-/* =========================================================================
-   8. BẬT / TẮT MODAL TÍNH NĂNG BOT DISCORD
-   ========================================================================= */
-const openBotFeaturesBtn = document.getElementById('open-bot-features-btn');
-const closeBotFeaturesBtn = document.getElementById('close-bot-features-btn');
-const botFeaturesModal = document.getElementById('bot-features-modal');
-const botModalOverlay = document.querySelector('.bot-modal-overlay');
-
-function toggleBotModal(show) {
-  if (show) {
-    botFeaturesModal.classList.remove('hidden');
-  } else {
-    botFeaturesModal.classList.add('hidden');
+  } catch (_) {
+    setStatus('mail.network', '#ef4444');
+  } finally {
+    submitBtn.disabled = false;
   }
+});
+
+// bot features
+const botModal = $('bot-features-modal');
+botModal.querySelectorAll('.feature-card').forEach((card, i) => card.style.setProperty('--i', i));
+
+$('open-bot-features-btn').addEventListener('click', () => openModal(botModal));
+$('close-bot-features-btn').addEventListener('click', () => closeModal(botModal));
+botModal.querySelector('.bot-modal-overlay').addEventListener('click', () => closeModal(botModal));
+
+// ---------------------------------------------------------------------------
+// Discord presence via Lanyard (https://github.com/Phineas/lanyard)
+// Only works while the account is in the Lanyard Discord server;
+// otherwise the card keeps its default look.
+// ---------------------------------------------------------------------------
+const DISCORD_ID = '1054712893037355018';
+const statusDot = $('discord-status');
+const presenceEl = $('discord-presence');
+let presence = null;
+
+function renderPresence() {
+  if (!presence) return;
+  const status = presence.discord_status || 'offline';
+  statusDot.className = `status-indicator ${status}`;
+  statusDot.title = t(`status.${status}`);
+
+  const acts = presence.activities || [];
+  const game = acts.find((a) => a.type === 0);
+  const custom = acts.find((a) => a.type === 4 && a.state);
+
+  let line = t(`status.${status}`);
+  if (presence.listening_to_spotify && presence.spotify) {
+    line = `${t('presence.listening')} ${presence.spotify.song} — ${presence.spotify.artist.replace(/;/g, ',')}`;
+  } else if (game) {
+    line = `${t('presence.playing')} ${game.name}`;
+  } else if (custom) {
+    line = custom.state;
+  }
+  presenceEl.textContent = line;
+  presenceEl.title = line;
 }
 
-if (openBotFeaturesBtn) openBotFeaturesBtn.addEventListener('click', () => toggleBotModal(true));
-if (closeBotFeaturesBtn) closeBotFeaturesBtn.addEventListener('click', () => toggleBotModal(false));
-if (botModalOverlay) botModalOverlay.addEventListener('click', () => toggleBotModal(false));
+async function fetchPresence() {
+  try {
+    const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+    if (!res.ok) return;
+    const json = await res.json();
+    if (!json.success) return;
+    presence = json.data;
+    renderPresence();
+  } catch (_) {}
+}
 
-/* =========================================================================
-   9. PLAYLIST SOUNDCLOUD & QUẢN LÝ PHÁT NHẠC
-   ========================================================================= */
+fetchPresence();
+setInterval(() => { if (!document.hidden) fetchPresence(); }, 30000);
+
+// ---------------------------------------------------------------------------
+// Music player (SoundCloud widget)
+// ---------------------------------------------------------------------------
 const PLAYLIST = [
-  {
-    title: "PAR SG - cigarette ft. Cigar",
-    url: "https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar"
-  },
-  {
-    title: "Hành Tinh Buồn Tênh",
-    url: "https://soundcloud.com/viet-music-chill/hanh-tinh-buon-tenh"
-  },
-  {
-    title: "Lofi Hip Hop Chill Beats",
-    url: "https://soundcloud.com/chillhopdotcom/chillhop-essentials-spring-2023"
-  }
+  { title: 'PAR SG - cigarette ft. Cigar', url: 'https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar' },
+  { title: 'Hành Tinh Buồn Tênh', url: 'https://soundcloud.com/viet-music-chill/hanh-tinh-buon-tenh' },
+  { title: 'Lofi Hip Hop Chill Beats', url: 'https://soundcloud.com/chillhopdotcom/chillhop-essentials-spring-2023' }
 ];
 
-let currentTrackIndex = 0;
-let soundStarted = false;
-let isMuted = false;
-let currentVolume = 85;
-let maxTrackMs = 162000;
-
-const iframe = document.getElementById('sc-hidden-frame');
-const widget = SC.Widget(iframe);
-const diskImage = document.getElementById('disk-image');
+const widget = window.SC ? SC.Widget($('sc-hidden-frame')) : null;
+const diskImage = $('disk-image');
 const diskBox = document.querySelector('.disk-container');
-const playIcon = document.getElementById('ctrl-play-icon');
-const trackNameEl = document.getElementById('track-name');
-const trackCounterEl = document.getElementById('track-counter');
-const floatingToggleBtn = document.getElementById('floating-audio-toggle');
-const floatIcon = document.getElementById('float-audio-icon');
+const playIcon = $('ctrl-play-icon');
+const progressVal = $('progress-bar-val');
+const muteBtn = $('floating-audio-toggle');
+const muteIcon = $('float-audio-icon');
 
-function formatSec(ms) {
-  const total = Math.floor(ms / 1000);
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  return `${m}:${s < 10 ? '0' : ''}${s}`;
+let trackIndex = 0;
+let isMuted = false;
+let volume = 85;
+let durationMs = 162000;
+
+const fmtTime = (ms) => {
+  const s = Math.floor(ms / 1000);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+};
+
+function showTrack() {
+  $('track-name').textContent = PLAYLIST[trackIndex].title;
+  $('track-counter').textContent = `${trackIndex + 1} / ${PLAYLIST.length}`;
 }
 
-function updateTrackUI() {
-  trackNameEl.textContent = PLAYLIST[currentTrackIndex].title;
-  trackCounterEl.textContent = `${currentTrackIndex + 1} / ${PLAYLIST.length}`;
+function refreshMeta() {
+  widget.getDuration((d) => {
+    if (d > 0) { durationMs = d; $('time-max').textContent = fmtTime(d); }
+  });
+  widget.getCurrentSound((sound) => {
+    if (sound?.artwork_url) diskImage.src = sound.artwork_url.replace('-large', '-t500x500');
+  });
 }
 
-function loadTrack(index) {
-  currentTrackIndex = index;
-  updateTrackUI();
-  widget.load(PLAYLIST[currentTrackIndex].url, {
+function loadTrack(i) {
+  trackIndex = (i + PLAYLIST.length) % PLAYLIST.length;
+  showTrack();
+  progressVal.style.transform = 'scaleX(0)';
+  $('time-curr').textContent = '0:00';
+  widget.load(PLAYLIST[trackIndex].url, {
     auto_play: true,
     show_artwork: true,
     callback: () => {
-      widget.setVolume(isMuted ? 0 : currentVolume);
+      widget.setVolume(isMuted ? 0 : volume);
+      refreshMeta();
     }
   });
 }
 
-widget.bind(SC.Widget.Events.READY, () => {
-  widget.setVolume(currentVolume);
-  updateTrackUI();
-
-  widget.getDuration((d) => {
-    if (d > 0) {
-      maxTrackMs = d;
-      document.getElementById('time-max').textContent = formatSec(d);
-    }
+if (widget) {
+  widget.bind(SC.Widget.Events.READY, () => {
+    widget.setVolume(volume);
+    showTrack();
+    refreshMeta();
+    if (soundStarted) widget.play();
   });
 
-  widget.getCurrentSound((sound) => {
-    if (sound?.artwork_url) {
-      const art = sound.artwork_url.replace('-large', '-t500x500');
-      diskImage.src = art;
-    }
+  widget.bind(SC.Widget.Events.PLAY, () => {
+    playIcon.className = 'fa-solid fa-pause';
+    diskImage.classList.add('running');
+    diskBox.classList.add('playing');
   });
-});
 
-document.getElementById('enter-screen').addEventListener('click', function () {
-  this.classList.add('dismissed');
-  soundStarted = true;
-  widget.play();
-});
+  widget.bind(SC.Widget.Events.PAUSE, () => {
+    playIcon.className = 'fa-solid fa-play';
+    diskImage.classList.remove('running');
+    diskBox.classList.remove('playing');
+  });
 
-['touchstart', 'click'].forEach((event) => {
-  window.addEventListener(event, () => {
-    if (!soundStarted) {
-      soundStarted = true;
-      document.getElementById('enter-screen').classList.add('dismissed');
-      widget.play();
-    }
-  }, { once: true, passive: true });
-});
+  widget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+    $('time-curr').textContent = fmtTime(data.currentPosition);
+    if (durationMs > 0) progressVal.style.transform = `scaleX(${Math.min(1, data.currentPosition / durationMs)})`;
+  });
 
-widget.bind(SC.Widget.Events.PLAY, () => {
-  playIcon.className = 'fa-solid fa-pause';
-  diskImage.classList.add('running');
-  diskBox.classList.add('playing');
-});
+  widget.bind(SC.Widget.Events.FINISH, () => loadTrack(trackIndex + 1));
 
-widget.bind(SC.Widget.Events.PAUSE, () => {
-  playIcon.className = 'fa-solid fa-play';
-  diskImage.classList.remove('running');
-  diskBox.classList.remove('playing');
-});
+  $('ctrl-play').addEventListener('click', () => { soundStarted = true; widget.toggle(); });
+  $('ctrl-next').addEventListener('click', () => loadTrack(trackIndex + 1));
+  $('ctrl-prev').addEventListener('click', () => loadTrack(trackIndex - 1));
 
-widget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
-  document.getElementById('time-curr').textContent = formatSec(data.currentPosition);
-  if (maxTrackMs > 0) {
-    const pct = (data.currentPosition / maxTrackMs) * 100;
-    document.getElementById('progress-bar-val').style.width = `${Math.min(100, pct)}%`;
-  }
-});
+  $('progress-bar-slot').addEventListener('click', function (e) {
+    const rect = this.getBoundingClientRect();
+    widget.seekTo(((e.clientX - rect.left) / rect.width) * durationMs);
+  });
 
-widget.bind(SC.Widget.Events.FINISH, () => {
-  nextTrack();
-});
+  $('vol-range').addEventListener('input', function () {
+    volume = Number(this.value);
+    if (!isMuted) widget.setVolume(volume);
+  });
 
-function nextTrack() {
-  currentTrackIndex = (currentTrackIndex + 1) % PLAYLIST.length;
-  loadTrack(currentTrackIndex);
+  muteBtn.addEventListener('click', () => {
+    isMuted = !isMuted;
+    widget.setVolume(isMuted ? 0 : volume);
+    muteIcon.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+    muteBtn.classList.toggle('muted', isMuted);
+  });
 }
 
-function prevTrack() {
-  currentTrackIndex = (currentTrackIndex - 1 + PLAYLIST.length) % PLAYLIST.length;
-  loadTrack(currentTrackIndex);
-}
-
-document.getElementById('ctrl-play').addEventListener('click', () => widget.toggle());
-document.getElementById('ctrl-next').addEventListener('click', nextTrack);
-document.getElementById('ctrl-prev').addEventListener('click', prevTrack);
-
-document.getElementById('progress-bar-slot').addEventListener('click', function (e) {
-  const rect = this.getBoundingClientRect();
-  const ratio = (e.clientX - rect.left) / rect.width;
-  widget.seekTo(ratio * maxTrackMs);
-});
-
-document.getElementById('vol-range').addEventListener('input', function () {
-  currentVolume = Number(this.value);
-  if (!isMuted) widget.setVolume(currentVolume);
-});
-
-/* =========================================================================
-   10. NÚT ÂM THANH NỔI (MUTE/UNMUTE)
-   ========================================================================= */
-floatingToggleBtn.addEventListener('click', () => {
-  isMuted = !isMuted;
-  if (isMuted) {
-    widget.setVolume(0);
-    floatIcon.className = 'fa-solid fa-volume-xmark';
-    floatingToggleBtn.classList.add('muted');
-  } else {
-    widget.setVolume(currentVolume);
-    floatIcon.className = 'fa-solid fa-volume-high';
-    floatingToggleBtn.classList.remove('muted');
-  }
-});
-
-/* =========================================================================
-   11. CỐ ĐỊNH AVATAR
-   ========================================================================= */
-const FIXED_AVATAR = "https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg";
-document.getElementById('main-avatar').src = FIXED_AVATAR;
-document.getElementById('card-avatar').src = FIXED_AVATAR;
-
-/* =========================================================================
-   12. PHÍM ESC ĐÓNG POPUP
-   ========================================================================= */
-document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return;
-  if (!botFeaturesModal.classList.contains('hidden')) toggleBotModal(false);
-  if (!gmailModalContainer.classList.contains('hidden')) toggleGmailPopup(false);
-});
+applyLang(lang);

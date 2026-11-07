@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="referrer" content="no-referrer" />
-
-  <!-- MÃ XÁC MINH GOOGLE SEARCH CONSOLE -->
   <meta name="google-site-verification" content="Z77-r76faPhTg1uc2TFHpSoOqsLd_WRSPCJMKu4T0wg" />
 
   <title>vinhx — Personal Portfolio</title>
@@ -15,12 +13,10 @@
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://vinhx.info/" />
 
-  <!-- FAVICON -->
   <link rel="icon" type="image/jpeg" href="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
   <link rel="shortcut icon" type="image/jpeg" href="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
   <link rel="apple-touch-icon" href="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
 
-  <!-- THEME & OG -->
   <meta name="theme-color" content="#000000" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vinhx.info/" />
@@ -29,64 +25,82 @@
   <meta property="og:description" content="Portfolio của Vinh (vinhx). Lập trình bot tự động hóa Discord, web tối giản." />
   <meta property="og:image" content="https://i.pinimg.com/736x/0a/a0/21/0aa0219a85b7abfe07cbc23a1ab9b3f2.jpg" />
 
-  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap&subset=latin,vietnamese" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- icons load without blocking first paint -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://w.soundcloud.com/player/api.js"></script>
+  <script src="https://w.soundcloud.com/player/api.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
 
-  <!-- Màn hình click to enter -->
-  <div id="enter-screen">
-    <div class="enter-box">
-      <div class="enter-title">click to enter...</div>
-      <div class="enter-sub">vinhx profile</div>
-      <button class="enter-play" type="button" aria-label="Play">
-        <i class="fa-solid fa-play"></i>
-      </button>
+  <!-- intro -->
+  <div id="enter-screen" class="enter-screen">
+    <div class="enter-inner">
+      <p class="enter-kicker" data-i18n="enter.kicker">Portfolio cá nhân</p>
+      <h2 class="enter-name" aria-label="vinhx">
+        <span style="--i:0">v</span><span style="--i:1">i</span><span style="--i:2">n</span><span style="--i:3">h</span><span style="--i:4">x</span>
+      </h2>
+      <div class="enter-actions">
+        <button id="enter-with-sound" class="enter-btn" type="button">
+          <span class="enter-btn-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16" width="10" height="10"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>
+          </span>
+          <span data-i18n="enter.sound">Vào trang</span>
+        </button>
+        <button id="enter-silent" class="enter-link" type="button" data-i18n="enter.silent">Vào không nhạc</button>
+      </div>
+    </div>
+    <div class="enter-foot">
+      <span>vinhx.info</span>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="vi">VI</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
     </div>
   </div>
 
-  <!-- Nút âm thanh nổi góc trên -->
   <div class="floating-top-controls">
-    <button id="floating-audio-toggle" class="ctrl-floating-btn" title="Bật/Tắt âm thanh" aria-label="Bật/Tắt âm thanh">
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button type="button" data-lang="vi">VI</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <button id="floating-audio-toggle" class="ctrl-floating-btn" type="button" data-i18n-label="ui.mute" title="Bật/Tắt âm thanh" aria-label="Bật/Tắt âm thanh">
       <i id="float-audio-icon" class="fa-solid fa-volume-high"></i>
     </button>
   </div>
 
-  <!-- Background GIF và lớp phủ đen mờ tối giản -->
   <div class="bg-layer"></div>
   <div class="bg-vignette"></div>
 
-  <!-- TOAST THÔNG BÁO SAO CHÉP EMAIL -->
-  <div id="copy-toast" class="copy-toast">
+  <div id="copy-toast" class="copy-toast" role="status" aria-live="polite">
     <div class="toast-tick-circle">✓</div>
     <div class="toast-text-group">
-      <span class="toast-title">Đã sao chép email!</span>
-      <span class="toast-sub">nguyenngoctrivinh72@gmail.com</span>
+      <span class="toast-title" data-i18n="toast.title">Đã sao chép email!</span>
+      <span class="toast-sub" data-i18n="toast.sub">Dán vào ứng dụng email để gửi thư.</span>
     </div>
   </div>
 
-  <!-- ================= HERO SECTION ================= -->
+  <!-- hero -->
   <main class="hero-view">
-    <div class="avatar-orbit">
-      <img id="main-avatar" class="avatar-face" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="vinhx" />
+    <div class="avatar-orbit intro" style="--i:0">
+      <img id="main-avatar" class="avatar-face" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="vinhx" width="96" height="96" />
     </div>
 
-    <h1 class="hero-name">vinhx</h1>
-    <p class="hero-tagline">Discord Bots & Web Scripting</p>
+    <h1 class="hero-name intro" style="--i:1">vinhx</h1>
+    <p class="hero-tagline intro" style="--i:2">Discord Bots &amp; Web Scripting</p>
 
-    <div class="social-cluster">
+    <div class="social-cluster intro" style="--i:3">
       <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="social-circle" title="Facebook" aria-label="Facebook">
         <i class="fa-brands fa-facebook-f"></i>
       </a>
       <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="social-circle" title="Discord" aria-label="Discord">
         <i class="fa-brands fa-discord"></i>
       </a>
-      <button id="copy-email-btn" class="social-circle email-copy-trigger" type="button" title="Sao chép Email" aria-label="Sao chép Email">
+      <button id="copy-email-btn" class="social-circle email-copy-trigger" type="button" data-i18n-label="ui.copyEmail" title="Sao chép Email" aria-label="Sao chép Email">
         <i class="fa-regular fa-envelope"></i>
       </button>
       <a href="https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar" target="_blank" rel="noopener noreferrer" class="social-circle" title="SoundCloud" aria-label="SoundCloud">
@@ -94,41 +108,40 @@
       </a>
     </div>
 
-    <div id="scroll-hint-btn" class="scroll-down-hint">
-      <span>EXPLORE</span>
-      <i class="fa-solid fa-chevron-down"></i>
-    </div>
+    <button id="scroll-hint-btn" class="scroll-hint intro" style="--i:5" type="button">
+      <span data-i18n="hero.scroll">Cuộn xuống</span>
+      <span class="scroll-line" aria-hidden="true"></span>
+    </button>
   </main>
 
-  <!-- ================= CARDS SECTION ================= -->
   <section id="cards-view" class="cards-view">
 
-    <!-- 1. THẺ ABOUT ME -->
+    <!-- about -->
     <div class="glass-card reveal-card">
-      <div class="section-badge">ABOUT ME</div>
+      <div class="section-badge" data-i18n="about.badge">Giới thiệu</div>
 
       <div class="about-hero-row">
-        <img class="about-avatar-img" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="Vinh" />
+        <img class="about-avatar-img" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="Vinh" width="58" height="58" loading="lazy" decoding="async" />
         <div class="about-meta">
           <div class="status-badge-online">
             <span class="status-pulse-dot"></span>
-            <span>Available for freelance</span>
+            <span data-i18n="about.status">Nhận làm freelance</span>
           </div>
-          <p class="about-text">
+          <p class="about-text" data-i18n-html="about.text">
             Mình là <strong>Vinh (vinhx)</strong>. Chuyên viết bot Discord, script tự động hóa bằng Python và xây dựng giao diện web tối giản, tốc độ cao.
           </p>
         </div>
       </div>
 
       <div class="about-actions-row">
-        <button id="about-contact-btn" type="button" class="about-btn primary"><i class="fa-solid fa-paper-plane"></i> Gửi tin nhắn</button>
+        <button id="about-contact-btn" type="button" class="about-btn primary"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="about.contact">Gửi tin nhắn</span></button>
         <a href="https://github.com/amItuff" target="_blank" rel="noopener noreferrer" class="about-btn secondary"><i class="fa-brands fa-github"></i> GitHub</a>
       </div>
     </div>
 
-    <!-- 2. THẺ GITHUB CONTRIBUTIONS (CHỮ VINHX + TRÁI TIM XANH) -->
+    <!-- github -->
     <div class="glass-card reveal-card">
-      <div class="section-badge">GITHUB CONTRIBUTIONS</div>
+      <div class="section-badge" data-i18n="gh.badge">Hoạt động GitHub</div>
       <div class="github-stats-box">
         <div class="github-header">
           <div class="gh-user">
@@ -136,32 +149,31 @@
             <span>@amItuff</span>
           </div>
           <a href="https://github.com/amItuff" target="_blank" rel="noopener noreferrer" class="gh-visit-link">
-            View profile <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <span data-i18n="gh.view">Xem hồ sơ</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
 
-        <div class="gh-contrib-sub">
-          <strong>42 contributions</strong> in the last year
+        <div class="gh-contrib-sub" data-i18n-html="gh.sub">
+          <strong>42 lượt đóng góp</strong> trong năm qua
         </div>
 
-        <!-- Biểu đồ chấm xanh vẽ vinhx và trái tim -->
         <div class="gh-contrib-calendar" id="gh-heatmap"></div>
 
         <div class="gh-contrib-footer">
-          <span>Less</span>
+          <span data-i18n="gh.less">Ít</span>
           <span class="legend-cell l0"></span>
           <span class="legend-cell l1"></span>
           <span class="legend-cell l2"></span>
           <span class="legend-cell l3"></span>
           <span class="legend-cell l4"></span>
-          <span>More</span>
+          <span data-i18n="gh.more">Nhiều</span>
         </div>
       </div>
     </div>
 
-    <!-- 3. THẺ SKILLS & TECH STACK -->
+    <!-- skills -->
     <div class="glass-card reveal-card">
-      <div class="section-badge">SKILLS & TECH STACK</div>
+      <div class="section-badge" data-i18n="skills.badge">Kỹ năng &amp; công nghệ</div>
 
       <div class="skills-grid">
         <div class="skill-item">
@@ -178,25 +190,24 @@
         </div>
         <div class="skill-item">
           <i class="fa-solid fa-network-wired skill-logo"></i>
-          <span class="skill-name">REST API & Webhooks</span>
+          <span class="skill-name">REST API &amp; Webhooks</span>
         </div>
         <div class="skill-item">
           <i class="fa-brands fa-git-alt skill-logo"></i>
-          <span class="skill-name">Git & GitHub</span>
+          <span class="skill-name">Git &amp; GitHub</span>
         </div>
         <div class="skill-item">
           <i class="fa-solid fa-cloud skill-logo"></i>
-          <span class="skill-name">Vercel & DNS Config</span>
+          <span class="skill-name">Vercel &amp; DNS Config</span>
         </div>
       </div>
     </div>
 
-    <!-- 4. THẺ FEATURED PROJECTS -->
+    <!-- projects -->
     <div class="glass-card reveal-card">
-      <div class="section-badge">FEATURED PROJECTS</div>
+      <div class="section-badge" data-i18n="projects.badge">Dự án nổi bật</div>
 
       <div class="projects-container">
-        <!-- Project 1 -->
         <div class="project-showcase-item">
           <div class="project-cover-wrap">
             <div class="terminal-mockup-header">
@@ -212,16 +223,15 @@
           </div>
 
           <div class="project-details">
-            <h3 class="project-heading">Personal Portfolio</h3>
-            <p class="project-paragraph">Trang portfolio cá nhân responsive bằng HTML/CSS/JS thuần, tích hợp SoundCloud Player và form liên hệ trực tiếp.</p>
+            <h3 class="project-heading" data-i18n="p1.title">Portfolio cá nhân</h3>
+            <p class="project-paragraph" data-i18n="p1.desc">Trang portfolio cá nhân responsive bằng HTML/CSS/JS thuần, tích hợp SoundCloud Player và form liên hệ trực tiếp.</p>
             <div class="project-action-buttons">
-              <a href="https://vinhx.info" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem trang</a>
-              <a href="https://github.com/amItuff/vinhx." target="_blank" rel="noopener noreferrer" class="p-btn p-btn-gh"><i class="fa-brands fa-github"></i> Repository</a>
+              <a href="https://vinhx.info" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="p.visit">Xem trang</span></a>
+              <a href="https://github.com/amItuff/vinhx." target="_blank" rel="noopener noreferrer" class="p-btn p-btn-gh"><i class="fa-brands fa-github"></i> <span data-i18n="p.repo">Mã nguồn</span></a>
             </div>
           </div>
         </div>
 
-        <!-- Project 2 -->
         <div class="project-showcase-item">
           <div class="project-cover-wrap">
             <div class="terminal-mockup-header">
@@ -237,14 +247,14 @@
           </div>
 
           <div class="project-details">
-            <h3 class="project-heading">Discord Multi-Tool & Badge Utility</h3>
-            <p class="project-paragraph">Công cụ tự động hóa Discord: hỗ trợ làm nhiệm vụ, treo stream voice 24/7, spoofer giờ chơi và các tiện ích bảo mật tài khoản.</p>
+            <h3 class="project-heading">Discord Multi-Tool &amp; Badge Utility</h3>
+            <p class="project-paragraph" data-i18n="p2.desc">Công cụ tự động hóa Discord: hỗ trợ làm nhiệm vụ, treo stream voice 24/7, spoofer giờ chơi và các tiện ích bảo mật tài khoản.</p>
             <div class="project-action-buttons">
               <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo">
-                <i class="fa-brands fa-discord"></i> Join Server
+                <i class="fa-brands fa-discord"></i> <span data-i18n="p.join">Vào server</span>
               </a>
               <button id="open-bot-features-btn" type="button" class="p-btn p-btn-features">
-                <i class="fa-solid fa-layer-group"></i> Xem tính năng bot
+                <i class="fa-solid fa-layer-group"></i> <span data-i18n="p.features">Xem tính năng bot</span>
               </button>
             </div>
           </div>
@@ -252,12 +262,12 @@
       </div>
     </div>
 
-    <!-- 5. THẺ DISCORD PROFILE -->
+    <!-- discord -->
     <div class="glass-card reveal-card">
       <div class="card-body-left">
         <div class="avatar-mini-wrap">
-          <img id="card-avatar" class="avatar-mini" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="vinhx" />
-          <div class="status-indicator dnd" title="Do Not Disturb"></div>
+          <img id="card-avatar" class="avatar-mini" src="https://i.pinimg.com/1200x/05/ab/a9/05aba97b6124199235026b5a962f049b.jpg" alt="vinhx" width="50" height="50" loading="lazy" decoding="async" />
+          <div id="discord-status" class="status-indicator dnd" title="Do Not Disturb"></div>
         </div>
 
         <div class="info-block">
@@ -266,37 +276,38 @@
             <span class="user-display">vinhx</span>
             <span class="handle-name">nntv_1.</span>
           </div>
+          <span id="discord-presence" class="presence-line"></span>
 
           <div class="badges-row">
-            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/subscriptions/badges/silver.png" alt="Silver Nitro" title="Nitro Silver" />
-            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/gifting/legend.png" alt="Legend Gift" title="Gifting Legend" />
-            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/game-time/eternal.svg" alt="Eternal" title="Game Time: Eternal" />
-            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/game-variety/universalist.svg" alt="Universalist" title="Game Variety: Universalist" />
+            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/subscriptions/badges/silver.png" alt="Silver Nitro" title="Nitro Silver" width="19" height="19" loading="lazy" decoding="async" />
+            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/gifting/legend.png" alt="Legend Gift" title="Gifting Legend" width="19" height="19" loading="lazy" decoding="async" />
+            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/game-time/eternal.svg" alt="Eternal" title="Game Time: Eternal" width="19" height="19" loading="lazy" decoding="async" />
+            <img class="badge-icon" src="https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/game-variety/universalist.svg" alt="Universalist" title="Game Variety: Universalist" width="19" height="19" loading="lazy" decoding="async" />
           </div>
         </div>
       </div>
-      <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="action-btn">PROFILE</a>
+      <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="action-btn" data-i18n="discord.profile">Hồ sơ</a>
     </div>
 
-    <!-- 6. THẺ FACEBOOK -->
+    <!-- facebook -->
     <div class="glass-card reveal-card">
       <div class="card-body-left">
         <div class="fb-logo-brand">
           <i class="fa-brands fa-facebook-f"></i>
         </div>
         <div class="info-block">
-          <span class="category-label">SOCIAL NETWORK</span>
+          <span class="category-label" data-i18n="fb.label">Mạng xã hội</span>
           <span class="title-bold">Tri Vinh Nguyen</span>
           <span class="sub-muted">facebook.com/trivinhnguyenuwu</span>
         </div>
       </div>
-      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="action-btn">CONNECT</a>
+      <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="action-btn" data-i18n="fb.connect">Kết nối</a>
     </div>
 
-    <!-- 7. AUDIO PLAYER -->
+    <!-- player -->
     <div class="audio-player-panel reveal-card">
       <div class="disk-container">
-        <img id="disk-image" class="disk-spinner" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Disk" />
+        <img id="disk-image" class="disk-spinner" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="" width="60" height="60" loading="lazy" decoding="async" />
         <div class="audio-bars">
           <div class="bar"></div>
           <div class="bar"></div>
@@ -306,7 +317,7 @@
 
       <div class="player-controls">
         <div class="player-top-row">
-          <span class="category-label">NOW PLAYING</span>
+          <span class="category-label" data-i18n="player.label">Đang phát</span>
           <span id="track-counter" class="track-counter">1 / 3</span>
         </div>
         <div id="track-name" class="track-headline">PAR SG - cigarette ft. Cigar</div>
@@ -321,21 +332,20 @@
 
         <div class="controls-toolbar">
           <div class="buttons-pack">
-            <button id="ctrl-prev" class="tool-btn" title="Bài trước" aria-label="Bài trước"><i class="fa-solid fa-backward-step"></i></button>
-            <button id="ctrl-play" class="tool-btn play-active" title="Play/Pause" aria-label="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-pause"></i></button>
-            <button id="ctrl-next" class="tool-btn" title="Bài tiếp theo" aria-label="Bài tiếp theo"><i class="fa-solid fa-forward-step"></i></button>
+            <button id="ctrl-prev" class="tool-btn" type="button" data-i18n-label="ui.prev" title="Bài trước" aria-label="Bài trước"><i class="fa-solid fa-backward-step"></i></button>
+            <button id="ctrl-play" class="tool-btn play-active" type="button" title="Play/Pause" aria-label="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-play"></i></button>
+            <button id="ctrl-next" class="tool-btn" type="button" data-i18n-label="ui.next" title="Bài tiếp theo" aria-label="Bài tiếp theo"><i class="fa-solid fa-forward-step"></i></button>
           </div>
 
           <div class="volume-tool">
             <i class="fa-solid fa-volume-low"></i>
-            <input id="vol-range" type="range" class="vol-range" aria-label="Âm lượng" min="0" max="100" value="85" />
+            <input id="vol-range" type="range" class="vol-range" data-i18n-label="ui.volume" aria-label="Âm lượng" min="0" max="100" value="85" />
             <i class="fa-solid fa-volume-high"></i>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 8. FOOTER -->
     <footer class="portfolio-footer reveal-card">
       <div class="footer-divider"></div>
       <div class="footer-main-row">
@@ -343,28 +353,27 @@
         <div class="footer-links">
           <a href="https://github.com/amItuff" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer">Discord</a>
-          <a href="mailto:nguyenngoctrivinh72@gmail.com">Email</a>
+          <button id="footer-contact-btn" type="button">Email</button>
         </div>
       </div>
-      <p class="footer-copy">© 2026 Vinh (vinhx). Minimalist Dark Portfolio.</p>
+      <p class="footer-copy">© 2026 Vinh (vinhx)</p>
     </footer>
 
   </section>
 
-  <!-- NÚT CUỘN LÊN ĐẦU TRANG -->
-  <button id="back-to-top-btn" class="back-to-top-btn" title="Lên đầu trang" aria-label="Lên đầu trang">
+  <button id="back-to-top-btn" class="back-to-top-btn" type="button" data-i18n-label="ui.top" title="Lên đầu trang" aria-label="Lên đầu trang">
     <i class="fa-solid fa-chevron-up"></i>
   </button>
 
-  <!-- ================= MODAL TÍNH NĂNG BOT DISCORD (EMOJI TỰ NHIÊN) ================= -->
-  <div id="bot-features-modal" class="bot-modal-wrapper hidden">
+  <!-- bot features -->
+  <div id="bot-features-modal" class="bot-modal-wrapper hidden" role="dialog" aria-modal="true" aria-labelledby="bot-modal-title">
     <div class="bot-modal-overlay"></div>
     <div class="bot-modal-content">
       <div class="bot-modal-header">
         <div class="bot-modal-title">
-          <span>TÍNH NĂNG BOT DISCORD</span>
+          <span id="bot-modal-title" data-i18n="bot.title">Tính năng bot Discord</span>
         </div>
-        <button id="close-bot-features-btn" type="button" class="bot-modal-close" title="Đóng" aria-label="Đóng">
+        <button id="close-bot-features-btn" type="button" class="bot-modal-close" data-i18n-label="ui.close" title="Đóng" aria-label="Đóng">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -374,7 +383,7 @@
           <div class="feature-emoji">⚡</div>
           <div class="feature-info">
             <span class="feature-name">Auto Quest</span>
-            <span class="feature-desc">Hoàn thành nhiệm vụ Discord và tự động claim quà.</span>
+            <span class="feature-desc" data-i18n="f1.desc">Hoàn thành nhiệm vụ Discord và tự động claim quà.</span>
           </div>
         </div>
 
@@ -382,15 +391,15 @@
           <div class="feature-emoji">🎭</div>
           <div class="feature-info">
             <span class="feature-name">Badge Spoofer</span>
-            <span class="feature-desc">Tùy chỉnh game & giờ chơi mở khóa huy hiệu, còn lại giữ nguyên hết.</span>
+            <span class="feature-desc" data-i18n="f2.desc">Tùy chỉnh game &amp; giờ chơi mở khóa huy hiệu, còn lại giữ nguyên hết.</span>
           </div>
         </div>
 
         <div class="feature-card">
           <div class="feature-emoji">🎙️</div>
           <div class="feature-info">
-            <span class="feature-name">Treo Stream Voice</span>
-            <span class="feature-desc">Phát sóng stream thoại 24/7 cày Streaming Badge.</span>
+            <span class="feature-name" data-i18n="f3.name">Treo Stream Voice</span>
+            <span class="feature-desc" data-i18n="f3.desc">Phát sóng stream thoại 24/7 cày Streaming Badge.</span>
           </div>
         </div>
 
@@ -398,7 +407,7 @@
           <div class="feature-emoji">🎮</div>
           <div class="feature-info">
             <span class="feature-name">Custom Rich Presence (RPC)</span>
-            <span class="feature-desc">Tùy biến ảnh GIF, game, status & các nút bấm tương tác.</span>
+            <span class="feature-desc" data-i18n="f4.desc">Tùy biến ảnh GIF, game, status &amp; các nút bấm tương tác.</span>
           </div>
         </div>
 
@@ -406,107 +415,104 @@
           <div class="feature-emoji">🎉</div>
           <div class="feature-info">
             <span class="feature-name">Auto Giveaway</span>
-            <span class="feature-desc">Tự động tham gia giveaway & nhận thông báo khi trúng giải.</span>
+            <span class="feature-desc" data-i18n="f5.desc">Tự động tham gia giveaway &amp; nhận thông báo khi trúng giải.</span>
           </div>
         </div>
 
         <div class="feature-card">
           <div class="feature-emoji">🛡️</div>
           <div class="feature-info">
-            <span class="feature-name">Huy Hiệu HypeSquad</span>
-            <span class="feature-desc">Trực tiếp gắn huy hiệu Bravery, Brilliance, Balance hoặc gỡ badge.</span>
+            <span class="feature-name" data-i18n="f6.name">Huy Hiệu HypeSquad</span>
+            <span class="feature-desc" data-i18n="f6.desc">Trực tiếp gắn huy hiệu Bravery, Brilliance, Balance hoặc gỡ badge.</span>
           </div>
         </div>
 
         <div class="feature-card">
           <div class="feature-emoji">🧹</div>
           <div class="feature-info">
-            <span class="feature-name">Sao Lưu & Dọn Dẹp</span>
-            <span class="feature-desc">Xuất dữ liệu tài khoản, dọn sạch tin nhắn & server rác.</span>
+            <span class="feature-name" data-i18n="f7.name">Sao Lưu &amp; Dọn Dẹp</span>
+            <span class="feature-desc" data-i18n="f7.desc">Xuất dữ liệu tài khoản, dọn sạch tin nhắn &amp; server rác.</span>
           </div>
         </div>
 
         <div class="feature-card">
           <div class="feature-emoji">👁️</div>
           <div class="feature-info">
-            <span class="feature-name">Giám Sát & Bảo Mật</span>
-            <span class="feature-desc">Kiểm tra phiên đăng nhập & gom nhắc tên tập trung.</span>
+            <span class="feature-name" data-i18n="f8.name">Giám Sát &amp; Bảo Mật</span>
+            <span class="feature-desc" data-i18n="f8.desc">Kiểm tra phiên đăng nhập &amp; gom nhắc tên tập trung.</span>
           </div>
         </div>
 
         <div class="feature-card">
           <div class="feature-emoji">🔑</div>
           <div class="feature-info">
-            <span class="feature-name">Quản Lý Token</span>
-            <span class="feature-desc">Lưu, kiểm tra hoặc xóa token an toàn.</span>
+            <span class="feature-name" data-i18n="f9.name">Quản Lý Token</span>
+            <span class="feature-desc" data-i18n="f9.desc">Lưu, kiểm tra hoặc xóa token an toàn.</span>
           </div>
         </div>
       </div>
 
       <div class="bot-modal-footer">
         <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer" class="bot-join-modal-btn">
-          <i class="fa-brands fa-discord"></i> Join Discord Server
+          <i class="fa-brands fa-discord"></i> <span data-i18n="bot.join">Vào server Discord</span>
         </a>
       </div>
     </div>
   </div>
 
-  <!-- ================= GMAIL POPUP (ĐEN TRONG SUỐT, ẨN EMAIL) ================= -->
-  <button id="open-gmail-modal" class="floating-mail-btn" title="Soạn thư" aria-label="Soạn thư">
+  <!-- contact form -->
+  <button id="open-gmail-modal" class="floating-mail-btn" type="button" data-i18n-label="ui.compose" title="Soạn thư" aria-label="Soạn thư">
     <i class="fa-solid fa-envelope"></i>
   </button>
 
-  <div id="gmail-modal-container" class="gmail-modal-backdrop hidden">
+  <div id="gmail-modal-container" class="gmail-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="gmail-title">
     <div id="gmail-popup" class="gmail-popup-wrapper">
       <div class="gmail-popup-header">
         <div class="gmail-popup-title">
-          <i class="fa-solid fa-envelope"></i> Gửi thư trực tiếp (New Message)
+          <i class="fa-solid fa-envelope"></i> <span id="gmail-title" data-i18n="mail.title">Gửi tin nhắn</span>
         </div>
-        <button id="close-gmail-btn" type="button" class="gmail-header-btn" title="Đóng" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
+        <button id="close-gmail-btn" type="button" class="gmail-header-btn" data-i18n-label="ui.close" title="Đóng" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <form id="contact-form" action="https://formspree.io/f/mrppjobo" method="POST" class="gmail-popup-body">
         <div class="gmail-field">
-          <span class="field-label">To:</span>
-          <span class="field-val">Vinh (Direct Message)</span>
+          <span class="field-label" data-i18n="mail.to">Đến:</span>
+          <span class="field-val">Vinh</span>
         </div>
 
-        <div class="gmail-field">
-          <span class="field-label">From:</span>
-          <input type="email" name="email" required placeholder="Email của bạn..." class="gmail-input" />
-        </div>
+        <label class="gmail-field">
+          <span class="field-label" data-i18n="mail.from">Từ:</span>
+          <input type="email" name="email" required placeholder="Email của bạn..." data-i18n-placeholder="mail.fromPh" class="gmail-input" />
+        </label>
 
-        <div class="gmail-field">
-          <span class="field-label">Subject:</span>
-          <input type="text" name="subject" required placeholder="Tiêu đề..." class="gmail-input" />
-        </div>
+        <label class="gmail-field">
+          <span class="field-label" data-i18n="mail.subject">Tiêu đề:</span>
+          <input type="text" name="subject" required placeholder="Tiêu đề..." data-i18n-placeholder="mail.subjectPh" class="gmail-input" />
+        </label>
 
-        <textarea name="message" required placeholder="Nội dung tin nhắn..." class="gmail-textarea" rows="5"></textarea>
+        <textarea name="message" required placeholder="Nội dung tin nhắn..." data-i18n-placeholder="mail.bodyPh" data-i18n-label="mail.bodyPh" aria-label="Nội dung tin nhắn" class="gmail-textarea" rows="5"></textarea>
 
         <div class="gmail-popup-footer">
           <button type="submit" id="form-submit-btn" class="send-mail-btn">
-            <span>Send</span> <i class="fa-solid fa-paper-plane"></i>
+            <span data-i18n="mail.send">Gửi</span> <i class="fa-solid fa-paper-plane"></i>
           </button>
-          <span id="form-status" class="form-status-text"></span>
+          <span id="form-status" class="form-status-text" role="status" aria-live="polite"></span>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- ĐỒNG HỒ VIỆT NAM (GMT+7) -->
   <div class="vn-clock-badge">
     <i class="fa-regular fa-clock"></i>
     <span id="vn-clock-display">VN (GMT+7) --:--:--</span>
   </div>
 
-  <!-- Iframe SoundCloud ẩn -->
   <iframe
     id="sc-hidden-frame"
     title="SoundCloud player"
     allow="autoplay"
-    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/parsg/par-sg-cigarette-ft-cigar&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false">
+    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/parsg/par-sg-cigarette-ft-cigar&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false">
   </iframe>
 
-  <script src="script.js"></script>
 </body>
 </html>
