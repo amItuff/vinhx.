@@ -717,6 +717,23 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 .text-green { color: #39d353 !important; }
 .text-dim { color: #6e7681 !important; }
 
+.note-cover {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 0.7rem;
+  color: #8b949e;
+  overflow: hidden;
+}
+.note-cover svg { flex-shrink: 0; color: #3fb950; }
+.note-cover-url { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.note-cover-url b { color: #e5e7eb; font-weight: 500; }
+.note-cover-sub { margin-top: 8px; font-size: 0.66rem; color: #6e7681; }
+
 .project-status-tag {
   position: absolute;
   top: 8px;

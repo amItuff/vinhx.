@@ -1,4 +1,8 @@
 {
+  "rewrites": [
+    { "source": "/note", "destination": "/note.html" },
+    { "source": "/note/:id", "destination": "/note.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -9,15 +13,17 @@
       ]
     },
     {
-      "source": "/(.*)\\.(css|js|html)",
+      "source": "/note/:id",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" }
       ]
     },
     {
-      "source": "/og-image.png",
+      "source": "/api/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400" }
+        { "key": "Cache-Control", "value": "no-store" }
       ]
     }
   ]

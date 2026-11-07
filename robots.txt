@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /note/
+Disallow: /api/
 
 Sitemap: https://vinhx.info/sitemap.xml

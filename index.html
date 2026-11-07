@@ -42,9 +42,9 @@
   <!-- icons load without blocking first paint -->
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=4" />
   <script src="https://w.soundcloud.com/player/api.js" defer></script>
-  <script src="script.js?v=3" defer></script>
+  <script src="script.js?v=4" defer></script>
 </head>
 <body>
 
@@ -221,24 +221,18 @@
       <div class="projects-container">
         <div class="project-showcase-item">
           <div class="project-cover-wrap">
-            <div class="terminal-mockup-header">
-              <span class="t-dot red"></span><span class="t-dot yellow"></span><span class="t-dot green"></span>
-              <span class="t-title">vinhx.info — source preview</span>
+            <div class="note-cover">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              <span class="note-cover-url">vinhx.info/note/<b>cCG9GEa1sYBkUyzffD46HS</b></span>
             </div>
-            <div class="terminal-preview-body">
-              <code>$ vercel deploy --prod</code>
-              <code class="text-green">✓ Ready: https://vinhx.info</code>
-              <code>Fast static response • Clean glass theme</code>
-            </div>
-            <span class="project-status-tag live">LIVE</span>
+            <p class="note-cover-sub" data-i18n="p3.cover">Mã hóa đầu cuối · không cần đăng ký</p>
           </div>
 
           <div class="project-details">
-            <h3 class="project-heading" data-i18n="p1.title">Portfolio cá nhân</h3>
-            <p class="project-paragraph" data-i18n="p1.desc">Trang portfolio cá nhân responsive bằng HTML/CSS/JS thuần, tích hợp SoundCloud Player và form liên hệ trực tiếp.</p>
+            <h3 class="project-heading">Notepad Online</h3>
+            <p class="project-paragraph" data-i18n="p3.desc">Ghi chú trực tuyến mã hóa AES-256 ngay trên trình duyệt. Chia sẻ bằng một link, ai có link đều xem và sửa được.</p>
             <div class="project-action-buttons">
-              <a href="https://vinhx.info" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="p.visit">Xem trang</span></a>
-              <a href="https://github.com/amItuff/vinhx." target="_blank" rel="noopener noreferrer" class="p-btn p-btn-gh"><i class="fa-brands fa-github"></i> <span data-i18n="p.repo">Mã nguồn</span></a>
+              <a href="/note" class="p-btn p-btn-demo"><i class="fa-regular fa-note-sticky"></i> <span data-i18n="p3.open">Mở Notepad</span></a>
             </div>
           </div>
         </div>
