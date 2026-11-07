@@ -677,77 +677,20 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   overflow: hidden;
   transition: border-color 0.2s;
 }
+.project-banner {
+  line-height: 0;
+  background: #0a0b0e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.project-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1600 / 520;
+}
 .project-showcase-item:hover {
   border-color: rgba(255, 255, 255, 0.2);
 }
-.project-cover-wrap {
-  position: relative;
-  width: 100%;
-  padding: 10px 12px;
-  background: #08090c;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  font-family: 'JetBrains Mono', monospace;
-}
-.terminal-mockup-header {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 6px;
-}
-.t-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-}
-.t-dot.red { background: #ff5f56; }
-.t-dot.yellow { background: #ffbd2e; }
-.t-dot.green { background: #27c93f; }
-.t-title {
-  font-size: 0.62rem;
-  color: var(--text-sub);
-  margin-left: 4px;
-}
-.terminal-preview-body {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 0.7rem;
-  color: #8b949e;
-}
-.text-green { color: #39d353 !important; }
-.text-dim { color: #6e7681 !important; }
-
-.note-cover {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  font-size: 0.7rem;
-  color: #8b949e;
-  overflow: hidden;
-}
-.note-cover svg { flex-shrink: 0; color: #3fb950; }
-.note-cover-url { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.note-cover-url b { color: #e5e7eb; font-weight: 500; }
-.note-cover-sub { margin-top: 8px; font-size: 0.66rem; color: #6e7681; }
-
-.project-status-tag {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 0.58rem;
-  font-weight: 700;
-  font-family: 'JetBrains Mono', monospace;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: rgba(35, 134, 54, 0.2);
-  border: 1px solid rgba(46, 160, 67, 0.4);
-  color: #3fb950;
-}
-
 .project-details {
   padding: 12px 14px;
   display: flex;
