@@ -242,7 +242,7 @@ function enterSite(withSound) {
   enterScreen.classList.add('is-leaving');
   document.body.classList.add('is-entered');
   root.classList.remove('is-locked');
-  setTimeout(() => enterScreen.classList.add('is-gone'), reduceMotion ? 0 : 1200);
+  setTimeout(() => enterScreen.classList.add('is-gone'), reduceMotion ? 700 : 1200);
 }
 
 enterScreen.addEventListener('click', (e) => {

@@ -1460,14 +1460,20 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   .enter-foot { left: 18px; right: 18px; bottom: 18px; }
 }
 
+/* Reduced motion (e.g. Windows "Animation effects" off): keep the fades, drop the movement */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
-  }
   html { scroll-behavior: auto; }
-  .scroll-line::after { display: none; }
+  .intro,
+  .avatar-orbit.intro,
+  body.is-entered .intro,
+  .reveal-card { transform: none !important; }
+  .enter-name span { transform: none; opacity: 0; animation-name: fadeIn; animation-duration: 0.6s; }
+  .enter-actions,
+  .bot-modal-wrapper:not(.hidden) .feature-card { animation-name: fadeIn; }
+  .enter-screen { transition: opacity 0.6s ease; }
+  .enter-screen.is-leaving { clip-path: inset(0 0 0 0); opacity: 0; }
+  .enter-screen.is-leaving .enter-inner { transform: none; }
+  .scroll-line::after,
+  .status-pulse-dot,
+  .scroll-down-hint i { animation: none; }
 }
