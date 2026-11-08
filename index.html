@@ -40,9 +40,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- icons load without blocking first paint -->
-  <link rel="stylesheet" href="style.css?v=9" />
+  <link rel="stylesheet" href="style.css?v=10" />
   <script src="https://w.soundcloud.com/player/api.js" defer></script>
-  <script src="script.js?v=10" defer></script>
+  <script src="script.js?v=11" defer></script>
 </head>
 <body>
 
@@ -148,70 +148,6 @@
       </div>
     </div>
 
-    <!-- github -->
-    <div class="glass-card reveal-card">
-      <div class="section-badge" data-i18n="gh.badge">Hoạt động GitHub</div>
-      <div class="github-stats-box">
-        <div class="github-header">
-          <div class="gh-user">
-            <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-github"></use></svg>
-            <span>@amItuff</span>
-          </div>
-          <a href="https://github.com/amItuff" target="_blank" rel="noopener noreferrer" class="gh-visit-link">
-            <span data-i18n="gh.view">Xem hồ sơ</span> <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-arrow-up-right-from-square"></use></svg>
-          </a>
-        </div>
-
-        <div class="gh-contrib-sub" data-i18n-html="gh.sub">
-          <strong>42 lượt đóng góp</strong> trong năm qua
-        </div>
-
-        <div class="gh-contrib-calendar" id="gh-heatmap"></div>
-
-        <div class="gh-contrib-footer">
-          <span data-i18n="gh.less">Ít</span>
-          <span class="legend-cell l0"></span>
-          <span class="legend-cell l1"></span>
-          <span class="legend-cell l2"></span>
-          <span class="legend-cell l3"></span>
-          <span class="legend-cell l4"></span>
-          <span data-i18n="gh.more">Nhiều</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- skills -->
-    <div class="glass-card reveal-card">
-      <div class="section-badge" data-i18n="skills.badge">Kỹ năng &amp; công nghệ</div>
-
-      <div class="skills-grid">
-        <div class="skill-item">
-          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#b-python"></use></svg>
-          <span class="skill-name">Python / discord.py</span>
-        </div>
-        <div class="skill-item">
-          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#b-js"></use></svg>
-          <span class="skill-name">JavaScript (ES6+)</span>
-        </div>
-        <div class="skill-item">
-          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#b-html5"></use></svg>
-          <span class="skill-name">HTML5 / CSS3</span>
-        </div>
-        <div class="skill-item">
-          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#s-network-wired"></use></svg>
-          <span class="skill-name">REST API &amp; Webhooks</span>
-        </div>
-        <div class="skill-item">
-          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#b-git-alt"></use></svg>
-          <span class="skill-name">Git &amp; GitHub</span>
-        </div>
-        <div class="skill-item">
-          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#s-cloud"></use></svg>
-          <span class="skill-name">Vercel &amp; DNS Config</span>
-        </div>
-      </div>
-    </div>
-
     <!-- projects -->
     <div class="glass-card reveal-card">
       <div class="section-badge" data-i18n="projects.badge">Dự án nổi bật</div>
@@ -249,6 +185,41 @@
           </div>
         </li>
       </ul>
+    </div>
+
+    <!-- faq -->
+    <div class="glass-card reveal-card">
+      <div class="section-badge" data-i18n="faq.badge">Câu hỏi thường gặp</div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary data-i18n="faq.q1">Ghi chú trên vinhx note có an toàn không?</summary>
+          <p data-i18n="faq.q1a">Nội dung được mã hóa AES-256-GCM ngay trên trình duyệt trước khi lưu, máy chủ chỉ giữ bản đã mã hóa. Ai có link thì đọc được, nên đừng đăng link công khai. Link dạng /note#tên có phần tên nằm sau dấu #, không gửi lên máy chủ. Nếu đặt mật khẩu thứ hai mà quên, nội dung không khôi phục được.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q2">Link chỉ xem khác link chỉnh sửa thế nào?</summary>
+          <p data-i18n="faq.q2a">Link chỉnh sửa cho đọc và sửa. Link chỉ xem cho người nhận đọc nhưng không sửa hay xóa được, vì máy chủ chỉ nhận ghi khi có khóa ghi mà link chỉ xem không chứa.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q3">Ghi chú tự xóa khi nào?</summary>
+          <p data-i18n="faq.q3a">Mặc định sau 1 năm không ai chỉnh sửa. Bạn có thể chọn 1 giờ, 1 ngày hoặc 1 tuần trong phần cài đặt, hoặc bật tự hủy sau khi link chỉ xem được mở một lần.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q4">File trong vinhx convert có bị tải lên máy chủ không?</summary>
+          <p data-i18n="faq.q4a">Không. Ảnh, âm thanh và video được xử lý ngay trong trình duyệt của bạn. Riêng video được ghi lại theo thời gian thực nên mất đúng bằng độ dài video và cần giữ tab mở.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q5">Vì sao có định dạng không xuất được?</summary>
+          <p data-i18n="faq.q5a">Định dạng xuất ra tùy trình duyệt hỗ trợ, Chrome và Edge đầy đủ nhất. Hiện chưa hỗ trợ xuất MP3 hay GIF động.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q6">Web có theo dõi mình không?</summary>
+          <p data-i18n="faq.q6a">Trang không dùng cookie theo dõi hay quảng cáo, chỉ lưu ngôn ngữ và bản nháp thư trên máy bạn. Trang có tải phông từ Google Fonts, trạng thái Discord từ Lanyard và trình phát SoundCloud; các dịch vụ này có thể ghi nhận lượt truy cập theo chính sách riêng của họ.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q7">Báo lỗi hoặc liên hệ ở đâu?</summary>
+          <p data-i18n="faq.q7a">Dùng nút thư ở góc phải dưới để gửi tin nhắn, hoặc vào server Discord ở phần dự án.</p>
+        </details>
+      </div>
     </div>
 
     <!-- discord -->

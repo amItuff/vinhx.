@@ -1491,3 +1491,32 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 .changelog-more[hidden] { display: none; }
 
 .ic { width: 1em; height: 1em; fill: currentColor; flex: none; vertical-align: -0.125em; }
+
+/* FAQ */
+.faq-list { display: grid; }
+.faq-item { border-top: 1px solid rgba(255, 255, 255, 0.07); }
+.faq-item:first-child { border-top: none; }
+.faq-item summary {
+  position: relative;
+  list-style: none;
+  padding: 11px 26px 11px 0;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #e5e7eb;
+  cursor: pointer;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '+';
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.45);
+  transition: transform 0.2s;
+}
+.faq-item[open] summary::after { content: '\2212'; }
+.faq-item summary:hover { color: #fff; }
+.faq-item summary:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.45); outline-offset: 2px; border-radius: 4px; }
+.faq-item p { padding: 0 26px 12px 0; font-size: 0.78rem; line-height: 1.6; color: #9ca3af; }

@@ -54,13 +54,22 @@ const STRINGS = {
     'about.status': 'Nhận làm freelance',
     'about.text': 'Mình là <strong>Vinh (vinhx)</strong>. Chuyên viết bot Discord, script tự động hóa bằng Python và xây dựng giao diện web tối giản, tốc độ cao.',
     'about.contact': 'Gửi tin nhắn',
-    'gh.badge': 'Hoạt động GitHub',
-    'gh.view': 'Xem hồ sơ',
-    'gh.sub': '<strong>42 lượt đóng góp</strong> trong năm qua',
-    'gh.less': 'Ít',
-    'gh.more': 'Nhiều',
-    'skills.badge': 'Kỹ năng & công nghệ',
     'projects.badge': 'Dự án nổi bật',
+    'faq.badge': 'Câu hỏi thường gặp',
+    'faq.q1': 'Ghi chú trên vinhx note có an toàn không?',
+    'faq.q1a': 'Nội dung được mã hóa AES-256-GCM ngay trên trình duyệt trước khi lưu, máy chủ chỉ giữ bản đã mã hóa. Ai có link thì đọc được, nên đừng đăng link công khai. Link dạng /note#tên có phần tên nằm sau dấu #, không gửi lên máy chủ. Nếu đặt mật khẩu thứ hai mà quên, nội dung không khôi phục được.',
+    'faq.q2': 'Link chỉ xem khác link chỉnh sửa thế nào?',
+    'faq.q2a': 'Link chỉnh sửa cho đọc và sửa. Link chỉ xem cho người nhận đọc nhưng không sửa hay xóa được, vì máy chủ chỉ nhận ghi khi có khóa ghi mà link chỉ xem không chứa.',
+    'faq.q3': 'Ghi chú tự xóa khi nào?',
+    'faq.q3a': 'Mặc định sau 1 năm không ai chỉnh sửa. Bạn có thể chọn 1 giờ, 1 ngày hoặc 1 tuần trong phần cài đặt, hoặc bật tự hủy sau khi link chỉ xem được mở một lần.',
+    'faq.q4': 'File trong vinhx convert có bị tải lên máy chủ không?',
+    'faq.q4a': 'Không. Ảnh, âm thanh và video được xử lý ngay trong trình duyệt của bạn. Riêng video được ghi lại theo thời gian thực nên mất đúng bằng độ dài video và cần giữ tab mở.',
+    'faq.q5': 'Vì sao có định dạng không xuất được?',
+    'faq.q5a': 'Định dạng xuất ra tùy trình duyệt hỗ trợ, Chrome và Edge đầy đủ nhất. Hiện chưa hỗ trợ xuất MP3 hay GIF động.',
+    'faq.q6': 'Web có theo dõi mình không?',
+    'faq.q6a': 'Trang không dùng cookie theo dõi hay quảng cáo, chỉ lưu ngôn ngữ và bản nháp thư trên máy bạn. Trang có tải phông từ Google Fonts, trạng thái Discord từ Lanyard và trình phát SoundCloud; các dịch vụ này có thể ghi nhận lượt truy cập theo chính sách riêng của họ.',
+    'faq.q7': 'Báo lỗi hoặc liên hệ ở đâu?',
+    'faq.q7a': 'Dùng nút thư ở góc phải dưới để gửi tin nhắn, hoặc vào server Discord ở phần dự án.',
     'p3.desc': 'Ghi chú mã hóa ngay trên trình duyệt, chia sẻ bằng một link.',
     'p3.open': 'Mở',
     'p4.desc': 'Đổi định dạng ảnh, âm thanh, video ngay trên máy, không tải file lên đâu cả.',
@@ -145,13 +154,22 @@ const STRINGS = {
     'about.status': 'Available for freelance',
     'about.text': 'I\'m <strong>Vinh (vinhx)</strong>. I build Discord bots, Python automation scripts and minimal, fast websites.',
     'about.contact': 'Send a message',
-    'gh.badge': 'GitHub activity',
-    'gh.view': 'View profile',
-    'gh.sub': '<strong>42 contributions</strong> in the last year',
-    'gh.less': 'Less',
-    'gh.more': 'More',
-    'skills.badge': 'Skills & tech stack',
     'projects.badge': 'Featured projects',
+    'faq.badge': 'FAQ',
+    'faq.q1': 'Is vinhx note safe?',
+    'faq.q1a': 'Text is encrypted with AES-256-GCM in your browser before it is saved, so the server only holds the encrypted copy. Anyone with the link can read it, so do not post it publicly. In /note#name links the name sits after the #, which is never sent to the server. If you set a second password and forget it, the content cannot be recovered.',
+    'faq.q2': 'What is the difference between the view-only and edit links?',
+    'faq.q2a': 'The edit link lets people read and change the note. The view-only link lets them read it but never change or delete it, because the server only accepts writes that carry a write key, and the view-only link does not contain one.',
+    'faq.q3': 'When are notes deleted?',
+    'faq.q3a': 'By default after 1 year without edits. In settings you can pick 1 hour, 1 day or 1 week, or turn on self-destruct after the view-only link is opened once.',
+    'faq.q4': 'Are my files uploaded when I use vinhx convert?',
+    'faq.q4a': 'No. Images, audio and video are processed inside your own browser. Video is re-recorded in real time, so it takes as long as the video itself and the tab must stay open.',
+    'faq.q5': 'Why can some formats not be exported?',
+    'faq.q5a': 'Output formats depend on what your browser supports; Chrome and Edge are the most complete. MP3 output and animated GIFs are not supported yet.',
+    'faq.q6': 'Does this site track me?',
+    'faq.q6a': 'The site uses no tracking cookies or ads and only stores your language and mail draft on your device. It does load fonts from Google Fonts, Discord status from Lanyard and the SoundCloud player; those services may log visits under their own policies.',
+    'faq.q7': 'Where can I report a bug or get in touch?',
+    'faq.q7a': 'Use the mail button at the bottom right to send a message, or join the Discord server from the projects section.',
     'p3.desc': 'Notes encrypted in your browser, shared with one link.',
     'p3.open': 'Open',
     'p4.desc': 'Convert images, audio and video right on your device. Nothing is uploaded.',
@@ -339,32 +357,6 @@ const revealObserver = new IntersectionObserver((entries, obs) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
 document.querySelectorAll('.reveal-card').forEach((el) => revealObserver.observe(el));
-
-// ---------------------------------------------------------------------------
-// GitHub grid (draws "vinhx" and a heart)
-// ---------------------------------------------------------------------------
-(function drawHeatmap() {
-  const grid = $('gh-heatmap');
-  const art = [
-    [1,0,0,0,1, 0, 1, 0, 1,1,1,0, 0, 1,0,0,0, 0, 1,0,0,0,1, 0, 0, 0,1,1,0,1,1,0],
-    [1,0,0,0,1, 0, 0, 0, 1,0,0,1, 0, 1,0,0,0, 0, 0,1,0,1,0, 0, 0, 1,1,1,1,1,1,1],
-    [0,1,0,1,0, 0, 1, 0, 1,0,0,1, 0, 1,1,1,0, 0, 0,0,1,0,0, 0, 0, 1,1,1,1,1,1,1],
-    [0,1,0,1,0, 0, 1, 0, 1,0,0,1, 0, 1,0,0,1, 0, 0,1,0,1,0, 0, 0, 0,1,1,1,1,1,0],
-    [0,0,1,0,0, 0, 1, 0, 1,0,0,1, 0, 1,0,0,1, 0, 1,0,0,0,1, 0, 0, 0,0,1,1,1,0,0],
-    [0,0,0,0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0,0, 0, 0,0,0,0,0, 0, 0, 0,0,0,1,0,0,0],
-    [0,0,0,0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0,0, 0, 0,0,0,0,0, 0, 0, 0,0,0,0,0,0,0]
-  ];
-  const frag = document.createDocumentFragment();
-  for (let c = 0; c < art[0].length; c++) {
-    for (let r = 0; r < art.length; r++) {
-      const cell = document.createElement('div');
-      cell.className = art[r][c] ? 'contrib-cell lvl-4' : 'contrib-cell';
-      cell.style.setProperty('--c', c);
-      frag.appendChild(cell);
-    }
-  }
-  grid.appendChild(frag);
-})();
 
 // ---------------------------------------------------------------------------
 // Email (kept out of the HTML so scrapers don't pick it up)
