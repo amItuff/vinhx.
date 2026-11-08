@@ -35,6 +35,7 @@
 
 const $ = (id) => document.getElementById(id);
 let changelogData = null;
+let changelogOpen = false;
 const root = document.documentElement;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -66,6 +67,8 @@ const STRINGS = {
     'p4.open': 'Mở',
     'log.label': 'Cập nhật gần đây',
     'log.all': 'Tất cả commit',
+    'log.more': 'Xem thêm',
+    'log.less': 'Thu gọn',
     'p2.desc': 'Công cụ Discord: làm nhiệm vụ, treo voice 24/7, giả lập giờ chơi, bảo mật tài khoản.',
     'p.join': 'Vào server',
     'p.features': 'Tính năng',
@@ -109,6 +112,8 @@ const STRINGS = {
     'mail.noAttach': 'Chưa gửi được ảnh đính kèm.',
     'mail.sendNoFiles': 'Gửi không kèm ảnh',
     'mail.rate': 'Bạn gửi quá nhiều, thử lại sau.',
+    'mail.badFiles': 'Ảnh không hợp lệ, thử ảnh khác.',
+    'mail.deliveryFail': 'Máy chủ không chuyển được thư kèm ảnh.',
     'mail.send': 'Gửi',
     'mail.sending': 'Đang gửi...',
     'mail.sent': 'Đã gửi thành công!',
@@ -153,6 +158,8 @@ const STRINGS = {
     'p4.open': 'Open',
     'log.label': 'Recent updates',
     'log.all': 'All commits',
+    'log.more': 'Show more',
+    'log.less': 'Show less',
     'p2.desc': 'Discord toolkit: quests, 24/7 voice, playtime spoofer, account security.',
     'p.join': 'Join server',
     'p.features': 'Features',
@@ -196,6 +203,8 @@ const STRINGS = {
     'mail.noAttach': 'Image attachments could not be sent.',
     'mail.sendNoFiles': 'Send without images',
     'mail.rate': 'Too many messages, try again later.',
+    'mail.badFiles': 'Invalid image, try another one.',
+    'mail.deliveryFail': 'The server could not deliver the message with images.',
     'mail.send': 'Send',
     'mail.sending': 'Sending...',
     'mail.sent': 'Sent, thank you!',
@@ -662,6 +671,10 @@ async function submitMail(withFiles) {
       noFilesBtn.hidden = false;
     } else if (r.status === 429) {
       setStatus('mail.rate', '#f28b82');
+    } else if (withFiles && (r.code || r.status)) {
+      const key = r.status === 413 ? 'mail.tooBig' : r.code === 'bad_files' ? 'mail.badFiles' : r.code === 'delivery_failed' ? 'mail.deliveryFail' : r.code === 'bad_email' ? 'mail.badEmail' : 'mail.error';
+      setStatus(key, '#f28b82');
+      if (key === 'mail.deliveryFail' || key === 'mail.error') noFilesBtn.hidden = false;
     } else {
       formStatus.style.color = '#f28b82';
       formStatus.textContent = r.text || t('mail.error');
@@ -846,9 +859,10 @@ function renderChangelog() {
   const list = $('changelog-list');
   if (!card || !list || !changelogData || !changelogData.length) return;
 
-  const fmt = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: 'short' });
+  const fmt = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: '2-digit' });
+  const shown = changelogOpen ? 8 : 3;
   list.textContent = '';
-  changelogData.slice(0, 6).forEach((c) => {
+  changelogData.slice(0, shown).forEach((c) => {
     const li = document.createElement('li');
     const time = document.createElement('time');
     time.dateTime = c.date;
@@ -856,18 +870,21 @@ function renderChangelog() {
     const msg = document.createElement('span');
     msg.className = 'log-msg';
     msg.textContent = (lang === 'vi' && c.vi) || c.subject;
-    const hash = document.createElement('span');
-    hash.className = 'log-hash';
-    hash.textContent = c.hash;
-    li.append(time, msg, hash);
+    li.append(time, msg);
     list.appendChild(li);
   });
+
+  const more = $('changelog-more');
+  more.hidden = changelogData.length <= 3;
+  more.textContent = changelogOpen ? t('log.less') : `${t('log.more')} (${Math.min(changelogData.length, 8) - 3})`;
 
   if (card.hidden) {
     card.hidden = false;
     revealObserver.observe(card);
   }
 }
+
+$('changelog-more').addEventListener('click', () => { changelogOpen = !changelogOpen; renderChangelog(); });
 
 fetch('/changelog.json', { cache: 'no-cache' })
   .then((r) => (r.ok ? r.json() : []))

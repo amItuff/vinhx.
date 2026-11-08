@@ -86,6 +86,7 @@ async function viaResend(m, files) {
       attachments: files.map((f) => ({ filename: f.name, content: f.buf.toString('base64') }))
     })
   });
+  if (!res.ok) console.error('contact: resend failed', res.status, (await res.text().catch(() => '')).slice(0, 300));
   return res.ok;
 }
 
@@ -103,6 +104,7 @@ async function viaWebhook(m, files) {
   }));
   files.forEach((f, i) => form.append(`files[${i}]`, new Blob([f.buf], { type: 'image/jpeg' }), f.name));
   const res = await fetch(WEBHOOK, { method: 'POST', body: form });
+  if (!res.ok) console.error('contact: webhook failed', res.status, (await res.text().catch(() => '')).slice(0, 300));
   return res.ok;
 }
 
@@ -131,9 +133,10 @@ module.exports = async (req, res) => {
 
     const m = { email, subject, message };
     const ok = RESEND_KEY ? await viaResend(m, files) : await viaWebhook(m, files);
-    if (!ok) return res.status(502).json({ error: 'delivery_failed' });
+    if (!ok) return res.status(502).json({ error: 'delivery_failed', provider: RESEND_KEY ? 'resend' : 'discord-webhook' });
     return res.status(200).json({ ok: true });
-  } catch (_) {
+  } catch (err) {
+    console.error('contact: error', err && err.message);
     return res.status(500).json({ error: 'server_error' });
   }
 };

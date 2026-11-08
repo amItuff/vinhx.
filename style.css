@@ -1470,22 +1470,24 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 }
 
 /* recent updates */
-.changelog-card { display: block; padding: 18px 20px; }
-.changelog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.changelog-all { font-size: 0.72rem; color: rgba(255, 255, 255, 0.55); text-decoration: none; border-bottom: 1px solid rgba(255, 255, 255, 0.18); }
-.changelog-all:hover { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+.changelog-card { display: block; padding: 12px 16px; }
+.changelog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.changelog-all { font-size: 0.7rem; color: rgba(255, 255, 255, 0.5); text-decoration: none; }
+.changelog-all:hover { color: #fff; }
 .changelog-list { list-style: none; display: grid; margin: 0; padding: 0; }
-.changelog-list li {
-  display: grid;
-  grid-template-columns: 4.6rem 1fr;
-  gap: 4px 14px;
-  align-items: baseline;
-  padding: 9px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+.changelog-list li { display: flex; gap: 12px; align-items: baseline; padding: 5px 0; }
+.changelog-list time { flex: none; font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.64rem; color: rgba(255, 255, 255, 0.4); }
+.changelog-list .log-msg {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #d1d5db;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.changelog-list li:first-child { border-top: none; }
-.changelog-list time { font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.68rem; color: rgba(255, 255, 255, 0.42); }
-.changelog-list .log-msg { font-size: 0.84rem; line-height: 1.45; color: #e5e7eb; overflow-wrap: anywhere; }
-.changelog-list .log-hash { grid-column: 2; font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.64rem; color: rgba(255, 255, 255, 0.3); }
+.changelog-more { margin-top: 4px; padding: 4px 0; border: none; background: none; color: rgba(255, 255, 255, 0.5); font-family: inherit; font-size: 0.7rem; cursor: pointer; }
+.changelog-more:hover { color: #fff; }
+.changelog-more[hidden] { display: none; }
 
 .ic { width: 1em; height: 1em; fill: currentColor; flex: none; vertical-align: -0.125em; }
