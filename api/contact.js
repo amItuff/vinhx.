@@ -108,7 +108,10 @@ async function viaWebhook(m, files) {
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return res.status(405).json({ error: 'method_not_allowed' }); }
+  if (req.method === 'GET') { // lets the page (and the owner) check whether attachments are set up
+    return res.status(200).json({ configured: !!(RESEND_KEY || WEBHOOK), provider: RESEND_KEY ? 'resend' : WEBHOOK ? 'discord-webhook' : null });
+  }
+  if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return res.status(405).json({ error: 'method_not_allowed' }); }
   if (!RESEND_KEY && !WEBHOOK) return res.status(503).json({ error: 'not_configured' });
 
   try {

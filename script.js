@@ -429,6 +429,7 @@ let attachments = [];
 let sending = false;
 
 $('gd-to').textContent = 'Vinh';
+['gd-attach', 'gd-photo'].forEach((id) => { $(id).hidden = true; }); // shown only once the server confirms it can deliver images
 
 function saveDraft() {
   try {
@@ -450,7 +451,23 @@ function loadDraft() {
 }
 contactForm.addEventListener('input', saveDraft);
 
+let attachState = 'unknown'; // 'on' once /api/contact says images can be delivered
+function applyAttachState() {
+  const on = attachState === 'on';
+  ['gd-attach', 'gd-photo'].forEach((id) => { $(id).hidden = !on; });
+}
+async function checkAttachSupport() {
+  if (attachState !== 'unknown') return;
+  try {
+    const res = await fetch('/api/contact', { cache: 'no-store' });
+    const data = res.ok ? await res.json() : null;
+    attachState = data && data.configured ? 'on' : 'off';
+  } catch (_) { attachState = 'off'; }
+  applyAttachState();
+}
+
 function openGmail() {
+  checkAttachSupport();
   mailFab.classList.add('is-hidden');
   gmailModal.classList.remove('hidden', 'min');
   loadDraft();
@@ -540,6 +557,7 @@ function clearAttachments() {
 }
 
 async function addImages(list) {
+  if (attachState !== 'on') return;
   const imgs = Array.from(list).filter((f) => f.type.startsWith('image/'));
   if (!imgs.length) return;
   setStatus('', '');
