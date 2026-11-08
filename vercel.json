@@ -4,6 +4,10 @@
   "outputDirectory": ".",
   "rewrites": [
     {
+      "source": "/convert",
+      "destination": "/convert.html"
+    },
+    {
       "source": "/note",
       "destination": "/note.html"
     },

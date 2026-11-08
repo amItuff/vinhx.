@@ -60,13 +60,15 @@ const STRINGS = {
     'gh.more': 'Nhiều',
     'skills.badge': 'Kỹ năng & công nghệ',
     'projects.badge': 'Dự án nổi bật',
-    'p3.desc': 'Ghi chú trực tuyến mã hóa AES-256 ngay trên trình duyệt. Chia sẻ bằng một link, ai có link đều xem và sửa được.',
-    'p3.open': 'Mở Notepad',
+    'p3.desc': 'Ghi chú mã hóa ngay trên trình duyệt, chia sẻ bằng một link.',
+    'p3.open': 'Mở',
+    'p4.desc': 'Đổi định dạng ảnh, âm thanh, video ngay trên máy, không tải file lên đâu cả.',
+    'p4.open': 'Mở',
     'log.label': 'Cập nhật gần đây',
     'log.all': 'Tất cả commit',
-    'p2.desc': 'Công cụ tự động hóa Discord: hỗ trợ làm nhiệm vụ, treo stream voice 24/7, spoofer giờ chơi và các tiện ích bảo mật tài khoản.',
+    'p2.desc': 'Công cụ Discord: làm nhiệm vụ, treo voice 24/7, giả lập giờ chơi, bảo mật tài khoản.',
     'p.join': 'Vào server',
-    'p.features': 'Xem tính năng bot',
+    'p.features': 'Tính năng',
     'discord.profile': 'Hồ sơ',
     'fb.label': 'Mạng xã hội',
     'fb.connect': 'Kết nối',
@@ -132,13 +134,15 @@ const STRINGS = {
     'gh.more': 'More',
     'skills.badge': 'Skills & tech stack',
     'projects.badge': 'Featured projects',
-    'p3.desc': 'Online notepad encrypted with AES-256 in your browser. Share one link and anyone who has it can read and edit.',
-    'p3.open': 'Open Notepad',
+    'p3.desc': 'Notes encrypted in your browser, shared with one link.',
+    'p3.open': 'Open',
+    'p4.desc': 'Convert images, audio and video right on your device. Nothing is uploaded.',
+    'p4.open': 'Open',
     'log.label': 'Recent updates',
     'log.all': 'All commits',
-    'p2.desc': 'Discord automation toolkit: quest helper, 24/7 voice streaming, playtime spoofer and account security utilities.',
+    'p2.desc': 'Discord toolkit: quests, 24/7 voice, playtime spoofer, account security.',
     'p.join': 'Join server',
-    'p.features': 'Bot features',
+    'p.features': 'Features',
     'discord.profile': 'Profile',
     'fb.label': 'Social network',
     'fb.connect': 'Connect',
@@ -607,7 +611,7 @@ function renderChangelog() {
     time.textContent = fmt.format(new Date(c.date));
     const msg = document.createElement('span');
     msg.className = 'log-msg';
-    msg.textContent = c.subject;
+    msg.textContent = (lang === 'vi' && c.vi) || c.subject;
     const hash = document.createElement('span');
     hash.className = 'log-hash';
     hash.textContent = c.hash;

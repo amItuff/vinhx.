@@ -1,0 +1,72 @@
+/* vinhx convert: builds on note.css for the bar, buttons, toast and form fields */
+.cv { width: 100%; max-width: 720px; margin: 0 auto; padding: 8px 16px 64px; animation: fadeUp 0.7s var(--ease) both; }
+.cv h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-size: clamp(1.8rem, 5.5vw, 2.4rem);
+  line-height: 1.12;
+  margin-bottom: 12px;
+}
+.cv .lead { margin-bottom: 22px; }
+
+.drop {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 30px 16px;
+  text-align: center;
+  border: 1.5px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--sub);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.drop strong { color: #fff; font-size: 0.92rem; font-weight: 600; }
+.drop:hover, .drop.over, .drop:focus-visible { border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.05); }
+
+.opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 14px; }
+.opt { padding: 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.025); display: grid; gap: 8px; align-content: start; }
+.opt[hidden] { display: none; }
+.opt h2 { font-family: var(--font-display); font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
+.opt .fl { margin: 6px 0 0; }
+.opt input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.4);
+  font-size: 0.82rem;
+}
+.opt input[type="range"] { width: 100%; accent-color: #fff; }
+.opt .check { margin-top: 6px; }
+
+.flist { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+.fitem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  align-items: center;
+  padding: 11px 13px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+}
+.fname { font-size: 0.84rem; font-weight: 500; overflow-wrap: anywhere; }
+.fmeta { grid-column: 1; font-family: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace; font-size: 0.68rem; color: rgba(255, 255, 255, 0.45); }
+.fmeta.err { color: #fca5a5; }
+.fmeta.ok { color: #86efac; }
+.fbtns { grid-column: 2; grid-row: 1 / span 2; display: flex; gap: 6px; }
+.fprog { grid-column: 1 / -1; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.fprog > i { display: block; height: 100%; width: 0; background: #fff; transition: width 0.25s linear; }
+
+.cv-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.cv-actions .btn { padding: 10px 16px; font-size: 0.8rem; }
+.cv-actions .btn:disabled { opacity: 0.4; cursor: default; }
+.cv .facts { margin-top: 30px; }
+
+@media (max-width: 560px) {
+  .cv { padding-bottom: 40px; }
+  .cv-actions .btn { flex: 1 1 100%; }
+}

@@ -42,9 +42,9 @@
   <!-- icons load without blocking first paint -->
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
-  <link rel="stylesheet" href="style.css?v=7" />
+  <link rel="stylesheet" href="style.css?v=8" />
   <script src="https://w.soundcloud.com/player/api.js" defer></script>
-  <script src="script.js?v=7" defer></script>
+  <script src="script.js?v=8" defer></script>
 </head>
 <body>
 
@@ -218,36 +218,39 @@
     <div class="glass-card reveal-card">
       <div class="section-badge" data-i18n="projects.badge">Dự án nổi bật</div>
 
-      <div class="projects-container">
-        <div class="project-showcase-item">
-          <div class="project-banner" role="img" aria-label="vinhx note"><span class="banner-word" aria-hidden="true">vinhx <em>note</em></span><svg class="banner-art" viewBox="1000 0 600 520" aria-hidden="true" focusable="false"><line class="ln" x1="1060" y1="110" x2="1520" y2="110"/><line class="ln" x1="1060" y1="158" x2="1520" y2="158"/><line class="ln" x1="1060" y1="206" x2="1520" y2="206"/><line class="ln" x1="1060" y1="254" x2="1520" y2="254"/><line class="ln" x1="1060" y1="302" x2="1520" y2="302"/><line class="ln" x1="1060" y1="350" x2="1520" y2="350"/><line class="ln" x1="1060" y1="398" x2="1520" y2="398"/><line class="ln m" x1="1060" y1="76" x2="1060" y2="450"/><rect class="tx" x="1090" y="92" width="96" height="9" rx="4"/><rect class="tx" x="1202" y="92" width="52" height="9" rx="4"/><rect class="tx" x="1270" y="92" width="120" height="9" rx="4"/><rect class="tx" x="1406" y="92" width="34" height="9" rx="4"/><rect class="tx" x="1090" y="140" width="96" height="9" rx="4"/><rect class="tx" x="1202" y="140" width="52" height="9" rx="4"/><rect class="tx" x="1270" y="140" width="80" height="9" rx="4"/><rect class="tx" x="1090" y="188" width="96" height="9" rx="4"/><rect class="tx" x="1202" y="188" width="52" height="9" rx="4"/><rect class="tx" x="1270" y="188" width="120" height="9" rx="4"/><rect class="tx" x="1406" y="188" width="70" height="9" rx="4"/><rect class="tx" x="1090" y="236" width="96" height="9" rx="4"/><rect class="tx" x="1202" y="236" width="48" height="9" rx="4"/><rect class="cr" x="1090" y="274" width="3.5" height="25" rx="2"/></svg></div>
-
-          <div class="project-details">
-            <h3 class="project-heading">Notepad Online</h3>
-            <p class="project-paragraph" data-i18n="p3.desc">Ghi chú trực tuyến mã hóa AES-256 ngay trên trình duyệt. Chia sẻ bằng một link, ai có link đều xem và sửa được.</p>
-            <div class="project-action-buttons">
-              <a href="/note" class="p-btn p-btn-demo"><i class="fa-regular fa-note-sticky"></i> <span data-i18n="p3.open">Mở Notepad</span></a>
-            </div>
+      <ul class="proj-list">
+        <li class="proj">
+          <span class="proj-tile" aria-hidden="true"><i class="fa-regular fa-note-sticky"></i></span>
+          <div class="proj-text">
+            <h3 class="project-heading">vinhx <span>note</span></h3>
+            <p class="project-paragraph" data-i18n="p3.desc">Ghi chú mã hóa ngay trên trình duyệt, chia sẻ bằng một link.</p>
           </div>
-        </div>
-
-        <div class="project-showcase-item">
-          <div class="project-banner" role="img" aria-label="vinhx hub"><span class="banner-word" aria-hidden="true">vinhx <em>hub</em></span><svg class="banner-art" viewBox="1000 0 600 520" aria-hidden="true" focusable="false"><circle class="rg" cx="1300" cy="260" r="88"/><circle class="rg" cx="1300" cy="260" r="150"/><circle class="rg" cx="1300" cy="260" r="224"/><line class="lk" x1="1300" y1="260" x2="1100" y2="164"/><line class="lk" x1="1300" y1="260" x2="1154" y2="378"/><line class="lk" x1="1300" y1="260" x2="1248" y2="94"/><line class="lk" x1="1300" y1="260" x2="1370" y2="140"/><line class="lk" x1="1300" y1="260" x2="1468" y2="202"/><line class="lk" x1="1300" y1="260" x2="1496" y2="352"/><line class="lk" x1="1300" y1="260" x2="1360" y2="410"/><line class="lk" x1="1300" y1="260" x2="1076" y2="272"/><line class="lk" x1="1300" y1="260" x2="1444" y2="92"/><line class="lk" x1="1300" y1="260" x2="1196" y2="240"/><line class="lk2" x1="1100" y1="164" x2="1196" y2="240"/><line class="lk2" x1="1370" y1="140" x2="1468" y2="202"/><line class="lk2" x1="1496" y1="352" x2="1360" y2="410"/><line class="lk2" x1="1154" y1="378" x2="1076" y2="272"/><circle class="nd" cx="1100" cy="164" r="9"/><circle class="nd" cx="1154" cy="378" r="7"/><circle class="nd" cx="1248" cy="94" r="6"/><circle class="nd" cx="1370" cy="140" r="8"/><circle class="nd" cx="1468" cy="202" r="6"/><circle class="nd" cx="1496" cy="352" r="9"/><circle class="nd" cx="1360" cy="410" r="7"/><circle class="nd" cx="1076" cy="272" r="5"/><circle class="nd" cx="1444" cy="92" r="4"/><circle class="nd" cx="1196" cy="240" r="5"/><circle class="hb" cx="1300" cy="260" r="30"/><circle class="hd" cx="1300" cy="260" r="9"/></svg></div>
-
-          <div class="project-details">
-            <h3 class="project-heading">Discord Multi-Tool &amp; Badge Utility</h3>
-            <p class="project-paragraph" data-i18n="p2.desc">Công cụ tự động hóa Discord: hỗ trợ làm nhiệm vụ, treo stream voice 24/7, spoofer giờ chơi và các tiện ích bảo mật tài khoản.</p>
-            <div class="project-action-buttons">
-              <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo">
-                <i class="fa-brands fa-discord"></i> <span data-i18n="p.join">Vào server</span>
-              </a>
-              <button id="open-bot-features-btn" type="button" class="p-btn p-btn-features">
-                <i class="fa-solid fa-layer-group"></i> <span data-i18n="p.features">Xem tính năng bot</span>
-              </button>
-            </div>
+          <div class="proj-actions">
+            <a href="/note" class="p-btn p-btn-demo"><span data-i18n="p3.open">Mở</span></a>
           </div>
-        </div>
-      </div>
+        </li>
+        <li class="proj">
+          <span class="proj-tile" aria-hidden="true"><i class="fa-solid fa-arrows-rotate"></i></span>
+          <div class="proj-text">
+            <h3 class="project-heading">vinhx <span>convert</span></h3>
+            <p class="project-paragraph" data-i18n="p4.desc">Đổi định dạng ảnh, âm thanh, video ngay trên máy, không tải file lên đâu cả.</p>
+          </div>
+          <div class="proj-actions">
+            <a href="/convert" class="p-btn p-btn-demo"><span data-i18n="p4.open">Mở</span></a>
+          </div>
+        </li>
+        <li class="proj">
+          <span class="proj-tile" aria-hidden="true"><i class="fa-brands fa-discord"></i></span>
+          <div class="proj-text">
+            <h3 class="project-heading">vinhx <span>hub</span></h3>
+            <p class="project-paragraph" data-i18n="p2.desc">Công cụ Discord: làm nhiệm vụ, treo voice 24/7, giả lập giờ chơi, bảo mật tài khoản.</p>
+          </div>
+          <div class="proj-actions">
+            <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo"><span data-i18n="p.join">Vào server</span></a>
+            <button id="open-bot-features-btn" type="button" class="p-btn p-btn-features"><span data-i18n="p.features">Tính năng</span></button>
+          </div>
+        </li>
+      </ul>
     </div>
 
     <!-- discord -->

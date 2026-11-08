@@ -20,8 +20,8 @@
   const ITERATIONS = 150000;
   const MAX_CHARS = 100000;
   const AUTOSAVE_MS = 900;
-  const POLL_FAST = 8000;
-  const POLL_SLOW = 30000;
+  const POLL_FAST = 20000;
+  const POLL_SLOW = 90000;
   const IDLE_MS = 60000;
   const MIN_PW = 6;
   const ID_RE = /^[A-Za-z0-9_-]{3,64}$/;
@@ -123,7 +123,7 @@
       'err.badview': 'Link chỉ xem không hợp lệ.',
       'err.pwchanged': 'Mật khẩu ghi chú đã đổi ở nơi khác. Hãy tải lại trang.',
       'err.toolarge': 'Ghi chú quá lớn sau khi mã hóa. Hãy rút gọn nội dung.',
-      'err.limit': 'Đã đạt giới hạn số ghi chú cho kết nối này. Hãy xóa bớt ghi chú cũ hoặc thử lại sau.',
+      'err.limit': 'Đã đạt giới hạn tạo ghi chú (theo kết nối hoặc toàn hệ thống). Hãy xóa bớt ghi chú cũ hoặc thử lại sau.',
       'err.rate': 'Thao tác quá nhanh, vui lòng chờ một lát.',
       'err.forbidden': 'Không có quyền sửa ghi chú này.',
       'burned': 'Ghi chú này đã tự hủy ngay khi bạn mở. Hãy tải về nếu cần giữ lại, tải lại trang sẽ không còn nữa.'
@@ -220,7 +220,7 @@
       'err.badview': 'This view-only link is not valid.',
       'err.pwchanged': 'The note password was changed elsewhere. Please reload the page.',
       'err.toolarge': 'The note is too large once encrypted. Please shorten it.',
-      'err.limit': 'You reached the note limit for this connection. Delete older notes or try again later.',
+      'err.limit': 'The note creation limit was reached (per connection or site-wide). Delete older notes or try again later.',
       'err.rate': 'Too many requests, please wait a moment.',
       'err.forbidden': 'You are not allowed to change this note.',
       'burned': 'This note destroyed itself the moment you opened it. Download it if you need to keep it; reloading the page will not bring it back.'
@@ -614,7 +614,7 @@
       if (res.status === 429) {
         let body = {};
         try { body = await res.json(); } catch (_) { /* ignore */ }
-        if (body.error === 'note_limit' || body.error === 'too_many_notes') {
+        if (body.error === 'note_limit' || body.error === 'too_many_notes' || body.error === 'busy') {
           blockedKey = 'err.limit';
           setBanner(blockedKey);
           setStatus('error');

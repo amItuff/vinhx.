@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07080b" />
+  <title>vinhx convert — đổi định dạng ảnh, âm thanh, video</title>
+  <meta name="description" content="Đổi định dạng ảnh, âm thanh và video ngay trên trình duyệt. File không bao giờ được tải lên máy chủ." />
+  <link rel="canonical" href="https://vinhx.info/convert" />
+  <meta property="og:title" content="vinhx convert" />
+  <meta property="og:description" content="Đổi định dạng ảnh, âm thanh, video ngay trên máy. Không tải file lên đâu cả." />
+  <meta property="og:url" content="https://vinhx.info/convert" />
+  <meta property="og:image" content="https://vinhx.info/og-image.png" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111318'/%3E%3Cpath d='M18 26h24l-6-6M46 38H22l6 6' fill='none' stroke='%23fff' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/note.css?v=4" />
+  <link rel="stylesheet" href="/convert.css?v=1" />
+  <script src="/convert.js?v=1" defer></script>
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="/">vinhx<span>/convert</span></a>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button type="button" data-lang="vi">VI</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <main class="cv">
+    <p class="kicker" data-i18n="kicker">Chuyển đổi tệp</p>
+    <h1 data-i18n="title">Đổi định dạng ảnh, âm thanh và video</h1>
+    <p class="lead" data-i18n="lead">Mọi thứ chạy ngay trên máy của bạn. File không được tải lên máy chủ nào.</p>
+
+    <label id="drop" class="drop" tabindex="0">
+      <input id="file" type="file" multiple accept="image/*,audio/*,video/*" hidden />
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+      <strong data-i18n="drop.title">Thả file vào đây hoặc bấm để chọn</strong>
+      <span class="small" data-i18n="drop.sub">Ảnh, âm thanh, video. Chọn được nhiều file cùng lúc.</span>
+    </label>
+
+    <section id="opts" class="opts" hidden>
+      <div id="opt-image" class="opt" hidden>
+        <h2 data-i18n="o.image">Ảnh</h2>
+        <label class="fl" for="img-fmt" data-i18n="o.format">Định dạng</label>
+        <select id="img-fmt"></select>
+        <label class="fl" for="img-q"><span data-i18n="o.quality">Chất lượng</span> <b id="img-q-val">90</b>%</label>
+        <input id="img-q" type="range" min="40" max="100" value="90" />
+        <label class="fl" for="img-w" data-i18n="o.maxw">Chiều rộng tối đa (px, để trống = giữ nguyên)</label>
+        <input id="img-w" type="number" min="16" max="16000" inputmode="numeric" placeholder="1920" />
+      </div>
+      <div id="opt-audio" class="opt" hidden>
+        <h2 data-i18n="o.audio">Âm thanh</h2>
+        <label class="fl" for="aud-fmt" data-i18n="o.format">Định dạng</label>
+        <select id="aud-fmt"></select>
+        <label class="check"><input id="aud-mono" type="checkbox" /><span data-i18n="o.mono">Gộp thành mono (nhỏ hơn một nửa)</span></label>
+      </div>
+      <div id="opt-video" class="opt" hidden>
+        <h2 data-i18n="o.video">Video</h2>
+        <label class="fl" for="vid-fmt" data-i18n="o.format">Định dạng</label>
+        <select id="vid-fmt"></select>
+        <label class="fl" for="vid-q" data-i18n="o.quality">Chất lượng</label>
+        <select id="vid-q">
+          <option value="5000000" data-i18n="o.qHigh">Cao</option>
+          <option value="2500000" data-i18n="o.qMid" selected>Vừa</option>
+          <option value="1000000" data-i18n="o.qLow">Thấp (nhỏ nhất)</option>
+        </select>
+        <p class="small" data-i18n="o.videoNote">Video được ghi lại theo thời gian thực nên đổi mất đúng bằng độ dài video. Giữ tab này mở.</p>
+      </div>
+    </section>
+
+    <ul id="list" class="flist" aria-live="polite"></ul>
+
+    <div id="bar" class="cv-actions" hidden>
+      <button id="go" class="btn primary" type="button" data-i18n="a.go">Chuyển đổi</button>
+      <button id="zip" class="btn" type="button" data-i18n="a.zip" disabled>Tải tất cả (.zip)</button>
+      <button id="clear" class="btn" type="button" data-i18n="a.clear">Xóa danh sách</button>
+    </div>
+
+    <ul class="facts">
+      <li data-i18n="f1">Xử lý bằng chính trình duyệt, không tải file lên máy chủ</li>
+      <li data-i18n="f2">Định dạng xuất ra tùy trình duyệt của bạn hỗ trợ (Chrome và Edge đầy đủ nhất)</li>
+      <li data-i18n="f3">Chưa hỗ trợ xuất MP3 hoặc GIF động</li>
+    </ul>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

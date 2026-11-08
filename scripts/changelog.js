@@ -18,8 +18,11 @@ try {
   });
 
   const fresh = out.split('\n').filter(Boolean).map((line) => {
-    const [hash, date, subject] = line.split('\x1f');
-    return { hash, date, subject: (subject || '').trim() };
+    const [hash, date, raw] = line.split('\x1f');
+    // Commit subjects may carry a Vietnamese version after " | ": "English text | Tiếng Việt"
+    const [subject, vi] = (raw || '').split(' | ').map((x) => x.trim());
+    const old = existing.find((e) => e && e.hash === hash);
+    return { hash, date, subject, vi: vi || (old && old.vi) || '' };
   }).filter((c) => c.hash && c.date && c.subject);
 
   const seen = new Set();

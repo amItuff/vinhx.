@@ -26,6 +26,8 @@ const LIMITS = {
   create: { max: 20, window: 86400 }
 };
 const MAX_ACTIVE_NOTES_PER_IP = 100;
+// Whole-site brake so the free Upstash tier cannot be filled by many IPs at once.
+const GLOBAL_NEW_NOTES_PER_DAY = 1000;
 
 const HEX64 = /^[0-9a-f]{64}$/;
 const VER_RE = /^[0-9a-f]{0,16}$/;
@@ -153,6 +155,10 @@ module.exports = async (req, res) => {
       } else {
         const waitNew = await overLimit('create', ip);
         if (waitNew) return tooMany(res, waitNew, 'too_many_notes');
+
+        const day = Math.floor(Date.now() / 86400000);
+        const [made] = await pipeline([['INCR', `rl:global:create:${day}`], ['EXPIRE', `rl:global:create:${day}`, 172800]]);
+        if (made > GLOBAL_NEW_NOTES_PER_DAY) return tooMany(res, 3600, 'busy');
 
         const set = `ipn:${ip}`;
         const [, active] = await pipeline([['ZREMRANGEBYSCORE', set, 0, Date.now()], ['ZCARD', set]]);

@@ -1,37 +1,50 @@
 [
   {
+    "hash": "57afbf9",
+    "date": "2026-11-08T08:59:15+07:00",
+    "subject": "Notepad v2: view-only links, password layer, expiry/burn, QR, Markdown, abuse limits; recent updates card",
+    "vi": "Notepad v2: link chỉ xem, mật khẩu, hết hạn/tự hủy, QR, Markdown, giới hạn chống lạm dụng; thêm thẻ cập nhật gần đây"
+  },
+  {
     "hash": "6e8ad05",
     "date": "2026-11-08T08:40:27+07:00",
-    "subject": "New font set and a much lighter bot-features popup"
+    "subject": "New font set and a much lighter bot-features popup",
+    "vi": "Bộ phông chữ mới và popup tính năng bot nhẹ hơn nhiều"
   },
   {
     "hash": "7169cb4",
     "date": "2026-11-08T06:41:49+07:00",
-    "subject": "Replace terminal mockups with vinhx note / vinhx hub banners"
+    "subject": "Replace terminal mockups with vinhx note / vinhx hub banners",
+    "vi": "Thay ảnh giả lập terminal bằng banner vinhx note / vinhx hub"
   },
   {
     "hash": "96e9f27",
     "date": "2026-11-08T06:29:52+07:00",
-    "subject": "Replace portfolio card with an encrypted online notepad"
+    "subject": "Replace portfolio card with an encrypted online notepad",
+    "vi": "Thay thẻ portfolio bằng Notepad online mã hóa"
   },
   {
     "hash": "ec94a3e",
     "date": "2026-11-07T20:58:12+07:00",
-    "subject": "Fix link previews and keep animations on reduced-motion desktops"
+    "subject": "Fix link previews and keep animations on reduced-motion desktops",
+    "vi": "Sửa link preview và giữ hiệu ứng trên máy tính bật giảm chuyển động"
   },
   {
     "hash": "9bfc303",
     "date": "2026-11-07T19:07:29+07:00",
-    "subject": "Redesign intro and motion, add live Discord status and VI/EN switch"
+    "subject": "Redesign intro and motion, add live Discord status and VI/EN switch",
+    "vi": "Làm lại intro và chuyển động, thêm trạng thái Discord thật và nút VI/EN"
   },
   {
     "hash": "5f7df1f",
     "date": "2026-11-07T18:57:48+07:00",
-    "subject": "Fix SEO files, mobile zoom and accessibility"
+    "subject": "Fix SEO files, mobile zoom and accessibility",
+    "vi": "Sửa file SEO, zoom trên điện thoại và trợ năng"
   },
   {
     "hash": "000c7a4",
     "date": "2026-11-06T09:30:20+07:00",
-    "subject": "Create vercel.json"
+    "subject": "Create vercel.json",
+    "vi": "Tạo vercel.json"
   }
 ]
