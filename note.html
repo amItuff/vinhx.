@@ -12,10 +12,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/note.css?v=3" />
-  <script src="/note.js?v=1" defer></script>
+  <link rel="stylesheet" href="/note.css?v=4" />
+  <script src="/qr.js?v=1" defer></script>
+  <script src="/note.js?v=2" defer></script>
 </head>
-<body>
+<body data-mode="edit">
 
   <header class="bar">
     <a class="brand" href="/">vinhx<span>/note</span></a>
@@ -25,12 +26,12 @@
     </div>
   </header>
 
-  <!-- Start screen (no note id in the URL) -->
+  <!-- Start screen (no note in the URL) -->
   <main id="start" class="start" hidden>
     <div class="start-card">
       <p class="kicker" data-i18n="s.kicker">Notepad online</p>
       <h1 data-i18n="s.title">Ghi chú mã hóa, chia sẻ bằng một đường link</h1>
-      <p class="lead" data-i18n="s.lead">Nội dung được mã hóa ngay trên trình duyệt bằng chính đoạn ký tự trong link. Máy chủ chỉ lưu dữ liệu đã mã hóa và không đọc được.</p>
+      <p class="lead" data-i18n="s.lead">Nội dung được mã hóa ngay trên trình duyệt bằng chính đoạn ký tự trong link. Cơ sở dữ liệu chỉ lưu bản đã mã hóa.</p>
 
       <button id="new-note" class="btn primary big" type="button">
         <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
@@ -50,30 +51,45 @@
       <ul class="facts">
         <li data-i18n="s.f1">Mã hóa AES-256-GCM, khóa sinh ra từ đoạn ký tự trong link</li>
         <li data-i18n="s.f2">Ai có link đều xem và sửa được, tự đồng bộ giữa các thiết bị</li>
+        <li data-i18n="s.f4">Link chỉ xem, mật khẩu thứ hai, đặt thời hạn hoặc tự hủy sau khi đọc</li>
         <li data-i18n="s.f3">Tự xóa sau 1 năm không ai chỉnh sửa</li>
       </ul>
     </div>
   </main>
 
-  <!-- Editor -->
+  <!-- Editor / viewer -->
   <main id="editor" class="editor" hidden>
     <div class="toolbar">
       <div id="status" class="status" data-state="loading" role="status" aria-live="polite">
         <span class="dot"></span><span id="status-text"></span>
       </div>
+
       <div class="actions">
         <button id="copy-link" class="btn" type="button">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
           <span data-i18n="e.copy">Sao chép link</span>
         </button>
-        <button id="new-note-2" class="btn" type="button">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          <span data-i18n="e.new">Mới</span>
-        </button>
-        <button id="delete" class="btn danger" type="button">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
-          <span id="delete-label" data-i18n="e.del">Xóa</span>
-        </button>
+
+        <div class="tools">
+          <button id="t-preview" class="icon-btn" type="button" aria-pressed="false" data-i18n-label="t.preview" title="Xem trước Markdown" aria-label="Xem trước Markdown">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button id="t-download" class="icon-btn" type="button" data-i18n-label="t.download" title="Tải về .txt" aria-label="Tải về .txt">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+          </button>
+          <button id="t-share" class="icon-btn" type="button" data-i18n-label="t.share" title="Chia sẻ" aria-label="Chia sẻ">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.4M8.3 13.2l7.4 4.4"/></svg>
+          </button>
+          <button id="t-settings" class="icon-btn edit-only" type="button" data-i18n-label="t.settings" title="Cài đặt" aria-label="Cài đặt">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+          </button>
+          <button id="t-new" class="icon-btn" type="button" data-i18n-label="t.new" title="Ghi chú mới" aria-label="Ghi chú mới">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button id="t-delete" class="icon-btn danger edit-only" type="button" data-i18n-label="t.delete" title="Xóa ghi chú" aria-label="Xóa ghi chú">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -85,16 +101,124 @@
       </div>
     </div>
 
-    <textarea id="pad" spellcheck="false" maxlength="100000" disabled data-i18n-placeholder="e.ph" data-i18n-label="e.label" placeholder="Gõ nội dung ghi chú ở đây..." aria-label="Nội dung ghi chú"></textarea>
+    <!-- shown when the note has its own password -->
+    <section id="locked" class="locked" hidden>
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      <h2 data-i18n="lk.title">Ghi chú được bảo vệ bằng mật khẩu</h2>
+      <form id="unlock-form" class="unlock" autocomplete="off">
+        <input id="unlock-pw" type="password" autocomplete="current-password" data-i18n-placeholder="lk.ph" data-i18n-label="lk.ph" placeholder="Nhập mật khẩu" aria-label="Nhập mật khẩu" />
+        <button type="submit" class="btn primary" data-i18n="lk.open">Mở khóa</button>
+      </form>
+      <p id="unlock-err" class="hint" aria-live="polite"></p>
+    </section>
+
+    <div id="pane" class="pane">
+      <textarea id="pad" spellcheck="false" maxlength="100000" disabled data-i18n-placeholder="e.ph" data-i18n-label="e.label" placeholder="Gõ nội dung ghi chú ở đây..." aria-label="Nội dung ghi chú"></textarea>
+      <div id="preview" class="preview" hidden></div>
+    </div>
 
     <div class="meta">
-      <span class="lock">
-        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-        <span data-i18n="e.enc">Mã hóa AES-256-GCM trên trình duyệt. Máy chủ chỉ thấy dữ liệu đã mã hóa.</span>
-      </span>
+      <div class="meta-left">
+        <span class="lock">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <span data-i18n="e.enc">Mã hóa AES-256-GCM trên trình duyệt trước khi lưu.</span>
+        </span>
+        <span id="meta-flags" class="flags"></span>
+      </div>
       <span id="count">0 / 100,000</span>
     </div>
   </main>
+
+  <!-- Share sheet -->
+  <div id="sheet-share" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="share-title">
+    <div class="sheet-overlay" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-head">
+        <h2 id="share-title" class="sheet-title" data-i18n="sh.title">Chia sẻ ghi chú</h2>
+        <button type="button" class="icon-btn" data-close data-i18n-label="ui.close" title="Đóng" aria-label="Đóng">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-body">
+        <div id="row-edit" class="edit-only">
+          <label class="fl" for="in-edit" data-i18n="sh.edit">Link chỉnh sửa</label>
+          <div class="copy-field">
+            <input id="in-edit" type="text" readonly spellcheck="false" />
+            <button id="cp-edit" class="btn" type="button" data-i18n="sh.copy">Sao chép</button>
+          </div>
+          <p class="small" data-i18n="sh.editHint">Ai có link này đều xem và sửa được.</p>
+          <label class="check">
+            <input id="sh-frag" type="checkbox" />
+            <span data-i18n="sh.frag">Link kín: tên ghi chú nằm sau dấu # nên không gửi lên máy chủ</span>
+          </label>
+        </div>
+
+        <div id="row-view">
+          <label class="fl" for="in-view" data-i18n="sh.view">Link chỉ xem</label>
+          <div class="copy-field">
+            <input id="in-view" type="text" readonly spellcheck="false" />
+            <button id="cp-view" class="btn" type="button" data-i18n="sh.copy">Sao chép</button>
+          </div>
+          <p id="view-hint" class="small" data-i18n="sh.viewHint">Người nhận chỉ đọc được, không sửa được.</p>
+        </div>
+
+        <div class="qr-box">
+          <div id="qr-tabs" class="seg edit-only" role="group" aria-label="QR">
+            <button type="button" data-qr="edit" data-i18n="sh.qrEdit">Chỉnh sửa</button>
+            <button type="button" data-qr="view" data-i18n="sh.qrView">Chỉ xem</button>
+          </div>
+          <canvas id="qr" width="240" height="240" role="img" aria-label="QR"></canvas>
+          <p class="small center" data-i18n="sh.qr">Quét bằng điện thoại để mở ghi chú.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings sheet -->
+  <div id="sheet-settings" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="sheet-overlay" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-head">
+        <h2 id="settings-title" class="sheet-title" data-i18n="se.title">Cài đặt ghi chú</h2>
+        <button type="button" class="icon-btn" data-close data-i18n-label="ui.close" title="Đóng" aria-label="Đóng">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-body">
+        <div>
+          <label class="fl" for="s-ttl" data-i18n="se.ttl">Thời hạn</label>
+          <select id="s-ttl">
+            <option value="3600" data-i18n="se.t1h">1 giờ</option>
+            <option value="86400" data-i18n="se.t1d">1 ngày</option>
+            <option value="604800" data-i18n="se.t1w">1 tuần</option>
+            <option value="31536000" data-i18n="se.t1y" selected>1 năm</option>
+          </select>
+          <p class="small" data-i18n="se.ttlHint">Tính từ lần chỉnh sửa cuối. Hết hạn thì ghi chú bị xóa.</p>
+        </div>
+
+        <div>
+          <label class="check">
+            <input id="s-burn" type="checkbox" />
+            <span data-i18n="se.burn">Tự hủy sau khi link chỉ xem được mở một lần</span>
+          </label>
+          <p class="small" data-i18n="se.burnHint">Link chỉnh sửa của bạn không làm ghi chú bị hủy.</p>
+        </div>
+
+        <div>
+          <label class="fl" for="s-pw" data-i18n="se.pw">Mật khẩu</label>
+          <div class="copy-field">
+            <input id="s-pw" type="password" autocomplete="new-password" data-i18n-placeholder="se.pwPh" placeholder="Mật khẩu mới (ít nhất 6 ký tự)" />
+            <button id="s-pw-set" class="btn" type="button" data-i18n="se.pwSet">Đặt mật khẩu</button>
+          </div>
+          <div class="pw-row">
+            <span id="s-pw-state" class="small"></span>
+            <button id="s-pw-clear" class="linkish" type="button" data-i18n="se.pwClear" hidden>Gỡ mật khẩu</button>
+          </div>
+          <p class="small" data-i18n="se.pwHint">Mã hóa thêm một lớp bằng mật khẩu. Quên mật khẩu thì không khôi phục được nội dung.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

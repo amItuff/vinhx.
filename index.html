@@ -42,9 +42,9 @@
   <!-- icons load without blocking first paint -->
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
-  <link rel="stylesheet" href="style.css?v=6" />
+  <link rel="stylesheet" href="style.css?v=7" />
   <script src="https://w.soundcloud.com/player/api.js" defer></script>
-  <script src="script.js?v=6" defer></script>
+  <script src="script.js?v=7" defer></script>
 </head>
 <body>
 
@@ -332,6 +332,15 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- recent updates, filled from changelog.json -->
+    <div id="changelog-card" class="glass-card changelog-card reveal-card" hidden>
+      <div class="changelog-head">
+        <span class="category-label" data-i18n="log.label">Cập nhật gần đây</span>
+        <a class="changelog-all" href="https://github.com/amItuff/vinhx./commits/main" target="_blank" rel="noopener noreferrer" data-i18n="log.all">Tất cả commit</a>
+      </div>
+      <ol id="changelog-list" class="changelog-list"></ol>
     </div>
 
     <footer class="portfolio-footer reveal-card">

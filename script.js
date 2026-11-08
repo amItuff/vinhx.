@@ -34,6 +34,7 @@
 })();
 
 const $ = (id) => document.getElementById(id);
+let changelogData = null;
 const root = document.documentElement;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -61,6 +62,8 @@ const STRINGS = {
     'projects.badge': 'Dự án nổi bật',
     'p3.desc': 'Ghi chú trực tuyến mã hóa AES-256 ngay trên trình duyệt. Chia sẻ bằng một link, ai có link đều xem và sửa được.',
     'p3.open': 'Mở Notepad',
+    'log.label': 'Cập nhật gần đây',
+    'log.all': 'Tất cả commit',
     'p2.desc': 'Công cụ tự động hóa Discord: hỗ trợ làm nhiệm vụ, treo stream voice 24/7, spoofer giờ chơi và các tiện ích bảo mật tài khoản.',
     'p.join': 'Vào server',
     'p.features': 'Xem tính năng bot',
@@ -131,6 +134,8 @@ const STRINGS = {
     'projects.badge': 'Featured projects',
     'p3.desc': 'Online notepad encrypted with AES-256 in your browser. Share one link and anyone who has it can read and edit.',
     'p3.open': 'Open Notepad',
+    'log.label': 'Recent updates',
+    'log.all': 'All commits',
     'p2.desc': 'Discord automation toolkit: quest helper, 24/7 voice streaming, playtime spoofer and account security utilities.',
     'p.join': 'Join server',
     'p.features': 'Bot features',
@@ -208,6 +213,7 @@ function applyLang(next) {
   });
 
   renderPresence();
+  renderChangelog();
 }
 
 document.querySelectorAll('.lang-toggle button').forEach((b) => {
@@ -583,3 +589,43 @@ if (widget) {
 }
 
 applyLang(lang);
+
+// ---------------------------------------------------------------------------
+// Recent updates (changelog.json is generated from git history at build time)
+// ---------------------------------------------------------------------------
+function renderChangelog() {
+  const card = $('changelog-card');
+  const list = $('changelog-list');
+  if (!card || !list || !changelogData || !changelogData.length) return;
+
+  const fmt = new Intl.DateTimeFormat(lang === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: 'short' });
+  list.textContent = '';
+  changelogData.slice(0, 6).forEach((c) => {
+    const li = document.createElement('li');
+    const time = document.createElement('time');
+    time.dateTime = c.date;
+    time.textContent = fmt.format(new Date(c.date));
+    const msg = document.createElement('span');
+    msg.className = 'log-msg';
+    msg.textContent = c.subject;
+    const hash = document.createElement('span');
+    hash.className = 'log-hash';
+    hash.textContent = c.hash;
+    li.append(time, msg, hash);
+    list.appendChild(li);
+  });
+
+  if (card.hidden) {
+    card.hidden = false;
+    revealObserver.observe(card);
+  }
+}
+
+fetch('/changelog.json', { cache: 'no-cache' })
+  .then((r) => (r.ok ? r.json() : []))
+  .then((data) => {
+    if (!Array.isArray(data)) return;
+    changelogData = data.filter((c) => c && typeof c.subject === 'string' && typeof c.date === 'string' && typeof c.hash === 'string');
+    renderChangelog();
+  })
+  .catch(() => { /* the card simply stays hidden */ });

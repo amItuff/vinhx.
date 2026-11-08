@@ -426,6 +426,8 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   gap: 14px;
 }
 
+[hidden] { display: none !important; }
+
 .reveal-card {
   opacity: 0;
   transform: translateY(22px);
@@ -1462,3 +1464,22 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   .status-pulse-dot,
   .scroll-down-hint i { animation: none; }
 }
+
+/* recent updates */
+.changelog-card { display: block; padding: 18px 20px; }
+.changelog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.changelog-all { font-size: 0.72rem; color: rgba(255, 255, 255, 0.55); text-decoration: none; border-bottom: 1px solid rgba(255, 255, 255, 0.18); }
+.changelog-all:hover { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+.changelog-list { list-style: none; display: grid; margin: 0; padding: 0; }
+.changelog-list li {
+  display: grid;
+  grid-template-columns: 4.6rem 1fr;
+  gap: 4px 14px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.changelog-list li:first-child { border-top: none; }
+.changelog-list time { font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.68rem; color: rgba(255, 255, 255, 0.42); }
+.changelog-list .log-msg { font-size: 0.84rem; line-height: 1.45; color: #e5e7eb; overflow-wrap: anywhere; }
+.changelog-list .log-hash { grid-column: 2; font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.64rem; color: rgba(255, 255, 255, 0.3); }

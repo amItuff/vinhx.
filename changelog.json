@@ -1,0 +1,37 @@
+[
+  {
+    "hash": "6e8ad05",
+    "date": "2026-11-08T08:40:27+07:00",
+    "subject": "New font set and a much lighter bot-features popup"
+  },
+  {
+    "hash": "7169cb4",
+    "date": "2026-11-08T06:41:49+07:00",
+    "subject": "Replace terminal mockups with vinhx note / vinhx hub banners"
+  },
+  {
+    "hash": "96e9f27",
+    "date": "2026-11-08T06:29:52+07:00",
+    "subject": "Replace portfolio card with an encrypted online notepad"
+  },
+  {
+    "hash": "ec94a3e",
+    "date": "2026-11-07T20:58:12+07:00",
+    "subject": "Fix link previews and keep animations on reduced-motion desktops"
+  },
+  {
+    "hash": "9bfc303",
+    "date": "2026-11-07T19:07:29+07:00",
+    "subject": "Redesign intro and motion, add live Discord status and VI/EN switch"
+  },
+  {
+    "hash": "5f7df1f",
+    "date": "2026-11-07T18:57:48+07:00",
+    "subject": "Fix SEO files, mobile zoom and accessibility"
+  },
+  {
+    "hash": "000c7a4",
+    "date": "2026-11-06T09:30:20+07:00",
+    "subject": "Create vercel.json"
+  }
+]
