@@ -347,7 +347,7 @@ function openModal(el) {
   returnFocus = document.activeElement;
   activeModal = el;
   el.classList.remove('hidden');
-  root.classList.add('is-locked');
+  root.classList.add('is-locked', 'modal-open');
   const first = el.querySelector('input, textarea') || el.querySelector(FOCUSABLE);
   setTimeout(() => first && first.focus({ preventScroll: true }), 60);
 }
@@ -355,7 +355,7 @@ function openModal(el) {
 function closeModal(el) {
   el.classList.add('hidden');
   if (activeModal === el) activeModal = null;
-  root.classList.remove('is-locked');
+  root.classList.remove('is-locked', 'modal-open');
   if (returnFocus && document.contains(returnFocus)) returnFocus.focus({ preventScroll: true });
 }
 
@@ -426,7 +426,6 @@ contactForm.addEventListener('submit', async (e) => {
 
 // bot features
 const botModal = $('bot-features-modal');
-botModal.querySelectorAll('.feature-card').forEach((card, i) => card.style.setProperty('--i', i));
 
 $('open-bot-features-btn').addEventListener('click', () => openModal(botModal));
 $('close-bot-features-btn').addEventListener('click', () => closeModal(botModal));

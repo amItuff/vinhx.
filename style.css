@@ -13,6 +13,7 @@
   --gh-green-3: #26a641;
   --gh-green-4: #39d353;
 
+  --font-display: 'Bricolage Grotesque', 'Be Vietnam Pro', -apple-system, 'Segoe UI', sans-serif;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
 }
@@ -35,11 +36,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  scrollbar-gutter: stable; /* no layout jump when a popup locks scrolling */
 }
+html.modal-open .bg-layer { visibility: hidden; } /* stop painting the GIF behind a popup */
 html.is-locked { overflow: hidden; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--text-main);
   background-color: #050608;
   overflow-x: hidden;
@@ -88,7 +91,7 @@ body {
 .enter-screen.is-leaving .enter-inner { opacity: 0; transform: translateY(-28px); }
 
 .enter-kicker {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.66rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -101,11 +104,11 @@ body {
   overflow: hidden;
   margin: 10px 0 30px;
   padding: 0 0.12em 0.08em;
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(4rem, 14vw, 6.5rem);
-  line-height: 1;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  font-size: clamp(3.6rem, 13vw, 5.6rem);
+  line-height: 1.1;
   color: #fff;
 }
 .enter-name span {
@@ -131,7 +134,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: transparent;
   color: #fff;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -172,7 +175,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.66rem;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.3);
@@ -200,7 +203,7 @@ body {
   border: none;
   background: transparent;
   color: rgba(255, 255, 255, 0.45);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   padding: 5px 9px;
@@ -295,7 +298,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 }
 .toast-text-group { display: flex; flex-direction: column; }
 .toast-title { font-size: 0.8rem; font-weight: 600; color: #fff; }
-.toast-sub { font-size: 0.68rem; color: var(--text-sub); font-family: 'JetBrains Mono', monospace; }
+.toast-sub { font-size: 0.68rem; color: var(--text-sub); font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; }
 
 /* ================= HERO SECTION ================= */
 .hero-view {
@@ -328,10 +331,10 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   background: #111214;
 }
 .hero-name {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-style: italic;
-  font-size: 3.8rem;
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: 3.4rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
   line-height: 1;
   color: #ffffff;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
@@ -342,7 +345,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   color: rgba(255, 255, 255, 0.6);
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   margin-bottom: 22px;
 }
 .social-cluster {
@@ -388,7 +391,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   font-size: 0.62rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   cursor: pointer;
 }
 .scroll-hint:hover { color: #fff; }
@@ -457,7 +460,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   letter-spacing: 1.8px !important;
   color: rgba(255, 255, 255, 0.5) !important;
   text-transform: uppercase !important;
-  font-family: 'JetBrains Mono', monospace !important;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace !important;
 }
 
 /* 1. ABOUT CARD */
@@ -484,7 +487,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   align-items: center;
   gap: 6px;
   font-size: 0.7rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   color: var(--status-green);
   background: rgba(63, 185, 80, 0.1);
   border: 1px solid rgba(63, 185, 80, 0.25);
@@ -569,7 +572,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.8rem;
   font-weight: 600;
   color: #fff;
@@ -623,7 +626,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   gap: 4px;
   font-size: 0.65rem;
   color: var(--text-sub);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 }
 .legend-cell {
   width: 9px;
@@ -678,16 +681,47 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   transition: border-color 0.2s;
 }
 .project-banner {
-  line-height: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  aspect-ratio: 1600 / 520;
+  padding-left: 5.25%;
+  container-type: inline-size;
   background: #0a0b0e;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
 }
-.project-banner img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1600 / 520;
+.banner-word {
+  font-family: var(--font-display);
+  font-size: 2.3rem;
+  font-size: 9.6cqw;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: #fff;
+  padding-bottom: 1.4cqw;
+  white-space: nowrap;
 }
+.banner-word em { font-style: normal; color: #8e929b; }
+.banner-art {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 600 / 520;
+}
+.banner-art * { vector-effect: non-scaling-stroke; }
+.banner-art .ln { stroke: rgba(255, 255, 255, 0.09); stroke-width: 1; }
+.banner-art .ln.m { stroke: rgba(255, 255, 255, 0.12); }
+.banner-art .tx { fill: rgba(255, 255, 255, 0.26); }
+.banner-art .cr { fill: rgba(255, 255, 255, 0.92); }
+.banner-art .lk { stroke: rgba(255, 255, 255, 0.15); stroke-width: 1; }
+.banner-art .lk2 { stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; }
+.banner-art .rg { fill: none; stroke: rgba(255, 255, 255, 0.09); stroke-width: 1; }
+.banner-art .nd { fill: rgba(255, 255, 255, 0.38); }
+.banner-art .hb { fill: #0a0b0e; stroke: rgba(255, 255, 255, 0.9); stroke-width: 1.5; }
+.banner-art .hd { fill: rgba(255, 255, 255, 0.94); }
 .project-showcase-item:hover {
   border-color: rgba(255, 255, 255, 0.2);
 }
@@ -927,14 +961,15 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   align-items: center;
 }
 .track-counter {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.65rem;
   color: var(--text-sub);
 }
 .track-headline {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-style: italic;
-  font-size: 1.2rem;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
@@ -944,7 +979,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.68rem;
   color: var(--text-sub);
 }
@@ -1031,7 +1066,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   margin-bottom: 6px;
 }
 .footer-brand {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.78rem;
   font-weight: 700;
   color: #fff;
@@ -1055,6 +1090,8 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 }
 
 /* ================= MODAL TÍNH NĂNG BOT DISCORD ================= */
+/* Closed modals are display:none and the overlay is a flat colour. A live
+   backdrop blur over the animated background GIF is what made opening laggy. */
 .bot-modal-wrapper {
   position: fixed;
   inset: 0;
@@ -1063,18 +1100,12 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   align-items: center;
   justify-content: center;
   padding: 16px;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-.bot-modal-wrapper.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
+.bot-modal-wrapper.hidden { display: none; }
 .bot-modal-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.9);
 }
 .bot-modal-content {
   position: relative;
@@ -1082,23 +1113,18 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   width: 100%;
   max-width: 500px;
   max-height: 85vh;
-  background: rgba(14, 16, 20, 0.95);
+  background: #0e1014;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transform: translateY(0);
-  transition: transform 0.45s var(--ease-out);
 }
-.bot-modal-wrapper.hidden .bot-modal-content {
-  transform: translateY(16px) scale(0.97);
-}
-.bot-modal-wrapper:not(.hidden) .feature-card {
-  animation: fadeUp 0.5s var(--ease-out) both;
-  animation-delay: calc(var(--i) * 35ms + 100ms);
-}
+.bot-modal-wrapper:not(.hidden) .bot-modal-overlay { animation: modalFade 0.2s ease both; }
+.bot-modal-wrapper:not(.hidden) .bot-modal-content { animation: modalIn 0.28s var(--ease-out) both; }
+@keyframes modalFade { from { opacity: 0; } }
+@keyframes modalIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } }
 .bot-modal-header {
   padding: 12px 16px;
   background: rgba(20, 24, 30, 0.9);
@@ -1108,7 +1134,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   justify-content: space-between;
 }
 .bot-modal-title {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.78rem;
   font-weight: 700;
   color: #fff;
@@ -1143,10 +1169,17 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.15);
 }
-.feature-emoji {
-  font-size: 1.15rem;
-  line-height: 1.2;
+.feature-icon {
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.8rem;
 }
 .feature-info {
   display: flex;
@@ -1219,35 +1252,26 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   position: fixed;
   inset: 0;
   z-index: 100000;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-.gmail-modal-backdrop.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
+.gmail-modal-backdrop.hidden { display: none; }
+.gmail-modal-backdrop:not(.hidden) { animation: modalFade 0.2s ease both; }
 
 .gmail-popup-wrapper {
   position: relative;
   width: 400px;
   max-width: 100%;
-  background: rgba(14, 16, 20, 0.95);
+  background: #0e1014;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
   overflow: hidden;
-  transform: translateY(0);
-  transition: transform 0.45s var(--ease-out);
 }
-.gmail-modal-backdrop.hidden .gmail-popup-wrapper {
-  transform: translateY(16px) scale(0.96);
-}
+.gmail-modal-backdrop:not(.hidden) .gmail-popup-wrapper { animation: modalIn 0.28s var(--ease-out) both; }
 
 .gmail-popup-header {
   background: rgba(22, 26, 32, 0.9);
@@ -1292,13 +1316,13 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 }
 .field-label {
   color: var(--text-sub);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   width: 64px;
   flex-shrink: 0;
 }
 .field-val {
   color: #fff;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.72rem;
 }
 .gmail-input, .gmail-textarea {
@@ -1348,7 +1372,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 .send-mail-btn:hover { background: #2ea043; }
 .form-status-text {
   font-size: 0.7rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 }
 
 /* NÚT BACK TO TOP */
@@ -1388,7 +1412,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   bottom: 16px;
   left: 68px;
   z-index: 50;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   font-size: 0.68rem;
   color: rgba(255, 255, 255, 0.4);
   display: flex;
@@ -1408,7 +1432,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 }
 
 @media (max-width: 600px) {
-  .hero-name { font-size: 3.2rem; }
+  .hero-name { font-size: 2.9rem; }
   .cards-view { padding: 20px 14px 90px; }
   .vn-clock-badge { display: none; }
   .floating-mail-btn { bottom: 16px; right: 16px; width: 42px; height: 42px; }
@@ -1429,7 +1453,8 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   .reveal-card { transform: none !important; }
   .enter-name span { transform: none; opacity: 0; animation-name: fadeIn; animation-duration: 0.6s; }
   .enter-actions,
-  .bot-modal-wrapper:not(.hidden) .feature-card { animation-name: fadeIn; }
+  .bot-modal-wrapper:not(.hidden) .bot-modal-content,
+  .gmail-modal-backdrop:not(.hidden) .gmail-popup-wrapper { animation-name: modalFade; }
   .enter-screen { transition: opacity 0.6s ease; }
   .enter-screen.is-leaving { clip-path: inset(0 0 0 0); opacity: 0; }
   .enter-screen.is-leaving .enter-inner { transform: none; }
