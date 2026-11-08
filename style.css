@@ -1222,131 +1222,163 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-.gmail-modal-backdrop {
+/* Gmail-style compose window, docked bottom right */
+.gdock {
   position: fixed;
-  inset: 0;
-  z-index: 100000;
-  background: rgba(0, 0, 0, 0.88);
+  right: 20px;
+  bottom: 0;
+  z-index: 1200;
+  width: 480px;
+  max-width: calc(100vw - 24px);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-.gmail-modal-backdrop.hidden { display: none; }
-.gmail-modal-backdrop:not(.hidden) { animation: modalFade 0.2s ease both; }
-
-.gmail-popup-wrapper {
-  position: relative;
-  width: 400px;
-  max-width: 100%;
-  background: #0e1014;
+  flex-direction: column;
+  background: #1f2126;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
   overflow: hidden;
 }
-.gmail-modal-backdrop:not(.hidden) .gmail-popup-wrapper { animation: modalIn 0.28s var(--ease-out) both; }
+.gdock.hidden { display: none; }
+.gdock:not(.hidden) { animation: gdIn 0.25s var(--ease-out) both; }
+@keyframes gdIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
-.gmail-popup-header {
-  background: rgba(22, 26, 32, 0.9);
-  padding: 10px 14px;
+.gd-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-.gmail-popup-title {
-  font-size: 0.76rem;
+  padding: 9px 8px 9px 16px;
+  background: #2b2d33;
+  color: #f1f3f4;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.gmail-popup-title i { color: var(--gmail-red); }
-.gmail-header-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-sub);
-  font-size: 0.85rem;
   cursor: pointer;
-  padding: 4px;
 }
-.gmail-header-btn:hover { color: #fff; }
+.gd-head-btns { display: flex; gap: 2px; }
+.gd-hbtn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #c4c7c5;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.gd-hbtn:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
 
-.gmail-popup-body {
-  padding: 12px 14px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.gmail-field {
+.gd-body { position: relative; display: flex; flex-direction: column; padding: 0 16px 12px; background: #1f2126; }
+.gdock.min .gd-body { display: none; }
+.gd-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.76rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 4px 0;
+  min-height: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.85rem;
 }
-.field-label {
-  color: var(--text-sub);
-  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
-  width: 64px;
-  flex-shrink: 0;
+.gd-label { flex: none; min-width: 34px; color: #9aa0a6; font-size: 0.82rem; }
+.gd-chip {
+  padding: 2px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e8eaed;
+  font-size: 0.8rem;
 }
-.field-val {
-  color: #fff;
-  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
-  font-size: 0.72rem;
-}
-.gmail-input, .gmail-textarea {
+.gd-input, .gd-text {
   flex: 1;
+  min-width: 0;
+  width: 100%;
   background: transparent;
   border: none;
   outline: none;
-  color: #fff;
-  font-size: 0.78rem;
+  color: #e8eaed;
   font-family: inherit;
+  font-size: 0.86rem;
   -webkit-user-select: text;
   user-select: text;
 }
-.gmail-input::placeholder, .gmail-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-.gmail-textarea {
-  width: 100%;
-  resize: vertical;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 6px;
-  padding: 8px;
-  margin-top: 4px;
-}
-.gmail-popup-footer {
+.gd-input::placeholder, .gd-text::placeholder { color: #9aa0a6; }
+.gd-input:focus-visible, .gd-text:focus-visible { outline: none; }
+.gd-text { height: 210px; resize: none; padding: 12px 0; line-height: 1.55; }
+.gd-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+.gd-files { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.gd-files:not(:empty) { padding-bottom: 8px; }
+.gd-file {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
+  gap: 8px;
+  max-width: 100%;
+  padding: 4px 6px 4px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.74rem;
+  color: #e8eaed;
 }
-.send-mail-btn {
-  background: #238636;
-  color: #fff;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-  padding: 7px 16px;
-  font-size: 0.75rem;
+.gd-file img { width: 30px; height: 30px; object-fit: cover; border-radius: 5px; background: #000; flex: none; }
+.gd-file b { font-weight: 500; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gd-file em { font-style: normal; color: #9aa0a6; flex: none; }
+.gd-file button { display: grid; place-items: center; width: 20px; height: 20px; border: none; border-radius: 50%; background: transparent; color: #c4c7c5; cursor: pointer; font-size: 0.7rem; }
+.gd-file button:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
+
+.gd-drop {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(31, 33, 38, 0.94);
+  border: 2px dashed #8ab4f8;
+  border-radius: 10px;
+  color: #8ab4f8;
+  font-size: 0.9rem;
   font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: opacity 0.2s;
+  pointer-events: none;
 }
-.send-mail-btn:hover { background: #2ea043; }
-.form-status-text {
-  font-size: 0.7rem;
-  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+.gd-drop[hidden] { display: none; }
+
+.gd-foot { display: flex; align-items: center; gap: 4px; padding-top: 6px; }
+.gd-send {
+  padding: 9px 22px;
+  border: none;
+  border-radius: 18px;
+  background: #0b57d0;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.gd-send:hover { background: #0a4cb8; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5); }
+.gd-send:disabled { opacity: 0.55; cursor: default; }
+.gd-tool {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #c4c7c5;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.gd-tool:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+.gd-discard { margin-left: auto; }
+.gd-status { font-size: 0.74rem; margin-left: 6px; min-width: 0; overflow-wrap: anywhere; }
+.gd-linkbtn { border: none; background: none; color: #8ab4f8; font-family: inherit; font-size: 0.74rem; text-decoration: underline; cursor: pointer; padding: 0 4px; }
+.gd-linkbtn[hidden] { display: none; }
+
+@media (max-width: 600px) {
+  .gdock { inset: 0; width: auto; max-width: none; border: none; border-radius: 0; }
+  .gdock.min { inset: auto 0 0 0; }
+  .gd-body { flex: 1; }
+  .gd-text { flex: 1; height: auto; min-height: 160px; }
 }
 
 /* NÚT BACK TO TOP */
@@ -1428,7 +1460,7 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   .enter-name span { transform: none; opacity: 0; animation-name: fadeIn; animation-duration: 0.6s; }
   .enter-actions,
   .bot-modal-wrapper:not(.hidden) .bot-modal-content,
-  .gmail-modal-backdrop:not(.hidden) .gmail-popup-wrapper { animation-name: modalFade; }
+  .gdock:not(.hidden) { animation-name: modalFade; }
   .enter-screen { transition: opacity 0.6s ease; }
   .enter-screen.is-leaving { clip-path: inset(0 0 0 0); opacity: 0; }
   .enter-screen.is-leaving .enter-inner { transform: none; }
@@ -1455,3 +1487,5 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 .changelog-list time { font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.68rem; color: rgba(255, 255, 255, 0.42); }
 .changelog-list .log-msg { font-size: 0.84rem; line-height: 1.45; color: #e5e7eb; overflow-wrap: anywhere; }
 .changelog-list .log-hash { grid-column: 2; font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.64rem; color: rgba(255, 255, 255, 0.3); }
+
+.ic { width: 1em; height: 1em; fill: currentColor; flex: none; vertical-align: -0.125em; }

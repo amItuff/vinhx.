@@ -89,13 +89,26 @@ const STRINGS = {
     'f8.desc': 'Kiểm tra phiên đăng nhập & gom nhắc tên tập trung.',
     'f9.name': 'Quản Lý Token',
     'f9.desc': 'Lưu, kiểm tra hoặc xóa token an toàn.',
-    'mail.title': 'Gửi tin nhắn',
-    'mail.to': 'Đến:',
-    'mail.from': 'Từ:',
-    'mail.subject': 'Tiêu đề:',
-    'mail.fromPh': 'Email của bạn...',
-    'mail.subjectPh': 'Tiêu đề...',
-    'mail.bodyPh': 'Nội dung tin nhắn...',
+    'mail.title': 'Tin nhắn mới',
+    'mail.to': 'Tới',
+    'mail.from': 'Từ',
+    'mail.fromPh': 'Email của bạn',
+    'mail.subjectPh': 'Tiêu đề',
+    'mail.bodyPh': 'Nội dung tin nhắn',
+    'mail.min': 'Thu nhỏ',
+    'mail.attach': 'Đính kèm ảnh',
+    'mail.photo': 'Chèn ảnh',
+    'mail.discard': 'Bỏ thư',
+    'mail.drop': 'Thả ảnh vào đây để đính kèm',
+    'mail.limit': 'Tối đa 3 ảnh.',
+    'mail.tooBig': 'Ảnh quá nặng, tổng tối đa khoảng 3 MB.',
+    'mail.imgFail': 'Không đọc được ảnh này.',
+    'mail.badEmail': 'Nhập email hợp lệ.',
+    'mail.needSubject': 'Nhập tiêu đề.',
+    'mail.needBody': 'Nhập nội dung.',
+    'mail.noAttach': 'Chưa gửi được ảnh đính kèm.',
+    'mail.sendNoFiles': 'Gửi không kèm ảnh',
+    'mail.rate': 'Bạn gửi quá nhiều, thử lại sau.',
     'mail.send': 'Gửi',
     'mail.sending': 'Đang gửi...',
     'mail.sent': 'Đã gửi thành công!',
@@ -164,12 +177,25 @@ const STRINGS = {
     'f9.name': 'Token Manager',
     'f9.desc': 'Save, check or delete tokens safely.',
     'mail.title': 'New message',
-    'mail.to': 'To:',
-    'mail.from': 'From:',
-    'mail.subject': 'Subject:',
-    'mail.fromPh': 'Your email...',
-    'mail.subjectPh': 'Subject...',
-    'mail.bodyPh': 'Your message...',
+    'mail.to': 'To',
+    'mail.from': 'From',
+    'mail.fromPh': 'Your email',
+    'mail.subjectPh': 'Subject',
+    'mail.bodyPh': 'Your message',
+    'mail.min': 'Minimize',
+    'mail.attach': 'Attach images',
+    'mail.photo': 'Insert image',
+    'mail.discard': 'Discard',
+    'mail.drop': 'Drop images here to attach',
+    'mail.limit': 'Up to 3 images.',
+    'mail.tooBig': 'Images are too large, about 3 MB in total at most.',
+    'mail.imgFail': 'Could not read that image.',
+    'mail.badEmail': 'Enter a valid email.',
+    'mail.needSubject': 'Enter a subject.',
+    'mail.needBody': 'Enter a message.',
+    'mail.noAttach': 'Image attachments could not be sent.',
+    'mail.sendNoFiles': 'Send without images',
+    'mail.rate': 'Too many messages, try again later.',
     'mail.send': 'Send',
     'mail.sending': 'Sending...',
     'mail.sent': 'Sent, thank you!',
@@ -372,7 +398,7 @@ function closeModal(el) {
 document.addEventListener('keydown', (e) => {
   if (!activeModal) return;
   if (e.key === 'Escape') {
-    activeModal === gmailModal ? closeGmail() : closeModal(activeModal);
+    closeModal(activeModal);
     return;
   }
   if (e.key !== 'Tab') return;
@@ -384,55 +410,254 @@ document.addEventListener('keydown', (e) => {
   else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 });
 
-// contact form
+// ---------------------------------------------------------------------------
+// Contact form: Gmail-style compose window with image attachments
+// ---------------------------------------------------------------------------
 const gmailModal = $('gmail-modal-container');
 const mailFab = $('open-gmail-modal');
+const contactForm = $('contact-form');
+const formStatus = $('form-status');
+const submitBtn = $('form-submit-btn');
+const noFilesBtn = $('gd-nofiles');
+const filesList = $('gd-files');
+const fileInput = $('gd-file');
+const dropHint = $('gd-drop');
+const DRAFT_KEY = 'mailDraft';
+const MAX_FILES = 3;
+const MAX_TOTAL = 3 * 1024 * 1024; // keeps the request under Vercel's 4.5 MB body limit once base64-encoded
+let attachments = [];
+let sending = false;
 
-function openGmail() { mailFab.classList.add('is-hidden'); openModal(gmailModal); }
-function closeGmail() { mailFab.classList.remove('is-hidden'); closeModal(gmailModal); }
+$('gd-to').textContent = 'Vinh';
+
+function saveDraft() {
+  try {
+    const f = contactForm.elements;
+    const d = { email: f.email.value, subject: f.subject.value, message: f.message.value };
+    if (d.email || d.subject || d.message) localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    else localStorage.removeItem(DRAFT_KEY);
+  } catch (_) {}
+}
+function loadDraft() {
+  try {
+    const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+    if (!d) return;
+    const f = contactForm.elements;
+    if (!f.email.value) f.email.value = d.email || '';
+    if (!f.subject.value) f.subject.value = d.subject || '';
+    if (!f.message.value) f.message.value = d.message || '';
+  } catch (_) {}
+}
+contactForm.addEventListener('input', saveDraft);
+
+function openGmail() {
+  mailFab.classList.add('is-hidden');
+  gmailModal.classList.remove('hidden', 'min');
+  loadDraft();
+  const f = contactForm.elements;
+  const first = !f.email.value ? f.email : !f.subject.value ? f.subject : f.message;
+  setTimeout(() => first.focus({ preventScroll: true }), 60);
+}
+function closeGmail() {
+  gmailModal.classList.add('hidden');
+  mailFab.classList.remove('is-hidden');
+  saveDraft();
+}
+function discardGmail() {
+  contactForm.reset();
+  clearAttachments();
+  try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
+  setStatus('', '');
+  closeGmail();
+}
 
 mailFab.addEventListener('click', openGmail);
 $('about-contact-btn').addEventListener('click', openGmail);
 $('footer-contact-btn').addEventListener('click', openGmail);
-$('close-gmail-btn').addEventListener('click', closeGmail);
-gmailModal.addEventListener('click', (e) => { if (e.target === gmailModal) closeGmail(); });
-
-const contactForm = $('contact-form');
-const formStatus = $('form-status');
-const submitBtn = $('form-submit-btn');
+$('close-gmail-btn').addEventListener('click', (e) => { e.stopPropagation(); closeGmail(); });
+$('gd-discard').addEventListener('click', discardGmail);
+$('gd-min').addEventListener('click', (e) => { e.stopPropagation(); gmailModal.classList.toggle('min'); });
+document.querySelector('.gd-head').addEventListener('click', () => { if (gmailModal.classList.contains('min')) gmailModal.classList.remove('min'); });
+gmailModal.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeGmail(); });
 
 function setStatus(key, color) {
   formStatus.style.color = color;
   formStatus.textContent = key ? t(key) : '';
 }
 
-contactForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  submitBtn.disabled = true;
-  setStatus('mail.sending', '#eab308');
+// --- attachments -----------------------------------------------------------
+const fmtKB = (n) => (n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' KB' : (n / 1048576).toFixed(1) + ' MB');
 
-  try {
-    const res = await fetch(contactForm.action, {
-      method: 'POST',
-      body: new FormData(contactForm),
-      headers: { Accept: 'application/json' }
+async function shrinkImage(file) {
+  const bmp = await createImageBitmap(file);
+  const scale = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+  const w = Math.max(1, Math.round(bmp.width * scale));
+  const h = Math.max(1, Math.round(bmp.height * scale));
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, w, h);
+  ctx.drawImage(bmp, 0, 0, w, h);
+  if (bmp.close) bmp.close();
+  const blob = await new Promise((res) => canvas.toBlob(res, 'image/jpeg', 0.82));
+  if (!blob) throw new Error('encode');
+  return blob;
+}
+
+function renderAttachments() {
+  filesList.textContent = '';
+  attachments.forEach((a) => {
+    const li = document.createElement('li');
+    li.className = 'gd-file';
+    const img = document.createElement('img');
+    img.src = a.url;
+    img.alt = '';
+    const name = document.createElement('b');
+    name.textContent = a.name;
+    const size = document.createElement('em');
+    size.textContent = fmtKB(a.blob.size);
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.setAttribute('aria-label', t('ui.close'));
+    rm.innerHTML = '<svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-xmark"></use></svg>';
+    rm.addEventListener('click', () => {
+      URL.revokeObjectURL(a.url);
+      attachments = attachments.filter((x) => x !== a);
+      renderAttachments();
     });
+    li.append(img, name, size, rm);
+    filesList.appendChild(li);
+  });
+  noFilesBtn.hidden = true;
+}
 
-    if (res.ok) {
-      setStatus('mail.sent', '#3fb950');
-      contactForm.reset();
-      setTimeout(() => { closeGmail(); setStatus('', ''); }, 2000);
+function clearAttachments() {
+  attachments.forEach((a) => URL.revokeObjectURL(a.url));
+  attachments = [];
+  renderAttachments();
+}
+
+async function addImages(list) {
+  const imgs = Array.from(list).filter((f) => f.type.startsWith('image/'));
+  if (!imgs.length) return;
+  setStatus('', '');
+  for (const f of imgs) {
+    if (attachments.length >= MAX_FILES) { setStatus('mail.limit', '#f28b82'); break; }
+    try {
+      const blob = await shrinkImage(f);
+      const total = attachments.reduce((s, x) => s + x.blob.size, 0) + blob.size;
+      if (total > MAX_TOTAL) { setStatus('mail.tooBig', '#f28b82'); break; }
+      const base = (f.name || 'image').replace(/\.[^.]+$/, '') || 'image';
+      attachments.push({ name: base + '.jpg', blob, url: URL.createObjectURL(blob) });
+    } catch (_) {
+      setStatus('mail.imgFail', '#f28b82');
+    }
+  }
+  renderAttachments();
+}
+
+$('gd-attach').addEventListener('click', () => fileInput.click());
+$('gd-photo').addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => { addImages(fileInput.files); fileInput.value = ''; });
+
+let dragDepth = 0;
+const hasFiles = (e) => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+gmailModal.addEventListener('dragenter', (e) => { if (hasFiles(e)) { e.preventDefault(); dragDepth++; dropHint.hidden = false; } });
+gmailModal.addEventListener('dragover', (e) => { if (hasFiles(e)) e.preventDefault(); });
+gmailModal.addEventListener('dragleave', () => { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) dropHint.hidden = true; });
+gmailModal.addEventListener('drop', (e) => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  dragDepth = 0;
+  dropHint.hidden = true;
+  addImages(e.dataTransfer.files);
+});
+contactForm.elements.message.addEventListener('paste', (e) => {
+  const files = Array.from((e.clipboardData && e.clipboardData.files) || []);
+  if (files.some((f) => f.type.startsWith('image/'))) { e.preventDefault(); addImages(files); }
+});
+
+// --- sending ---------------------------------------------------------------
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(String(r.result).split(',')[1]);
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+
+function validate() {
+  const f = contactForm.elements;
+  if (!f.email.value || !f.email.checkValidity()) { f.email.focus(); setStatus('mail.badEmail', '#f28b82'); return false; }
+  if (!f.subject.value.trim()) { f.subject.focus(); setStatus('mail.needSubject', '#f28b82'); return false; }
+  if (!f.message.value.trim()) { f.message.focus(); setStatus('mail.needBody', '#f28b82'); return false; }
+  return true;
+}
+
+async function sendText() { // Formspree, text only
+  const res = await fetch(contactForm.action, {
+    method: 'POST',
+    body: new FormData(contactForm),
+    headers: { Accept: 'application/json' }
+  });
+  if (res.ok) return { ok: true };
+  const data = await res.json().catch(() => null);
+  return { ok: false, text: data?.errors ? data.errors.map((er) => er.message).join(', ') : '' };
+}
+
+async function sendWithImages() { // own endpoint, supports attachments
+  const f = contactForm.elements;
+  const files = [];
+  for (const a of attachments) files.push({ name: a.name, type: 'image/jpeg', data: await blobToBase64(a.blob) });
+  const res = await fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: f.email.value.trim(), subject: f.subject.value.trim(), message: f.message.value, hp: f._gotcha.value, files })
+  });
+  if (res.ok) return { ok: true };
+  const data = await res.json().catch(() => ({}));
+  return { ok: false, code: data.error || '', status: res.status };
+}
+
+function finishSent() {
+  setStatus('mail.sent', '#81c995');
+  contactForm.reset();
+  clearAttachments();
+  try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
+  setTimeout(() => { closeGmail(); setStatus('', ''); }, 1800);
+}
+
+async function submitMail(withFiles) {
+  if (sending || !validate()) return;
+  sending = true;
+  submitBtn.disabled = true;
+  noFilesBtn.hidden = true;
+  setStatus('mail.sending', '#fdd663');
+  try {
+    const r = withFiles && attachments.length ? await sendWithImages() : await sendText();
+    if (r.ok) { finishSent(); return; }
+    if (withFiles && (r.status === 503 || r.status === 404)) {
+      setStatus('mail.noAttach', '#f28b82');
+      noFilesBtn.hidden = false;
+    } else if (r.status === 429) {
+      setStatus('mail.rate', '#f28b82');
     } else {
-      const data = await res.json().catch(() => null);
-      formStatus.style.color = '#ef4444';
-      formStatus.textContent = data?.errors ? data.errors.map((er) => er.message).join(', ') : t('mail.error');
+      formStatus.style.color = '#f28b82';
+      formStatus.textContent = r.text || t('mail.error');
     }
   } catch (_) {
-    setStatus('mail.network', '#ef4444');
+    setStatus('mail.network', '#f28b82');
   } finally {
+    sending = false;
     submitBtn.disabled = false;
   }
-});
+}
+
+contactForm.addEventListener('submit', (e) => { e.preventDefault(); submitMail(true); });
+noFilesBtn.addEventListener('click', () => { clearAttachments(); submitMail(false); });
 
 // bot features
 const botModal = $('bot-features-modal');
@@ -499,6 +724,7 @@ const PLAYLIST = [
 const widget = window.SC ? SC.Widget($('sc-hidden-frame')) : null;
 const diskImage = $('disk-image');
 const diskBox = document.querySelector('.disk-container');
+function setIcon(svg, id) { const u = svg.querySelector('use'); if (u) u.setAttribute('href', '/icons.svg#' + id); }
 const playIcon = $('ctrl-play-icon');
 const progressVal = $('progress-bar-val');
 const muteBtn = $('floating-audio-toggle');
@@ -552,13 +778,13 @@ if (widget) {
   });
 
   widget.bind(SC.Widget.Events.PLAY, () => {
-    playIcon.className = 'fa-solid fa-pause';
+    setIcon(playIcon, 's-pause');
     diskImage.classList.add('running');
     diskBox.classList.add('playing');
   });
 
   widget.bind(SC.Widget.Events.PAUSE, () => {
-    playIcon.className = 'fa-solid fa-play';
+    setIcon(playIcon, 's-play');
     diskImage.classList.remove('running');
     diskBox.classList.remove('playing');
   });
@@ -587,7 +813,7 @@ if (widget) {
   muteBtn.addEventListener('click', () => {
     isMuted = !isMuted;
     widget.setVolume(isMuted ? 0 : volume);
-    muteIcon.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+    setIcon(muteIcon, isMuted ? 's-volume-xmark' : 's-volume-high');
     muteBtn.classList.toggle('muted', isMuted);
   });
 }

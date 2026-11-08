@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#07080b" />
+  <title>404 — vinhx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&family=Bricolage+Grotesque:opsz,wght@12..96,600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { min-height: 100dvh; display: grid; place-items: center; padding: 24px; text-align: center; color: #f3f4f6; font-family: 'Be Vietnam Pro', system-ui, sans-serif; background: #07080b radial-gradient(60% 46% at 50% 0%, rgba(86, 98, 132, 0.17), transparent 72%) no-repeat; }
+    .code { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.42); margin-bottom: 14px; }
+    h1 { font-family: 'Bricolage Grotesque', 'Be Vietnam Pro', sans-serif; font-weight: 600; letter-spacing: -0.03em; font-size: clamp(2rem, 7vw, 3rem); line-height: 1.1; margin-bottom: 12px; }
+    p { color: #9ca3af; font-size: 0.92rem; line-height: 1.6; margin-bottom: 26px; }
+    .links { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    a { padding: 10px 18px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.14); color: #e5e7eb; text-decoration: none; font-size: 0.82rem; font-weight: 600; }
+    a.primary { background: #fff; color: #07080b; border-color: #fff; }
+    a:hover { border-color: rgba(255,255,255,0.5); }
+    a:focus-visible { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="code">404</p>
+    <h1 id="t">Không tìm thấy trang này</h1>
+    <p id="d">Đường dẫn có thể đã đổi hoặc không tồn tại.</p>
+    <div class="links">
+      <a class="primary" href="/" id="h">Về trang chủ</a>
+      <a href="/note">Notepad</a>
+      <a href="/convert">Convert</a>
+    </div>
+  </main>
+  <script>
+    try {
+      var l = localStorage.getItem('lang') || ((navigator.language || 'vi').toLowerCase().indexOf('vi') === 0 ? 'vi' : 'en');
+      if (l === 'en') {
+        document.documentElement.lang = 'en';
+        document.getElementById('t').textContent = 'Page not found';
+        document.getElementById('d').textContent = 'The link may have changed or never existed.';
+        document.getElementById('h').textContent = 'Back home';
+      }
+    } catch (e) {}
+  </script>
+</body>
+</html>

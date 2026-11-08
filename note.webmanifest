@@ -1,0 +1,23 @@
+{
+  "name": "vinhx note",
+  "short_name": "note",
+  "description": "Ghi chú mã hóa, chia sẻ bằng một link",
+  "start_url": "/note",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07080b",
+  "theme_color": "#07080b",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -25,8 +25,8 @@
   <meta property="og:locale:alternate" content="en_US" />
   <meta property="og:title" content="vinhx — Personal Portfolio" />
   <meta property="og:description" content="Portfolio của Vinh (vinhx). Lập trình bot tự động hóa Discord, web tối giản." />
-  <meta property="og:image" content="https://vinhx.info/og-image.png" />
-  <meta property="og:image:secure_url" content="https://vinhx.info/og-image.png" />
+  <meta property="og:image" content="https://vinhx.info/og-image.png?v=3" />
+  <meta property="og:image:secure_url" content="https://vinhx.info/og-image.png?v=3" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -34,14 +34,12 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="vinhx — Personal Portfolio" />
   <meta name="twitter:description" content="Portfolio của Vinh (vinhx). Lập trình bot tự động hóa Discord, web tối giản." />
-  <meta name="twitter:image" content="https://vinhx.info/og-image.png" />
+  <meta name="twitter:image" content="https://vinhx.info/og-image.png?v=3" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- icons load without blocking first paint -->
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
   <link rel="stylesheet" href="style.css?v=8" />
   <script src="https://w.soundcloud.com/player/api.js" defer></script>
   <script src="script.js?v=8" defer></script>
@@ -80,7 +78,7 @@
       <button type="button" data-lang="en">EN</button>
     </div>
     <button id="floating-audio-toggle" class="ctrl-floating-btn" type="button" data-i18n-label="ui.mute" title="Bật/Tắt âm thanh" aria-label="Bật/Tắt âm thanh">
-      <i id="float-audio-icon" class="fa-solid fa-volume-high"></i>
+      <svg class="ic" id="float-audio-icon" aria-hidden="true" focusable="false"><use href="/icons.svg#s-volume-high"></use></svg>
     </button>
   </div>
 
@@ -106,16 +104,16 @@
 
     <div class="social-cluster intro" style="--i:3">
       <a href="https://www.facebook.com/trivinhnguyenuwu" target="_blank" rel="noopener noreferrer" class="social-circle" title="Facebook" aria-label="Facebook">
-        <i class="fa-brands fa-facebook-f"></i>
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-facebook-f"></use></svg>
       </a>
       <a href="https://discord.com/users/1054712893037355018" target="_blank" rel="noopener noreferrer" class="social-circle" title="Discord" aria-label="Discord">
-        <i class="fa-brands fa-discord"></i>
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-discord"></use></svg>
       </a>
       <button id="copy-email-btn" class="social-circle email-copy-trigger" type="button" data-i18n-label="ui.copyEmail" title="Sao chép Email" aria-label="Sao chép Email">
-        <i class="fa-regular fa-envelope"></i>
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#r-envelope"></use></svg>
       </button>
       <a href="https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar" target="_blank" rel="noopener noreferrer" class="social-circle" title="SoundCloud" aria-label="SoundCloud">
-        <i class="fa-brands fa-soundcloud"></i>
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-soundcloud"></use></svg>
       </a>
     </div>
 
@@ -145,8 +143,8 @@
       </div>
 
       <div class="about-actions-row">
-        <button id="about-contact-btn" type="button" class="about-btn primary"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="about.contact">Gửi tin nhắn</span></button>
-        <a href="https://github.com/amItuff" target="_blank" rel="noopener noreferrer" class="about-btn secondary"><i class="fa-brands fa-github"></i> GitHub</a>
+        <button id="about-contact-btn" type="button" class="about-btn primary"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-paper-plane"></use></svg> <span data-i18n="about.contact">Gửi tin nhắn</span></button>
+        <a href="https://github.com/amItuff" target="_blank" rel="noopener noreferrer" class="about-btn secondary"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-github"></use></svg> GitHub</a>
       </div>
     </div>
 
@@ -156,11 +154,11 @@
       <div class="github-stats-box">
         <div class="github-header">
           <div class="gh-user">
-            <i class="fa-brands fa-github"></i>
+            <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-github"></use></svg>
             <span>@amItuff</span>
           </div>
           <a href="https://github.com/amItuff" target="_blank" rel="noopener noreferrer" class="gh-visit-link">
-            <span data-i18n="gh.view">Xem hồ sơ</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <span data-i18n="gh.view">Xem hồ sơ</span> <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-arrow-up-right-from-square"></use></svg>
           </a>
         </div>
 
@@ -188,27 +186,27 @@
 
       <div class="skills-grid">
         <div class="skill-item">
-          <i class="fa-brands fa-python skill-logo"></i>
+          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#b-python"></use></svg>
           <span class="skill-name">Python / discord.py</span>
         </div>
         <div class="skill-item">
-          <i class="fa-brands fa-js skill-logo"></i>
+          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#b-js"></use></svg>
           <span class="skill-name">JavaScript (ES6+)</span>
         </div>
         <div class="skill-item">
-          <i class="fa-brands fa-html5 skill-logo"></i>
+          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#b-html5"></use></svg>
           <span class="skill-name">HTML5 / CSS3</span>
         </div>
         <div class="skill-item">
-          <i class="fa-solid fa-network-wired skill-logo"></i>
+          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#s-network-wired"></use></svg>
           <span class="skill-name">REST API &amp; Webhooks</span>
         </div>
         <div class="skill-item">
-          <i class="fa-brands fa-git-alt skill-logo"></i>
+          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#b-git-alt"></use></svg>
           <span class="skill-name">Git &amp; GitHub</span>
         </div>
         <div class="skill-item">
-          <i class="fa-solid fa-cloud skill-logo"></i>
+          <svg class="ic skill-logo" aria-hidden="true" focusable="false"><use href="/icons.svg#s-cloud"></use></svg>
           <span class="skill-name">Vercel &amp; DNS Config</span>
         </div>
       </div>
@@ -220,7 +218,7 @@
 
       <ul class="proj-list">
         <li class="proj">
-          <span class="proj-tile" aria-hidden="true"><i class="fa-regular fa-note-sticky"></i></span>
+          <span class="proj-tile" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#r-note-sticky"></use></svg></span>
           <div class="proj-text">
             <h3 class="project-heading">vinhx <span>note</span></h3>
             <p class="project-paragraph" data-i18n="p3.desc">Ghi chú mã hóa ngay trên trình duyệt, chia sẻ bằng một link.</p>
@@ -230,7 +228,7 @@
           </div>
         </li>
         <li class="proj">
-          <span class="proj-tile" aria-hidden="true"><i class="fa-solid fa-arrows-rotate"></i></span>
+          <span class="proj-tile" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-arrows-rotate"></use></svg></span>
           <div class="proj-text">
             <h3 class="project-heading">vinhx <span>convert</span></h3>
             <p class="project-paragraph" data-i18n="p4.desc">Đổi định dạng ảnh, âm thanh, video ngay trên máy, không tải file lên đâu cả.</p>
@@ -240,7 +238,7 @@
           </div>
         </li>
         <li class="proj">
-          <span class="proj-tile" aria-hidden="true"><i class="fa-brands fa-discord"></i></span>
+          <span class="proj-tile" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-discord"></use></svg></span>
           <div class="proj-text">
             <h3 class="project-heading">vinhx <span>hub</span></h3>
             <p class="project-paragraph" data-i18n="p2.desc">Công cụ Discord: làm nhiệm vụ, treo voice 24/7, giả lập giờ chơi, bảo mật tài khoản.</p>
@@ -284,7 +282,7 @@
     <div class="glass-card reveal-card">
       <div class="card-body-left">
         <div class="fb-logo-brand">
-          <i class="fa-brands fa-facebook-f"></i>
+          <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-facebook-f"></use></svg>
         </div>
         <div class="info-block">
           <span class="category-label" data-i18n="fb.label">Mạng xã hội</span>
@@ -298,7 +296,7 @@
     <!-- player -->
     <div class="audio-player-panel reveal-card">
       <div class="disk-container">
-        <img id="disk-image" class="disk-spinner" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="" width="60" height="60" loading="lazy" decoding="async" />
+        <img id="disk-image" class="disk-spinner" src="/disk.svg" alt="" width="60" height="60" loading="lazy" decoding="async" />
         <div class="audio-bars">
           <div class="bar"></div>
           <div class="bar"></div>
@@ -323,15 +321,15 @@
 
         <div class="controls-toolbar">
           <div class="buttons-pack">
-            <button id="ctrl-prev" class="tool-btn" type="button" data-i18n-label="ui.prev" title="Bài trước" aria-label="Bài trước"><i class="fa-solid fa-backward-step"></i></button>
-            <button id="ctrl-play" class="tool-btn play-active" type="button" title="Play/Pause" aria-label="Play/Pause"><i id="ctrl-play-icon" class="fa-solid fa-play"></i></button>
-            <button id="ctrl-next" class="tool-btn" type="button" data-i18n-label="ui.next" title="Bài tiếp theo" aria-label="Bài tiếp theo"><i class="fa-solid fa-forward-step"></i></button>
+            <button id="ctrl-prev" class="tool-btn" type="button" data-i18n-label="ui.prev" title="Bài trước" aria-label="Bài trước"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-backward-step"></use></svg></button>
+            <button id="ctrl-play" class="tool-btn play-active" type="button" title="Play/Pause" aria-label="Play/Pause"><svg class="ic" id="ctrl-play-icon" aria-hidden="true" focusable="false"><use href="/icons.svg#s-play"></use></svg></button>
+            <button id="ctrl-next" class="tool-btn" type="button" data-i18n-label="ui.next" title="Bài tiếp theo" aria-label="Bài tiếp theo"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-forward-step"></use></svg></button>
           </div>
 
           <div class="volume-tool">
-            <i class="fa-solid fa-volume-low"></i>
+            <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-volume-low"></use></svg>
             <input id="vol-range" type="range" class="vol-range" data-i18n-label="ui.volume" aria-label="Âm lượng" min="0" max="100" value="85" />
-            <i class="fa-solid fa-volume-high"></i>
+            <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-volume-high"></use></svg>
           </div>
         </div>
       </div>
@@ -362,7 +360,7 @@
   </section>
 
   <button id="back-to-top-btn" class="back-to-top-btn" type="button" data-i18n-label="ui.top" title="Lên đầu trang" aria-label="Lên đầu trang">
-    <i class="fa-solid fa-chevron-up"></i>
+    <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-chevron-up"></use></svg>
   </button>
 
   <!-- bot features -->
@@ -374,13 +372,13 @@
           <span id="bot-modal-title" data-i18n="bot.title">Tính năng bot Discord</span>
         </div>
         <button id="close-bot-features-btn" type="button" class="bot-modal-close" data-i18n-label="ui.close" title="Đóng" aria-label="Đóng">
-          <i class="fa-solid fa-xmark"></i>
+          <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-xmark"></use></svg>
         </button>
       </div>
 
       <div class="bot-features-list">
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-bolt"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name">Auto Quest</span>
             <span class="feature-desc" data-i18n="f1.desc">Hoàn thành nhiệm vụ Discord và tự động claim quà.</span>
@@ -388,7 +386,7 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-masks-theater"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-masks-theater"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name">Badge Spoofer</span>
             <span class="feature-desc" data-i18n="f2.desc">Tùy chỉnh game &amp; giờ chơi mở khóa huy hiệu, còn lại giữ nguyên hết.</span>
@@ -396,7 +394,7 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-microphone-lines"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name" data-i18n="f3.name">Treo Stream Voice</span>
             <span class="feature-desc" data-i18n="f3.desc">Phát sóng stream thoại 24/7 cày Streaming Badge.</span>
@@ -404,7 +402,7 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-gamepad"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-gamepad"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name">Custom Rich Presence (RPC)</span>
             <span class="feature-desc" data-i18n="f4.desc">Tùy biến ảnh GIF, game, status &amp; các nút bấm tương tác.</span>
@@ -412,7 +410,7 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-gift"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-gift"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name">Auto Giveaway</span>
             <span class="feature-desc" data-i18n="f5.desc">Tự động tham gia giveaway &amp; nhận thông báo khi trúng giải.</span>
@@ -420,7 +418,7 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-shield-halved"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name" data-i18n="f6.name">Huy Hiệu HypeSquad</span>
             <span class="feature-desc" data-i18n="f6.desc">Trực tiếp gắn huy hiệu Bravery, Brilliance, Balance hoặc gỡ badge.</span>
@@ -428,7 +426,7 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-broom"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-broom"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name" data-i18n="f7.name">Sao Lưu &amp; Dọn Dẹp</span>
             <span class="feature-desc" data-i18n="f7.desc">Xuất dữ liệu tài khoản, dọn sạch tin nhắn &amp; server rác.</span>
@@ -436,7 +434,7 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-eye"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-eye"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name" data-i18n="f8.name">Giám Sát &amp; Bảo Mật</span>
             <span class="feature-desc" data-i18n="f8.desc">Kiểm tra phiên đăng nhập &amp; gom nhắc tên tập trung.</span>
@@ -444,7 +442,7 @@
         </div>
 
         <div class="feature-card">
-          <div class="feature-icon"><i class="fa-solid fa-key"></i></div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-key"></use></svg></div>
           <div class="feature-info">
             <span class="feature-name" data-i18n="f9.name">Quản Lý Token</span>
             <span class="feature-desc" data-i18n="f9.desc">Lưu, kiểm tra hoặc xóa token an toàn.</span>
@@ -454,56 +452,58 @@
 
       <div class="bot-modal-footer">
         <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer" class="bot-join-modal-btn">
-          <i class="fa-brands fa-discord"></i> <span data-i18n="bot.join">Vào server Discord</span>
+          <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#b-discord"></use></svg> <span data-i18n="bot.join">Vào server Discord</span>
         </a>
       </div>
     </div>
   </div>
 
-  <!-- contact form -->
+  <!-- contact form: Gmail-style compose window -->
   <button id="open-gmail-modal" class="floating-mail-btn" type="button" data-i18n-label="ui.compose" title="Soạn thư" aria-label="Soạn thư">
-    <i class="fa-solid fa-envelope"></i>
+    <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#r-envelope"></use></svg>
   </button>
 
-  <div id="gmail-modal-container" class="gmail-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="gmail-title">
-    <div id="gmail-popup" class="gmail-popup-wrapper">
-      <div class="gmail-popup-header">
-        <div class="gmail-popup-title">
-          <i class="fa-solid fa-envelope"></i> <span id="gmail-title" data-i18n="mail.title">Gửi tin nhắn</span>
-        </div>
-        <button id="close-gmail-btn" type="button" class="gmail-header-btn" data-i18n-label="ui.close" title="Đóng" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
+  <section id="gmail-modal-container" class="gdock hidden" role="dialog" aria-labelledby="gmail-title">
+    <div class="gd-head">
+      <span id="gmail-title" class="gd-title" data-i18n="mail.title">Tin nhắn mới</span>
+      <div class="gd-head-btns">
+        <button id="gd-min" type="button" class="gd-hbtn" data-i18n-label="mail.min" title="Thu nhỏ" aria-label="Thu nhỏ"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-minus"></use></svg></button>
+        <button id="close-gmail-btn" type="button" class="gd-hbtn" data-i18n-label="ui.close" title="Đóng" aria-label="Đóng"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-xmark"></use></svg></button>
       </div>
-
-      <form id="contact-form" action="https://formspree.io/f/mrppjobo" method="POST" class="gmail-popup-body">
-        <div class="gmail-field">
-          <span class="field-label" data-i18n="mail.to">Đến:</span>
-          <span class="field-val">Vinh</span>
-        </div>
-
-        <label class="gmail-field">
-          <span class="field-label" data-i18n="mail.from">Từ:</span>
-          <input type="email" name="email" required placeholder="Email của bạn..." data-i18n-placeholder="mail.fromPh" class="gmail-input" />
-        </label>
-
-        <label class="gmail-field">
-          <span class="field-label" data-i18n="mail.subject">Tiêu đề:</span>
-          <input type="text" name="subject" required placeholder="Tiêu đề..." data-i18n-placeholder="mail.subjectPh" class="gmail-input" />
-        </label>
-
-        <textarea name="message" required placeholder="Nội dung tin nhắn..." data-i18n-placeholder="mail.bodyPh" data-i18n-label="mail.bodyPh" aria-label="Nội dung tin nhắn" class="gmail-textarea" rows="5"></textarea>
-
-        <div class="gmail-popup-footer">
-          <button type="submit" id="form-submit-btn" class="send-mail-btn">
-            <span data-i18n="mail.send">Gửi</span> <i class="fa-solid fa-paper-plane"></i>
-          </button>
-          <span id="form-status" class="form-status-text" role="status" aria-live="polite"></span>
-        </div>
-      </form>
     </div>
-  </div>
+
+    <form id="contact-form" action="https://formspree.io/f/mrppjobo" method="POST" class="gd-body" novalidate>
+      <div class="gd-row">
+        <span class="gd-label" data-i18n="mail.to">Tới</span>
+        <span class="gd-chip" id="gd-to">Vinh</span>
+      </div>
+      <label class="gd-row">
+        <span class="gd-label" data-i18n="mail.from">Từ</span>
+        <input type="email" name="email" required autocomplete="email" data-i18n-placeholder="mail.fromPh" placeholder="Email của bạn" class="gd-input" />
+      </label>
+      <div class="gd-row">
+        <input type="text" name="subject" required maxlength="150" data-i18n-placeholder="mail.subjectPh" data-i18n-label="mail.subjectPh" placeholder="Tiêu đề" aria-label="Tiêu đề" class="gd-input" />
+      </div>
+      <textarea name="message" required maxlength="5000" data-i18n-placeholder="mail.bodyPh" data-i18n-label="mail.bodyPh" placeholder="Nội dung tin nhắn" aria-label="Nội dung tin nhắn" class="gd-text"></textarea>
+      <input type="text" name="_gotcha" class="gd-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <ul id="gd-files" class="gd-files" aria-live="polite"></ul>
+      <div id="gd-drop" class="gd-drop" hidden data-i18n="mail.drop">Thả ảnh vào đây để đính kèm</div>
+
+      <div class="gd-foot">
+        <button type="submit" id="form-submit-btn" class="gd-send" data-i18n="mail.send">Gửi</button>
+        <button type="button" id="gd-attach" class="gd-tool" data-i18n-label="mail.attach" title="Đính kèm ảnh" aria-label="Đính kèm ảnh"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-paperclip"></use></svg></button>
+        <button type="button" id="gd-photo" class="gd-tool" data-i18n-label="mail.photo" title="Chèn ảnh" aria-label="Chèn ảnh"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#r-image"></use></svg></button>
+        <span id="form-status" class="gd-status" role="status" aria-live="polite"></span>
+        <button type="button" id="gd-nofiles" class="gd-linkbtn" hidden data-i18n="mail.sendNoFiles">Gửi không kèm ảnh</button>
+        <button type="button" id="gd-discard" class="gd-tool gd-discard" data-i18n-label="mail.discard" title="Bỏ thư" aria-label="Bỏ thư"><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-trash"></use></svg></button>
+      </div>
+      <input id="gd-file" type="file" accept="image/*" multiple hidden />
+    </form>
+  </section>
 
   <div class="vn-clock-badge">
-    <i class="fa-regular fa-clock"></i>
+    <svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#r-clock"></use></svg>
     <span id="vn-clock-display">VN (GMT+7) --:--:--</span>
   </div>
 
