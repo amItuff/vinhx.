@@ -40,10 +40,10 @@
       't.noVi': 'Chưa thấy giọng tiếng Việt, đang dùng giọng mặc định nên có thể đọc sai.',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
       'cat.title': 'Kệ sách miễn phí',
-      'cat.sub': 'Các tác phẩm đã hết bản quyền, lấy từ Project Gutenberg và Wikisource. Bấm Thêm vào kệ để đọc ngay trong trang này.',
-      'cat.all': 'Tất cả', 'cat.add': 'Thêm vào kệ', 'cat.page': 'Trang sách', 'cat.wiki': 'Đọc trên Wikisource', 'cat.has': 'Đã có trên kệ',
-      'cat.busy': 'Đang tải', 'cat.manual': 'Trình duyệt chặn tải trực tiếp nên đã mở trang tải EPUB. Tải xong hãy kéo file vào ô phía trên.',
-      'cat.en': 'Sách tiếng Anh',
+      'cat.sub': 'Các tác phẩm đã hết bản quyền, lấy từ Project Gutenberg và Wikisource. Bấm Đọc ngay để mở và đọc ngay trong trang này, số chương theo bản EPUB gốc.',
+      'cat.all': 'Tất cả', 'cat.wiki': 'Đọc trên Wikisource',
+      'cat.busy': 'Đang tải', 'cat.read': 'Đọc ngay', 'cat.cont': 'Đọc tiếp', 'cat.more': 'Xem thêm', 'cat.fail': 'Chưa tải được sách này, hãy thử lại sau.',
+      'tr.on': 'Dịch sang tiếng Việt', 'tr.off': 'Hiện bản gốc', 'tr.none': 'Trình duyệt này chưa có dịch tích hợp. Hãy dùng Chrome hoặc Edge mới, hoặc nhấp chuột phải rồi chọn Dịch sang tiếng Việt.', 'tr.busy': 'Đang dịch', 'tr.fail': 'Chưa dịch được, hãy thử lại.', 'tr.dl': 'Đang tải gói dịch, lần đầu có thể hơi lâu',
       'g.en': 'Văn học Anh – Mỹ', 'g.ru': 'Văn học Nga', 'g.fr': 'Văn học Pháp', 'g.eu': 'Văn học châu Âu', 'g.ancient': 'Cổ điển',
       'g.crime': 'Trinh thám & kinh dị', 'g.kids': 'Phiêu lưu & thiếu nhi', 'g.biz': 'Kinh tế & chứng khoán', 'g.phil': 'Triết học & khoa học', 'g.vi': 'Văn học Việt Nam'
     },
@@ -74,10 +74,10 @@
       't.noVi': 'No Vietnamese voice found, using the default voice which may mispronounce.',
       'ui.close': 'Close', 'ch.untitled': 'Part',
       'cat.title': 'Free bookshelf',
-      'cat.sub': 'Works whose copyright has expired, from Project Gutenberg and Wikisource. Tap Add to shelf to read right on this page.',
-      'cat.all': 'All', 'cat.add': 'Add to shelf', 'cat.page': 'Book page', 'cat.wiki': 'Read on Wikisource', 'cat.has': 'On your shelf',
-      'cat.busy': 'Downloading', 'cat.manual': 'Your browser blocked the direct download, so the EPUB page was opened. When it finishes, drop the file in the box above.',
-      'cat.en': 'English text',
+      'cat.sub': 'Works whose copyright has expired, from Project Gutenberg and Wikisource. Tap Read now to open it right here; chapters follow the original EPUB.',
+      'cat.all': 'All', 'cat.wiki': 'Read on Wikisource',
+      'cat.busy': 'Loading', 'cat.read': 'Read now', 'cat.cont': 'Continue', 'cat.more': 'Show more', 'cat.fail': 'Could not load this book right now, please try again later.',
+      'tr.on': 'Translate to Vietnamese', 'tr.off': 'Show original', 'tr.none': 'This browser has no built-in translation. Use a recent Chrome or Edge, or right-click and choose Translate.', 'tr.busy': 'Translating', 'tr.fail': 'Could not translate, please try again.', 'tr.dl': 'Downloading the translation pack, the first time can take a moment',
       'g.en': 'British & American', 'g.ru': 'Russian', 'g.fr': 'French', 'g.eu': 'Other European', 'g.ancient': 'Classics',
       'g.crime': 'Mystery & horror', 'g.kids': 'Adventure & young readers', 'g.biz': 'Economics & markets', 'g.phil': 'Philosophy & science', 'g.vi': 'Vietnamese literature'
     }
@@ -101,6 +101,7 @@
     document.querySelectorAll('.lang-toggle button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     renderShelf();
     renderCatalog();
+    updateTransUi();
     if (current) { renderChapterLabel(); renderSheets(); updateTtsUi(); }
   }
   document.querySelectorAll('.lang-toggle button').forEach((b) => b.addEventListener('click', () => applyLang(b.dataset.lang)));
@@ -270,7 +271,7 @@
       if (!blocks.length || chars < 40) continue; // covers, empty pages
       chapters.push({ title: ct || '', blocks });
     }
-    return { title, author, chapters };
+    return { title, author, lang: meta('language').slice(0, 2).toLowerCase(), chapters };
   }
 
   function parseTxt(text, fileName) {
@@ -369,6 +370,10 @@
     { q: 'Chí Phèo', g: 'vi', t: 'Chí Phèo', a: 'Nam Cao' }
   ];
   let catFilter = 'all';
+  let catExpanded = false;
+  const CAT_LIMIT = 8;
+  const catBusy = new Set();
+  const coverOf = (it) => `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.small.jpg`;
 
   function renderCatalog() {
     const tabs = $('cat-tabs');
@@ -381,86 +386,92 @@
       b.className = 'ctab';
       b.textContent = k === 'all' ? t('cat.all') : t('g.' + k);
       b.setAttribute('aria-pressed', String(catFilter === k));
-      b.addEventListener('click', () => { catFilter = k; renderCatalog(); });
+      b.addEventListener('click', () => { catFilter = k; catExpanded = false; renderCatalog(); });
       tabs.appendChild(b);
     });
     grid.textContent = '';
-    const have = new Set(books.map((b) => b.fileName));
-    CATALOG.filter((it) => catFilter === 'all' || it.g === catFilter).forEach((it) => {
+    const items = CATALOG.filter((it) => catFilter === 'all' || it.g === catFilter);
+    const shown = catFilter === 'all' && !catExpanded ? items.slice(0, CAT_LIMIT) : items;
+    shown.forEach((it) => {
       const li = document.createElement('li');
-      li.className = 'citem';
+      li.className = 'crow';
       const hue = Array.from(it.t).reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
       const cv = document.createElement('div');
-      cv.className = 'ccover';
+      cv.className = 'cthumb';
       cv.style.setProperty('--h', hue);
-      const fallback = document.createElement('span');
-      fallback.textContent = it.t;
-      cv.appendChild(fallback);
+      cv.textContent = (it.t.match(/\p{L}/u) || ['?'])[0].toUpperCase();
       if (it.id) {
         const img = document.createElement('img');
         img.loading = 'lazy';
         img.decoding = 'async';
         img.alt = '';
-        img.src = `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.medium.jpg`;
-        img.addEventListener('load', () => { fallback.hidden = true; });
-        img.addEventListener('error', () => img.remove());
-        cv.appendChild(img);
+        img.width = 44;
+        img.height = 64;
+        img.src = coverOf(it);
+        img.addEventListener('load', () => { cv.textContent = ''; cv.appendChild(img); });
       }
+      const info = document.createElement('div');
+      info.className = 'cinfo';
       const title = document.createElement('h3');
       title.textContent = lang === 'vi' && it.v ? it.v : it.t;
       const sub = document.createElement('p');
-      sub.className = 'cauthor';
-      sub.textContent = it.a + (it.id ? ' · ' + t('cat.en') : '');
-      const act = document.createElement('div');
-      act.className = 'cact';
+      sub.textContent = it.a + (lang === 'vi' && it.v ? ' · ' + it.t : '');
+      info.append(title, sub);
+      let act;
       if (it.id) {
-        const add = document.createElement('button');
-        add.type = 'button';
-        add.className = 'btn primary';
-        const fname = `pg${it.id}.epub`;
-        if (have.has(fname)) { add.textContent = t('cat.has'); add.disabled = true; }
-        else {
-          add.textContent = t('cat.add');
-          add.addEventListener('click', () => addFromCatalog(it, add));
-        }
-        const pg = document.createElement('a');
-        pg.className = 'btn';
-        pg.href = `https://www.gutenberg.org/ebooks/${it.id}`;
-        pg.target = '_blank';
-        pg.rel = 'noopener noreferrer';
-        pg.textContent = t('cat.page');
-        act.append(add, pg);
+        const mine = books.find((b) => b.fileName === `pg${it.id}.epub`);
+        act = document.createElement('button');
+        act.type = 'button';
+        act.className = 'btn primary';
+        act.disabled = catBusy.has(it.id);
+        act.textContent = catBusy.has(it.id) ? t('cat.busy') + '...' : mine ? t('cat.cont') : t('cat.read');
+        act.addEventListener('click', () => readFromCatalog(it));
       } else {
-        const w = document.createElement('a');
-        w.className = 'btn primary';
-        w.href = `https://vi.wikisource.org/w/index.php?search=${encodeURIComponent(it.q)}`;
-        w.target = '_blank';
-        w.rel = 'noopener noreferrer';
-        w.textContent = t('cat.wiki');
-        act.appendChild(w);
+        act = document.createElement('a');
+        act.className = 'btn';
+        act.href = `https://vi.wikisource.org/w/index.php?search=${encodeURIComponent(it.q)}`;
+        act.target = '_blank';
+        act.rel = 'noopener noreferrer';
+        act.textContent = t('cat.wiki');
       }
-      li.append(cv, title, sub, act);
+      li.append(cv, info, act);
       grid.appendChild(li);
     });
+    if (catFilter === 'all' && !catExpanded && items.length > CAT_LIMIT) {
+      const li = document.createElement('li');
+      li.className = 'cmore';
+      const more = document.createElement('button');
+      more.type = 'button';
+      more.className = 'btn';
+      more.textContent = `${t('cat.more')} (${items.length - CAT_LIMIT})`;
+      more.addEventListener('click', () => { catExpanded = true; renderCatalog(); });
+      li.appendChild(more);
+      grid.appendChild(li);
+    }
   }
 
-  async function addFromCatalog(it, btn) {
-    btn.disabled = true;
-    btn.textContent = t('cat.busy') + '...';
+  async function readFromCatalog(it) {
+    const fname = `pg${it.id}.epub`;
+    const have = books.find((b) => b.fileName === fname);
+    if (have) { openBook(have.id); return; }
+    catBusy.add(it.id);
+    renderCatalog();
     try {
       const ctl = new AbortController();
-      const timer = setTimeout(() => ctl.abort(), 25000);
-      const res = await fetch(`https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}-images-3.epub`, { signal: ctl.signal });
+      const timer = setTimeout(() => ctl.abort(), 30000);
+      const res = await fetch(`/api/book?id=${it.id}`, { signal: ctl.signal });
       clearTimeout(timer);
       if (!res.ok) throw new Error('http');
       const blob = await res.blob();
-      await importFile(new File([blob], `pg${it.id}.epub`, { type: 'application/epub+zip' }));
+      await importFile(new File([blob], fname, { type: 'application/epub+zip' }), { lang: 'en', cover: coverOf(it), v: it.v || '' });
       await loadShelf();
+      const added = books.find((b) => b.fileName === fname);
+      if (added) openBook(added.id);
     } catch (_) {
-      window.open(`https://www.gutenberg.org/ebooks/${it.id}.epub3.images`, '_blank', 'noopener');
-      importMsg.textContent = t('cat.manual');
-      btn.disabled = false;
-      btn.textContent = t('cat.add');
+      showToast(t('cat.fail'));
+    } finally {
+      catBusy.delete(it.id);
+      renderCatalog();
     }
   }
 
@@ -471,7 +482,8 @@
 
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
-  async function importFile(file) {
+  async function importFile(file, meta) {
+    meta = meta || {};
     const name = file.name || 'book';
     const isEpub = /\.epub$/i.test(name);
     const isTxt = /\.txt$/i.test(name);
@@ -485,7 +497,7 @@
       parsed.chapters.forEach((c, i) => { if (!c.title) c.title = `${t('r.chapter')} ${i + 1}`; });
       const sig = `${parsed.title}|${parsed.chapters.length}|${file.size}`;
       if (books.some((b) => b.sig === sig)) { importMsg.textContent = `${parsed.title}: ${t('m.dup')}`; return; }
-      const book = { id: uid(), sig, title: parsed.title, author: parsed.author, kind: isEpub ? 'epub' : 'txt', fileName: name, size: file.size, added: Date.now(), chapters: parsed.chapters };
+      const book = { id: uid(), sig, title: parsed.title, author: parsed.author, kind: isEpub ? 'epub' : 'txt', lang: parsed.lang || meta.lang || '', cover: meta.cover || '', fileName: name, size: file.size, added: Date.now(), chapters: parsed.chapters };
       await putOne('books', book);
       await putOne('files', file, book.id);
       importMsg.textContent = `${t('m.added')}: ${parsed.title}`;
@@ -532,6 +544,11 @@
       const hue = Array.from(b.id).reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
       cover.style.setProperty('--h', hue);
       cover.textContent = (b.title.match(/\p{L}/u) || ['?'])[0].toUpperCase();
+      if (b.cover) {
+        const im = document.createElement('img');
+        im.loading = 'lazy'; im.alt = ''; im.src = b.cover;
+        im.addEventListener('load', () => { cover.textContent = ''; cover.appendChild(im); });
+      }
 
       const info = document.createElement('div');
       info.className = 'binfo';
@@ -618,7 +635,7 @@
   let marks = [];
   let saveTimer = null;
 
-  const prefs = { size: 18, lh: 1.7, theme: 'dark', font: 'sans', rate: 1, voice: '' };
+  const prefs = { size: 18, lh: 1.7, theme: 'dark', font: 'sans', rate: 1, voice: '', trans: false };
   try { Object.assign(prefs, JSON.parse(localStorage.getItem('libPrefs') || '{}')); } catch (_) {}
   const savePrefs = () => { try { localStorage.setItem('libPrefs', JSON.stringify(prefs)); } catch (_) {} };
 
@@ -635,6 +652,73 @@
     if (meta && current) meta.content = { dark: '#0b0c10', sepia: '#f4ecd8', light: '#ffffff' }[prefs.theme];
   }
 
+  // ---- translation: Chrome's on-device Translator API, nothing is sent to our server ----
+  let transOn = false;
+  let trRun = 0;
+  const trCache = {};
+  const translators = {};
+  const trKey = () => current.id + ':' + chIdx;
+  function textOf(i) {
+    const c = transOn && trCache[trKey()];
+    return (c && c[i]) || current.chapters[chIdx].blocks[i].t;
+  }
+  function updateTransUi() {
+    const b = $('r-trans');
+    if (!b) return;
+    const label = t(transOn ? 'tr.off' : 'tr.on');
+    b.setAttribute('aria-pressed', String(transOn));
+    b.setAttribute('aria-label', label);
+    b.title = label;
+  }
+  async function getTranslator(src) {
+    if (!('Translator' in self)) return null;
+    if (translators[src]) return translators[src];
+    const av = await self.Translator.availability({ sourceLanguage: src, targetLanguage: 'vi' });
+    if (av === 'unavailable') return null;
+    if (av !== 'available') showToast(t('tr.dl'));
+    translators[src] = await self.Translator.create({ sourceLanguage: src, targetLanguage: 'vi' });
+    return translators[src];
+  }
+  function stopTrans() { transOn = false; trRun++; updateTransUi(); }
+  async function translateChapter() {
+    const token = trRun;
+    const book = current;
+    const ci = chIdx;
+    const key = trKey();
+    const blocks = book.chapters[ci].blocks;
+    const paint = () => { if (token !== trRun) return; (trCache[key] || []).forEach((v, i) => { const el = page.querySelector(`[data-i="${i}"]`); if (el && v) el.textContent = v; }); };
+    let arr = trCache[key];
+    if (!arr) {
+      let saved = null;
+      try { saved = await getOne('kv', 'tr:' + key); } catch (_) {}
+      if (token !== trRun) return;
+      if (saved && saved.length === blocks.length && saved.every(Boolean)) { trCache[key] = saved; paint(); return; }
+      arr = trCache[key] = new Array(blocks.length).fill('');
+    }
+    let tr;
+    try { tr = await getTranslator((book.lang || 'en').slice(0, 2)); } catch (_) { tr = null; }
+    if (token !== trRun) return;
+    if (!tr) { stopTrans(); showToast(t('tr.none')); renderChapter(ci, scrollFrac()); return; }
+    $('r-chap').textContent = `${t('tr.busy')}...`;
+    for (let i = 0; i < blocks.length; i++) {
+      if (token !== trRun) return;
+      if (arr[i]) continue;
+      try { arr[i] = await tr.translate(blocks[i].t); } catch (_) { if (token === trRun) { stopTrans(); showToast(t('tr.fail')); renderChapter(ci, scrollFrac()); } return; }
+      const el = page.querySelector(`[data-i="${i}"]`);
+      if (el && token === trRun) el.textContent = arr[i];
+    }
+    if (token !== trRun) return;
+    renderChapterLabel();
+    putOne('kv', arr, 'tr:' + key).catch(() => {});
+  }
+  $('r-trans').addEventListener('click', () => {
+    if (!current) return;
+    if (transOn) { stopTrans(); prefs.trans = false; savePrefs(); renderChapter(chIdx, scrollFrac()); return; }
+    if (!('Translator' in self)) { showToast(t('tr.none')); return; }
+    transOn = true; prefs.trans = true; savePrefs(); updateTransUi();
+    renderChapter(chIdx, scrollFrac());
+  });
+
   function renderChapterLabel() {
     if (!current) return;
     $('r-title').textContent = current.title;
@@ -645,18 +729,21 @@
 
   function renderChapter(idx, frac, focusPara) {
     stopSpeech(true);
+    trRun++;
     chIdx = Math.max(0, Math.min(current.chapters.length - 1, idx));
     const ch = current.chapters[chIdx];
     const frag = document.createDocumentFragment();
     ch.blocks.forEach((b, i) => {
       const el = document.createElement(b.h ? 'h2' : 'p');
-      el.textContent = b.t;
+      el.textContent = textOf(i);
       el.dataset.i = String(i);
       frag.appendChild(el);
     });
     page.textContent = '';
     page.appendChild(frag);
+    if (transOn) page.lang = 'vi'; else if (current.lang) page.lang = current.lang; else page.removeAttribute('lang');
     renderChapterLabel();
+    if (transOn) translateChapter();
     markBookmarked();
     requestAnimationFrame(() => {
       if (focusPara != null) {
@@ -705,6 +792,10 @@
     $('shelf').hidden = true;
     $('reader').hidden = false;
     applyPrefs();
+    const isVi = /^vi/.test(book.lang || '');
+    $('r-trans').hidden = isVi;
+    transOn = !!prefs.trans && !isVi && 'Translator' in self;
+    updateTransUi();
     renderChapter(p ? p.ch : 0, p ? p.frac : 0);
     renderSheets();
     history.replaceState(null, '', '#' + id);
@@ -715,6 +806,7 @@
   function closeBook() {
     saveProgress();
     stopSpeech(true);
+    trRun++;
     $('tts').hidden = true;
     current = null;
     document.body.dataset.view = 'shelf';
@@ -918,13 +1010,15 @@
       updateTtsUi();
       return;
     }
-    const chunks = chunksOf(blocks[paraIdx].t);
+    const chunks = chunksOf(textOf(paraIdx));
     if (chunkIdx >= chunks.length) { paraIdx++; chunkIdx = 0; return speakCurrent(); }
 
     highlight(paraIdx);
     const u = new SpeechSynthesisUtterance(chunks[chunkIdx]);
-    const voice = voices.find((v) => v.voiceURI === $('t-voice').value);
-    if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = 'vi-VN';
+    const want = transOn ? 'vi' : (current.lang || '').slice(0, 2).toLowerCase();
+    let voice = voices.find((v) => v.voiceURI === $('t-voice').value);
+    if (want && (!voice || !voice.lang.toLowerCase().startsWith(want))) voice = voices.find((v) => v.lang.toLowerCase().startsWith(want)) || voice;
+    if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = want || 'vi-VN';
     u.rate = Number(prefs.rate);
     u.onend = () => { if (token !== runToken || !speaking) return; chunkIdx++; speakCurrent(); };
     u.onerror = (e) => { if (token !== runToken) return; if (e.error === 'canceled' || e.error === 'interrupted') return; speaking = false; updateTtsUi(); };
