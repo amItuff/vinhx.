@@ -16,16 +16,11 @@
     vi: {
       kicker: 'Thư viện cá nhân',
       title: 'Đọc sách của bạn, nhớ tiến độ, nghe đọc thành tiếng',
-      lead: 'Thêm file EPUB hoặc TXT bạn có quyền dùng. Sách nằm trong trình duyệt của bạn, không tải lên máy chủ.',
-      'drop.title': 'Thả file vào đây hoặc bấm để chọn',
-      'drop.sub': 'Hỗ trợ .epub và .txt (UTF-8)',
-      empty: 'Thư viện đang trống. Hãy thêm sách miễn phí, sách tự viết hoặc sách đã hết thời hạn bản quyền.',
-      'src.title': 'Nơi tìm sách miễn phí hợp pháp',
-      'src.ws': 'tác phẩm đã hết bản quyền', 'src.pg': 'sách công cộng, tải EPUB', 'src.se': 'EPUB biên tập đẹp, miễn phí', 'src.ia': 'kho tư liệu lớn',
-      'src.note': 'Sách còn bản quyền (như truyện của các nhà văn đương đại) hãy mua hoặc mượn từ nhà sách, thư viện.',
-      f1: 'Không tải sách lên máy chủ, mọi thứ lưu trong trình duyệt của bạn',
-      f2: 'Dọn dữ liệu trình duyệt sẽ xóa sách; hãy giữ file gốc hoặc dùng nút Tải về',
-      f3: 'Nghe đọc dùng giọng có sẵn trên thiết bị, cần có giọng tiếng Việt',
+      lead: 'Đọc sách miễn phí ngay trong web: nhớ tiến độ, đánh dấu, dịch tiếng Việt và nghe đọc.',
+      'src.title': 'Nguồn thư viện', 'src.books': 'sách', 'src.pg': 'Kho sách công cộng quốc tế, bản EPUB tiếng Anh', 'src.ws': 'Thư viện mở tiếng Việt, đọc trên Wikisource',
+      'src.note': 'Chỉ gồm tác phẩm đã hết bản quyền.',
+      f1: 'Sách đã mở được lưu trong trình duyệt của bạn',
+      f2: 'Nghe đọc dùng giọng có sẵn trên thiết bị',
       'b.read': 'Đọc', 'b.continue': 'Đọc tiếp', 'b.download': 'Tải về', 'b.delete': 'Xóa', 'b.confirm': 'Bấm lại để xóa',
       'b.chapters': 'chương', 'b.done': 'Đã đọc xong',
       'm.adding': 'Đang thêm', 'm.added': 'Đã thêm', 'm.badType': 'Chỉ nhận .epub và .txt', 'm.bad': 'Không đọc được file này', 'm.noZip': 'Trình duyệt này chưa hỗ trợ đọc EPUB. Hãy dùng Chrome, Edge hoặc Safari mới.',
@@ -34,13 +29,13 @@
       'r.prev': 'Chương trước', 'r.next': 'Chương sau', 'r.chapter': 'Chương',
       'mark.added': 'Đã đánh dấu', 'mark.removed': 'Đã bỏ đánh dấu', 'mark.none': 'Chưa có đánh dấu nào. Bấm biểu tượng đánh dấu để lưu vị trí đang đọc.',
       's.chapters': 'Mục lục', 's.marks': 'Đánh dấu',
-      'aa.size': 'Cỡ chữ', 'aa.lh': 'Giãn dòng', 'aa.theme': 'Nền', 'aa.dark': 'Tối', 'aa.sepia': 'Vàng', 'aa.light': 'Sáng', 'aa.font': 'Kiểu chữ', 'aa.sans': 'Không chân', 'aa.serif': 'Có chân',
-      't.prev': 'Đoạn trước', 't.next': 'Đoạn sau', 't.play': 'Phát', 't.pause': 'Tạm dừng', 't.speed': 'Tốc độ', 't.voice': 'Giọng đọc',
+      'aa.size': 'Cỡ chữ', 'aa.lh': 'Giãn dòng', 'aa.theme': 'Nền', 'aa.book': 'Sách', 'aa.dark': 'Tối', 'aa.sepia': 'Vàng', 'aa.light': 'Sáng', 'aa.font': 'Kiểu chữ', 'aa.sans': 'Không chân', 'aa.serif': 'Có chân',
+      't.prev': 'Đoạn trước', 't.next': 'Đoạn sau', 't.play': 'Phát', 't.pause': 'Tạm dừng', 't.speed': 'Tốc độ', 't.voice': 'Giọng đọc', 't.vol': 'Âm lượng', 't.mode': 'Phạm vi đọc', 't.mpara': 'Một đoạn', 't.mchap': 'Hết chương', 't.mbook': 'Cả sách', 'ch.n': 'chương',
       't.noVoice': 'Thiết bị chưa có giọng đọc. Trên Windows hãy thêm giọng tiếng Việt trong Cài đặt, trên điện thoại kiểm tra cài đặt chuyển văn bản thành giọng nói.',
       't.noVi': 'Chưa thấy giọng tiếng Việt, đang dùng giọng mặc định nên có thể đọc sai.',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
       'cat.title': 'Kệ sách miễn phí',
-      'cat.sub': 'Các tác phẩm đã hết bản quyền, lấy từ Project Gutenberg và Wikisource. Bấm Đọc ngay để mở và đọc ngay trong trang này, số chương theo bản EPUB gốc.',
+      'cat.sub': 'Tác phẩm đã hết bản quyền. Bấm Đọc ngay để mở và đọc ngay trong trang, số chương theo bản gốc.',
       'cat.all': 'Tất cả', 'cat.wiki': 'Đọc trên Wikisource',
       'cat.busy': 'Đang tải', 'cat.read': 'Đọc ngay', 'cat.cont': 'Đọc tiếp', 'cat.more': 'Xem thêm', 'cat.fail': 'Chưa tải được sách này, hãy thử lại sau.',
       'tr.on': 'Dịch sang tiếng Việt', 'tr.off': 'Hiện bản gốc', 'tr.none': 'Trình duyệt này chưa có dịch tích hợp. Hãy dùng Chrome hoặc Edge mới, hoặc nhấp chuột phải rồi chọn Dịch sang tiếng Việt.', 'tr.busy': 'Đang dịch', 'tr.fail': 'Chưa dịch được, hãy thử lại.', 'tr.dl': 'Đang tải gói dịch, lần đầu có thể hơi lâu',
@@ -50,16 +45,11 @@
     en: {
       kicker: 'Personal library',
       title: 'Read your books, keep your place, listen out loud',
-      lead: 'Add EPUB or TXT files you are allowed to use. Books stay in your browser and are never uploaded.',
-      'drop.title': 'Drop files here or click to choose',
-      'drop.sub': 'Supports .epub and .txt (UTF-8)',
-      empty: 'Your library is empty. Add free books, your own writing or works whose copyright has expired.',
-      'src.title': 'Where to find free, legal books',
-      'src.ws': 'works out of copyright', 'src.pg': 'public domain books, EPUB downloads', 'src.se': 'carefully edited free EPUBs', 'src.ia': 'huge archive',
-      'src.note': 'For books still in copyright, please buy or borrow them from a bookshop or library.',
-      f1: 'Books are never uploaded; everything is stored in your browser',
-      f2: 'Clearing browser data removes your books; keep the original file or use Download',
-      f3: 'Listening uses the voices already on your device and needs a matching voice',
+      lead: 'Read free books right on the web: keeps your place, bookmarks, Vietnamese translation and read-aloud.',
+      'src.title': 'Library sources', 'src.books': 'books', 'src.pg': 'International public-domain library, English EPUBs', 'src.ws': 'Open Vietnamese library, read on Wikisource',
+      'src.note': 'Only works whose copyright has expired.',
+      f1: 'Books you open are stored in your browser',
+      f2: 'Listening uses the voices already on your device',
       'b.read': 'Read', 'b.continue': 'Continue', 'b.download': 'Download', 'b.delete': 'Delete', 'b.confirm': 'Click again to delete',
       'b.chapters': 'chapters', 'b.done': 'Finished',
       'm.adding': 'Adding', 'm.added': 'Added', 'm.badType': 'Only .epub and .txt are accepted', 'm.bad': 'This file could not be read', 'm.noZip': 'This browser cannot read EPUB yet. Use a recent Chrome, Edge or Safari.',
@@ -68,13 +58,13 @@
       'r.prev': 'Previous chapter', 'r.next': 'Next chapter', 'r.chapter': 'Chapter',
       'mark.added': 'Bookmarked', 'mark.removed': 'Bookmark removed', 'mark.none': 'No bookmarks yet. Tap the bookmark icon to save where you are.',
       's.chapters': 'Contents', 's.marks': 'Bookmarks',
-      'aa.size': 'Text size', 'aa.lh': 'Line spacing', 'aa.theme': 'Theme', 'aa.dark': 'Dark', 'aa.sepia': 'Sepia', 'aa.light': 'Light', 'aa.font': 'Typeface', 'aa.sans': 'Sans', 'aa.serif': 'Serif',
-      't.prev': 'Previous paragraph', 't.next': 'Next paragraph', 't.play': 'Play', 't.pause': 'Pause', 't.speed': 'Speed', 't.voice': 'Voice',
+      'aa.size': 'Text size', 'aa.lh': 'Line spacing', 'aa.theme': 'Theme', 'aa.book': 'Book', 'aa.dark': 'Dark', 'aa.sepia': 'Sepia', 'aa.light': 'Light', 'aa.font': 'Typeface', 'aa.sans': 'Sans', 'aa.serif': 'Serif',
+      't.prev': 'Previous paragraph', 't.next': 'Next paragraph', 't.play': 'Play', 't.pause': 'Pause', 't.speed': 'Speed', 't.voice': 'Voice', 't.vol': 'Volume', 't.mode': 'Read range', 't.mpara': 'One paragraph', 't.mchap': 'To chapter end', 't.mbook': 'Whole book', 'ch.n': 'chapters',
       't.noVoice': 'This device has no speech voices. Add one in system settings (text-to-speech).',
       't.noVi': 'No Vietnamese voice found, using the default voice which may mispronounce.',
       'ui.close': 'Close', 'ch.untitled': 'Part',
       'cat.title': 'Free bookshelf',
-      'cat.sub': 'Works whose copyright has expired, from Project Gutenberg and Wikisource. Tap Read now to open it right here; chapters follow the original EPUB.',
+      'cat.sub': 'Works out of copyright. Tap Read now to open it here; chapters follow the original.',
       'cat.all': 'All', 'cat.wiki': 'Read on Wikisource',
       'cat.busy': 'Loading', 'cat.read': 'Read now', 'cat.cont': 'Continue', 'cat.more': 'Show more', 'cat.fail': 'Could not load this book right now, please try again later.',
       'tr.on': 'Translate to Vietnamese', 'tr.off': 'Show original', 'tr.none': 'This browser has no built-in translation. Use a recent Chrome or Edge, or right-click and choose Translate.', 'tr.busy': 'Translating', 'tr.fail': 'Could not translate, please try again.', 'tr.dl': 'Downloading the translation pack, the first time can take a moment',
@@ -101,6 +91,7 @@
     document.querySelectorAll('.lang-toggle button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     renderShelf();
     renderCatalog();
+    renderSources();
     updateTransUi();
     if (current) { renderChapterLabel(); renderSheets(); updateTtsUi(); }
   }
@@ -450,6 +441,27 @@
     }
   }
 
+  function renderSources() {
+    const box = $('src-list');
+    if (!box) return;
+    box.textContent = '';
+    const rows = [
+      ['Project Gutenberg', 'https://www.gutenberg.org/', CATALOG.filter((i) => i.id).length, 'src.pg'],
+      ['Wikisource', 'https://vi.wikisource.org/', CATALOG.filter((i) => !i.id).length, 'src.ws']
+    ];
+    rows.forEach(([name, href, n, desc]) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = name;
+      const c = document.createElement('b');
+      c.textContent = ` ${n} ${t('src.books')}`;
+      const d = document.createElement('span');
+      d.textContent = t(desc);
+      li.append(a, c, d);
+      box.appendChild(li);
+    });
+  }
+
   async function readFromCatalog(it) {
     const fname = `pg${it.id}.epub`;
     const have = books.find((b) => b.fileName === fname);
@@ -507,11 +519,6 @@
     }
   }
 
-  async function addFiles(list) {
-    for (const f of Array.from(list)) await importFile(f);
-    await loadShelf();
-  }
-
   async function loadShelf() {
     try { books = (await allBooks()).sort((a, b) => b.added - a.added); } catch (_) { books = []; }
     progressMap = {};
@@ -532,11 +539,12 @@
   function renderShelf() {
     const list = $('books');
     list.textContent = '';
-    $('empty').hidden = books.length > 0;
     books.forEach((b) => {
       const pct = percentOf(b);
       const li = document.createElement('li');
       li.className = 'book';
+      li.style.setProperty('--h', Array.from(b.id).reduce((n, c) => n + c.charCodeAt(0), 0) % 360);
+      if (b.cover) { const bg = document.createElement('div'); bg.className = 'bbg'; bg.style.backgroundImage = `url("${b.cover}")`; li.appendChild(bg); }
 
       const cover = document.createElement('div');
       cover.className = 'cover';
@@ -616,16 +624,6 @@
     } catch (_) { /* ignore */ }
   }
 
-  const drop = $('drop');
-  const input = $('file');
-  input.addEventListener('change', () => { addFiles(input.files); input.value = ''; });
-  drop.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
-  ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('over'); }));
-  ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
-  drop.addEventListener('drop', (e) => { if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files); });
-  window.addEventListener('dragover', (e) => e.preventDefault());
-  window.addEventListener('drop', (e) => { if (!drop.contains(e.target)) e.preventDefault(); });
-
   // ---------------------------------------------------------------------------
   // Reader
   // ---------------------------------------------------------------------------
@@ -635,7 +633,7 @@
   let marks = [];
   let saveTimer = null;
 
-  const prefs = { size: 18, lh: 1.7, theme: 'dark', font: 'sans', rate: 1, voice: '', trans: false };
+  const prefs = { size: 18, lh: 1.7, theme: 'book', font: 'serif', rate: 1, voice: '', trans: false, vol: 1, mode: 'book' };
   try { Object.assign(prefs, JSON.parse(localStorage.getItem('libPrefs') || '{}')); } catch (_) {}
   const savePrefs = () => { try { localStorage.setItem('libPrefs', JSON.stringify(prefs)); } catch (_) {} };
 
@@ -649,7 +647,7 @@
     document.querySelectorAll('#aa-theme button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.theme === prefs.theme)));
     document.querySelectorAll('#aa-font button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === prefs.font)));
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta && current) meta.content = { dark: '#0b0c10', sepia: '#f4ecd8', light: '#ffffff' }[prefs.theme];
+    if (meta && current) meta.content = { book: '#f6efdf', dark: '#0b0c10', sepia: '#f4ecd8', light: '#ffffff' }[prefs.theme];
   }
 
   // ---- translation: Chrome's on-device Translator API, nothing is sent to our server ----
@@ -719,6 +717,23 @@
     renderChapter(chIdx, scrollFrac());
   });
 
+  function bannerEl(b) {
+    const d = document.createElement('header');
+    d.className = 'rbanner';
+    d.style.setProperty('--h', Array.from(b.id).reduce((n, c) => n + c.charCodeAt(0), 0) % 360);
+    if (b.cover) { const bg = document.createElement('div'); bg.className = 'bbg'; bg.style.backgroundImage = `url("${b.cover}")`; d.appendChild(bg); }
+    const th = document.createElement('div');
+    th.className = 'rb-cover';
+    th.textContent = (b.title.match(/\p{L}/u) || ['?'])[0].toUpperCase();
+    if (b.cover) { const im = document.createElement('img'); im.alt = ''; im.src = b.cover; im.addEventListener('load', () => { th.textContent = ''; th.appendChild(im); }); }
+    const tx = document.createElement('div');
+    const h = document.createElement('p'); h.className = 'rb-title'; h.textContent = b.title;
+    const m = document.createElement('p'); m.className = 'rb-meta'; m.textContent = `${b.author ? b.author + ' · ' : ''}${b.chapters.length} ${t('ch.n')}`;
+    tx.append(h, m);
+    d.append(th, tx);
+    return d;
+  }
+
   function renderChapterLabel() {
     if (!current) return;
     $('r-title').textContent = current.title;
@@ -740,6 +755,7 @@
       frag.appendChild(el);
     });
     page.textContent = '';
+    if (chIdx === 0) page.appendChild(bannerEl(current));
     page.appendChild(frag);
     if (transOn) page.lang = 'vi'; else if (current.lang) page.lang = current.lang; else page.removeAttribute('lang');
     renderChapterLabel();
@@ -980,6 +996,12 @@
     $('r-listen').setAttribute('aria-pressed', String(!$('tts').hidden));
     $('t-rate-val').textContent = Number(prefs.rate).toFixed(1) + '×';
     $('t-rate').value = prefs.rate;
+    $('t-vol').value = prefs.vol;
+    $('t-vol-val').textContent = Math.round(prefs.vol * 100) + '%';
+    const mode = $('t-mode');
+    if (mode.options.length !== 3) { mode.textContent = ''; ['para', 'chapter', 'book'].forEach((k) => mode.appendChild(new Option('', k))); }
+    ['t.mpara', 't.mchap', 't.mbook'].forEach((k, i) => { mode.options[i].textContent = t(k); });
+    mode.value = prefs.mode;
   }
 
   function highlight(i) {
@@ -996,8 +1018,8 @@
     const token = ++runToken;
     synth.cancel();
     const blocks = current.chapters[chIdx].blocks;
-    if (paraIdx >= blocks.length) { // chapter finished: continue with the next one
-      if (chIdx + 1 < current.chapters.length) {
+    if (paraIdx >= blocks.length) { // chapter finished
+      if (prefs.mode === 'book' && chIdx + 1 < current.chapters.length) {
         renderChapter(chIdx + 1, 0);
         window.scrollTo(0, 0);
         saveProgress();
@@ -1007,11 +1029,17 @@
         return speakCurrent();
       }
       speaking = false;
+      paraIdx = 0;
+      chunkIdx = 0;
       updateTtsUi();
       return;
     }
     const chunks = chunksOf(textOf(paraIdx));
-    if (chunkIdx >= chunks.length) { paraIdx++; chunkIdx = 0; return speakCurrent(); }
+    if (chunkIdx >= chunks.length) {
+      paraIdx++; chunkIdx = 0;
+      if (prefs.mode === 'para') { speaking = false; page.querySelectorAll('.reading').forEach((e) => e.classList.remove('reading')); updateTtsUi(); return; }
+      return speakCurrent();
+    }
 
     highlight(paraIdx);
     const u = new SpeechSynthesisUtterance(chunks[chunkIdx]);
@@ -1020,6 +1048,7 @@
     if (want && (!voice || !voice.lang.toLowerCase().startsWith(want))) voice = voices.find((v) => v.lang.toLowerCase().startsWith(want)) || voice;
     if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = want || 'vi-VN';
     u.rate = Number(prefs.rate);
+    u.volume = Number(prefs.vol);
     u.onend = () => { if (token !== runToken || !speaking) return; chunkIdx++; speakCurrent(); };
     u.onerror = (e) => { if (token !== runToken) return; if (e.error === 'canceled' || e.error === 'interrupted') return; speaking = false; updateTtsUi(); };
     synth.speak(u);
@@ -1062,6 +1091,9 @@
     updateTtsUi();
   });
   $('t-rate').addEventListener('change', () => { if (speaking) speakCurrent(); }); // apply the new speed from the current sentence
+  $('t-vol').addEventListener('input', (e) => { prefs.vol = Number(e.target.value); savePrefs(); updateTtsUi(); });
+  $('t-vol').addEventListener('change', () => { if (speaking) speakCurrent(); });
+  $('t-mode').addEventListener('change', (e) => { prefs.mode = e.target.value; savePrefs(); });
   $('t-voice').addEventListener('change', () => { prefs.voice = $('t-voice').value; savePrefs(); if (speaking) speakCurrent(); });
 
   // tap a paragraph while the listening bar is open to read from there

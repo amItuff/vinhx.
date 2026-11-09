@@ -5,16 +5,9 @@
 .lib .hint { color: var(--sub); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
-.drop {
-  display: grid; justify-items: center; gap: 6px; padding: 24px 16px; text-align: center;
-  border: 1.5px dashed rgba(255, 255, 255, 0.18); border-radius: 14px; background: rgba(255, 255, 255, 0.02);
-  color: var(--sub); cursor: pointer; transition: border-color 0.2s, background 0.2s;
-}
-.drop strong { color: #fff; font-size: 0.9rem; font-weight: 600; }
-.drop:hover, .drop.over, .drop:focus-visible { border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.05); }
 
 .books { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
-.book { display: grid; grid-template-columns: 56px 1fr; gap: 6px 14px; padding: 12px; border-radius: 13px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.025); }
+.book { position: relative; overflow: hidden; isolation: isolate; display: grid; grid-template-columns: 56px 1fr; gap: 6px 14px; padding: 12px; border-radius: 13px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.025); }
 .cover {
   grid-row: 1 / span 2; width: 56px; height: 78px; border-radius: 6px 9px 9px 6px; display: grid; place-items: center;
   font-family: var(--font-display); font-size: 1.7rem; font-weight: 600; color: rgba(255, 255, 255, 0.9);
@@ -143,3 +136,36 @@ body[data-view="read"] .seg button[aria-pressed="true"] { background: var(--rfg)
 
 .cover { overflow: hidden; }
 .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* banners: blurred cover behind the book card and the reader header */
+.bbg { position: absolute; inset: -20px; z-index: -1; background-size: cover; background-position: center; filter: blur(22px) saturate(1.2); opacity: 0.38; transform: scale(1.1); }
+.book::before, .rbanner::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(110deg, hsl(var(--h) 34% 18% / 0.9), hsl(var(--h) 30% 10% / 0.55)); }
+.book .binfo h3, .book .bmeta { text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4); }
+.rbanner { position: relative; overflow: hidden; isolation: isolate; display: flex; align-items: center; gap: 16px; margin: -24px -20px 28px; padding: 22px 20px; color: #fff; }
+.rb-cover { flex: none; width: 62px; height: 90px; border-radius: 3px 7px 7px 3px; overflow: hidden; display: grid; place-items: center; font: 600 1.8rem var(--font-display); background: hsl(var(--h) 35% 24%); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 2px 0 0 rgba(0, 0, 0, 0.3); }
+.rb-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.page p.rb-title { margin: 0; text-indent: 0; text-align: left; font: 600 1.15em/1.25 var(--font-display); letter-spacing: -0.01em; }
+.page p.rb-meta { margin: 4px 0 0; text-indent: 0; text-align: left; font-size: 0.78em; opacity: 0.75; }
+@media (max-width: 560px) { .rbanner { margin: -18px -16px 24px; padding: 18px 16px; } }
+
+/* "Book" theme: warm paper, serif text, paragraph indents, drop cap */
+body[data-theme="book"] { --rbg: #f6efdf; --rfg: #3a2e21; --rsub: #85745c; --rline: rgba(58, 46, 33, 0.16); --rmark: rgba(196, 138, 30, 0.26); --rread: rgba(58, 46, 33, 0.09); --rpanel: #ece2cb; }
+body[data-view="read"][data-theme="book"] { background: #e4d9c0; color-scheme: light; }
+body[data-theme="book"] .page { background: var(--rbg); text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+body[data-theme="book"] .page p { margin: 0 0 0.2em; text-indent: 1.5em; }
+body[data-theme="book"] .page h2 { text-align: center; font-weight: 600; margin: 1.6em 0 1.1em; }
+body[data-theme="book"] .page h2::after { content: '\2766'; display: block; margin-top: 0.4em; font-size: 0.7em; opacity: 0.45; }
+body[data-theme="book"] .page h2 + p { text-indent: 0; }
+body[data-theme="book"] .page h2 + p::first-letter { float: left; font-family: var(--font-display); font-size: 3.2em; line-height: 0.85; padding: 0.06em 0.1em 0 0; color: #8a5a1f; }
+body[data-theme="book"] .page p.rb-title, body[data-theme="book"] .page p.rb-meta { text-indent: 0; }
+body[data-theme="book"] .page .marked, body[data-theme="book"] .page .reading { text-indent: 1.5em; }
+@media (min-width: 760px) {
+  body[data-view="read"][data-theme="book"] .page { margin: 22px auto 0; padding: 24px 56px 56px; border-radius: 6px; box-shadow: 0 10px 40px rgba(60, 40, 10, 0.18), 0 0 0 1px var(--rline); overflow: hidden; }
+  body[data-view="read"][data-theme="book"] .rbanner { margin: -24px -56px 32px; padding: 26px 56px; }
+  body[data-view="read"][data-theme="book"] .rbar { background: var(--rbg); }
+}
+body[data-view="read"] .page { animation: pageIn 0.35s ease both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { body[data-view="read"] .page { animation: none; } }
+
+.tts select.mode { width: auto; flex: none; max-width: 42%; }

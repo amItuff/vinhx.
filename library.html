@@ -18,10 +18,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/note.css?v=4" />
-  <link rel="stylesheet" href="/library.css?v=3" />
-  <script src="/library.js?v=3" defer></script>
+  <link rel="stylesheet" href="/library.css?v=4" />
+  <script src="/library.js?v=4" defer></script>
 </head>
-<body data-view="shelf" data-theme="dark">
+<body data-view="shelf" data-theme="book">
   <header class="bar">
     <a class="brand" href="/">vinhx<span>/library</span></a>
     <div class="lang-toggle" role="group" aria-label="Language">
@@ -34,18 +34,11 @@
   <main id="shelf" class="lib">
     <p class="kicker" data-i18n="kicker">Thư viện cá nhân</p>
     <h1 data-i18n="title">Đọc sách của bạn, nhớ tiến độ, nghe đọc thành tiếng</h1>
-    <p class="lead" data-i18n="lead">Thêm file EPUB hoặc TXT bạn có quyền dùng. Sách nằm trong trình duyệt của bạn, không tải lên máy chủ.</p>
+    <p class="lead" data-i18n="lead">Đọc sách miễn phí ngay trong web: nhớ tiến độ, đánh dấu, dịch tiếng Việt và nghe đọc.</p>
 
-    <label id="drop" class="drop" tabindex="0">
-      <input id="file" type="file" accept=".epub,.txt,application/epub+zip,text/plain" multiple hidden />
-      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
-      <strong data-i18n="drop.title">Thả file vào đây hoặc bấm để chọn</strong>
-      <span class="small" data-i18n="drop.sub">Hỗ trợ .epub và .txt (UTF-8)</span>
-    </label>
     <p id="import-msg" class="hint" role="status" aria-live="polite"></p>
 
     <ul id="books" class="books"></ul>
-    <p id="empty" class="empty" data-i18n="empty" hidden>Thư viện đang trống. Hãy thêm sách miễn phí, sách tự viết hoặc sách đã hết thời hạn bản quyền.</p>
 
     <section class="cat" id="catalog">
       <h2 data-i18n="cat.title">Kệ sách miễn phí</h2>
@@ -55,20 +48,14 @@
     </section>
 
     <section class="sources">
-      <h2 data-i18n="src.title">Nơi tìm sách miễn phí hợp pháp</h2>
-      <ul>
-        <li><a href="https://vi.wikisource.org/" target="_blank" rel="noopener noreferrer">Wikisource tiếng Việt</a> <span data-i18n="src.ws">tác phẩm đã hết bản quyền</span></li>
-        <li><a href="https://www.gutenberg.org/" target="_blank" rel="noopener noreferrer">Project Gutenberg</a> <span data-i18n="src.pg">sách công cộng, tải EPUB</span></li>
-        <li><a href="https://standardebooks.org/" target="_blank" rel="noopener noreferrer">Standard Ebooks</a> <span data-i18n="src.se">EPUB biên tập đẹp, miễn phí</span></li>
-        <li><a href="https://archive.org/" target="_blank" rel="noopener noreferrer">Internet Archive</a> <span data-i18n="src.ia">kho tư liệu lớn</span></li>
-      </ul>
-      <p class="small" data-i18n="src.note">Sách còn bản quyền (như truyện của các nhà văn đương đại) hãy mua hoặc mượn từ nhà sách, thư viện.</p>
+      <h2 data-i18n="src.title">Nguồn thư viện</h2>
+      <ul id="src-list"></ul>
+      <p class="small" data-i18n="src.note">Chỉ gồm tác phẩm đã hết bản quyền.</p>
     </section>
 
     <ul class="facts">
-      <li data-i18n="f1">Không tải sách lên máy chủ, mọi thứ lưu trong trình duyệt của bạn</li>
-      <li data-i18n="f2">Dọn dữ liệu trình duyệt sẽ xóa sách; hãy giữ file gốc hoặc dùng nút Tải về</li>
-      <li data-i18n="f3">Nghe đọc dùng giọng có sẵn trên thiết bị, cần có giọng tiếng Việt</li>
+      <li data-i18n="f1">Sách đã mở được lưu trong trình duyệt của bạn</li>
+      <li data-i18n="f2">Nghe đọc dùng giọng có sẵn trên thiết bị</li>
     </ul>
   </main>
 
@@ -105,6 +92,12 @@
           <input id="t-rate" type="range" min="0.5" max="2" step="0.1" value="1" data-i18n-label="t.speed" aria-label="Tốc độ đọc" />
         </label>
         <button id="t-close" class="icon-btn" type="button" data-i18n-label="ui.close" aria-label="Đóng" title="Đóng"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="tts-row">
+        <label class="speed"><span data-i18n="t.vol">Âm lượng</span> <b id="t-vol-val">100%</b>
+          <input id="t-vol" type="range" min="0" max="1" step="0.05" value="1" data-i18n-label="t.vol" aria-label="Âm lượng" />
+        </label>
+        <select id="t-mode" class="mode" data-i18n-label="t.mode" aria-label="Phạm vi đọc"></select>
       </div>
       <div class="tts-row">
         <select id="t-voice" data-i18n-label="t.voice" aria-label="Giọng đọc"></select>
@@ -149,6 +142,7 @@
         <div>
           <span class="fl" data-i18n="aa.theme">Nền</span>
           <div class="seg" id="aa-theme" role="group">
+            <button type="button" data-theme="book" data-i18n="aa.book">Sách</button>
             <button type="button" data-theme="dark" data-i18n="aa.dark">Tối</button>
             <button type="button" data-theme="sepia" data-i18n="aa.sepia">Vàng</button>
             <button type="button" data-theme="light" data-i18n="aa.light">Sáng</button>
