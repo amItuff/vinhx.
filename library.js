@@ -17,7 +17,7 @@
       kicker: 'Thư viện cá nhân',
       title: 'Đọc sách của bạn, nhớ tiến độ, nghe đọc thành tiếng',
       lead: 'Đọc sách miễn phí ngay trong web: nhớ tiến độ, đánh dấu, dịch tiếng Việt và nghe đọc.',
-      'src.title': 'Nguồn thư viện', 'src.books': 'sách', 'src.pg': 'Kho sách công cộng quốc tế, bản EPUB tiếng Anh', 'src.se': 'Bản EPUB biên tập kỹ, mã nguồn mở trên GitHub', 'src.ws': 'Thư viện mở tiếng Việt, đọc trên Wikisource',
+      'src.title': 'Nguồn thư viện', 'src.books': 'sách', 'src.pg': 'Kho sách công cộng quốc tế, bản EPUB tiếng Anh', 'src.gh': 'Bản sao Gutenberg trên GitHub, nơi web lấy và chia chương sẵn', 'src.ws': 'Thư viện mở tiếng Việt, đọc trên Wikisource',
       'src.note': 'Chỉ gồm tác phẩm đã hết bản quyền.',
       f1: 'Sách đã mở được lưu trong trình duyệt của bạn',
       f2: 'Nghe đọc dùng giọng có sẵn trên thiết bị',
@@ -32,7 +32,7 @@
       'aa.size': 'Cỡ chữ', 'aa.lh': 'Giãn dòng', 'aa.theme': 'Nền', 'aa.book': 'Sách', 'aa.dark': 'Tối', 'aa.sepia': 'Vàng', 'aa.light': 'Sáng', 'aa.font': 'Kiểu chữ', 'aa.sans': 'Không chân', 'aa.serif': 'Có chân',
       't.prev': 'Đoạn trước', 't.next': 'Đoạn sau', 't.play': 'Phát', 't.pause': 'Tạm dừng', 't.speed': 'Tốc độ', 't.voice': 'Giọng đọc', 't.vol': 'Âm lượng', 't.mode': 'Phạm vi đọc', 't.mpara': 'Một đoạn', 't.mchap': 'Hết chương', 't.mbook': 'Cả sách', 'ch.n': 'chương',
       't.noVoice': 'Thiết bị chưa có giọng đọc. Trên Windows hãy thêm giọng tiếng Việt trong Cài đặt, trên điện thoại kiểm tra cài đặt chuyển văn bản thành giọng nói.',
-      't.noVi': 'Chưa thấy giọng tiếng Việt, đang dùng giọng mặc định nên có thể đọc sai.',
+      't.noVi': 'Máy chưa có giọng tiếng Việt. Trên Windows: Cài đặt > Thời gian và ngôn ngữ > Giọng nói; trên Android: cài Google Text-to-speech.', 't.noEn': 'Máy chưa có giọng tiếng Anh.', 't.using': 'Đang dùng', 't.vi': 'Giọng Việt', 't.en': 'Giọng Anh',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
       'cat.title': 'Kệ sách miễn phí',
       'cat.sub': 'Tác phẩm đã hết bản quyền. Bấm Đọc ngay để mở và đọc ngay trong trang, số chương theo bản gốc.',
@@ -46,7 +46,7 @@
       kicker: 'Personal library',
       title: 'Read your books, keep your place, listen out loud',
       lead: 'Read free books right on the web: keeps your place, bookmarks, Vietnamese translation and read-aloud.',
-      'src.title': 'Library sources', 'src.books': 'books', 'src.pg': 'International public-domain library, English EPUBs', 'src.se': 'Carefully edited EPUBs, open source on GitHub', 'src.ws': 'Open Vietnamese library, read on Wikisource',
+      'src.title': 'Library sources', 'src.books': 'books', 'src.pg': 'International public-domain library, English EPUBs', 'src.gh': 'Gutenberg mirror on GitHub; the site takes the text from here and splits chapters ahead of time', 'src.ws': 'Open Vietnamese library, read on Wikisource',
       'src.note': 'Only works whose copyright has expired.',
       f1: 'Books you open are stored in your browser',
       f2: 'Listening uses the voices already on your device',
@@ -61,7 +61,7 @@
       'aa.size': 'Text size', 'aa.lh': 'Line spacing', 'aa.theme': 'Theme', 'aa.book': 'Book', 'aa.dark': 'Dark', 'aa.sepia': 'Sepia', 'aa.light': 'Light', 'aa.font': 'Typeface', 'aa.sans': 'Sans', 'aa.serif': 'Serif',
       't.prev': 'Previous paragraph', 't.next': 'Next paragraph', 't.play': 'Play', 't.pause': 'Pause', 't.speed': 'Speed', 't.voice': 'Voice', 't.vol': 'Volume', 't.mode': 'Read range', 't.mpara': 'One paragraph', 't.mchap': 'To chapter end', 't.mbook': 'Whole book', 'ch.n': 'chapters',
       't.noVoice': 'This device has no speech voices. Add one in system settings (text-to-speech).',
-      't.noVi': 'No Vietnamese voice found, using the default voice which may mispronounce.',
+      't.noVi': 'No Vietnamese voice on this device. Add one in your system speech settings.', 't.noEn': 'No English voice on this device.', 't.using': 'Using', 't.vi': 'Vietnamese voice', 't.en': 'English voice',
       'ui.close': 'Close', 'ch.untitled': 'Part',
       'cat.title': 'Free bookshelf',
       'cat.sub': 'Works out of copyright. Tap Read now to open it here; chapters follow the original.',
@@ -314,36 +314,36 @@
   // (cover and EPUB come from gutenberg.org); q = Vietnamese Wikisource search for Vietnamese works.
   const CATEGORIES = ['en', 'ru', 'fr', 'eu', 'ancient', 'crime', 'kids', 'biz', 'phil', 'vi'];
   const CATALOG = [
-    // g = category, id = Project Gutenberg number, se = Standard Ebooks path (preferred when present), q = Wikisource search
-    { id: 1342, se: 'jane-austen/pride-and-prejudice', g: 'en', t: 'Pride and Prejudice', v: 'Kiêu hãnh và định kiến', a: 'Jane Austen' },
-    { id: 158, se: 'jane-austen/emma', g: 'en', t: 'Emma', a: 'Jane Austen' },
+    // g = category, id = Project Gutenberg number (text prepared in /books/<id>.json.gz), q = Wikisource search
+    { id: 1342, g: 'en', t: 'Pride and Prejudice', v: 'Kiêu hãnh và định kiến', a: 'Jane Austen' },
+    { id: 158, g: 'en', t: 'Emma', a: 'Jane Austen' },
     { id: 161, g: 'en', t: 'Sense and Sensibility', v: 'Lý trí và tình cảm', a: 'Jane Austen' },
     { id: 105, g: 'en', t: 'Persuasion', a: 'Jane Austen' },
-    { id: 1260, se: 'charlotte-bronte/jane-eyre', g: 'en', t: 'Jane Eyre', a: 'Charlotte Brontë' },
+    { id: 1260, g: 'en', t: 'Jane Eyre', a: 'Charlotte Brontë' },
     { id: 768, g: 'en', t: 'Wuthering Heights', v: 'Đồi gió hú', a: 'Emily Brontë' },
     { id: 1400, g: 'en', t: 'Great Expectations', v: 'Những kỳ vọng lớn lao', a: 'Charles Dickens' },
-    { id: 98, se: 'charles-dickens/a-tale-of-two-cities', g: 'en', t: 'A Tale of Two Cities', v: 'Chuyện hai thành phố', a: 'Charles Dickens' },
-    { id: 730, se: 'charles-dickens/oliver-twist', g: 'en', t: 'Oliver Twist', a: 'Charles Dickens' },
+    { id: 98, g: 'en', t: 'A Tale of Two Cities', v: 'Chuyện hai thành phố', a: 'Charles Dickens' },
+    { id: 730, g: 'en', t: 'Oliver Twist', a: 'Charles Dickens' },
     { id: 46, g: 'en', t: 'A Christmas Carol', v: 'Bài ca Giáng sinh', a: 'Charles Dickens' },
-    { se: 'thomas-hardy/tess-of-the-durbervilles', g: 'en', t: "Tess of the d'Urbervilles", a: 'Thomas Hardy' },
+    { id: 110, g: 'en', t: "Tess of the d'Urbervilles", a: 'Thomas Hardy' },
     { id: 145, g: 'en', t: 'Middlemarch', a: 'George Eliot' },
     { id: 2701, g: 'en', t: 'Moby-Dick', v: 'Cá voi trắng', a: 'Herman Melville' },
     { id: 25344, g: 'en', t: 'The Scarlet Letter', v: 'Chữ A đỏ', a: 'Nathaniel Hawthorne' },
     { id: 64317, g: 'en', t: 'The Great Gatsby', v: 'Gatsby vĩ đại', a: 'F. Scott Fitzgerald' },
     { id: 76, g: 'en', t: 'Adventures of Huckleberry Finn', a: 'Mark Twain' },
-    { se: 'jack-london/the-call-of-the-wild', g: 'en', t: 'The Call of the Wild', v: 'Tiếng gọi nơi hoang dã', a: 'Jack London' },
+    { id: 215, g: 'en', t: 'The Call of the Wild', v: 'Tiếng gọi nơi hoang dã', a: 'Jack London' },
     { id: 1513, g: 'en', t: 'Romeo and Juliet', v: 'Romeo và Juliet', a: 'William Shakespeare' },
     { id: 174, g: 'en', t: 'The Picture of Dorian Gray', v: 'Bức chân dung của Dorian Gray', a: 'Oscar Wilde' },
     { id: 844, g: 'en', t: 'The Importance of Being Earnest', a: 'Oscar Wilde' },
     { id: 1952, g: 'en', t: 'The Yellow Wallpaper', a: 'Charlotte Perkins Gilman' },
     { id: 219, g: 'en', t: 'Heart of Darkness', v: 'Trái tim bóng tối', a: 'Joseph Conrad' },
-    { id: 2554, se: 'fyodor-dostoevsky/crime-and-punishment/constance-garnett', g: 'ru', t: 'Crime and Punishment', v: 'Tội ác và hình phạt', a: 'Fyodor Dostoevsky' },
+    { id: 2554, g: 'ru', t: 'Crime and Punishment', v: 'Tội ác và hình phạt', a: 'Fyodor Dostoevsky' },
     { id: 28054, g: 'ru', t: 'The Brothers Karamazov', v: 'Anh em nhà Karamazov', a: 'Fyodor Dostoevsky' },
     { id: 600, g: 'ru', t: 'Notes from Underground', v: 'Ghi chép từ căn hầm', a: 'Fyodor Dostoevsky' },
     { id: 36034, g: 'ru', t: 'White Nights, and Other Stories', v: 'Đêm trắng', a: 'Fyodor Dostoevsky' },
     { id: 2600, g: 'ru', t: 'War and Peace', v: 'Chiến tranh và hòa bình', a: 'Leo Tolstoy' },
-    { id: 1399, se: 'leo-tolstoy/anna-karenina/constance-garnett', g: 'ru', t: 'Anna Karenina', a: 'Leo Tolstoy' },
-    { id: 135, se: 'victor-hugo/les-miserables/isabel-f-hapgood', g: 'fr', t: 'Les Misérables', v: 'Những người khốn khổ', a: 'Victor Hugo' },
+    { id: 1399, g: 'ru', t: 'Anna Karenina', a: 'Leo Tolstoy' },
+    { id: 135, g: 'fr', t: 'Les Misérables', v: 'Những người khốn khổ', a: 'Victor Hugo' },
     { id: 1184, g: 'fr', t: 'The Count of Monte Cristo', v: 'Bá tước Monte Cristo', a: 'Alexandre Dumas' },
     { id: 1259, g: 'fr', t: 'Twenty Years After', v: 'Hai mươi năm sau', a: 'Alexandre Dumas' },
     { id: 996, g: 'eu', t: 'Don Quixote', a: 'Miguel de Cervantes' },
@@ -357,7 +357,7 @@
     { id: 16328, g: 'ancient', t: 'Beowulf', a: 'Anglo-Saxon epic' },
     { id: 1661, g: 'crime', t: 'The Adventures of Sherlock Holmes', v: 'Sherlock Holmes: Những cuộc phiêu lưu', a: 'Arthur Conan Doyle' },
     { id: 244, g: 'crime', t: 'A Study in Scarlet', v: 'Cuộc điều tra màu đỏ', a: 'Arthur Conan Doyle' },
-    { id: 2852, se: 'arthur-conan-doyle/the-hound-of-the-baskervilles', g: 'crime', t: 'The Hound of the Baskervilles', v: 'Chó săn dòng họ Baskerville', a: 'Arthur Conan Doyle' },
+    { id: 2852, g: 'crime', t: 'The Hound of the Baskervilles', v: 'Chó săn dòng họ Baskerville', a: 'Arthur Conan Doyle' },
     { id: 345, g: 'crime', t: 'Dracula', a: 'Bram Stoker' },
     { id: 84, g: 'crime', t: 'Frankenstein', a: 'Mary Shelley' },
     { id: 43, g: 'crime', t: 'Strange Case of Dr Jekyll and Mr Hyde', a: 'Robert Louis Stevenson' },
@@ -372,7 +372,7 @@
     { id: 55, g: 'kids', t: 'The Wonderful Wizard of Oz', v: 'Phù thủy xứ Oz', a: 'L. Frank Baum' },
     { id: 2591, g: 'kids', t: "Grimms' Fairy Tales", v: 'Truyện cổ Grimm', a: 'Brothers Grimm' },
     { id: 829, g: 'kids', t: "Gulliver's Travels", v: 'Gulliver du ký', a: 'Jonathan Swift' },
-    { id: 35, se: 'h-g-wells/the-time-machine', g: 'kids', t: 'The Time Machine', v: 'Cỗ máy thời gian', a: 'H. G. Wells' },
+    { id: 35, g: 'kids', t: 'The Time Machine', v: 'Cỗ máy thời gian', a: 'H. G. Wells' },
     { id: 36, g: 'kids', t: 'The War of the Worlds', v: 'Cuộc chiến giữa các thế giới', a: 'H. G. Wells' },
     { id: 3300, g: 'biz', t: 'The Wealth of Nations', v: 'Của cải của các quốc gia', a: 'Adam Smith' },
     { id: 20203, g: 'biz', t: 'Autobiography of Benjamin Franklin', v: 'Tự truyện Benjamin Franklin', a: 'Benjamin Franklin' },
@@ -395,9 +395,25 @@
   let catExpanded = false;
   const CAT_LIMIT = 8;
   const catBusy = new Set();
-  const coverOf = (it) => it.id ? `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.small.jpg` : `https://standardebooks.org/ebooks/${it.se}/downloads/cover.jpg`;
-  const fileOf = (it) => it.se ? `se-${it.se.replace(/\//g, '_')}.epub` : `pg${it.id}.epub`;
-  const onShelf = (it) => books.find((b) => b.fileName === fileOf(it) || (it.id && b.fileName === `pg${it.id}.epub`));
+  const coverOf = (it) => `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.medium.jpg`;
+  const fileOf = (it) => `gb${it.id}.txt`;
+  const onShelf = (it) => books.find((b) => b.fileName === fileOf(it) || b.fileName === `pg${it.id}.epub`);
+
+  // Typeset cover: title and author on paper; the real cover image (if it loads) sits on top.
+  function fillCover(box, title, author, url) {
+    box.textContent = '';
+    box.classList.add('tcover');
+    const tt = document.createElement('span'); tt.className = 'tc-t'; tt.textContent = title;
+    const ta = document.createElement('span'); ta.className = 'tc-a'; ta.textContent = author || '';
+    box.append(tt, ta);
+    if (url) {
+      const im = document.createElement('img');
+      im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.className = 'tc-img';
+      im.addEventListener('error', () => im.remove());
+      im.src = url;
+      box.appendChild(im);
+    }
+  }
 
   function renderCatalog() {
     const tabs = $('cat-tabs');
@@ -419,21 +435,10 @@
     shown.forEach((it) => {
       const li = document.createElement('li');
       li.className = 'crow';
-      const hue = Array.from(it.t).reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
       const cv = document.createElement('div');
       cv.className = 'cthumb';
-      cv.style.setProperty('--h', hue);
-      cv.textContent = (it.t.match(/\p{L}/u) || ['?'])[0].toUpperCase();
-      if (it.id || it.se) {
-        const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        img.alt = '';
-        img.width = 44;
-        img.height = 64;
-        img.src = coverOf(it);
-        img.addEventListener('load', () => { cv.textContent = ''; cv.appendChild(img); });
-      }
+      cv.setAttribute('aria-hidden', 'true');
+      fillCover(cv, it.t, it.a, it.id ? coverOf(it) : '');
       const info = document.createElement('div');
       info.className = 'cinfo';
       const title = document.createElement('h3');
@@ -442,13 +447,13 @@
       sub.textContent = it.a + (lang === 'vi' && it.v ? ' · ' + it.t : '');
       info.append(title, sub);
       let act;
-      if (it.id || it.se) {
+      if (it.id) {
         const mine = onShelf(it);
         act = document.createElement('button');
         act.type = 'button';
         act.className = 'btn primary';
-        act.disabled = catBusy.has(it.id || it.se);
-        act.textContent = catBusy.has(it.id || it.se) ? t('cat.busy') + '...' : mine ? t('cat.cont') : t('cat.read');
+        act.disabled = catBusy.has(it.id);
+        act.textContent = catBusy.has(it.id) ? t('cat.busy') + '...' : mine ? t('cat.cont') : t('cat.read');
         act.addEventListener('click', () => readFromCatalog(it));
       } else {
         act = document.createElement('a');
@@ -480,7 +485,7 @@
     box.textContent = '';
     const rows = [
       ['Project Gutenberg', 'https://www.gutenberg.org/', CATALOG.filter((i) => i.id).length, 'src.pg'],
-      ['Standard Ebooks', 'https://standardebooks.org/', CATALOG.filter((i) => i.se).length, 'src.se'],
+      ['GITenberg (GitHub)', 'https://github.com/GITenberg', CATALOG.filter((i) => i.id).length, 'src.gh'],
       ['Wikisource', 'https://vi.wikisource.org/', CATALOG.filter((i) => i.q).length, 'src.ws']
     ];
     rows.forEach(([name, href, n, desc]) => {
@@ -496,28 +501,34 @@
     });
   }
 
+  async function gunzipJson(buf) {
+    const u8 = new Uint8Array(buf);
+    let text;
+    if (u8[0] === 0x1f && u8[1] === 0x8b) {
+      const stream = new Blob([u8]).stream().pipeThrough(new DecompressionStream('gzip'));
+      text = await new Response(stream).text();
+    } else text = new TextDecoder().decode(u8); // already decoded by the network layer
+    return JSON.parse(text);
+  }
+
   async function readFromCatalog(it) {
-    const fname = fileOf(it);
     const have = onShelf(it);
     if (have) { openBook(have.id); return; }
-    const busyKey = it.id || it.se;
-    catBusy.add(busyKey);
+    catBusy.add(it.id);
     renderCatalog();
     try {
-      const ctl = new AbortController();
-      const timer = setTimeout(() => ctl.abort(), 30000);
-      const res = await fetch(it.se ? `/api/book?se=${encodeURIComponent(it.se)}` : `/api/book?id=${it.id}`, { signal: ctl.signal });
-      clearTimeout(timer);
+      const res = await fetch(`/books/${it.id}.json.gz`);
       if (!res.ok) throw new Error('http');
-      const blob = await res.blob();
-      await importFile(new File([blob], fname, { type: 'application/epub+zip' }), { lang: 'en', cover: coverOf(it), v: it.v || '' });
+      const data = await gunzipJson(await res.arrayBuffer());
+      const chapters = data.ch.map((c, i) => ({ title: c.t || `${t('r.chapter')} ${i + 1}`, blocks: c.p.map((p) => ({ t: p })) }));
+      const book = { id: uid(), sig: 'gb' + it.id, title: it.t, author: it.a, kind: 'txt', lang: data.lang || 'en', cover: coverOf(it), fileName: fileOf(it), size: 0, added: Date.now(), chapters };
+      await putOne('books', book);
       await loadShelf();
-      const added = books.find((b) => b.fileName === fname);
-      if (added) openBook(added.id);
-    } catch (_) {
-      showToast(t('cat.fail'));
+      openBook(book.id);
+    } catch (e) {
+      showToast(e && e.name === 'QuotaExceededError' ? t('m.storage') : t('cat.fail'));
     } finally {
-      catBusy.delete(busyKey);
+      catBusy.delete(it.id);
       renderCatalog();
     }
   }
@@ -586,12 +597,7 @@
       cover.setAttribute('aria-hidden', 'true');
       const hue = Array.from(b.id).reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
       cover.style.setProperty('--h', hue);
-      cover.textContent = (b.title.match(/\p{L}/u) || ['?'])[0].toUpperCase();
-      if (b.cover) {
-        const im = document.createElement('img');
-        im.loading = 'lazy'; im.alt = ''; im.src = b.cover;
-        im.addEventListener('load', () => { cover.textContent = ''; cover.appendChild(im); });
-      }
+      fillCover(cover, b.title, b.author, b.cover);
 
       const info = document.createElement('div');
       info.className = 'binfo';
@@ -646,8 +652,8 @@
 
   async function downloadBook(b) {
     try {
-      const blob = await getOne('files', b.id);
-      if (!blob) return;
+      let blob = await getOne('files', b.id);
+      if (!blob) blob = new Blob([[b.title, b.author, ''].concat(b.chapters.map((c) => [c.title, ''].concat(c.blocks.map((x) => x.t)).join('\n\n'))).join('\n\n')], { type: 'text/plain;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -671,6 +677,7 @@
   const prefs = { size: 18, lh: 1.7, theme: 'book', font: 'serif', rate: 1, voice: '', trans: false, vol: 1, mode: 'book' };
   try { Object.assign(prefs, JSON.parse(localStorage.getItem('libPrefs') || '{}')); } catch (_) {}
   const savePrefs = () => { try { localStorage.setItem('libPrefs', JSON.stringify(prefs)); } catch (_) {} };
+  if ((prefs.v || 1) < 2) { prefs.theme = 'book'; prefs.font = 'serif'; prefs.v = 2; savePrefs(); } // new default look for everyone once
 
   function applyPrefs() {
     document.body.dataset.theme = prefs.theme;
@@ -759,8 +766,7 @@
     if (b.cover) { const bg = document.createElement('div'); bg.className = 'bbg'; bg.style.backgroundImage = `url("${b.cover}")`; d.appendChild(bg); }
     const th = document.createElement('div');
     th.className = 'rb-cover';
-    th.textContent = (b.title.match(/\p{L}/u) || ['?'])[0].toUpperCase();
-    if (b.cover) { const im = document.createElement('img'); im.alt = ''; im.src = b.cover; im.addEventListener('load', () => { th.textContent = ''; th.appendChild(im); }); }
+    fillCover(th, b.title, b.author, b.cover);
     const tx = document.createElement('div');
     const h = document.createElement('p'); h.className = 'rb-title'; h.textContent = b.title;
     const m = document.createElement('p'); m.className = 'rb-meta'; m.textContent = `${b.author ? b.author + ' · ' : ''}${b.chapters.length} ${t('ch.n')}`;
@@ -795,6 +801,7 @@
     if (transOn) page.lang = 'vi'; else if (current.lang) page.lang = current.lang; else page.removeAttribute('lang');
     renderChapterLabel();
     if (transOn) translateChapter();
+    if (typeof renderVoiceUi === 'function' && voices.length) renderVoiceUi();
     markBookmarked();
     requestAnimationFrame(() => {
       if (focusPara != null) {
@@ -986,25 +993,34 @@
   let chunkIdx = 0;
   let runToken = 0;
 
+  // Only two choices: a Vietnamese and an English voice, each the most natural one the device has.
+  let voiceLang = '';  // '' = follow the text
+  function voiceScore(v) {
+    const n = v.name.toLowerCase();
+    let sc = 0;
+    if (/natural|neural|online|premium|enhanced|wavenet|studio/.test(n)) sc += 50;
+    if (/google/.test(n)) sc += 30;
+    if (/hoaimy|namminh|linh|an\b|aria|jenny|ava|andrew|emma|brian|guy|samantha|daniel|serena/.test(n)) sc += 15;
+    if (v.localService === false) sc += 5;
+    if (/espeak|compact|eloquence/.test(n)) sc -= 40;
+    return sc;
+  }
+  const bestVoice = (l) => voices.filter((v) => v.lang.toLowerCase().replace('_', '-').startsWith(l)).sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
+  const textLang = () => (transOn || /^vi/.test(current && current.lang || '') ? 'vi' : 'en');
+  const activeLang = () => voiceLang || textLang();
   function loadVoices() {
     if (!synth) return;
     voices = synth.getVoices();
-    const sel = $('t-voice');
-    sel.textContent = '';
-    const viFirst = voices.slice().sort((a, b) => Number(/^vi/i.test(b.lang)) - Number(/^vi/i.test(a.lang)));
-    viFirst.forEach((v) => {
-      const o = document.createElement('option');
-      o.value = v.voiceURI;
-      o.textContent = `${v.name} (${v.lang})`;
-      sel.appendChild(o);
-    });
-    const saved = voices.find((v) => v.voiceURI === prefs.voice);
-    const best = saved || viFirst.find((v) => /^vi/i.test(v.lang)) || viFirst[0];
-    if (best) sel.value = best.voiceURI;
+    renderVoiceUi();
+  }
+  function renderVoiceUi() {
+    const l = current ? activeLang() : 'vi';
+    document.querySelectorAll('#t-lang button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
+    const v = bestVoice(l);
     const note = $('t-note');
     if (!voices.length) { note.hidden = false; note.textContent = t('t.noVoice'); }
-    else if (!voices.some((v) => /^vi/i.test(v.lang))) { note.hidden = false; note.textContent = t('t.noVi'); }
-    else note.hidden = true;
+    else if (!v) { note.hidden = false; note.textContent = t(l === 'vi' ? 't.noVi' : 't.noEn'); }
+    else { note.hidden = false; note.textContent = `${t('t.using')}: ${v.name}`; }
   }
   if (synth) {
     loadVoices();
@@ -1078,10 +1094,9 @@
 
     highlight(paraIdx);
     const u = new SpeechSynthesisUtterance(chunks[chunkIdx]);
-    const want = transOn ? 'vi' : (current.lang || '').slice(0, 2).toLowerCase();
-    let voice = voices.find((v) => v.voiceURI === $('t-voice').value);
-    if (want && (!voice || !voice.lang.toLowerCase().startsWith(want))) voice = voices.find((v) => v.lang.toLowerCase().startsWith(want)) || voice;
-    if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = want || 'vi-VN';
+    const want = activeLang();
+    const voice = bestVoice(want);
+    if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = want === 'vi' ? 'vi-VN' : 'en-US';
     u.rate = Number(prefs.rate);
     u.volume = Number(prefs.vol);
     u.onend = () => { if (token !== runToken || !speaking) return; chunkIdx++; speakCurrent(); };
@@ -1129,7 +1144,11 @@
   $('t-vol').addEventListener('input', (e) => { prefs.vol = Number(e.target.value); savePrefs(); updateTtsUi(); });
   $('t-vol').addEventListener('change', () => { if (speaking) speakCurrent(); });
   $('t-mode').addEventListener('change', (e) => { prefs.mode = e.target.value; savePrefs(); });
-  $('t-voice').addEventListener('change', () => { prefs.voice = $('t-voice').value; savePrefs(); if (speaking) speakCurrent(); });
+  document.querySelectorAll('#t-lang button').forEach((b) => b.addEventListener('click', () => {
+    voiceLang = b.dataset.l === textLang() ? '' : b.dataset.l;
+    renderVoiceUi();
+    if (speaking) speakCurrent();
+  }));
 
   // tap a paragraph while the listening bar is open to read from there
   page.addEventListener('click', (e) => {

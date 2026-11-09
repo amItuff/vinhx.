@@ -63,6 +63,19 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/books/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, immutable"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/gzip"
+        }
+      ]
     }
   ]
 }

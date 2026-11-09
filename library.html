@@ -18,8 +18,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/note.css?v=4" />
-  <link rel="stylesheet" href="/library.css?v=5" />
-  <script src="/library.js?v=5" defer></script>
+  <link rel="stylesheet" href="/library.css?v=6" />
+  <script src="/library.js?v=6" defer></script>
 </head>
 <body data-view="shelf" data-theme="book">
   <header class="bar">
@@ -100,7 +100,7 @@
         <select id="t-mode" class="mode" data-i18n-label="t.mode" aria-label="Phạm vi đọc"></select>
       </div>
       <div class="tts-row">
-        <select id="t-voice" data-i18n-label="t.voice" aria-label="Giọng đọc"></select>
+        <div class="seg" id="t-lang" role="group" data-i18n-label="t.voice" aria-label="Giọng đọc"><button type="button" data-l="vi" data-i18n="t.vi">Giọng Việt</button><button type="button" data-l="en" data-i18n="t.en">Giọng Anh</button></div>
       </div>
       <p id="t-note" class="small" hidden></p>
     </div>
