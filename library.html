@@ -18,8 +18,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/note.css?v=4" />
-  <link rel="stylesheet" href="/library.css?v=1" />
-  <script src="/library.js?v=1" defer></script>
+  <link rel="stylesheet" href="/library.css?v=2" />
+  <script src="/library.js?v=2" defer></script>
 </head>
 <body data-view="shelf" data-theme="dark">
   <header class="bar">
@@ -46,6 +46,13 @@
 
     <ul id="books" class="books"></ul>
     <p id="empty" class="empty" data-i18n="empty" hidden>Thư viện đang trống. Hãy thêm sách miễn phí, sách tự viết hoặc sách đã hết thời hạn bản quyền.</p>
+
+    <section class="cat" id="catalog">
+      <h2 data-i18n="cat.title">Kệ sách miễn phí</h2>
+      <p class="small" data-i18n="cat.sub">Các tác phẩm đã hết bản quyền, lấy từ Project Gutenberg và Wikisource. Bấm Thêm vào kệ để đọc ngay trong trang này.</p>
+      <div id="cat-tabs" class="ctabs" role="group" aria-label="Thể loại"></div>
+      <ul id="cat-grid" class="cgrid"></ul>
+    </section>
 
     <section class="sources">
       <h2 data-i18n="src.title">Nơi tìm sách miễn phí hợp pháp</h2>

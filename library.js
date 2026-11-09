@@ -38,7 +38,14 @@
       't.prev': 'Đoạn trước', 't.next': 'Đoạn sau', 't.play': 'Phát', 't.pause': 'Tạm dừng', 't.speed': 'Tốc độ', 't.voice': 'Giọng đọc',
       't.noVoice': 'Thiết bị chưa có giọng đọc. Trên Windows hãy thêm giọng tiếng Việt trong Cài đặt, trên điện thoại kiểm tra cài đặt chuyển văn bản thành giọng nói.',
       't.noVi': 'Chưa thấy giọng tiếng Việt, đang dùng giọng mặc định nên có thể đọc sai.',
-      'ui.close': 'Đóng', 'ch.untitled': 'Phần'
+      'ui.close': 'Đóng', 'ch.untitled': 'Phần',
+      'cat.title': 'Kệ sách miễn phí',
+      'cat.sub': 'Các tác phẩm đã hết bản quyền, lấy từ Project Gutenberg và Wikisource. Bấm Thêm vào kệ để đọc ngay trong trang này.',
+      'cat.all': 'Tất cả', 'cat.add': 'Thêm vào kệ', 'cat.page': 'Trang sách', 'cat.wiki': 'Đọc trên Wikisource', 'cat.has': 'Đã có trên kệ',
+      'cat.busy': 'Đang tải', 'cat.manual': 'Trình duyệt chặn tải trực tiếp nên đã mở trang tải EPUB. Tải xong hãy kéo file vào ô phía trên.',
+      'cat.en': 'Sách tiếng Anh',
+      'g.en': 'Văn học Anh – Mỹ', 'g.ru': 'Văn học Nga', 'g.fr': 'Văn học Pháp', 'g.eu': 'Văn học châu Âu', 'g.ancient': 'Cổ điển',
+      'g.crime': 'Trinh thám & kinh dị', 'g.kids': 'Phiêu lưu & thiếu nhi', 'g.biz': 'Kinh tế & chứng khoán', 'g.phil': 'Triết học & khoa học', 'g.vi': 'Văn học Việt Nam'
     },
     en: {
       kicker: 'Personal library',
@@ -65,7 +72,14 @@
       't.prev': 'Previous paragraph', 't.next': 'Next paragraph', 't.play': 'Play', 't.pause': 'Pause', 't.speed': 'Speed', 't.voice': 'Voice',
       't.noVoice': 'This device has no speech voices. Add one in system settings (text-to-speech).',
       't.noVi': 'No Vietnamese voice found, using the default voice which may mispronounce.',
-      'ui.close': 'Close', 'ch.untitled': 'Part'
+      'ui.close': 'Close', 'ch.untitled': 'Part',
+      'cat.title': 'Free bookshelf',
+      'cat.sub': 'Works whose copyright has expired, from Project Gutenberg and Wikisource. Tap Add to shelf to read right on this page.',
+      'cat.all': 'All', 'cat.add': 'Add to shelf', 'cat.page': 'Book page', 'cat.wiki': 'Read on Wikisource', 'cat.has': 'On your shelf',
+      'cat.busy': 'Downloading', 'cat.manual': 'Your browser blocked the direct download, so the EPUB page was opened. When it finishes, drop the file in the box above.',
+      'cat.en': 'English text',
+      'g.en': 'British & American', 'g.ru': 'Russian', 'g.fr': 'French', 'g.eu': 'Other European', 'g.ancient': 'Classics',
+      'g.crime': 'Mystery & horror', 'g.kids': 'Adventure & young readers', 'g.biz': 'Economics & markets', 'g.phil': 'Philosophy & science', 'g.vi': 'Vietnamese literature'
     }
   };
 
@@ -86,6 +100,7 @@
     });
     document.querySelectorAll('.lang-toggle button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     renderShelf();
+    renderCatalog();
     if (current) { renderChapterLabel(); renderSheets(); updateTtsUi(); }
   }
   document.querySelectorAll('.lang-toggle button').forEach((b) => b.addEventListener('click', () => applyLang(b.dataset.lang)));
@@ -302,6 +317,153 @@
   // ---------------------------------------------------------------------------
   // Shelf
   // ---------------------------------------------------------------------------
+  // Free bookshelf: only works whose copyright has expired. id = Project Gutenberg ebook number
+  // (cover and EPUB come from gutenberg.org); q = Vietnamese Wikisource search for Vietnamese works.
+  const CATEGORIES = ['en', 'ru', 'fr', 'eu', 'ancient', 'crime', 'kids', 'biz', 'phil', 'vi'];
+  const CATALOG = [
+    { id: 1342, g: 'en', t: 'Pride and Prejudice', a: 'Jane Austen' },
+    { id: 1260, g: 'en', t: 'Jane Eyre', a: 'Charlotte Brontë' },
+    { id: 768, g: 'en', t: 'Wuthering Heights', a: 'Emily Brontë' },
+    { id: 1400, g: 'en', t: 'Great Expectations', a: 'Charles Dickens' },
+    { id: 2701, g: 'en', t: 'Moby-Dick', a: 'Herman Melville' },
+    { id: 64317, g: 'en', t: 'The Great Gatsby', a: 'F. Scott Fitzgerald' },
+    { id: 76, g: 'en', t: 'Adventures of Huckleberry Finn', a: 'Mark Twain' },
+    { id: 1513, g: 'en', t: 'Romeo and Juliet', a: 'William Shakespeare' },
+    { id: 1524, g: 'en', t: 'Hamlet', a: 'William Shakespeare' },
+    { id: 174, g: 'en', t: 'The Picture of Dorian Gray', a: 'Oscar Wilde' },
+    { id: 2554, g: 'ru', t: 'Crime and Punishment', v: 'Tội ác và hình phạt', a: 'Fyodor Dostoevsky' },
+    { id: 28054, g: 'ru', t: 'The Brothers Karamazov', v: 'Anh em nhà Karamazov', a: 'Fyodor Dostoevsky' },
+    { id: 2600, g: 'ru', t: 'War and Peace', v: 'Chiến tranh và hòa bình', a: 'Leo Tolstoy' },
+    { id: 1399, g: 'ru', t: 'Anna Karenina', a: 'Leo Tolstoy' },
+    { id: 135, g: 'fr', t: 'Les Misérables', v: 'Những người khốn khổ', a: 'Victor Hugo' },
+    { id: 1184, g: 'fr', t: 'The Count of Monte Cristo', v: 'Bá tước Monte Cristo', a: 'Alexandre Dumas' },
+    { id: 2413, g: 'fr', t: 'Madame Bovary', a: 'Gustave Flaubert' },
+    { id: 19942, g: 'fr', t: 'Candide', a: 'Voltaire' },
+    { id: 996, g: 'eu', t: 'Don Quixote', v: 'Don Quixote', a: 'Miguel de Cervantes' },
+    { id: 5200, g: 'eu', t: 'Metamorphosis', v: 'Hóa thân', a: 'Franz Kafka' },
+    { id: 8800, g: 'eu', t: 'The Divine Comedy', v: 'Thần khúc', a: 'Dante Alighieri' },
+    { id: 1727, g: 'ancient', t: 'The Odyssey', v: 'Odyssey', a: 'Homer' },
+    { id: 6130, g: 'ancient', t: 'The Iliad', v: 'Iliad', a: 'Homer' },
+    { id: 1661, g: 'crime', t: 'The Adventures of Sherlock Holmes', v: 'Những cuộc phiêu lưu của Sherlock Holmes', a: 'Arthur Conan Doyle' },
+    { id: 345, g: 'crime', t: 'Dracula', a: 'Bram Stoker' },
+    { id: 84, g: 'crime', t: 'Frankenstein', a: 'Mary Shelley' },
+    { id: 43, g: 'crime', t: 'Strange Case of Dr Jekyll and Mr Hyde', a: 'Robert Louis Stevenson' },
+    { id: 11, g: 'kids', t: "Alice's Adventures in Wonderland", v: 'Alice ở xứ sở thần tiên', a: 'Lewis Carroll' },
+    { id: 120, g: 'kids', t: 'Treasure Island', v: 'Đảo giấu vàng', a: 'Robert Louis Stevenson' },
+    { id: 74, g: 'kids', t: 'The Adventures of Tom Sawyer', v: 'Những cuộc phiêu lưu của Tom Sawyer', a: 'Mark Twain' },
+    { id: 37106, g: 'kids', t: 'Little Women', v: 'Những người phụ nữ nhỏ bé', a: 'Louisa May Alcott' },
+    { id: 103, g: 'kids', t: 'Around the World in Eighty Days', v: 'Vòng quanh thế giới trong 80 ngày', a: 'Jules Verne' },
+    { id: 1257, g: 'kids', t: 'The Three Musketeers', v: 'Ba chàng lính ngự lâm', a: 'Alexandre Dumas' },
+    { id: 3300, g: 'biz', t: 'The Wealth of Nations', v: 'Của cải của các quốc gia', a: 'Adam Smith' },
+    { id: 24518, g: 'biz', t: 'Extraordinary Popular Delusions and the Madness of Crowds', v: 'Ảo tưởng đám đông và cơn điên của đám đông', a: 'Charles Mackay' },
+    { id: 132, g: 'phil', t: 'The Art of War', v: 'Binh pháp Tôn Tử', a: 'Sun Tzu' },
+    { id: 1232, g: 'phil', t: 'The Prince', v: 'Quân vương', a: 'Niccolò Machiavelli' },
+    { id: 2680, g: 'phil', t: 'Meditations', v: 'Suy tưởng', a: 'Marcus Aurelius' },
+    { id: 1998, g: 'phil', t: 'Thus Spake Zarathustra', v: 'Zarathustra đã nói như thế', a: 'Friedrich Nietzsche' },
+    { id: 2009, g: 'phil', t: 'On the Origin of Species', v: 'Nguồn gốc các loài', a: 'Charles Darwin' },
+    { id: 205, g: 'phil', t: 'Walden', a: 'Henry David Thoreau' },
+    { q: 'Truyện Kiều', g: 'vi', t: 'Truyện Kiều', a: 'Nguyễn Du' },
+    { q: 'Chinh phụ ngâm', g: 'vi', t: 'Chinh phụ ngâm', a: 'Đặng Trần Côn' },
+    { q: 'Số đỏ', g: 'vi', t: 'Số đỏ', a: 'Vũ Trọng Phụng' },
+    { q: 'Tắt đèn', g: 'vi', t: 'Tắt đèn', a: 'Ngô Tất Tố' },
+    { q: 'Chí Phèo', g: 'vi', t: 'Chí Phèo', a: 'Nam Cao' }
+  ];
+  let catFilter = 'all';
+
+  function renderCatalog() {
+    const tabs = $('cat-tabs');
+    const grid = $('cat-grid');
+    if (!tabs || !grid) return;
+    tabs.textContent = '';
+    ['all', ...CATEGORIES].forEach((k) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ctab';
+      b.textContent = k === 'all' ? t('cat.all') : t('g.' + k);
+      b.setAttribute('aria-pressed', String(catFilter === k));
+      b.addEventListener('click', () => { catFilter = k; renderCatalog(); });
+      tabs.appendChild(b);
+    });
+    grid.textContent = '';
+    const have = new Set(books.map((b) => b.fileName));
+    CATALOG.filter((it) => catFilter === 'all' || it.g === catFilter).forEach((it) => {
+      const li = document.createElement('li');
+      li.className = 'citem';
+      const hue = Array.from(it.t).reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
+      const cv = document.createElement('div');
+      cv.className = 'ccover';
+      cv.style.setProperty('--h', hue);
+      const fallback = document.createElement('span');
+      fallback.textContent = it.t;
+      cv.appendChild(fallback);
+      if (it.id) {
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.alt = '';
+        img.src = `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.medium.jpg`;
+        img.addEventListener('load', () => { fallback.hidden = true; });
+        img.addEventListener('error', () => img.remove());
+        cv.appendChild(img);
+      }
+      const title = document.createElement('h3');
+      title.textContent = lang === 'vi' && it.v ? it.v : it.t;
+      const sub = document.createElement('p');
+      sub.className = 'cauthor';
+      sub.textContent = it.a + (it.id ? ' · ' + t('cat.en') : '');
+      const act = document.createElement('div');
+      act.className = 'cact';
+      if (it.id) {
+        const add = document.createElement('button');
+        add.type = 'button';
+        add.className = 'btn primary';
+        const fname = `pg${it.id}.epub`;
+        if (have.has(fname)) { add.textContent = t('cat.has'); add.disabled = true; }
+        else {
+          add.textContent = t('cat.add');
+          add.addEventListener('click', () => addFromCatalog(it, add));
+        }
+        const pg = document.createElement('a');
+        pg.className = 'btn';
+        pg.href = `https://www.gutenberg.org/ebooks/${it.id}`;
+        pg.target = '_blank';
+        pg.rel = 'noopener noreferrer';
+        pg.textContent = t('cat.page');
+        act.append(add, pg);
+      } else {
+        const w = document.createElement('a');
+        w.className = 'btn primary';
+        w.href = `https://vi.wikisource.org/w/index.php?search=${encodeURIComponent(it.q)}`;
+        w.target = '_blank';
+        w.rel = 'noopener noreferrer';
+        w.textContent = t('cat.wiki');
+        act.appendChild(w);
+      }
+      li.append(cv, title, sub, act);
+      grid.appendChild(li);
+    });
+  }
+
+  async function addFromCatalog(it, btn) {
+    btn.disabled = true;
+    btn.textContent = t('cat.busy') + '...';
+    try {
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 25000);
+      const res = await fetch(`https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}-images-3.epub`, { signal: ctl.signal });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('http');
+      const blob = await res.blob();
+      await importFile(new File([blob], `pg${it.id}.epub`, { type: 'application/epub+zip' }));
+      await loadShelf();
+    } catch (_) {
+      window.open(`https://www.gutenberg.org/ebooks/${it.id}.epub3.images`, '_blank', 'noopener');
+      importMsg.textContent = t('cat.manual');
+      btn.disabled = false;
+      btn.textContent = t('cat.add');
+    }
+  }
+
   const MAX_BYTES = 60 * 1024 * 1024;
   let books = [];
   let progressMap = {};
@@ -345,6 +507,7 @@
       try { progressMap[b.id] = (await getOne('kv', 'p:' + b.id)) || null; } catch (_) { progressMap[b.id] = null; }
     }
     renderShelf();
+    renderCatalog();
   }
 
   function percentOf(book) {
