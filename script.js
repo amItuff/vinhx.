@@ -547,7 +547,7 @@ function renderAttachments() {
     const rm = document.createElement('button');
     rm.type = 'button';
     rm.setAttribute('aria-label', t('ui.close'));
-    rm.innerHTML = '<svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#s-xmark"></use></svg>';
+    rm.innerHTML = '<svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#s-xmark"></use></svg>';
     rm.addEventListener('click', () => {
       URL.revokeObjectURL(a.url);
       attachments = attachments.filter((x) => x !== a);
@@ -755,7 +755,7 @@ const PLAYLIST = [
 const widget = window.SC ? SC.Widget($('sc-hidden-frame')) : null;
 const diskImage = $('disk-image');
 const diskBox = document.querySelector('.disk-container');
-function setIcon(svg, id) { const u = svg.querySelector('use'); if (u) u.setAttribute('href', '/icons.svg#' + id); }
+function setIcon(svg, id) { const u = svg.querySelector('use'); if (u) u.setAttribute('href', '/assets/icons.svg#' + id); }
 const playIcon = $('ctrl-play-icon');
 const progressVal = $('progress-bar-val');
 const muteBtn = $('floating-audio-toggle');

@@ -517,7 +517,7 @@
     catBusy.add(it.id);
     renderCatalog();
     try {
-      const res = await fetch(`/books/${it.id}.json.gz`);
+      const res = await fetch(`/library/books/${it.id}.json.gz`);
       if (!res.ok) throw new Error('http');
       const data = await gunzipJson(await res.arrayBuffer());
       const chapters = data.ch.map((c, i) => ({ title: c.t || `${t('r.chapter')} ${i + 1}`, blocks: c.p.map((p) => ({ t: p })) }));

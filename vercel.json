@@ -4,20 +4,20 @@
   "outputDirectory": ".",
   "rewrites": [
     {
-      "source": "/convert",
-      "destination": "/convert.html"
-    },
-    {
-      "source": "/library",
-      "destination": "/library.html"
+      "source": "/note/:id",
+      "destination": "/note/index.html"
     },
     {
       "source": "/note",
-      "destination": "/note.html"
+      "destination": "/note/index.html"
     },
     {
-      "source": "/note/:id",
-      "destination": "/note.html"
+      "source": "/convert",
+      "destination": "/convert/index.html"
+    },
+    {
+      "source": "/library",
+      "destination": "/library/index.html"
     }
   ],
   "headers": [
@@ -65,7 +65,7 @@
       ]
     },
     {
-      "source": "/books/(.*)",
+      "source": "/library/books/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -76,6 +76,18 @@
           "value": "application/gzip"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/(og-image|og-note|og-convert|og-library).png",
+      "destination": "/assets/$1.png",
+      "permanent": true
+    },
+    {
+      "source": "/icons.svg",
+      "destination": "/assets/icons.svg",
+      "permanent": true
     }
   ]
 }
