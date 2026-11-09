@@ -1,0 +1,7 @@
+{
+  "name": "vinhx",
+  "private": true,
+  "description": "vinhx.info: static pages plus a few Vercel functions",
+  "engines": { "node": ">=20" },
+  "dependencies": { "ws": "^8.18.0" }
+}

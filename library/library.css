@@ -248,3 +248,20 @@ body[data-view="shelf"] .toast { background: var(--ink); color: var(--paper); }
 body[data-theme="book"] .rbanner, body[data-theme="sepia"] .rbanner, body[data-theme="light"] .rbanner { color: var(--rfg); }
 body[data-theme="book"] .rbanner::before, body[data-theme="sepia"] .rbanner::before, body[data-theme="light"] .rbanner::before { background: rgba(58, 46, 33, 0.06); }
 body[data-theme="book"] .rbanner .bbg, body[data-theme="sepia"] .rbanner .bbg, body[data-theme="light"] .rbanner .bbg { opacity: 0.16; }
+
+/* category accordion (same pattern as the FAQ on the home page) */
+.cacc { margin-top: 10px; border-top: 1px solid var(--line); }
+.cat-sec { border-bottom: 1px solid var(--line); }
+.cat-sec summary { position: relative; list-style: none; display: flex; align-items: baseline; gap: 8px; padding: 13px 28px 13px 0; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+.cat-sec summary::-webkit-details-marker { display: none; }
+.cat-sec summary small { font-weight: 400; font-size: 0.72rem; color: var(--sub); }
+.cat-sec summary::after { content: '+'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; font-weight: 400; color: var(--sub); }
+.cat-sec[open] summary::after { content: '\2212'; }
+.cat-sec .cgrid { margin: 0 0 6px; }
+.cat-sec .crow:last-child { border-bottom: 0; }
+body[data-view="shelf"] .cacc, body[data-view="shelf"] .cat-sec { border-color: var(--line); }
+body[data-view="shelf"] .cat-sec summary { font-family: 'Literata', Georgia, serif; color: var(--ink); }
+body[data-view="shelf"] .cat-sec summary:hover { color: var(--accent); }
+
+.tts select#t-who { flex: 1; min-width: 0; width: auto; }
+.tts .seg { flex: 1; }

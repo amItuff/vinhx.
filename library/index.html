@@ -18,8 +18,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/base.css?v=5" />
-  <link rel="stylesheet" href="/library/library.css?v=7" />
-  <script src="/library/library.js?v=7" defer></script>
+  <link rel="stylesheet" href="/library/library.css?v=8" />
+  <script src="/library/library.js?v=8" defer></script>
 </head>
 <body data-view="shelf" data-theme="book">
   <header class="bar">
@@ -43,8 +43,7 @@
     <section class="cat" id="catalog">
       <h2 data-i18n="cat.title">Kệ sách miễn phí</h2>
       <p class="small" data-i18n="cat.sub">Các tác phẩm đã hết bản quyền, lấy từ Project Gutenberg và Wikisource. Bấm Thêm vào kệ để đọc ngay trong trang này.</p>
-      <div id="cat-tabs" class="ctabs" role="group" aria-label="Thể loại"></div>
-      <ul id="cat-grid" class="cgrid"></ul>
+      <div id="cat-grid" class="cacc"></div>
     </section>
 
     <section class="sources">
@@ -100,7 +99,8 @@
         <select id="t-mode" class="mode" data-i18n-label="t.mode" aria-label="Phạm vi đọc"></select>
       </div>
       <div class="tts-row">
-        <div class="seg" id="t-lang" role="group" data-i18n-label="t.voice" aria-label="Giọng đọc"><button type="button" data-l="vi" data-i18n="t.vi">Giọng Việt</button><button type="button" data-l="en" data-i18n="t.en">Giọng Anh</button></div>
+        <select id="t-who" data-i18n-label="t.voice" aria-label="Giọng đọc"></select>
+        <div class="seg" id="t-lang" role="group" data-i18n-label="t.voice" aria-label="Ngôn ngữ giọng đọc"><button type="button" data-l="vi" data-i18n="t.vi">Giọng Việt</button><button type="button" data-l="en" data-i18n="t.en">Giọng Anh</button></div>
       </div>
       <p id="t-note" class="small" hidden></p>
     </div>

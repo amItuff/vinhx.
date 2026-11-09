@@ -31,7 +31,7 @@
       's.chapters': 'Mục lục', 's.marks': 'Đánh dấu',
       'aa.size': 'Cỡ chữ', 'aa.lh': 'Giãn dòng', 'aa.theme': 'Nền', 'aa.book': 'Sách', 'aa.dark': 'Tối', 'aa.sepia': 'Vàng', 'aa.light': 'Sáng', 'aa.font': 'Kiểu chữ', 'aa.sans': 'Không chân', 'aa.serif': 'Có chân',
       't.prev': 'Đoạn trước', 't.next': 'Đoạn sau', 't.play': 'Phát', 't.pause': 'Tạm dừng', 't.speed': 'Tốc độ', 't.voice': 'Giọng đọc', 't.vol': 'Âm lượng', 't.mode': 'Phạm vi đọc', 't.mpara': 'Một đoạn', 't.mchap': 'Hết chương', 't.mbook': 'Cả sách', 'ch.n': 'chương',
-      't.noVoice': 'Thiết bị chưa có giọng đọc. Trên Windows hãy thêm giọng tiếng Việt trong Cài đặt, trên điện thoại kiểm tra cài đặt chuyển văn bản thành giọng nói.',
+      't.noVoice': 'Thiết bị chưa có giọng đọc. Hãy chọn một giọng chất lượng cao ở ô bên cạnh.', 't.device': 'Giọng thiết bị', 't.fallback': 'Giọng chất lượng cao đang bận, tạm dùng giọng thiết bị.',
       't.noVi': 'Máy chưa có giọng tiếng Việt. Trên Windows: Cài đặt > Thời gian và ngôn ngữ > Giọng nói; trên Android: cài Google Text-to-speech.', 't.noEn': 'Máy chưa có giọng tiếng Anh.', 't.using': 'Đang dùng', 't.vi': 'Giọng Việt', 't.en': 'Giọng Anh',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
       'cat.title': 'Kệ sách miễn phí',
@@ -60,7 +60,7 @@
       's.chapters': 'Contents', 's.marks': 'Bookmarks',
       'aa.size': 'Text size', 'aa.lh': 'Line spacing', 'aa.theme': 'Theme', 'aa.book': 'Book', 'aa.dark': 'Dark', 'aa.sepia': 'Sepia', 'aa.light': 'Light', 'aa.font': 'Typeface', 'aa.sans': 'Sans', 'aa.serif': 'Serif',
       't.prev': 'Previous paragraph', 't.next': 'Next paragraph', 't.play': 'Play', 't.pause': 'Pause', 't.speed': 'Speed', 't.voice': 'Voice', 't.vol': 'Volume', 't.mode': 'Read range', 't.mpara': 'One paragraph', 't.mchap': 'To chapter end', 't.mbook': 'Whole book', 'ch.n': 'chapters',
-      't.noVoice': 'This device has no speech voices. Add one in system settings (text-to-speech).',
+      't.noVoice': 'This device has no speech voices. Pick a high-quality voice in the box next to it.', 't.device': 'Device voice', 't.fallback': 'The high-quality voice is busy, using the device voice for now.',
       't.noVi': 'No Vietnamese voice on this device. Add one in your system speech settings.', 't.noEn': 'No English voice on this device.', 't.using': 'Using', 't.vi': 'Vietnamese voice', 't.en': 'English voice',
       'ui.close': 'Close', 'ch.untitled': 'Part',
       'cat.title': 'Free bookshelf',
@@ -391,10 +391,8 @@
     { q: 'Tắt đèn', g: 'vi', t: 'Tắt đèn', a: 'Ngô Tất Tố' },
     { q: 'Chí Phèo', g: 'vi', t: 'Chí Phèo', a: 'Nam Cao' }
   ];
-  let catFilter = 'all';
-  let catExpanded = false;
-  const CAT_LIMIT = 8;
   const catBusy = new Set();
+  const catOpen = new Set();
   const coverOf = (it) => `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.medium.jpg`;
   const fileOf = (it) => `gb${it.id}.txt`;
   const onShelf = (it) => books.find((b) => b.fileName === fileOf(it) || b.fileName === `pg${it.id}.epub`);
@@ -415,68 +413,70 @@
     }
   }
 
-  function renderCatalog() {
-    const tabs = $('cat-tabs');
-    const grid = $('cat-grid');
-    if (!tabs || !grid) return;
-    tabs.textContent = '';
-    ['all', ...CATEGORIES].forEach((k) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'ctab';
-      b.textContent = k === 'all' ? t('cat.all') : t('g.' + k);
-      b.setAttribute('aria-pressed', String(catFilter === k));
-      b.addEventListener('click', () => { catFilter = k; catExpanded = false; renderCatalog(); });
-      tabs.appendChild(b);
-    });
-    grid.textContent = '';
-    const items = CATALOG.filter((it) => catFilter === 'all' || it.g === catFilter);
-    const shown = catFilter === 'all' && !catExpanded ? items.slice(0, CAT_LIMIT) : items;
-    shown.forEach((it) => {
-      const li = document.createElement('li');
-      li.className = 'crow';
-      const cv = document.createElement('div');
-      cv.className = 'cthumb';
-      cv.setAttribute('aria-hidden', 'true');
-      fillCover(cv, it.t, it.a, it.id ? coverOf(it) : '');
-      const info = document.createElement('div');
-      info.className = 'cinfo';
-      const title = document.createElement('h3');
-      title.textContent = lang === 'vi' && it.v ? it.v : it.t;
-      const sub = document.createElement('p');
-      sub.textContent = it.a + (lang === 'vi' && it.v ? ' · ' + it.t : '');
-      info.append(title, sub);
-      let act;
-      if (it.id) {
-        const mine = onShelf(it);
-        act = document.createElement('button');
-        act.type = 'button';
-        act.className = 'btn primary';
-        act.disabled = catBusy.has(it.id);
-        act.textContent = catBusy.has(it.id) ? t('cat.busy') + '...' : mine ? t('cat.cont') : t('cat.read');
-        act.addEventListener('click', () => readFromCatalog(it));
-      } else {
-        act = document.createElement('a');
-        act.className = 'btn';
-        act.href = `https://vi.wikisource.org/w/index.php?search=${encodeURIComponent(it.q)}`;
-        act.target = '_blank';
-        act.rel = 'noopener noreferrer';
-        act.textContent = t('cat.wiki');
-      }
-      li.append(cv, info, act);
-      grid.appendChild(li);
-    });
-    if (catFilter === 'all' && !catExpanded && items.length > CAT_LIMIT) {
-      const li = document.createElement('li');
-      li.className = 'cmore';
-      const more = document.createElement('button');
-      more.type = 'button';
-      more.className = 'btn';
-      more.textContent = `${t('cat.more')} (${items.length - CAT_LIMIT})`;
-      more.addEventListener('click', () => { catExpanded = true; renderCatalog(); });
-      li.appendChild(more);
-      grid.appendChild(li);
+  function bookRow(it) {
+    const li = document.createElement('li');
+    li.className = 'crow';
+    const cv = document.createElement('div');
+    cv.className = 'cthumb';
+    cv.setAttribute('aria-hidden', 'true');
+    fillCover(cv, it.t, it.a, it.id ? coverOf(it) : '');
+    const info = document.createElement('div');
+    info.className = 'cinfo';
+    const title = document.createElement('h3');
+    title.textContent = lang === 'vi' && it.v ? it.v : it.t;
+    const sub = document.createElement('p');
+    sub.textContent = it.a + (lang === 'vi' && it.v ? ' · ' + it.t : '');
+    info.append(title, sub);
+    let act;
+    if (it.id) {
+      const mine = onShelf(it);
+      act = document.createElement('button');
+      act.type = 'button';
+      act.className = 'btn primary';
+      act.disabled = catBusy.has(it.id);
+      act.textContent = catBusy.has(it.id) ? t('cat.busy') + '...' : mine ? t('cat.cont') : t('cat.read');
+      act.addEventListener('click', () => readFromCatalog(it));
+    } else {
+      act = document.createElement('a');
+      act.className = 'btn';
+      act.href = `https://vi.wikisource.org/w/index.php?search=${encodeURIComponent(it.q)}`;
+      act.target = '_blank';
+      act.rel = 'noopener noreferrer';
+      act.textContent = t('cat.wiki');
     }
+    li.append(cv, info, act);
+    return li;
+  }
+
+  // One collapsed row per category, like the FAQ; the list is only built when it is opened.
+  function renderCatalog() {
+    const box = $('cat-grid');
+    if (!box) return;
+    box.textContent = '';
+    CATEGORIES.forEach((k) => {
+      const items = CATALOG.filter((it) => it.g === k);
+      if (!items.length) return;
+      const d = document.createElement('details');
+      d.className = 'cat-sec';
+      d.open = catOpen.has(k);
+      const sm = document.createElement('summary');
+      const name = document.createElement('span');
+      name.textContent = t('g.' + k);
+      const n = document.createElement('small');
+      n.textContent = items.length;
+      sm.append(name, n);
+      d.appendChild(sm);
+      const fill = () => {
+        if (d.querySelector('ul')) return;
+        const ul = document.createElement('ul');
+        ul.className = 'cgrid';
+        items.forEach((it) => ul.appendChild(bookRow(it)));
+        d.appendChild(ul);
+      };
+      if (d.open) fill();
+      d.addEventListener('toggle', () => { if (d.open) { catOpen.add(k); fill(); } else catOpen.delete(k); });
+      box.appendChild(d);
+    });
   }
 
   function renderSources() {
@@ -710,6 +710,16 @@
     b.setAttribute('aria-label', label);
     b.title = label;
   }
+  const srcLang = (b) => { const l = (b.lang || 'en').slice(0, 2).toLowerCase(); return l === 'zh' ? 'zh-CN' : l; };
+  // Server first (Google's web translator, batched, fast); the browser's own translator is the fallback.
+  let trNetDown = false;
+  async function netTranslate(sl, texts) {
+    const r = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sl, texts }) });
+    if (!r.ok) throw new Error('http');
+    const j = await r.json();
+    if (!j.texts || j.texts.length !== texts.length) throw new Error('shape');
+    return j.texts;
+  }
   async function getTranslator(src) {
     if (!('Translator' in self)) return null;
     if (translators[src]) return translators[src];
@@ -718,6 +728,16 @@
     if (av !== 'available') showToast(t('tr.dl'));
     translators[src] = await self.Translator.create({ sourceLanguage: src, targetLanguage: 'vi' });
     return translators[src];
+  }
+  async function translateTexts(book, texts) {
+    if (!trNetDown) {
+      try { return await netTranslate(srcLang(book), texts); } catch (_) { trNetDown = true; }
+    }
+    const tr = await getTranslator(srcLang(book).slice(0, 2));
+    if (!tr) throw new Error('none');
+    const out = [];
+    for (const x of texts) out.push(await tr.translate(x));
+    return out;
   }
   function stopTrans() { transOn = false; trRun++; updateTransUi(); }
   async function translateChapter() {
@@ -735,26 +755,44 @@
       if (saved && saved.length === blocks.length && saved.every(Boolean)) { trCache[key] = saved; paint(); return; }
       arr = trCache[key] = new Array(blocks.length).fill('');
     }
-    let tr;
-    try { tr = await getTranslator((book.lang || 'en').slice(0, 2)); } catch (_) { tr = null; }
+    // translate what is on screen first, then the rest of the chapter, in batches of up to 20 paragraphs
+    const start = Math.max(0, Math.min(blocks.length - 1, firstVisibleIndex()));
+    const order = [];
+    for (let i = start; i < blocks.length; i++) order.push(i);
+    for (let i = 0; i < start; i++) order.push(i);
+    const batches = [];
+    let cur = [];
+    let chars = 0;
+    order.filter((i) => !arr[i]).forEach((i) => {
+      const len = blocks[i].t.length;
+      if (cur.length && (cur.length >= 20 || chars + len > 3500)) { batches.push(cur); cur = []; chars = 0; }
+      cur.push(i); chars += len;
+    });
+    if (cur.length) batches.push(cur);
+    let done = 0;
+    const total = batches.length;
+    if (total) $('r-chap').textContent = `${t('tr.busy')}...`;
+    let failed = false;
+    const worker = async () => {
+      while (batches.length && !failed) {
+        const idxs = batches.shift();
+        let out;
+        try { out = await translateTexts(book, idxs.map((i) => blocks[i].t)); } catch (_) { failed = true; return; }
+        if (token !== trRun) return;
+        idxs.forEach((i, k) => { arr[i] = out[k] || blocks[i].t; const el = page.querySelector(`[data-i="${i}"]`); if (el && chIdx === ci) el.textContent = arr[i]; });
+        done++;
+        $('r-chap').textContent = `${t('tr.busy')} ${Math.round((done / total) * 100)}%`;
+      }
+    };
+    await Promise.all([worker(), worker()]);
     if (token !== trRun) return;
-    if (!tr) { stopTrans(); showToast(t('tr.none')); renderChapter(ci, scrollFrac()); return; }
-    $('r-chap').textContent = `${t('tr.busy')}...`;
-    for (let i = 0; i < blocks.length; i++) {
-      if (token !== trRun) return;
-      if (arr[i]) continue;
-      try { arr[i] = await tr.translate(blocks[i].t); } catch (_) { if (token === trRun) { stopTrans(); showToast(t('tr.fail')); renderChapter(ci, scrollFrac()); } return; }
-      const el = page.querySelector(`[data-i="${i}"]`);
-      if (el && token === trRun) el.textContent = arr[i];
-    }
-    if (token !== trRun) return;
+    if (failed) { stopTrans(); showToast(trNetDown && !('Translator' in self) ? t('tr.none') : t('tr.fail')); renderChapter(ci, scrollFrac()); return; }
     renderChapterLabel();
     putOne('kv', arr, 'tr:' + key).catch(() => {});
   }
   $('r-trans').addEventListener('click', () => {
     if (!current) return;
     if (transOn) { stopTrans(); prefs.trans = false; savePrefs(); renderChapter(chIdx, scrollFrac()); return; }
-    if (!('Translator' in self)) { showToast(t('tr.none')); return; }
     transOn = true; prefs.trans = true; savePrefs(); updateTransUi();
     renderChapter(chIdx, scrollFrac());
   });
@@ -852,7 +890,7 @@
     applyPrefs();
     const isVi = /^vi/.test(book.lang || '');
     $('r-trans').hidden = isVi;
-    transOn = !!prefs.trans && !isVi && 'Translator' in self;
+    transOn = !!prefs.trans && !isVi;
     updateTransUi();
     renderChapter(p ? p.ch : 0, p ? p.frac : 0);
     renderSheets();
@@ -993,14 +1031,19 @@
   let chunkIdx = 0;
   let runToken = 0;
 
-  // Only two choices: a Vietnamese and an English voice, each the most natural one the device has.
-  let voiceLang = '';  // '' = follow the text
+  // Two languages. Each has a few neural voices from the server (/api/tts) plus the device's own voice as a fallback.
+  const NET_VOICES = {
+    vi: [['vi-HoaiMy', 'HoaiMy'], ['vi-NamMinh', 'NamMinh']],
+    en: [['en-Aria', 'Aria'], ['en-Andrew', 'Andrew'], ['en-Sonia', 'Sonia'], ['en-Ryan', 'Ryan']]
+  };
+  prefs.who = Object.assign({ vi: 'vi-HoaiMy', en: 'en-Aria' }, prefs.who || {});
+  let netDown = false;      // set when the server voice failed; the device voice is used for the rest of the visit
+  let voiceLang = '';       // '' = follow the text
   function voiceScore(v) {
     const n = v.name.toLowerCase();
     let sc = 0;
     if (/natural|neural|online|premium|enhanced|wavenet|studio/.test(n)) sc += 50;
     if (/google/.test(n)) sc += 30;
-    if (/hoaimy|namminh|linh|an\b|aria|jenny|ava|andrew|emma|brian|guy|samantha|daniel|serena/.test(n)) sc += 15;
     if (v.localService === false) sc += 5;
     if (/espeak|compact|eloquence/.test(n)) sc -= 40;
     return sc;
@@ -1008,6 +1051,7 @@
   const bestVoice = (l) => voices.filter((v) => v.lang.toLowerCase().replace('_', '-').startsWith(l)).sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
   const textLang = () => (transOn || /^vi/.test(current && current.lang || '') ? 'vi' : 'en');
   const activeLang = () => voiceLang || textLang();
+  const whoNow = () => (netDown ? 'device' : (prefs.who[activeLang()] || 'device'));
   function loadVoices() {
     if (!synth) return;
     voices = synth.getVoices();
@@ -1016,16 +1060,49 @@
   function renderVoiceUi() {
     const l = current ? activeLang() : 'vi';
     document.querySelectorAll('#t-lang button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
-    const v = bestVoice(l);
+    const sel = $('t-who');
+    sel.textContent = '';
+    NET_VOICES[l].forEach(([id, label]) => sel.appendChild(new Option(label, id)));
+    sel.appendChild(new Option(t('t.device'), 'device'));
+    sel.value = whoNow();
     const note = $('t-note');
-    if (!voices.length) { note.hidden = false; note.textContent = t('t.noVoice'); }
-    else if (!v) { note.hidden = false; note.textContent = t(l === 'vi' ? 't.noVi' : 't.noEn'); }
-    else { note.hidden = false; note.textContent = `${t('t.using')}: ${v.name}`; }
+    note.hidden = true;
+    if (whoNow() === 'device') {
+      if (!synth || !voices.length) { note.hidden = false; note.textContent = t('t.noVoice'); }
+      else if (!bestVoice(l)) { note.hidden = false; note.textContent = t(l === 'vi' ? 't.noVi' : 't.noEn'); }
+    }
   }
   if (synth) {
     loadVoices();
     if (synth.addEventListener) synth.addEventListener('voiceschanged', loadVoices);
     else synth.onvoiceschanged = loadVoices;
+  }
+
+  // neural audio: fetched one sentence at a time, the next two are fetched while one plays
+  const netCache = new Map();
+  let curAudio = null;
+  function netUrl(who, text) {
+    const key = who + '|' + text;
+    if (!netCache.has(key)) {
+      const p = fetch(`/api/tts?v=${encodeURIComponent(who)}&t=${encodeURIComponent(text)}`)
+        .then((r) => { if (!r.ok) throw new Error('http'); return r.blob(); })
+        .then((b) => URL.createObjectURL(b));
+      p.catch(() => netCache.delete(key));
+      netCache.set(key, p);
+      if (netCache.size > 40) { const k = netCache.keys().next().value; netCache.get(k).then((u) => URL.revokeObjectURL(u), () => {}); netCache.delete(k); }
+    }
+    return netCache.get(key);
+  }
+  function upcomingTexts(n) {
+    const out = [];
+    const blocks = current.chapters[chIdx].blocks;
+    let p = paraIdx;
+    let c = chunkIdx + 1;
+    while (out.length < n && p < blocks.length) {
+      const ch = chunksOf(textOf(p));
+      if (c < ch.length) { out.push(ch[c]); c++; } else { p++; c = 0; }
+    }
+    return out;
   }
 
   function chunksOf(text) {
@@ -1065,9 +1142,10 @@
   }
 
   function speakCurrent() {
-    if (!synth || !current) return;
+    if (!current) return;
     const token = ++runToken;
-    synth.cancel();
+    if (synth) synth.cancel();
+    if (curAudio) { curAudio.pause(); curAudio = null; }
     const blocks = current.chapters[chIdx].blocks;
     if (paraIdx >= blocks.length) { // chapter finished
       if (prefs.mode === 'book' && chIdx + 1 < current.chapters.length) {
@@ -1093,7 +1171,32 @@
     }
 
     highlight(paraIdx);
-    const u = new SpeechSynthesisUtterance(chunks[chunkIdx]);
+    speaking = true;
+    updateTtsUi();
+    const text = chunks[chunkIdx];
+    const who = whoNow();
+    if (who === 'device') return speakDevice(text, token);
+    netUrl(who, text).then((url) => {
+      if (token !== runToken || !speaking) return;
+      const a = new Audio(url);
+      curAudio = a;
+      a.playbackRate = Number(prefs.rate);
+      a.volume = Number(prefs.vol);
+      a.onended = () => { if (token !== runToken || !speaking) return; chunkIdx++; speakCurrent(); };
+      const fallback = () => { if (token !== runToken) return; netDown = true; showToast(t('t.fallback')); renderVoiceUi(); speakDevice(text, token); };
+      a.onerror = fallback;
+      a.play().catch((e) => { if (e && e.name === 'NotAllowedError') { speaking = false; updateTtsUi(); } else fallback(); });
+      upcomingTexts(2).forEach((tx) => netUrl(who, tx).catch(() => {}));
+    }).catch(() => {
+      if (token !== runToken) return;
+      netDown = true; showToast(t('t.fallback')); renderVoiceUi();
+      speakDevice(text, token);
+    });
+  }
+
+  function speakDevice(text, token) {
+    if (!synth) { speaking = false; updateTtsUi(); renderVoiceUi(); return; }
+    const u = new SpeechSynthesisUtterance(text);
     const want = activeLang();
     const voice = bestVoice(want);
     if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = want === 'vi' ? 'vi-VN' : 'en-US';
@@ -1102,21 +1205,20 @@
     u.onend = () => { if (token !== runToken || !speaking) return; chunkIdx++; speakCurrent(); };
     u.onerror = (e) => { if (token !== runToken) return; if (e.error === 'canceled' || e.error === 'interrupted') return; speaking = false; updateTtsUi(); };
     synth.speak(u);
-    speaking = true;
-    updateTtsUi();
   }
 
   function stopSpeech(silent) {
     runToken++;
     speaking = false;
     if (synth) synth.cancel();
+    if (curAudio) { curAudio.pause(); curAudio = null; }
     if (page) page.querySelectorAll('.reading').forEach((e) => e.classList.remove('reading'));
     if (!silent) updateTtsUi();
   }
 
   function startListening() {
     $('tts').hidden = false;
-    if (!synth) { $('t-note').hidden = false; $('t-note').textContent = t('t.noVoice'); updateTtsUi(); return; }
+    renderVoiceUi();
     paraIdx = firstVisibleIndex();
     chunkIdx = 0;
     speaking = true;
@@ -1139,10 +1241,18 @@
     prefs.rate = Number(e.target.value);
     savePrefs();
     updateTtsUi();
+    if (curAudio) curAudio.playbackRate = prefs.rate; // neural audio changes speed live
   });
-  $('t-rate').addEventListener('change', () => { if (speaking) speakCurrent(); }); // apply the new speed from the current sentence
-  $('t-vol').addEventListener('input', (e) => { prefs.vol = Number(e.target.value); savePrefs(); updateTtsUi(); });
-  $('t-vol').addEventListener('change', () => { if (speaking) speakCurrent(); });
+  $('t-rate').addEventListener('change', () => { if (speaking && !curAudio) speakCurrent(); }); // device voice restarts the sentence at the new speed
+  $('t-vol').addEventListener('input', (e) => { prefs.vol = Number(e.target.value); savePrefs(); updateTtsUi(); if (curAudio) curAudio.volume = prefs.vol; });
+  $('t-vol').addEventListener('change', () => { if (speaking && !curAudio) speakCurrent(); });
+  $('t-who').addEventListener('change', (e) => {
+    netDown = false;
+    prefs.who[activeLang()] = e.target.value;
+    savePrefs();
+    renderVoiceUi();
+    if (speaking) speakCurrent();
+  });
   $('t-mode').addEventListener('change', (e) => { prefs.mode = e.target.value; savePrefs(); });
   document.querySelectorAll('#t-lang button').forEach((b) => b.addEventListener('click', () => {
     voiceLang = b.dataset.l === textLang() ? '' : b.dataset.l;
@@ -1152,7 +1262,7 @@
 
   // tap a paragraph while the listening bar is open to read from there
   page.addEventListener('click', (e) => {
-    if ($('tts').hidden || !synth) return;
+    if ($('tts').hidden) return;
     const el = e.target.closest('[data-i]');
     if (!el) return;
     paraIdx = Number(el.dataset.i);
@@ -1167,7 +1277,7 @@
     if (e.key === 'ArrowRight') $('r-next').click();
     else if (e.key === 'ArrowLeft') $('r-prev').click();
   });
-  window.addEventListener('beforeunload', () => { if (synth) synth.cancel(); });
+  window.addEventListener('beforeunload', () => { if (synth) synth.cancel(); if (curAudio) curAudio.pause(); });
 
   // ---------------------------------------------------------------------------
   applyPrefs();
