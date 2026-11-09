@@ -9,10 +9,10 @@
 // (either env var naming scheme works).
 
 const crypto = require('crypto');
+const { ipKey, hit } = require('./_limit');
 
 const BASE = (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || '').replace(/\/$/, '');
 const TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || '';
-const IP_SALT = process.env.NOTE_SALT || 'vinhx-note';
 
 const PREFIX = 'note:v2:';
 const TTL_CHOICES = [3600, 86400, 604800, 31536000]; // 1 hour, 1 day, 1 week, 1 year
@@ -35,14 +35,6 @@ const B64_RE = /^[A-Za-z0-9+/]+={0,2}$/;
 
 const sha256 = (s) => crypto.createHash('sha256').update(s).digest('hex');
 
-function clientIp(req) {
-  const h = req.headers || {};
-  if (h['x-real-ip']) return String(h['x-real-ip']).trim();
-  if (h['x-forwarded-for']) return String(h['x-forwarded-for']).split(',')[0].trim();
-  return (req.socket && req.socket.remoteAddress) || 'unknown';
-}
-const ipKey = (req) => sha256(`${IP_SALT}|${clientIp(req)}`).slice(0, 20);
-
 async function call(path, body) {
   const res = await fetch(BASE + path, {
     method: 'POST',
@@ -63,13 +55,7 @@ async function pipeline(commands) {
 }
 
 // Fixed-window counter. Returns 0 when allowed, otherwise the seconds to wait.
-async function overLimit(bucket, ip) {
-  const { max, window } = LIMITS[bucket];
-  const now = Math.floor(Date.now() / 1000);
-  const key = `rl:${bucket}:${ip}:${Math.floor(now / window)}`;
-  const [count] = await pipeline([['INCR', key], ['EXPIRE', key, window]]);
-  return count > max ? window - (now % window) : 0;
-}
+const overLimit = (bucket, req) => hit(req, 'note-' + bucket, LIMITS[bucket].max, LIMITS[bucket].window);
 
 async function readNote(k) {
   const raw = await redis(['GET', PREFIX + k]);
@@ -110,7 +96,7 @@ module.exports = async (req, res) => {
       const { k, ver } = req.query || {};
       if (!HEX64.test(String(k || ''))) return res.status(400).json({ error: 'bad_key' });
 
-      const wait = await overLimit('read', ip);
+      const wait = await overLimit('read', req);
       if (wait) return tooMany(res, wait, 'rate_limited');
 
       const note = await readNote(k);
@@ -122,6 +108,7 @@ module.exports = async (req, res) => {
       if (note.burn && !owner) {
         const removed = await redis(['DEL', PREFIX + k]);
         if (removed !== 1) return res.status(404).json({ error: 'not_found' });
+        if (note.ip) await redis(['ZREM', `ipn:${note.ip}`, k]);
         return res.status(200).json({ ...publicView(note), burned: true });
       }
 
@@ -145,7 +132,7 @@ module.exports = async (req, res) => {
       const ttl = TTL_CHOICES.includes(Number(body.ttl)) ? Number(body.ttl) : DEFAULT_TTL;
       const burn = body.burn === true;
 
-      const wait = await overLimit('write', ip);
+      const wait = await overLimit('write', req);
       if (wait) return tooMany(res, wait, 'rate_limited');
 
       const current = await readNote(k);
@@ -153,7 +140,7 @@ module.exports = async (req, res) => {
         if (!holdsWriteToken(w, current)) return res.status(403).json({ error: 'forbidden' });
         if (current.ver !== base) return res.status(409).json({ error: 'conflict', ...publicView(current) });
       } else {
-        const waitNew = await overLimit('create', ip);
+        const waitNew = await overLimit('create', req);
         if (waitNew) return tooMany(res, waitNew, 'too_many_notes');
 
         const day = Math.floor(Date.now() / 86400000);
@@ -170,7 +157,8 @@ module.exports = async (req, res) => {
         ver: crypto.randomBytes(6).toString('hex'),
         iv, ct, ttl, burn,
         t: Date.now(),
-        wh: current ? current.wh : sha256(w)
+        wh: current ? current.wh : sha256(w),
+        ip: current && current.ip ? current.ip : ip // creator's hashed IP, so delete/burn can free the right quota
       };
       await redis(['SET', PREFIX + k, JSON.stringify(next), 'EX', ttl]);
       if (!current) {
@@ -184,7 +172,7 @@ module.exports = async (req, res) => {
       const { k } = req.query || {};
       if (!HEX64.test(String(k || ''))) return res.status(400).json({ error: 'bad_key' });
 
-      const wait = await overLimit('write', ip);
+      const wait = await overLimit('write', req);
       if (wait) return tooMany(res, wait, 'rate_limited');
 
       const note = await readNote(k);
@@ -192,13 +180,14 @@ module.exports = async (req, res) => {
       if (!holdsWriteToken((req.headers || {})['x-note-write'], note)) return res.status(403).json({ error: 'forbidden' });
 
       await redis(['DEL', PREFIX + k]);
-      await redis(['ZREM', `ipn:${ip}`, k]);
+      await redis(['ZREM', `ipn:${note.ip || ip}`, k]); // the creator's quota, not the caller's
       return res.status(200).json({ ok: true });
     }
 
     res.setHeader('Allow', 'GET, PUT, POST, DELETE');
     return res.status(405).json({ error: 'method_not_allowed' });
   } catch (err) {
+    console.error('note: error', err && err.message);
     return res.status(500).json({ error: 'server_error' });
   }
 };

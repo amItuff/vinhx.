@@ -1,50 +1,74 @@
 [
   {
-    "hash": "57afbf9",
-    "date": "2026-11-08T08:59:15+07:00",
-    "subject": "Notepad v2: view-only links, password layer, expiry/burn, QR, Markdown, abuse limits; recent updates card",
-    "vi": "Notepad v2: link chỉ xem, mật khẩu, hết hạn/tự hủy, QR, Markdown, giới hạn chống lạm dụng; thêm thẻ cập nhật gần đây"
+    "hash": "943a8e0",
+    "date": "2026-11-09T17:35:05+07:00",
+    "subject": "Home: compact projects",
+    "vi": "Trang chủ: dự án gọn hơn"
   },
   {
-    "hash": "6e8ad05",
-    "date": "2026-11-08T08:40:27+07:00",
-    "subject": "New font set and a much lighter bot-features popup",
-    "vi": "Bộ phông chữ mới và popup tính năng bot nhẹ hơn nhiều"
+    "hash": "369b80c",
+    "date": "2026-11-09T17:34:20+07:00",
+    "subject": "Library: dim dark reading theme",
+    "vi": "Library: theme đọc tối dịu"
   },
   {
-    "hash": "7169cb4",
-    "date": "2026-11-08T06:41:49+07:00",
-    "subject": "Replace terminal mockups with vinhx note / vinhx hub banners",
-    "vi": "Thay ảnh giả lập terminal bằng banner vinhx note / vinhx hub"
+    "hash": "7563f10",
+    "date": "2026-11-09T17:33:47+07:00",
+    "subject": "Library: remove read-aloud",
+    "vi": "Library: bỏ phần nghe đọc"
   },
   {
-    "hash": "96e9f27",
-    "date": "2026-11-08T06:29:52+07:00",
-    "subject": "Replace portfolio card with an encrypted online notepad",
-    "vi": "Thay thẻ portfolio bằng Notepad online mã hóa"
+    "hash": "4a61c0c",
+    "date": "2026-11-09T17:28:46+07:00",
+    "subject": "Redeploy",
+    "vi": "Triển khai lại"
   },
   {
-    "hash": "ec94a3e",
-    "date": "2026-11-07T20:58:12+07:00",
-    "subject": "Fix link previews and keep animations on reduced-motion desktops",
-    "vi": "Sửa link preview và giữ hiệu ứng trên máy tính bật giảm chuyển động"
+    "hash": "da749b5",
+    "date": "2026-11-09T17:10:34+07:00",
+    "subject": "Library: collapsible shelf, fast translate, neural voices",
+    "vi": "Library: kệ gập, dịch nhanh, giọng Edge"
   },
   {
-    "hash": "9bfc303",
-    "date": "2026-11-07T19:07:29+07:00",
-    "subject": "Redesign intro and motion, add live Discord status and VI/EN switch",
-    "vi": "Làm lại intro và chuyển động, thêm trạng thái Discord thật và nút VI/EN"
+    "hash": "ab6e777",
+    "date": "2026-11-09T17:06:55+07:00",
+    "subject": "Tidy repo into folders",
+    "vi": "Gọn repo thành các thư mục"
   },
   {
-    "hash": "5f7df1f",
-    "date": "2026-11-07T18:57:48+07:00",
-    "subject": "Fix SEO files, mobile zoom and accessibility",
-    "vi": "Sửa file SEO, zoom trên điện thoại và trợ năng"
+    "hash": "8c5d701",
+    "date": "2026-11-09T14:41:32+07:00",
+    "subject": "Library: host books, fix covers, 2 voices",
+    "vi": "Library: lưu sách trên web, sửa bìa, 2 giọng"
   },
   {
-    "hash": "000c7a4",
-    "date": "2026-11-06T09:30:20+07:00",
-    "subject": "Create vercel.json",
-    "vi": "Tạo vercel.json"
+    "hash": "0c275c6",
+    "date": "2026-11-09T12:12:51+07:00",
+    "subject": "Library: more books, paper UI",
+    "vi": "Library: thêm sách, giao diện giấy"
+  },
+  {
+    "hash": "639f6e1",
+    "date": "2026-11-09T12:03:29+07:00",
+    "subject": "Library: book theme, banners, volume, shorter FAQ",
+    "vi": "Library: theme sách, banner, âm lượng, FAQ gọn"
+  },
+  {
+    "hash": "13c3099",
+    "date": "2026-11-09T11:55:15+07:00",
+    "subject": "Library: read bookshelf titles in-page, Vietnamese translate toggle, compact list UI",
+    "vi": "Library: đọc thẳng sách trong kệ, nút dịch tiếng Việt, giao diện danh sách gọn"
+  },
+  {
+    "hash": "a921c5b",
+    "date": "2026-11-09T11:47:54+07:00",
+    "subject": "Add free public-domain bookshelf with covers and categories to library",
+    "vi": "Thêm kệ sách miễn phí có bìa, chia theo thể loại vào library"
+  },
+  {
+    "hash": "cbc75e5",
+    "date": "2026-11-09T11:35:26+07:00",
+    "subject": "Add vinhx library: local EPUB/TXT reader with bookmarks, progress and read-aloud",
+    "vi": "Thêm vinhx library: đọc EPUB/TXT cục bộ, đánh dấu, nhớ tiến độ, nghe đọc chỉnh tốc độ"
   }
 ]

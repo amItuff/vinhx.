@@ -13,7 +13,7 @@ try {
   let existing = [];
   try { existing = JSON.parse(fs.readFileSync(FILE, 'utf8')); } catch (_) { /* first run */ }
 
-  const out = execFileSync('git', ['log', '-n', '40', '--no-merges', '--format=%h%x1f%cI%x1f%s'], {
+  const out = execFileSync('git', ['log', '-n', '60', '--no-merges', '--format=%h%x1f%cI%x1f%s'], {
     cwd: path.join(__dirname, '..'), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']
   });
 
@@ -36,4 +36,28 @@ try {
   console.log(`changelog: ${merged.length} entries`);
 } catch (err) {
   console.log('changelog: skipped (' + (err && err.message ? err.message.split('\n')[0] : 'error') + ')');
+}
+
+// Keeps <lastmod> in sitemap.xml equal to the last commit that touched each page's files.
+try {
+  const root = path.join(__dirname, '..');
+  const SITEMAP = path.join(root, 'sitemap.xml');
+  const PAGES = {
+    'https://vinhx.info/': ['index.html', 'style.css', 'script.js'],
+    'https://vinhx.info/convert': ['convert'],
+    'https://vinhx.info/library': ['library/index.html', 'library/library.js', 'library/library.css', 'library/books']
+  };
+  let xml = fs.readFileSync(SITEMAP, 'utf8');
+  let changed = 0;
+  for (const [loc, paths] of Object.entries(PAGES)) {
+    const day = execFileSync('git', ['log', '-1', '--format=%cs', '--', ...paths], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) continue;
+    const re = new RegExp('(<loc>' + loc.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&') + '</loc>\\s*<lastmod>)[^<]*(</lastmod>)');
+    const next = xml.replace(re, '$1' + day + '$2');
+    if (next !== xml) { xml = next; changed++; }
+  }
+  if (changed) fs.writeFileSync(SITEMAP, xml);
+  console.log(`sitemap: ${changed} lastmod updated`);
+} catch (err) {
+  console.log('sitemap: skipped (' + (err && err.message ? err.message.split('\n')[0] : 'error') + ')');
 }
