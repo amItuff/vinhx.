@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#f2e9d5" />
-  <title>vinhx library — đọc sách, đánh dấu, nghe đọc</title>
-  <meta name="description" content="Thư viện cá nhân ngay trên trình duyệt: mở file EPUB hoặc TXT, đánh dấu trang, nhớ tiến độ và nghe đọc thành tiếng với tốc độ tùy chỉnh. Sách không được tải lên máy chủ." />
+  <title>vinhx library — đọc sách, đánh dấu, dịch</title>
+  <meta name="description" content="Thư viện cá nhân ngay trên trình duyệt: mở file EPUB hoặc TXT, đánh dấu trang, nhớ tiến độ và dịch sang tiếng Việt. Sách không được tải lên máy chủ." />
   <link rel="canonical" href="https://vinhx.info/library" />
   <meta property="og:title" content="vinhx library" />
-  <meta property="og:description" content="Đọc sách EPUB/TXT của bạn, đánh dấu, nhớ tiến độ, nghe đọc thành tiếng." />
+  <meta property="og:description" content="Đọc sách EPUB/TXT của bạn, đánh dấu, nhớ tiến độ." />
   <meta property="og:url" content="https://vinhx.info/library" />
   <meta property="og:image" content="https://vinhx.info/assets/og-library.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -18,8 +18,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/base.css?v=5" />
-  <link rel="stylesheet" href="/library/library.css?v=8" />
-  <script src="/library/library.js?v=8" defer></script>
+  <link rel="stylesheet" href="/library/library.css?v=9" />
+  <script src="/library/library.js?v=9" defer></script>
 </head>
 <body data-view="shelf" data-theme="book">
   <header class="bar">
@@ -33,8 +33,8 @@
   <!-- shelf -->
   <main id="shelf" class="lib">
     <p class="kicker" data-i18n="kicker">Thư viện cá nhân</p>
-    <h1 data-i18n="title">Đọc sách của bạn, nhớ tiến độ, nghe đọc thành tiếng</h1>
-    <p class="lead" data-i18n="lead">Đọc sách miễn phí ngay trong web: nhớ tiến độ, đánh dấu, dịch tiếng Việt và nghe đọc.</p>
+    <h1 data-i18n="title">Đọc sách của bạn, nhớ tiến độ</h1>
+    <p class="lead" data-i18n="lead">Đọc sách miễn phí ngay trong web: nhớ tiến độ, đánh dấu, dịch tiếng Việt.</p>
 
     <p id="import-msg" class="hint" role="status" aria-live="polite"></p>
 
@@ -64,7 +64,6 @@
       <button id="r-back" class="icon-btn" type="button" data-i18n-label="r.back" aria-label="Về thư viện" title="Về thư viện"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
       <div class="rtitle"><b id="r-title"></b><span id="r-chap"></span></div>
       <div class="rtools">
-        <button id="r-listen" class="icon-btn" type="button" data-i18n-label="r.listen" aria-label="Nghe đọc" title="Nghe đọc"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2M4 14h3v6H4zM17 14h3v6h-3z"/></svg></button>
         <button id="r-trans" class="icon-btn" type="button" data-i18n-label="tr.on" aria-label="Dịch sang tiếng Việt" title="Dịch sang tiếng Việt" aria-pressed="false" hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></button>
         <button id="r-mark" class="icon-btn" type="button" data-i18n-label="r.mark" aria-label="Đánh dấu" title="Đánh dấu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v16l-5-4-5 4z"/></svg></button>
         <button id="r-toc" class="icon-btn" type="button" data-i18n-label="r.toc" aria-label="Mục lục và đánh dấu" title="Mục lục và đánh dấu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
@@ -81,29 +80,6 @@
       <button id="r-next" class="btn" type="button" data-i18n="r.next">Chương sau</button>
     </nav>
 
-    <!-- listening bar -->
-    <div id="tts" class="tts" hidden>
-      <div class="tts-row">
-        <button id="t-prev" class="icon-btn" type="button" data-i18n-label="t.prev" aria-label="Đoạn trước" title="Đoạn trước"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
-        <button id="t-play" class="icon-btn big" type="button" data-i18n-label="t.play" aria-label="Phát" title="Phát"><svg id="t-play-ic" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></button>
-        <button id="t-next" class="icon-btn" type="button" data-i18n-label="t.next" aria-label="Đoạn sau" title="Đoạn sau"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
-        <label class="speed"><span data-i18n="t.speed">Tốc độ</span> <b id="t-rate-val">1.0×</b>
-          <input id="t-rate" type="range" min="0.5" max="2" step="0.1" value="1" data-i18n-label="t.speed" aria-label="Tốc độ đọc" />
-        </label>
-        <button id="t-close" class="icon-btn" type="button" data-i18n-label="ui.close" aria-label="Đóng" title="Đóng"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      </div>
-      <div class="tts-row">
-        <label class="speed"><span data-i18n="t.vol">Âm lượng</span> <b id="t-vol-val">100%</b>
-          <input id="t-vol" type="range" min="0" max="1" step="0.05" value="1" data-i18n-label="t.vol" aria-label="Âm lượng" />
-        </label>
-        <select id="t-mode" class="mode" data-i18n-label="t.mode" aria-label="Phạm vi đọc"></select>
-      </div>
-      <div class="tts-row">
-        <select id="t-who" data-i18n-label="t.voice" aria-label="Giọng đọc"></select>
-        <div class="seg" id="t-lang" role="group" data-i18n-label="t.voice" aria-label="Ngôn ngữ giọng đọc"><button type="button" data-l="vi" data-i18n="t.vi">Giọng Việt</button><button type="button" data-l="en" data-i18n="t.en">Giọng Anh</button></div>
-      </div>
-      <p id="t-note" class="small" hidden></p>
-    </div>
   </section>
 
   <!-- sheets -->

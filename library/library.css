@@ -93,21 +93,6 @@ body[data-font="serif"] .page { font-family: 'Literata', Georgia, 'Times New Rom
 .reader .btn:disabled { opacity: 0.35; cursor: default; }
 .pct { font-family: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace; font-size: 0.7rem; color: var(--rsub); }
 
-.tts {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-  background: var(--rpanel); border-top: 1px solid var(--rline); color: var(--rfg);
-}
-.tts[hidden] { display: none; }
-.tts-row { display: flex; align-items: center; gap: 8px; max-width: 680px; margin: 0 auto; }
-.tts-row + .tts-row { margin-top: 8px; }
-.tts .icon-btn.big { width: 42px; height: 42px; border-radius: 50%; background: var(--rfg); color: var(--rbg); }
-.tts .icon-btn.big:hover:not(:disabled) { background: var(--rfg); color: var(--rbg); opacity: 0.9; }
-.speed { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; font-size: 0.72rem; color: var(--rsub); }
-.speed b { font-weight: 600; color: var(--rfg); min-width: 2.6em; font-family: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace; }
-.speed input { flex: 1; min-width: 0; accent-color: var(--rfg); }
-.tts select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--rline); background: transparent; color: var(--rfg); font-size: 0.78rem; }
-.tts select option { color: #111; }
-.tts .small { max-width: 680px; margin: 8px auto 0; color: var(--rsub); }
 
 /* sheets inherit the reader palette while reading */
 body[data-view="read"] .sheet-panel { background: var(--rpanel); color: var(--rfg); border-color: var(--rline); }
@@ -168,7 +153,6 @@ body[data-view="read"] .page { animation: pageIn 0.35s ease both; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { body[data-view="read"] .page { animation: none; } }
 
-.tts select.mode { width: auto; flex: none; max-width: 42%; }
 
 /* ---- shelf: same warm paper as the Book reading theme, flat and quiet ---- */
 body[data-view="shelf"] {
@@ -240,10 +224,6 @@ body[data-view="shelf"] .toast { background: var(--ink); color: var(--paper); }
 .rb-cover.tcover .tc-a { font-size: 0.42rem; }
 .page .tc-t, .page .tc-a { text-indent: 0; }
 
-/* two-voice switch in the listening bar */
-.tts .seg { flex: 1; display: flex; border: 1px solid var(--rline); border-radius: 6px; padding: 2px; }
-.tts .seg button { flex: 1; border: 0; background: transparent; color: var(--rsub); padding: 7px 8px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; }
-.tts .seg button[aria-pressed="true"] { background: var(--rfg); color: var(--rbg); font-weight: 600; }
 .page p { white-space: pre-line; }
 body[data-theme="book"] .rbanner, body[data-theme="sepia"] .rbanner, body[data-theme="light"] .rbanner { color: var(--rfg); }
 body[data-theme="book"] .rbanner::before, body[data-theme="sepia"] .rbanner::before, body[data-theme="light"] .rbanner::before { background: rgba(58, 46, 33, 0.06); }
@@ -263,5 +243,3 @@ body[data-view="shelf"] .cacc, body[data-view="shelf"] .cat-sec { border-color: 
 body[data-view="shelf"] .cat-sec summary { font-family: 'Literata', Georgia, serif; color: var(--ink); }
 body[data-view="shelf"] .cat-sec summary:hover { color: var(--accent); }
 
-.tts select#t-who { flex: 1; min-width: 0; width: auto; }
-.tts .seg { flex: 1; }

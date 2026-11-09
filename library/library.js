@@ -15,8 +15,8 @@
   const STRINGS = {
     vi: {
       kicker: 'Thư viện cá nhân',
-      title: 'Đọc sách của bạn, nhớ tiến độ, nghe đọc thành tiếng',
-      lead: 'Đọc sách miễn phí ngay trong web: nhớ tiến độ, đánh dấu, dịch tiếng Việt và nghe đọc.',
+      title: 'Đọc sách của bạn, nhớ tiến độ',
+      lead: 'Đọc sách miễn phí ngay trong web: nhớ tiến độ, đánh dấu, dịch tiếng Việt.',
       'src.title': 'Nguồn thư viện', 'src.books': 'sách', 'src.pg': 'Kho sách công cộng quốc tế, bản EPUB tiếng Anh', 'src.gh': 'Bản sao Gutenberg trên GitHub, nơi web lấy và chia chương sẵn', 'src.ws': 'Thư viện mở tiếng Việt, đọc trên Wikisource',
       'src.note': 'Chỉ gồm tác phẩm đã hết bản quyền.',
       f1: 'Sách đã mở được lưu trong trình duyệt của bạn',
@@ -25,14 +25,12 @@
       'b.chapters': 'chương', 'b.done': 'Đã đọc xong',
       'm.adding': 'Đang thêm', 'm.added': 'Đã thêm', 'm.badType': 'Chỉ nhận .epub và .txt', 'm.bad': 'Không đọc được file này', 'm.noZip': 'Trình duyệt này chưa hỗ trợ đọc EPUB. Hãy dùng Chrome, Edge hoặc Safari mới.',
       'm.empty': 'File không có nội dung đọc được', 'm.big': 'File quá lớn (tối đa 60 MB)', 'm.dup': 'Đã có trong thư viện', 'm.storage': 'Không lưu được, bộ nhớ trình duyệt đầy hoặc bị chặn',
-      'r.back': 'Về thư viện', 'r.listen': 'Nghe đọc', 'r.mark': 'Đánh dấu', 'r.toc': 'Mục lục và đánh dấu', 'r.aa': 'Chữ và giao diện',
+      'r.back': 'Về thư viện', 'r.mark': 'Đánh dấu', 'r.toc': 'Mục lục và đánh dấu', 'r.aa': 'Chữ và giao diện',
       'r.prev': 'Chương trước', 'r.next': 'Chương sau', 'r.chapter': 'Chương',
       'mark.added': 'Đã đánh dấu', 'mark.removed': 'Đã bỏ đánh dấu', 'mark.none': 'Chưa có đánh dấu nào. Bấm biểu tượng đánh dấu để lưu vị trí đang đọc.',
       's.chapters': 'Mục lục', 's.marks': 'Đánh dấu',
       'aa.size': 'Cỡ chữ', 'aa.lh': 'Giãn dòng', 'aa.theme': 'Nền', 'aa.book': 'Sách', 'aa.dark': 'Tối', 'aa.sepia': 'Vàng', 'aa.light': 'Sáng', 'aa.font': 'Kiểu chữ', 'aa.sans': 'Không chân', 'aa.serif': 'Có chân',
-      't.prev': 'Đoạn trước', 't.next': 'Đoạn sau', 't.play': 'Phát', 't.pause': 'Tạm dừng', 't.speed': 'Tốc độ', 't.voice': 'Giọng đọc', 't.vol': 'Âm lượng', 't.mode': 'Phạm vi đọc', 't.mpara': 'Một đoạn', 't.mchap': 'Hết chương', 't.mbook': 'Cả sách', 'ch.n': 'chương',
-      't.noVoice': 'Thiết bị chưa có giọng đọc. Hãy chọn một giọng chất lượng cao ở ô bên cạnh.', 't.device': 'Giọng thiết bị', 't.fallback': 'Giọng chất lượng cao đang bận, tạm dùng giọng thiết bị.',
-      't.noVi': 'Máy chưa có giọng tiếng Việt. Trên Windows: Cài đặt > Thời gian và ngôn ngữ > Giọng nói; trên Android: cài Google Text-to-speech.', 't.noEn': 'Máy chưa có giọng tiếng Anh.', 't.using': 'Đang dùng', 't.vi': 'Giọng Việt', 't.en': 'Giọng Anh',
+      'ch.n': 'chương',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
       'cat.title': 'Kệ sách miễn phí',
       'cat.sub': 'Tác phẩm đã hết bản quyền. Bấm Đọc ngay để mở và đọc ngay trong trang, số chương theo bản gốc.',
@@ -44,24 +42,22 @@
     },
     en: {
       kicker: 'Personal library',
-      title: 'Read your books, keep your place, listen out loud',
+      title: 'Read your books, keep your place',
       lead: 'Read free books right on the web: keeps your place, bookmarks, Vietnamese translation and read-aloud.',
       'src.title': 'Library sources', 'src.books': 'books', 'src.pg': 'International public-domain library, English EPUBs', 'src.gh': 'Gutenberg mirror on GitHub; the site takes the text from here and splits chapters ahead of time', 'src.ws': 'Open Vietnamese library, read on Wikisource',
       'src.note': 'Only works whose copyright has expired.',
       f1: 'Books you open are stored in your browser',
-      f2: 'Listening uses the voices already on your device',
+      f2: 'Books are read in your browser, nothing is uploaded',
       'b.read': 'Read', 'b.continue': 'Continue', 'b.download': 'Download', 'b.delete': 'Delete', 'b.confirm': 'Click again to delete',
       'b.chapters': 'chapters', 'b.done': 'Finished',
       'm.adding': 'Adding', 'm.added': 'Added', 'm.badType': 'Only .epub and .txt are accepted', 'm.bad': 'This file could not be read', 'm.noZip': 'This browser cannot read EPUB yet. Use a recent Chrome, Edge or Safari.',
       'm.empty': 'The file has no readable text', 'm.big': 'File too large (60 MB max)', 'm.dup': 'Already in your library', 'm.storage': 'Could not save, browser storage is full or blocked',
-      'r.back': 'Back to library', 'r.listen': 'Listen', 'r.mark': 'Bookmark', 'r.toc': 'Contents and bookmarks', 'r.aa': 'Text and theme',
+      'r.back': 'Back to library', 'r.mark': 'Bookmark', 'r.toc': 'Contents and bookmarks', 'r.aa': 'Text and theme',
       'r.prev': 'Previous chapter', 'r.next': 'Next chapter', 'r.chapter': 'Chapter',
       'mark.added': 'Bookmarked', 'mark.removed': 'Bookmark removed', 'mark.none': 'No bookmarks yet. Tap the bookmark icon to save where you are.',
       's.chapters': 'Contents', 's.marks': 'Bookmarks',
       'aa.size': 'Text size', 'aa.lh': 'Line spacing', 'aa.theme': 'Theme', 'aa.book': 'Book', 'aa.dark': 'Dark', 'aa.sepia': 'Sepia', 'aa.light': 'Light', 'aa.font': 'Typeface', 'aa.sans': 'Sans', 'aa.serif': 'Serif',
-      't.prev': 'Previous paragraph', 't.next': 'Next paragraph', 't.play': 'Play', 't.pause': 'Pause', 't.speed': 'Speed', 't.voice': 'Voice', 't.vol': 'Volume', 't.mode': 'Read range', 't.mpara': 'One paragraph', 't.mchap': 'To chapter end', 't.mbook': 'Whole book', 'ch.n': 'chapters',
-      't.noVoice': 'This device has no speech voices. Pick a high-quality voice in the box next to it.', 't.device': 'Device voice', 't.fallback': 'The high-quality voice is busy, using the device voice for now.',
-      't.noVi': 'No Vietnamese voice on this device. Add one in your system speech settings.', 't.noEn': 'No English voice on this device.', 't.using': 'Using', 't.vi': 'Vietnamese voice', 't.en': 'English voice',
+      'ch.n': 'chapters',
       'ui.close': 'Close', 'ch.untitled': 'Part',
       'cat.title': 'Free bookshelf',
       'cat.sub': 'Works out of copyright. Tap Read now to open it here; chapters follow the original.',
@@ -822,7 +818,6 @@
   }
 
   function renderChapter(idx, frac, focusPara) {
-    stopSpeech(true);
     trRun++;
     chIdx = Math.max(0, Math.min(current.chapters.length - 1, idx));
     const ch = current.chapters[chIdx];
@@ -839,7 +834,6 @@
     if (transOn) page.lang = 'vi'; else if (current.lang) page.lang = current.lang; else page.removeAttribute('lang');
     renderChapterLabel();
     if (transOn) translateChapter();
-    if (typeof renderVoiceUi === 'function' && voices.length) renderVoiceUi();
     markBookmarked();
     requestAnimationFrame(() => {
       if (focusPara != null) {
@@ -901,9 +895,7 @@
 
   function closeBook() {
     saveProgress();
-    stopSpeech(true);
     trRun++;
-    $('tts').hidden = true;
     current = null;
     document.body.dataset.view = 'shelf';
     document.body.dataset.theme = 'dark';
@@ -1021,268 +1013,16 @@
   document.querySelectorAll('#aa-theme button').forEach((b) => b.addEventListener('click', () => { prefs.theme = b.dataset.theme; savePrefs(); applyPrefs(); }));
   document.querySelectorAll('#aa-font button').forEach((b) => b.addEventListener('click', () => { prefs.font = b.dataset.font; savePrefs(); applyPrefs(); }));
 
-  // ---------------------------------------------------------------------------
-  // Listening (Web Speech API)
-  // ---------------------------------------------------------------------------
-  const synth = window.speechSynthesis;
-  let voices = [];
-  let speaking = false;
-  let paraIdx = 0;
-  let chunkIdx = 0;
-  let runToken = 0;
-
-  // Two languages. Each has a few neural voices from the server (/api/tts) plus the device's own voice as a fallback.
-  const NET_VOICES = {
-    vi: [['vi-HoaiMy', 'HoaiMy'], ['vi-NamMinh', 'NamMinh']],
-    en: [['en-Aria', 'Aria'], ['en-Andrew', 'Andrew'], ['en-Sonia', 'Sonia'], ['en-Ryan', 'Ryan']]
-  };
-  prefs.who = Object.assign({ vi: 'vi-HoaiMy', en: 'en-Aria' }, prefs.who || {});
-  let netDown = false;      // set when the server voice failed; the device voice is used for the rest of the visit
-  let voiceLang = '';       // '' = follow the text
-  function voiceScore(v) {
-    const n = v.name.toLowerCase();
-    let sc = 0;
-    if (/natural|neural|online|premium|enhanced|wavenet|studio/.test(n)) sc += 50;
-    if (/google/.test(n)) sc += 30;
-    if (v.localService === false) sc += 5;
-    if (/espeak|compact|eloquence/.test(n)) sc -= 40;
-    return sc;
-  }
-  const bestVoice = (l) => voices.filter((v) => v.lang.toLowerCase().replace('_', '-').startsWith(l)).sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
-  const textLang = () => (transOn || /^vi/.test(current && current.lang || '') ? 'vi' : 'en');
-  const activeLang = () => voiceLang || textLang();
-  const whoNow = () => (netDown ? 'device' : (prefs.who[activeLang()] || 'device'));
-  function loadVoices() {
-    if (!synth) return;
-    voices = synth.getVoices();
-    renderVoiceUi();
-  }
-  function renderVoiceUi() {
-    const l = current ? activeLang() : 'vi';
-    document.querySelectorAll('#t-lang button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
-    const sel = $('t-who');
-    sel.textContent = '';
-    NET_VOICES[l].forEach(([id, label]) => sel.appendChild(new Option(label, id)));
-    sel.appendChild(new Option(t('t.device'), 'device'));
-    sel.value = whoNow();
-    const note = $('t-note');
-    note.hidden = true;
-    if (whoNow() === 'device') {
-      if (!synth || !voices.length) { note.hidden = false; note.textContent = t('t.noVoice'); }
-      else if (!bestVoice(l)) { note.hidden = false; note.textContent = t(l === 'vi' ? 't.noVi' : 't.noEn'); }
-    }
-  }
-  if (synth) {
-    loadVoices();
-    if (synth.addEventListener) synth.addEventListener('voiceschanged', loadVoices);
-    else synth.onvoiceschanged = loadVoices;
-  }
-
-  // neural audio: fetched one sentence at a time, the next two are fetched while one plays
-  const netCache = new Map();
-  let curAudio = null;
-  function netUrl(who, text) {
-    const key = who + '|' + text;
-    if (!netCache.has(key)) {
-      const p = fetch(`/api/tts?v=${encodeURIComponent(who)}&t=${encodeURIComponent(text)}`)
-        .then((r) => { if (!r.ok) throw new Error('http'); return r.blob(); })
-        .then((b) => URL.createObjectURL(b));
-      p.catch(() => netCache.delete(key));
-      netCache.set(key, p);
-      if (netCache.size > 40) { const k = netCache.keys().next().value; netCache.get(k).then((u) => URL.revokeObjectURL(u), () => {}); netCache.delete(k); }
-    }
-    return netCache.get(key);
-  }
-  function upcomingTexts(n) {
-    const out = [];
-    const blocks = current.chapters[chIdx].blocks;
-    let p = paraIdx;
-    let c = chunkIdx + 1;
-    while (out.length < n && p < blocks.length) {
-      const ch = chunksOf(textOf(p));
-      if (c < ch.length) { out.push(ch[c]); c++; } else { p++; c = 0; }
-    }
-    return out;
-  }
-
-  function chunksOf(text) {
-    const parts = text.match(/[^.!?…;:\n]+[.!?…;:]*\s*/g) || [text];
-    const out = [];
-    let buf = '';
-    parts.forEach((p) => {
-      if ((buf + p).length > 180 && buf) { out.push(buf.trim()); buf = p; } else buf += p;
-    });
-    if (buf.trim()) out.push(buf.trim());
-    return out.length ? out : [text];
-  }
-
-  function updateTtsUi() {
-    $('t-play-ic').innerHTML = speaking ? '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>' : '<path d="M7 4v16l13-8z"/>';
-    const label = t(speaking ? 't.pause' : 't.play');
-    $('t-play').setAttribute('aria-label', label);
-    $('t-play').title = label;
-    $('r-listen').setAttribute('aria-pressed', String(!$('tts').hidden));
-    $('t-rate-val').textContent = Number(prefs.rate).toFixed(1) + '×';
-    $('t-rate').value = prefs.rate;
-    $('t-vol').value = prefs.vol;
-    $('t-vol-val').textContent = Math.round(prefs.vol * 100) + '%';
-    const mode = $('t-mode');
-    if (mode.options.length !== 3) { mode.textContent = ''; ['para', 'chapter', 'book'].forEach((k) => mode.appendChild(new Option('', k))); }
-    ['t.mpara', 't.mchap', 't.mbook'].forEach((k, i) => { mode.options[i].textContent = t(k); });
-    mode.value = prefs.mode;
-  }
-
-  function highlight(i) {
-    page.querySelectorAll('.reading').forEach((e) => e.classList.remove('reading'));
-    const el = page.querySelector(`[data-i="${i}"]`);
-    if (!el) return;
-    el.classList.add('reading');
-    const r = el.getBoundingClientRect();
-    if (r.top < 70 || r.bottom > innerHeight - 140) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
-  }
-
-  function speakCurrent() {
-    if (!current) return;
-    const token = ++runToken;
-    if (synth) synth.cancel();
-    if (curAudio) { curAudio.pause(); curAudio = null; }
-    const blocks = current.chapters[chIdx].blocks;
-    if (paraIdx >= blocks.length) { // chapter finished
-      if (prefs.mode === 'book' && chIdx + 1 < current.chapters.length) {
-        renderChapter(chIdx + 1, 0);
-        window.scrollTo(0, 0);
-        saveProgress();
-        paraIdx = 0;
-        chunkIdx = 0;
-        speaking = true;
-        return speakCurrent();
-      }
-      speaking = false;
-      paraIdx = 0;
-      chunkIdx = 0;
-      updateTtsUi();
-      return;
-    }
-    const chunks = chunksOf(textOf(paraIdx));
-    if (chunkIdx >= chunks.length) {
-      paraIdx++; chunkIdx = 0;
-      if (prefs.mode === 'para') { speaking = false; page.querySelectorAll('.reading').forEach((e) => e.classList.remove('reading')); updateTtsUi(); return; }
-      return speakCurrent();
-    }
-
-    highlight(paraIdx);
-    speaking = true;
-    updateTtsUi();
-    const text = chunks[chunkIdx];
-    const who = whoNow();
-    if (who === 'device') return speakDevice(text, token);
-    netUrl(who, text).then((url) => {
-      if (token !== runToken || !speaking) return;
-      const a = new Audio(url);
-      curAudio = a;
-      a.playbackRate = Number(prefs.rate);
-      a.volume = Number(prefs.vol);
-      a.onended = () => { if (token !== runToken || !speaking) return; chunkIdx++; speakCurrent(); };
-      const fallback = () => { if (token !== runToken) return; netDown = true; showToast(t('t.fallback')); renderVoiceUi(); speakDevice(text, token); };
-      a.onerror = fallback;
-      a.play().catch((e) => { if (e && e.name === 'NotAllowedError') { speaking = false; updateTtsUi(); } else fallback(); });
-      upcomingTexts(2).forEach((tx) => netUrl(who, tx).catch(() => {}));
-    }).catch(() => {
-      if (token !== runToken) return;
-      netDown = true; showToast(t('t.fallback')); renderVoiceUi();
-      speakDevice(text, token);
-    });
-  }
-
-  function speakDevice(text, token) {
-    if (!synth) { speaking = false; updateTtsUi(); renderVoiceUi(); return; }
-    const u = new SpeechSynthesisUtterance(text);
-    const want = activeLang();
-    const voice = bestVoice(want);
-    if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = want === 'vi' ? 'vi-VN' : 'en-US';
-    u.rate = Number(prefs.rate);
-    u.volume = Number(prefs.vol);
-    u.onend = () => { if (token !== runToken || !speaking) return; chunkIdx++; speakCurrent(); };
-    u.onerror = (e) => { if (token !== runToken) return; if (e.error === 'canceled' || e.error === 'interrupted') return; speaking = false; updateTtsUi(); };
-    synth.speak(u);
-  }
-
-  function stopSpeech(silent) {
-    runToken++;
-    speaking = false;
-    if (synth) synth.cancel();
-    if (curAudio) { curAudio.pause(); curAudio = null; }
-    if (page) page.querySelectorAll('.reading').forEach((e) => e.classList.remove('reading'));
-    if (!silent) updateTtsUi();
-  }
-
-  function startListening() {
-    $('tts').hidden = false;
-    renderVoiceUi();
-    paraIdx = firstVisibleIndex();
-    chunkIdx = 0;
-    speaking = true;
-    speakCurrent();
-  }
-
-  $('r-listen').addEventListener('click', () => {
-    if ($('tts').hidden) startListening();
-    else { stopSpeech(); $('tts').hidden = true; updateTtsUi(); }
-  });
-  $('t-close').addEventListener('click', () => { stopSpeech(); $('tts').hidden = true; updateTtsUi(); });
-  $('t-play').addEventListener('click', () => {
-    if (speaking) { stopSpeech(); } // stop keeps the paragraph position so play resumes there
-    else { speaking = true; speakCurrent(); }
-    updateTtsUi();
-  });
-  $('t-prev').addEventListener('click', () => { paraIdx = Math.max(0, paraIdx - 1); chunkIdx = 0; if (speaking) speakCurrent(); else highlight(paraIdx); });
-  $('t-next').addEventListener('click', () => { paraIdx = Math.min(current.chapters[chIdx].blocks.length - 1, paraIdx + 1); chunkIdx = 0; if (speaking) speakCurrent(); else highlight(paraIdx); });
-  $('t-rate').addEventListener('input', (e) => {
-    prefs.rate = Number(e.target.value);
-    savePrefs();
-    updateTtsUi();
-    if (curAudio) curAudio.playbackRate = prefs.rate; // neural audio changes speed live
-  });
-  $('t-rate').addEventListener('change', () => { if (speaking && !curAudio) speakCurrent(); }); // device voice restarts the sentence at the new speed
-  $('t-vol').addEventListener('input', (e) => { prefs.vol = Number(e.target.value); savePrefs(); updateTtsUi(); if (curAudio) curAudio.volume = prefs.vol; });
-  $('t-vol').addEventListener('change', () => { if (speaking && !curAudio) speakCurrent(); });
-  $('t-who').addEventListener('change', (e) => {
-    netDown = false;
-    prefs.who[activeLang()] = e.target.value;
-    savePrefs();
-    renderVoiceUi();
-    if (speaking) speakCurrent();
-  });
-  $('t-mode').addEventListener('change', (e) => { prefs.mode = e.target.value; savePrefs(); });
-  document.querySelectorAll('#t-lang button').forEach((b) => b.addEventListener('click', () => {
-    voiceLang = b.dataset.l === textLang() ? '' : b.dataset.l;
-    renderVoiceUi();
-    if (speaking) speakCurrent();
-  }));
-
-  // tap a paragraph while the listening bar is open to read from there
-  page.addEventListener('click', (e) => {
-    if ($('tts').hidden) return;
-    const el = e.target.closest('[data-i]');
-    if (!el) return;
-    paraIdx = Number(el.dataset.i);
-    chunkIdx = 0;
-    speaking = true;
-    speakCurrent();
-  });
-
   document.addEventListener('keydown', (e) => {
     if (!current || openSheet) return;
     if (e.target.matches('input, select, textarea')) return;
     if (e.key === 'ArrowRight') $('r-next').click();
     else if (e.key === 'ArrowLeft') $('r-prev').click();
   });
-  window.addEventListener('beforeunload', () => { if (synth) synth.cancel(); if (curAudio) curAudio.pause(); });
 
   // ---------------------------------------------------------------------------
   applyPrefs();
   applyLang(lang);
-  updateTtsUi();
   loadShelf().then(() => {
     const id = location.hash.slice(1);
     if (id && books.some((b) => b.id === id)) openBook(id);
