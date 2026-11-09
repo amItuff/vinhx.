@@ -134,18 +134,18 @@ body[data-view="read"] .seg button[aria-pressed="true"] { background: var(--rfg)
 @media (max-width: 560px) { .rbanner { margin: -18px -16px 24px; padding: 18px 16px; } }
 
 /* "Book" theme: warm paper, serif text, paragraph indents, drop cap */
-body[data-theme="book"] { --rbg: #f6efdf; --rfg: #3a2e21; --rsub: #85745c; --rline: rgba(58, 46, 33, 0.16); --rmark: rgba(196, 138, 30, 0.26); --rread: rgba(58, 46, 33, 0.09); --rpanel: #ece2cb; }
-body[data-view="read"][data-theme="book"] { background: #e4d9c0; color-scheme: light; }
+body[data-theme="book"] { --rbg: #1c1915; --rfg: #d4c9b4; --rsub: #988b74; --rline: rgba(212, 201, 180, 0.14); --rmark: rgba(214, 160, 60, 0.2); --rread: rgba(212, 201, 180, 0.09); --rpanel: #25211b; }
+body[data-view="read"][data-theme="book"] { background: #12100d; color-scheme: dark; }
 body[data-theme="book"] .page { background: var(--rbg); text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
 body[data-theme="book"] .page p { margin: 0 0 0.2em; text-indent: 1.5em; }
 body[data-theme="book"] .page h2 { text-align: center; font-weight: 600; margin: 1.6em 0 1.1em; }
 body[data-theme="book"] .page h2::after { content: '\2766'; display: block; margin-top: 0.4em; font-size: 0.7em; opacity: 0.45; }
 body[data-theme="book"] .page h2 + p { text-indent: 0; }
-body[data-theme="book"] .page h2 + p::first-letter { float: left; font-family: var(--font-display); font-size: 3.2em; line-height: 0.85; padding: 0.06em 0.1em 0 0; color: #8a5a1f; }
+body[data-theme="book"] .page h2 + p::first-letter { float: left; font-family: var(--font-display); font-size: 3.2em; line-height: 0.85; padding: 0.06em 0.1em 0 0; color: #c9a063; }
 body[data-theme="book"] .page p.rb-title, body[data-theme="book"] .page p.rb-meta { text-indent: 0; }
 body[data-theme="book"] .page .marked, body[data-theme="book"] .page .reading { text-indent: 1.5em; }
 @media (min-width: 760px) {
-  body[data-view="read"][data-theme="book"] .page { margin: 22px auto 0; padding: 24px 56px 56px; border-radius: 6px; box-shadow: 0 10px 40px rgba(60, 40, 10, 0.18), 0 0 0 1px var(--rline); overflow: hidden; }
+  body[data-view="read"][data-theme="book"] .page { margin: 22px auto 0; padding: 24px 56px 56px; border-radius: 6px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--rline); overflow: hidden; }
   body[data-view="read"][data-theme="book"] .rbanner { margin: -24px -56px 32px; padding: 26px 56px; }
   body[data-view="read"][data-theme="book"] .rbar { background: var(--rbg); }
 }
@@ -225,9 +225,9 @@ body[data-view="shelf"] .toast { background: var(--ink); color: var(--paper); }
 .page .tc-t, .page .tc-a { text-indent: 0; }
 
 .page p { white-space: pre-line; }
-body[data-theme="book"] .rbanner, body[data-theme="sepia"] .rbanner, body[data-theme="light"] .rbanner { color: var(--rfg); }
-body[data-theme="book"] .rbanner::before, body[data-theme="sepia"] .rbanner::before, body[data-theme="light"] .rbanner::before { background: rgba(58, 46, 33, 0.06); }
-body[data-theme="book"] .rbanner .bbg, body[data-theme="sepia"] .rbanner .bbg, body[data-theme="light"] .rbanner .bbg { opacity: 0.16; }
+body[data-theme="sepia"] .rbanner, body[data-theme="light"] .rbanner { color: var(--rfg); }
+body[data-theme="sepia"] .rbanner::before, body[data-theme="light"] .rbanner::before { background: rgba(58, 46, 33, 0.06); }
+body[data-theme="sepia"] .rbanner .bbg, body[data-theme="light"] .rbanner .bbg { opacity: 0.16; }
 
 /* category accordion (same pattern as the FAQ on the home page) */
 .cacc { margin-top: 10px; border-top: 1px solid var(--line); }

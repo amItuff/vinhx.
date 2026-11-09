@@ -43,7 +43,7 @@
     en: {
       kicker: 'Personal library',
       title: 'Read your books, keep your place',
-      lead: 'Read free books right on the web: keeps your place, bookmarks, Vietnamese translation and read-aloud.',
+      lead: 'Read free books right on the web: keeps your place, bookmarks, and Vietnamese translation.',
       'src.title': 'Library sources', 'src.books': 'books', 'src.pg': 'International public-domain library, English EPUBs', 'src.gh': 'Gutenberg mirror on GitHub; the site takes the text from here and splits chapters ahead of time', 'src.ws': 'Open Vietnamese library, read on Wikisource',
       'src.note': 'Only works whose copyright has expired.',
       f1: 'Books you open are stored in your browser',
@@ -673,7 +673,7 @@
   const prefs = { size: 18, lh: 1.7, theme: 'book', font: 'serif', rate: 1, voice: '', trans: false, vol: 1, mode: 'book' };
   try { Object.assign(prefs, JSON.parse(localStorage.getItem('libPrefs') || '{}')); } catch (_) {}
   const savePrefs = () => { try { localStorage.setItem('libPrefs', JSON.stringify(prefs)); } catch (_) {} };
-  if ((prefs.v || 1) < 2) { prefs.theme = 'book'; prefs.font = 'serif'; prefs.v = 2; savePrefs(); } // new default look for everyone once
+  if ((prefs.v || 1) < 3) { prefs.theme = 'book'; prefs.font = 'serif'; prefs.v = 3; savePrefs(); } // new dim default look, applied once
 
   function applyPrefs() {
     document.body.dataset.theme = prefs.theme;
@@ -685,7 +685,7 @@
     document.querySelectorAll('#aa-theme button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.theme === prefs.theme)));
     document.querySelectorAll('#aa-font button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.font === prefs.font)));
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta && current) meta.content = { book: '#f6efdf', dark: '#0b0c10', sepia: '#f4ecd8', light: '#ffffff' }[prefs.theme];
+    if (meta && current) meta.content = { book: '#1c1915', dark: '#0b0c10', sepia: '#f4ecd8', light: '#ffffff' }[prefs.theme];
   }
 
   // ---- translation: Chrome's on-device Translator API, nothing is sent to our server ----
