@@ -17,7 +17,7 @@
       kicker: 'Thư viện cá nhân',
       title: 'Đọc sách của bạn, nhớ tiến độ, nghe đọc thành tiếng',
       lead: 'Đọc sách miễn phí ngay trong web: nhớ tiến độ, đánh dấu, dịch tiếng Việt và nghe đọc.',
-      'src.title': 'Nguồn thư viện', 'src.books': 'sách', 'src.pg': 'Kho sách công cộng quốc tế, bản EPUB tiếng Anh', 'src.ws': 'Thư viện mở tiếng Việt, đọc trên Wikisource',
+      'src.title': 'Nguồn thư viện', 'src.books': 'sách', 'src.pg': 'Kho sách công cộng quốc tế, bản EPUB tiếng Anh', 'src.se': 'Bản EPUB biên tập kỹ, mã nguồn mở trên GitHub', 'src.ws': 'Thư viện mở tiếng Việt, đọc trên Wikisource',
       'src.note': 'Chỉ gồm tác phẩm đã hết bản quyền.',
       f1: 'Sách đã mở được lưu trong trình duyệt của bạn',
       f2: 'Nghe đọc dùng giọng có sẵn trên thiết bị',
@@ -39,14 +39,14 @@
       'cat.all': 'Tất cả', 'cat.wiki': 'Đọc trên Wikisource',
       'cat.busy': 'Đang tải', 'cat.read': 'Đọc ngay', 'cat.cont': 'Đọc tiếp', 'cat.more': 'Xem thêm', 'cat.fail': 'Chưa tải được sách này, hãy thử lại sau.',
       'tr.on': 'Dịch sang tiếng Việt', 'tr.off': 'Hiện bản gốc', 'tr.none': 'Trình duyệt này chưa có dịch tích hợp. Hãy dùng Chrome hoặc Edge mới, hoặc nhấp chuột phải rồi chọn Dịch sang tiếng Việt.', 'tr.busy': 'Đang dịch', 'tr.fail': 'Chưa dịch được, hãy thử lại.', 'tr.dl': 'Đang tải gói dịch, lần đầu có thể hơi lâu',
-      'g.en': 'Văn học Anh – Mỹ', 'g.ru': 'Văn học Nga', 'g.fr': 'Văn học Pháp', 'g.eu': 'Văn học châu Âu', 'g.ancient': 'Cổ điển',
+      'g.en': 'Văn học Anh – Mỹ', 'g.ru': 'Văn học Nga', 'g.fr': 'Văn học Pháp', 'g.eu': 'Thế giới khác', 'g.ancient': 'Cổ điển',
       'g.crime': 'Trinh thám & kinh dị', 'g.kids': 'Phiêu lưu & thiếu nhi', 'g.biz': 'Kinh tế & chứng khoán', 'g.phil': 'Triết học & khoa học', 'g.vi': 'Văn học Việt Nam'
     },
     en: {
       kicker: 'Personal library',
       title: 'Read your books, keep your place, listen out loud',
       lead: 'Read free books right on the web: keeps your place, bookmarks, Vietnamese translation and read-aloud.',
-      'src.title': 'Library sources', 'src.books': 'books', 'src.pg': 'International public-domain library, English EPUBs', 'src.ws': 'Open Vietnamese library, read on Wikisource',
+      'src.title': 'Library sources', 'src.books': 'books', 'src.pg': 'International public-domain library, English EPUBs', 'src.se': 'Carefully edited EPUBs, open source on GitHub', 'src.ws': 'Open Vietnamese library, read on Wikisource',
       'src.note': 'Only works whose copyright has expired.',
       f1: 'Books you open are stored in your browser',
       f2: 'Listening uses the voices already on your device',
@@ -68,7 +68,7 @@
       'cat.all': 'All', 'cat.wiki': 'Read on Wikisource',
       'cat.busy': 'Loading', 'cat.read': 'Read now', 'cat.cont': 'Continue', 'cat.more': 'Show more', 'cat.fail': 'Could not load this book right now, please try again later.',
       'tr.on': 'Translate to Vietnamese', 'tr.off': 'Show original', 'tr.none': 'This browser has no built-in translation. Use a recent Chrome or Edge, or right-click and choose Translate.', 'tr.busy': 'Translating', 'tr.fail': 'Could not translate, please try again.', 'tr.dl': 'Downloading the translation pack, the first time can take a moment',
-      'g.en': 'British & American', 'g.ru': 'Russian', 'g.fr': 'French', 'g.eu': 'Other European', 'g.ancient': 'Classics',
+      'g.en': 'British & American', 'g.ru': 'Russian', 'g.fr': 'French', 'g.eu': 'Rest of the world', 'g.ancient': 'Classics',
       'g.crime': 'Mystery & horror', 'g.kids': 'Adventure & young readers', 'g.biz': 'Economics & markets', 'g.phil': 'Philosophy & science', 'g.vi': 'Vietnamese literature'
     }
   };
@@ -255,6 +255,7 @@
     const chapters = [];
     for (const item of spine) {
       if (!/html|xml/i.test(item.type)) continue;
+      if (/(^|\/)(titlepage|halftitlepage|imprint|colophon|uncopyright|toc|cover)\.x?html$/i.test(item.href)) continue;
       let text;
       try { text = await zip.text(resolvePath(base, item.href)); } catch (_) { continue; }
       const { blocks, title: ct } = htmlToBlocks(text);
@@ -313,46 +314,76 @@
   // (cover and EPUB come from gutenberg.org); q = Vietnamese Wikisource search for Vietnamese works.
   const CATEGORIES = ['en', 'ru', 'fr', 'eu', 'ancient', 'crime', 'kids', 'biz', 'phil', 'vi'];
   const CATALOG = [
-    { id: 1342, g: 'en', t: 'Pride and Prejudice', a: 'Jane Austen' },
-    { id: 1260, g: 'en', t: 'Jane Eyre', a: 'Charlotte Brontë' },
-    { id: 768, g: 'en', t: 'Wuthering Heights', a: 'Emily Brontë' },
-    { id: 1400, g: 'en', t: 'Great Expectations', a: 'Charles Dickens' },
-    { id: 2701, g: 'en', t: 'Moby-Dick', a: 'Herman Melville' },
-    { id: 64317, g: 'en', t: 'The Great Gatsby', a: 'F. Scott Fitzgerald' },
+    // g = category, id = Project Gutenberg number, se = Standard Ebooks path (preferred when present), q = Wikisource search
+    { id: 1342, se: 'jane-austen/pride-and-prejudice', g: 'en', t: 'Pride and Prejudice', v: 'Kiêu hãnh và định kiến', a: 'Jane Austen' },
+    { id: 158, se: 'jane-austen/emma', g: 'en', t: 'Emma', a: 'Jane Austen' },
+    { id: 161, g: 'en', t: 'Sense and Sensibility', v: 'Lý trí và tình cảm', a: 'Jane Austen' },
+    { id: 105, g: 'en', t: 'Persuasion', a: 'Jane Austen' },
+    { id: 1260, se: 'charlotte-bronte/jane-eyre', g: 'en', t: 'Jane Eyre', a: 'Charlotte Brontë' },
+    { id: 768, g: 'en', t: 'Wuthering Heights', v: 'Đồi gió hú', a: 'Emily Brontë' },
+    { id: 1400, g: 'en', t: 'Great Expectations', v: 'Những kỳ vọng lớn lao', a: 'Charles Dickens' },
+    { id: 98, se: 'charles-dickens/a-tale-of-two-cities', g: 'en', t: 'A Tale of Two Cities', v: 'Chuyện hai thành phố', a: 'Charles Dickens' },
+    { id: 730, se: 'charles-dickens/oliver-twist', g: 'en', t: 'Oliver Twist', a: 'Charles Dickens' },
+    { id: 46, g: 'en', t: 'A Christmas Carol', v: 'Bài ca Giáng sinh', a: 'Charles Dickens' },
+    { se: 'thomas-hardy/tess-of-the-durbervilles', g: 'en', t: "Tess of the d'Urbervilles", a: 'Thomas Hardy' },
+    { id: 145, g: 'en', t: 'Middlemarch', a: 'George Eliot' },
+    { id: 2701, g: 'en', t: 'Moby-Dick', v: 'Cá voi trắng', a: 'Herman Melville' },
+    { id: 25344, g: 'en', t: 'The Scarlet Letter', v: 'Chữ A đỏ', a: 'Nathaniel Hawthorne' },
+    { id: 64317, g: 'en', t: 'The Great Gatsby', v: 'Gatsby vĩ đại', a: 'F. Scott Fitzgerald' },
     { id: 76, g: 'en', t: 'Adventures of Huckleberry Finn', a: 'Mark Twain' },
-    { id: 1513, g: 'en', t: 'Romeo and Juliet', a: 'William Shakespeare' },
-    { id: 1524, g: 'en', t: 'Hamlet', a: 'William Shakespeare' },
-    { id: 174, g: 'en', t: 'The Picture of Dorian Gray', a: 'Oscar Wilde' },
-    { id: 2554, g: 'ru', t: 'Crime and Punishment', v: 'Tội ác và hình phạt', a: 'Fyodor Dostoevsky' },
+    { se: 'jack-london/the-call-of-the-wild', g: 'en', t: 'The Call of the Wild', v: 'Tiếng gọi nơi hoang dã', a: 'Jack London' },
+    { id: 1513, g: 'en', t: 'Romeo and Juliet', v: 'Romeo và Juliet', a: 'William Shakespeare' },
+    { id: 174, g: 'en', t: 'The Picture of Dorian Gray', v: 'Bức chân dung của Dorian Gray', a: 'Oscar Wilde' },
+    { id: 844, g: 'en', t: 'The Importance of Being Earnest', a: 'Oscar Wilde' },
+    { id: 1952, g: 'en', t: 'The Yellow Wallpaper', a: 'Charlotte Perkins Gilman' },
+    { id: 219, g: 'en', t: 'Heart of Darkness', v: 'Trái tim bóng tối', a: 'Joseph Conrad' },
+    { id: 2554, se: 'fyodor-dostoevsky/crime-and-punishment/constance-garnett', g: 'ru', t: 'Crime and Punishment', v: 'Tội ác và hình phạt', a: 'Fyodor Dostoevsky' },
     { id: 28054, g: 'ru', t: 'The Brothers Karamazov', v: 'Anh em nhà Karamazov', a: 'Fyodor Dostoevsky' },
+    { id: 600, g: 'ru', t: 'Notes from Underground', v: 'Ghi chép từ căn hầm', a: 'Fyodor Dostoevsky' },
+    { id: 36034, g: 'ru', t: 'White Nights, and Other Stories', v: 'Đêm trắng', a: 'Fyodor Dostoevsky' },
     { id: 2600, g: 'ru', t: 'War and Peace', v: 'Chiến tranh và hòa bình', a: 'Leo Tolstoy' },
-    { id: 1399, g: 'ru', t: 'Anna Karenina', a: 'Leo Tolstoy' },
-    { id: 135, g: 'fr', t: 'Les Misérables', v: 'Những người khốn khổ', a: 'Victor Hugo' },
+    { id: 1399, se: 'leo-tolstoy/anna-karenina/constance-garnett', g: 'ru', t: 'Anna Karenina', a: 'Leo Tolstoy' },
+    { id: 135, se: 'victor-hugo/les-miserables/isabel-f-hapgood', g: 'fr', t: 'Les Misérables', v: 'Những người khốn khổ', a: 'Victor Hugo' },
     { id: 1184, g: 'fr', t: 'The Count of Monte Cristo', v: 'Bá tước Monte Cristo', a: 'Alexandre Dumas' },
-    { id: 2413, g: 'fr', t: 'Madame Bovary', a: 'Gustave Flaubert' },
-    { id: 19942, g: 'fr', t: 'Candide', a: 'Voltaire' },
-    { id: 996, g: 'eu', t: 'Don Quixote', v: 'Don Quixote', a: 'Miguel de Cervantes' },
+    { id: 1259, g: 'fr', t: 'Twenty Years After', v: 'Hai mươi năm sau', a: 'Alexandre Dumas' },
+    { id: 996, g: 'eu', t: 'Don Quixote', a: 'Miguel de Cervantes' },
     { id: 5200, g: 'eu', t: 'Metamorphosis', v: 'Hóa thân', a: 'Franz Kafka' },
-    { id: 8800, g: 'eu', t: 'The Divine Comedy', v: 'Thần khúc', a: 'Dante Alighieri' },
+    { id: 2542, g: 'eu', t: "A Doll's House", v: 'Nhà búp bê', a: 'Henrik Ibsen' },
+    { id: 2814, g: 'eu', t: 'Dubliners', a: 'James Joyce' },
+    { id: 4300, g: 'eu', t: 'Ulysses', a: 'James Joyce' },
+    { id: 24264, g: 'eu', t: '紅樓夢', v: 'Hồng lâu mộng (bản chữ Hán)', a: 'Tào Tuyết Cần' },
     { id: 1727, g: 'ancient', t: 'The Odyssey', v: 'Odyssey', a: 'Homer' },
-    { id: 6130, g: 'ancient', t: 'The Iliad', v: 'Iliad', a: 'Homer' },
-    { id: 1661, g: 'crime', t: 'The Adventures of Sherlock Holmes', v: 'Những cuộc phiêu lưu của Sherlock Holmes', a: 'Arthur Conan Doyle' },
+    { id: 1497, g: 'ancient', t: 'The Republic', v: 'Nhà nước (Cộng hòa)', a: 'Plato' },
+    { id: 16328, g: 'ancient', t: 'Beowulf', a: 'Anglo-Saxon epic' },
+    { id: 1661, g: 'crime', t: 'The Adventures of Sherlock Holmes', v: 'Sherlock Holmes: Những cuộc phiêu lưu', a: 'Arthur Conan Doyle' },
+    { id: 244, g: 'crime', t: 'A Study in Scarlet', v: 'Cuộc điều tra màu đỏ', a: 'Arthur Conan Doyle' },
+    { id: 2852, se: 'arthur-conan-doyle/the-hound-of-the-baskervilles', g: 'crime', t: 'The Hound of the Baskervilles', v: 'Chó săn dòng họ Baskerville', a: 'Arthur Conan Doyle' },
     { id: 345, g: 'crime', t: 'Dracula', a: 'Bram Stoker' },
     { id: 84, g: 'crime', t: 'Frankenstein', a: 'Mary Shelley' },
     { id: 43, g: 'crime', t: 'Strange Case of Dr Jekyll and Mr Hyde', a: 'Robert Louis Stevenson' },
     { id: 11, g: 'kids', t: "Alice's Adventures in Wonderland", v: 'Alice ở xứ sở thần tiên', a: 'Lewis Carroll' },
+    { id: 12, g: 'kids', t: 'Through the Looking-Glass', v: 'Alice ở xứ sở trong gương', a: 'Lewis Carroll' },
     { id: 120, g: 'kids', t: 'Treasure Island', v: 'Đảo giấu vàng', a: 'Robert Louis Stevenson' },
     { id: 74, g: 'kids', t: 'The Adventures of Tom Sawyer', v: 'Những cuộc phiêu lưu của Tom Sawyer', a: 'Mark Twain' },
     { id: 37106, g: 'kids', t: 'Little Women', v: 'Những người phụ nữ nhỏ bé', a: 'Louisa May Alcott' },
-    { id: 103, g: 'kids', t: 'Around the World in Eighty Days', v: 'Vòng quanh thế giới trong 80 ngày', a: 'Jules Verne' },
-    { id: 1257, g: 'kids', t: 'The Three Musketeers', v: 'Ba chàng lính ngự lâm', a: 'Alexandre Dumas' },
+    { id: 45, g: 'kids', t: 'Anne of Green Gables', v: 'Anne tóc đỏ dưới chái nhà xanh', a: 'L. M. Montgomery' },
+    { id: 113, g: 'kids', t: 'The Secret Garden', v: 'Khu vườn bí mật', a: 'Frances Hodgson Burnett' },
+    { id: 16, g: 'kids', t: 'Peter Pan', a: 'J. M. Barrie' },
+    { id: 55, g: 'kids', t: 'The Wonderful Wizard of Oz', v: 'Phù thủy xứ Oz', a: 'L. Frank Baum' },
+    { id: 2591, g: 'kids', t: "Grimms' Fairy Tales", v: 'Truyện cổ Grimm', a: 'Brothers Grimm' },
+    { id: 829, g: 'kids', t: "Gulliver's Travels", v: 'Gulliver du ký', a: 'Jonathan Swift' },
+    { id: 35, se: 'h-g-wells/the-time-machine', g: 'kids', t: 'The Time Machine', v: 'Cỗ máy thời gian', a: 'H. G. Wells' },
+    { id: 36, g: 'kids', t: 'The War of the Worlds', v: 'Cuộc chiến giữa các thế giới', a: 'H. G. Wells' },
     { id: 3300, g: 'biz', t: 'The Wealth of Nations', v: 'Của cải của các quốc gia', a: 'Adam Smith' },
-    { id: 24518, g: 'biz', t: 'Extraordinary Popular Delusions and the Madness of Crowds', v: 'Ảo tưởng đám đông và cơn điên của đám đông', a: 'Charles Mackay' },
+    { id: 20203, g: 'biz', t: 'Autobiography of Benjamin Franklin', v: 'Tự truyện Benjamin Franklin', a: 'Benjamin Franklin' },
+    { id: 34901, g: 'biz', t: 'On Liberty', v: 'Bàn về tự do', a: 'John Stuart Mill' },
     { id: 132, g: 'phil', t: 'The Art of War', v: 'Binh pháp Tôn Tử', a: 'Sun Tzu' },
     { id: 1232, g: 'phil', t: 'The Prince', v: 'Quân vương', a: 'Niccolò Machiavelli' },
     { id: 2680, g: 'phil', t: 'Meditations', v: 'Suy tưởng', a: 'Marcus Aurelius' },
+    { id: 45109, g: 'phil', t: 'The Enchiridion', v: 'Cẩm nang', a: 'Epictetus' },
     { id: 1998, g: 'phil', t: 'Thus Spake Zarathustra', v: 'Zarathustra đã nói như thế', a: 'Friedrich Nietzsche' },
-    { id: 2009, g: 'phil', t: 'On the Origin of Species', v: 'Nguồn gốc các loài', a: 'Charles Darwin' },
+    { id: 4363, g: 'phil', t: 'Beyond Good and Evil', v: 'Bên kia thiện ác', a: 'Friedrich Nietzsche' },
+    { id: 1228, g: 'phil', t: 'On the Origin of Species', v: 'Nguồn gốc các loài', a: 'Charles Darwin' },
     { id: 205, g: 'phil', t: 'Walden', a: 'Henry David Thoreau' },
     { q: 'Truyện Kiều', g: 'vi', t: 'Truyện Kiều', a: 'Nguyễn Du' },
     { q: 'Chinh phụ ngâm', g: 'vi', t: 'Chinh phụ ngâm', a: 'Đặng Trần Côn' },
@@ -364,7 +395,9 @@
   let catExpanded = false;
   const CAT_LIMIT = 8;
   const catBusy = new Set();
-  const coverOf = (it) => `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.small.jpg`;
+  const coverOf = (it) => it.id ? `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.small.jpg` : `https://standardebooks.org/ebooks/${it.se}/downloads/cover.jpg`;
+  const fileOf = (it) => it.se ? `se-${it.se.replace(/\//g, '_')}.epub` : `pg${it.id}.epub`;
+  const onShelf = (it) => books.find((b) => b.fileName === fileOf(it) || (it.id && b.fileName === `pg${it.id}.epub`));
 
   function renderCatalog() {
     const tabs = $('cat-tabs');
@@ -391,7 +424,7 @@
       cv.className = 'cthumb';
       cv.style.setProperty('--h', hue);
       cv.textContent = (it.t.match(/\p{L}/u) || ['?'])[0].toUpperCase();
-      if (it.id) {
+      if (it.id || it.se) {
         const img = document.createElement('img');
         img.loading = 'lazy';
         img.decoding = 'async';
@@ -409,13 +442,13 @@
       sub.textContent = it.a + (lang === 'vi' && it.v ? ' · ' + it.t : '');
       info.append(title, sub);
       let act;
-      if (it.id) {
-        const mine = books.find((b) => b.fileName === `pg${it.id}.epub`);
+      if (it.id || it.se) {
+        const mine = onShelf(it);
         act = document.createElement('button');
         act.type = 'button';
         act.className = 'btn primary';
-        act.disabled = catBusy.has(it.id);
-        act.textContent = catBusy.has(it.id) ? t('cat.busy') + '...' : mine ? t('cat.cont') : t('cat.read');
+        act.disabled = catBusy.has(it.id || it.se);
+        act.textContent = catBusy.has(it.id || it.se) ? t('cat.busy') + '...' : mine ? t('cat.cont') : t('cat.read');
         act.addEventListener('click', () => readFromCatalog(it));
       } else {
         act = document.createElement('a');
@@ -447,7 +480,8 @@
     box.textContent = '';
     const rows = [
       ['Project Gutenberg', 'https://www.gutenberg.org/', CATALOG.filter((i) => i.id).length, 'src.pg'],
-      ['Wikisource', 'https://vi.wikisource.org/', CATALOG.filter((i) => !i.id).length, 'src.ws']
+      ['Standard Ebooks', 'https://standardebooks.org/', CATALOG.filter((i) => i.se).length, 'src.se'],
+      ['Wikisource', 'https://vi.wikisource.org/', CATALOG.filter((i) => i.q).length, 'src.ws']
     ];
     rows.forEach(([name, href, n, desc]) => {
       const li = document.createElement('li');
@@ -463,15 +497,16 @@
   }
 
   async function readFromCatalog(it) {
-    const fname = `pg${it.id}.epub`;
-    const have = books.find((b) => b.fileName === fname);
+    const fname = fileOf(it);
+    const have = onShelf(it);
     if (have) { openBook(have.id); return; }
-    catBusy.add(it.id);
+    const busyKey = it.id || it.se;
+    catBusy.add(busyKey);
     renderCatalog();
     try {
       const ctl = new AbortController();
       const timer = setTimeout(() => ctl.abort(), 30000);
-      const res = await fetch(`/api/book?id=${it.id}`, { signal: ctl.signal });
+      const res = await fetch(it.se ? `/api/book?se=${encodeURIComponent(it.se)}` : `/api/book?id=${it.id}`, { signal: ctl.signal });
       clearTimeout(timer);
       if (!res.ok) throw new Error('http');
       const blob = await res.blob();
@@ -482,7 +517,7 @@
     } catch (_) {
       showToast(t('cat.fail'));
     } finally {
-      catBusy.delete(it.id);
+      catBusy.delete(busyKey);
       renderCatalog();
     }
   }
@@ -512,7 +547,7 @@
       const book = { id: uid(), sig, title: parsed.title, author: parsed.author, kind: isEpub ? 'epub' : 'txt', lang: parsed.lang || meta.lang || '', cover: meta.cover || '', fileName: name, size: file.size, added: Date.now(), chapters: parsed.chapters };
       await putOne('books', book);
       await putOne('files', file, book.id);
-      importMsg.textContent = `${t('m.added')}: ${parsed.title}`;
+      importMsg.textContent = '';
     } catch (e) {
       const m = e && e.message;
       importMsg.textContent = `${name}: ${m === 'nozip' ? t('m.noZip') : e && e.name === 'QuotaExceededError' ? t('m.storage') : t('m.bad')}`;
@@ -828,7 +863,7 @@
     document.body.dataset.view = 'shelf';
     document.body.dataset.theme = 'dark';
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = '#07080b';
+    if (meta) meta.content = '#f2e9d5';
     $('reader').hidden = true;
     $('shelf').hidden = false;
     history.replaceState(null, '', location.pathname);
