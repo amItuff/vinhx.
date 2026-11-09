@@ -8,6 +8,10 @@
       "destination": "/convert.html"
     },
     {
+      "source": "/library",
+      "destination": "/library.html"
+    },
+    {
       "source": "/note",
       "destination": "/note.html"
     },

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07080b" />
+  <title>vinhx library — đọc sách, đánh dấu, nghe đọc</title>
+  <meta name="description" content="Thư viện cá nhân ngay trên trình duyệt: mở file EPUB hoặc TXT, đánh dấu trang, nhớ tiến độ và nghe đọc thành tiếng với tốc độ tùy chỉnh. Sách không được tải lên máy chủ." />
+  <link rel="canonical" href="https://vinhx.info/library" />
+  <meta property="og:title" content="vinhx library" />
+  <meta property="og:description" content="Đọc sách EPUB/TXT của bạn, đánh dấu, nhớ tiến độ, nghe đọc thành tiếng." />
+  <meta property="og:url" content="https://vinhx.info/library" />
+  <meta property="og:image" content="https://vinhx.info/og-library.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111318'/%3E%3Cpath d='M18 18h12a4 4 0 0 1 4 4v26a4 4 0 0 0-4-4H18zM46 18H34v26h12z' fill='none' stroke='%23fff' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/note.css?v=4" />
+  <link rel="stylesheet" href="/library.css?v=1" />
+  <script src="/library.js?v=1" defer></script>
+</head>
+<body data-view="shelf" data-theme="dark">
+  <header class="bar">
+    <a class="brand" href="/">vinhx<span>/library</span></a>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button type="button" data-lang="vi">VI</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <!-- shelf -->
+  <main id="shelf" class="lib">
+    <p class="kicker" data-i18n="kicker">Thư viện cá nhân</p>
+    <h1 data-i18n="title">Đọc sách của bạn, nhớ tiến độ, nghe đọc thành tiếng</h1>
+    <p class="lead" data-i18n="lead">Thêm file EPUB hoặc TXT bạn có quyền dùng. Sách nằm trong trình duyệt của bạn, không tải lên máy chủ.</p>
+
+    <label id="drop" class="drop" tabindex="0">
+      <input id="file" type="file" accept=".epub,.txt,application/epub+zip,text/plain" multiple hidden />
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+      <strong data-i18n="drop.title">Thả file vào đây hoặc bấm để chọn</strong>
+      <span class="small" data-i18n="drop.sub">Hỗ trợ .epub và .txt (UTF-8)</span>
+    </label>
+    <p id="import-msg" class="hint" role="status" aria-live="polite"></p>
+
+    <ul id="books" class="books"></ul>
+    <p id="empty" class="empty" data-i18n="empty" hidden>Thư viện đang trống. Hãy thêm sách miễn phí, sách tự viết hoặc sách đã hết thời hạn bản quyền.</p>
+
+    <section class="sources">
+      <h2 data-i18n="src.title">Nơi tìm sách miễn phí hợp pháp</h2>
+      <ul>
+        <li><a href="https://vi.wikisource.org/" target="_blank" rel="noopener noreferrer">Wikisource tiếng Việt</a> <span data-i18n="src.ws">tác phẩm đã hết bản quyền</span></li>
+        <li><a href="https://www.gutenberg.org/" target="_blank" rel="noopener noreferrer">Project Gutenberg</a> <span data-i18n="src.pg">sách công cộng, tải EPUB</span></li>
+        <li><a href="https://standardebooks.org/" target="_blank" rel="noopener noreferrer">Standard Ebooks</a> <span data-i18n="src.se">EPUB biên tập đẹp, miễn phí</span></li>
+        <li><a href="https://archive.org/" target="_blank" rel="noopener noreferrer">Internet Archive</a> <span data-i18n="src.ia">kho tư liệu lớn</span></li>
+      </ul>
+      <p class="small" data-i18n="src.note">Sách còn bản quyền (như truyện của các nhà văn đương đại) hãy mua hoặc mượn từ nhà sách, thư viện.</p>
+    </section>
+
+    <ul class="facts">
+      <li data-i18n="f1">Không tải sách lên máy chủ, mọi thứ lưu trong trình duyệt của bạn</li>
+      <li data-i18n="f2">Dọn dữ liệu trình duyệt sẽ xóa sách; hãy giữ file gốc hoặc dùng nút Tải về</li>
+      <li data-i18n="f3">Nghe đọc dùng giọng có sẵn trên thiết bị, cần có giọng tiếng Việt</li>
+    </ul>
+  </main>
+
+  <!-- reader -->
+  <section id="reader" class="reader" hidden>
+    <div class="rbar">
+      <button id="r-back" class="icon-btn" type="button" data-i18n-label="r.back" aria-label="Về thư viện" title="Về thư viện"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="rtitle"><b id="r-title"></b><span id="r-chap"></span></div>
+      <div class="rtools">
+        <button id="r-listen" class="icon-btn" type="button" data-i18n-label="r.listen" aria-label="Nghe đọc" title="Nghe đọc"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2M4 14h3v6H4zM17 14h3v6h-3z"/></svg></button>
+        <button id="r-mark" class="icon-btn" type="button" data-i18n-label="r.mark" aria-label="Đánh dấu" title="Đánh dấu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v16l-5-4-5 4z"/></svg></button>
+        <button id="r-toc" class="icon-btn" type="button" data-i18n-label="r.toc" aria-label="Mục lục và đánh dấu" title="Mục lục và đánh dấu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
+        <button id="r-aa" class="icon-btn" type="button" data-i18n-label="r.aa" aria-label="Chữ và giao diện" title="Chữ và giao diện"><b aria-hidden="true">Aa</b></button>
+      </div>
+    </div>
+    <div id="r-progress" class="rprog" aria-hidden="true"><i></i></div>
+
+    <article id="page" class="page" tabindex="-1"></article>
+
+    <nav class="rnav">
+      <button id="r-prev" class="btn" type="button" data-i18n="r.prev">Chương trước</button>
+      <span id="r-pct" class="pct"></span>
+      <button id="r-next" class="btn" type="button" data-i18n="r.next">Chương sau</button>
+    </nav>
+
+    <!-- listening bar -->
+    <div id="tts" class="tts" hidden>
+      <div class="tts-row">
+        <button id="t-prev" class="icon-btn" type="button" data-i18n-label="t.prev" aria-label="Đoạn trước" title="Đoạn trước"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+        <button id="t-play" class="icon-btn big" type="button" data-i18n-label="t.play" aria-label="Phát" title="Phát"><svg id="t-play-ic" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></button>
+        <button id="t-next" class="icon-btn" type="button" data-i18n-label="t.next" aria-label="Đoạn sau" title="Đoạn sau"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+        <label class="speed"><span data-i18n="t.speed">Tốc độ</span> <b id="t-rate-val">1.0×</b>
+          <input id="t-rate" type="range" min="0.5" max="2" step="0.1" value="1" data-i18n-label="t.speed" aria-label="Tốc độ đọc" />
+        </label>
+        <button id="t-close" class="icon-btn" type="button" data-i18n-label="ui.close" aria-label="Đóng" title="Đóng"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="tts-row">
+        <select id="t-voice" data-i18n-label="t.voice" aria-label="Giọng đọc"></select>
+      </div>
+      <p id="t-note" class="small" hidden></p>
+    </div>
+  </section>
+
+  <!-- sheets -->
+  <div id="sheet-toc" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="toc-title">
+    <div class="sheet-overlay" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-head">
+        <div class="seg" id="toc-tabs" role="tablist">
+          <button type="button" role="tab" data-tab="chapters" aria-pressed="true" data-i18n="s.chapters">Mục lục</button>
+          <button type="button" role="tab" data-tab="marks" aria-pressed="false" data-i18n="s.marks">Đánh dấu</button>
+        </div>
+        <button type="button" class="icon-btn" data-close data-i18n-label="ui.close" aria-label="Đóng"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <h2 id="toc-title" class="sr" data-i18n="s.chapters">Mục lục</h2>
+      <ol id="toc-list" class="tlist"></ol>
+      <ul id="mark-list" class="tlist" hidden></ul>
+    </div>
+  </div>
+
+  <div id="sheet-aa" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="aa-title">
+    <div class="sheet-overlay" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-head">
+        <h2 id="aa-title" class="sheet-title" data-i18n="r.aa">Chữ và giao diện</h2>
+        <button type="button" class="icon-btn" data-close data-i18n-label="ui.close" aria-label="Đóng"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="sheet-body">
+        <div>
+          <label class="fl" for="aa-size"><span data-i18n="aa.size">Cỡ chữ</span> <b id="aa-size-val">18</b></label>
+          <input id="aa-size" type="range" min="14" max="30" step="1" value="18" />
+        </div>
+        <div>
+          <label class="fl" for="aa-lh"><span data-i18n="aa.lh">Giãn dòng</span> <b id="aa-lh-val">1.7</b></label>
+          <input id="aa-lh" type="range" min="1.3" max="2.2" step="0.1" value="1.7" />
+        </div>
+        <div>
+          <span class="fl" data-i18n="aa.theme">Nền</span>
+          <div class="seg" id="aa-theme" role="group">
+            <button type="button" data-theme="dark" data-i18n="aa.dark">Tối</button>
+            <button type="button" data-theme="sepia" data-i18n="aa.sepia">Vàng</button>
+            <button type="button" data-theme="light" data-i18n="aa.light">Sáng</button>
+          </div>
+        </div>
+        <div>
+          <span class="fl" data-i18n="aa.font">Kiểu chữ</span>
+          <div class="seg" id="aa-font" role="group">
+            <button type="button" data-font="sans" data-i18n="aa.sans">Không chân</button>
+            <button type="button" data-font="serif" data-i18n="aa.serif">Có chân</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
