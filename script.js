@@ -870,7 +870,34 @@ function renderChangelog() {
     const msg = document.createElement('span');
     msg.className = 'log-msg';
     msg.textContent = (lang === 'vi' && c.vi) || c.subject;
-    li.append(time, msg);
+    const body = document.createElement('div');
+    body.className = 'log-body';
+    const top = document.createElement('div');
+    top.className = 'log-top';
+    top.appendChild(msg);
+    if (c.add || c.del) {
+      const st = document.createElement('span');
+      st.className = 'log-stat';
+      st.title = `${c.files || 0} file${c.files === 1 ? '' : 's'}`;
+      const plus = document.createElement('b');
+      plus.className = 'log-add';
+      plus.textContent = `+${c.add || 0}`;
+      const minus = document.createElement('b');
+      minus.className = 'log-del';
+      minus.textContent = `\u2212${c.del || 0}`;
+      st.append(plus, minus);
+      if (c.top) st.append(document.createTextNode(' ' + c.top));
+      top.appendChild(st);
+    }
+    body.appendChild(top);
+    const desc = (lang === 'vi' && c.descVi) || c.desc;
+    if (desc) {
+      const p = document.createElement('div');
+      p.className = 'log-desc';
+      p.textContent = desc;
+      body.appendChild(p);
+    }
+    li.append(time, body);
     list.appendChild(li);
   });
 

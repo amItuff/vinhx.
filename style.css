@@ -1489,6 +1489,13 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.changelog-list .log-body { min-width: 0; flex: 1; }
+.changelog-list .log-top { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; }
+.changelog-list .log-stat { flex: none; display: inline-flex; gap: 6px; align-items: baseline; font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.62rem; color: rgba(255, 255, 255, 0.4); white-space: nowrap; }
+.changelog-list .log-stat b { font-weight: 500; }
+.changelog-list .log-add { color: #4ade80; }
+.changelog-list .log-del { color: #f87171; }
+.changelog-list .log-desc { margin-top: 1px; font-size: 0.7rem; line-height: 1.45; color: rgba(255, 255, 255, 0.45); }
 .changelog-more { margin-top: 4px; padding: 4px 0; border: none; background: none; color: rgba(255, 255, 255, 0.5); font-family: inherit; font-size: 0.7rem; cursor: pointer; }
 .changelog-more:hover { color: #fff; }
 .changelog-more[hidden] { display: none; }
