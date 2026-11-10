@@ -1489,6 +1489,13 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.changelog-list .log-body { min-width: 0; flex: 1; }
+.changelog-list .log-top { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; }
+.changelog-list .log-stat { flex: none; display: inline-flex; gap: 6px; align-items: baseline; font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.62rem; color: rgba(255, 255, 255, 0.4); white-space: nowrap; }
+.changelog-list .log-stat b { font-weight: 500; }
+.changelog-list .log-add { color: #4ade80; }
+.changelog-list .log-del { color: #f87171; }
+.changelog-list .log-desc { margin-top: 1px; font-size: 0.7rem; line-height: 1.45; color: rgba(255, 255, 255, 0.45); }
 .changelog-more { margin-top: 4px; padding: 4px 0; border: none; background: none; color: rgba(255, 255, 255, 0.5); font-family: inherit; font-size: 0.7rem; cursor: pointer; }
 .changelog-more:hover { color: #fff; }
 .changelog-more[hidden] { display: none; }
@@ -1496,6 +1503,13 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 .ic { width: 1em; height: 1em; fill: currentColor; flex: none; vertical-align: -0.125em; }
 
 /* FAQ */
+.faq-all > summary { display: flex; align-items: center; justify-content: space-between; list-style: none; cursor: pointer; }
+.faq-all > summary::-webkit-details-marker { display: none; }
+.faq-all > summary::after { content: '+'; font-size: 1.05rem; letter-spacing: 0; color: rgba(255, 255, 255, 0.45); }
+.faq-all[open] > summary::after { content: '\2212'; }
+.faq-all > summary:hover { color: #fff; }
+.faq-all > summary:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.45); outline-offset: 4px; border-radius: 4px; }
+.faq-all[open] > .faq-list { margin-top: 8px; }
 .faq-list { display: grid; }
 .faq-item { border-top: 1px solid rgba(255, 255, 255, 0.07); }
 .faq-item:first-child { border-top: none; }

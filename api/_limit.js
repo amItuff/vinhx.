@@ -1,4 +1,5 @@
-// Small per-IP limiter shared by the library endpoints (Upstash Redis when configured, memory otherwise).
+// Shared helpers for the API: client IP, hashed IP key and a per-IP fixed-window limiter
+// (Upstash Redis when configured, in-memory otherwise).
 const crypto = require('crypto');
 
 const REDIS = (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || '').replace(/\/$/, '');
@@ -13,10 +14,14 @@ function clientIp(req) {
   return (req.socket && req.socket.remoteAddress) || 'unknown';
 }
 
-// true when `ip` has used more than `max` calls of `name` in the current window
-async function over(req, name, max, windowSec) {
-  const slot = Math.floor(Date.now() / 1000 / windowSec);
-  const key = `rl:${name}:${crypto.createHash('sha256').update(`${SALT}|${clientIp(req)}`).digest('hex').slice(0, 20)}:${slot}`;
+// salted hash of the caller's IP, so raw IPs never reach the database
+const ipKey = (req) => crypto.createHash('sha256').update(`${SALT}|${clientIp(req)}`).digest('hex').slice(0, 20);
+
+// Counts one call of `name` for this IP. Returns 0 when allowed, otherwise the seconds until the window resets.
+async function hit(req, name, max, windowSec) {
+  const now = Math.floor(Date.now() / 1000);
+  const key = `rl:${name}:${ipKey(req)}:${Math.floor(now / windowSec)}`;
+  let count;
   if (REDIS && TOKEN) {
     try {
       const res = await fetch(REDIS + '/pipeline', {
@@ -25,13 +30,18 @@ async function over(req, name, max, windowSec) {
         body: JSON.stringify([['INCR', key], ['EXPIRE', key, windowSec + 30]])
       });
       const rows = await res.json();
-      return Number(rows[0].result) > max;
+      count = Number(rows[0].result);
     } catch (_) { /* fall back to memory */ }
   }
-  const n = (memory.get(key) || 0) + 1;
-  memory.set(key, n);
-  if (memory.size > 800) memory.clear();
-  return n > max;
+  if (!(count > 0)) {
+    count = (memory.get(key) || 0) + 1;
+    memory.set(key, count);
+    if (memory.size > 800) memory.clear();
+  }
+  return count > max ? windowSec - (now % windowSec) : 0;
 }
 
-module.exports = { over };
+// true when this IP has used more than `max` calls of `name` in the current window
+const over = async (req, name, max, windowSec) => (await hit(req, name, max, windowSec)) > 0;
+
+module.exports = { clientIp, ipKey, hit, over };
