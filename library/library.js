@@ -489,6 +489,17 @@
     box.append(h, p, actionFor(it));
   }
 
+  // A real cover photo cropped to the spine's width, sitting under the title text; removes
+  // itself if it fails to load so the hue-tinted spine stays the fallback.
+  function addSpineCover(box, url) {
+    if (!url) return;
+    const im = document.createElement('img');
+    im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.className = 'spine-cover';
+    im.addEventListener('error', () => im.remove());
+    im.src = url;
+    box.appendChild(im);
+  }
+
   function renderShelfStrip(list) {
     const box = $('cat-shelf');
     box.textContent = '';
@@ -503,6 +514,7 @@
         const span = document.createElement('span');
         span.textContent = titleOf(it);
         d.appendChild(span);
+        if (it.id) addSpineCover(d, coverOf(it));
       }
       d.addEventListener('click', () => setActiveSpine(i, list));
       box.appendChild(d);
