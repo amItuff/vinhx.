@@ -33,9 +33,10 @@
       'ch.n': 'chương',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
       'cat.title': 'Kệ sách miễn phí',
-      'cat.sub': 'Tác phẩm đã hết bản quyền. Bấm Đọc ngay để mở và đọc ngay trong trang, số chương theo bản gốc.',
+      'cat.sub': 'Tác phẩm đã hết bản quyền, lấy từ Project Gutenberg và Wikisource.',
       'cat.all': 'Tất cả', 'cat.wiki': 'Đọc trên Wikisource',
       'cat.busy': 'Đang tải', 'cat.read': 'Đọc ngay', 'cat.cont': 'Đọc tiếp', 'cat.more': 'Xem thêm', 'cat.fail': 'Chưa tải được sách này, hãy thử lại sau.',
+      'cat.prev': 'Cuốn trước', 'cat.next': 'Cuốn sau', 'cat.search': 'Tìm truyện...', 'cat.empty': 'Không tìm thấy truyện nào khớp.',
       'tr.on': 'Dịch sang tiếng Việt', 'tr.off': 'Hiện bản gốc', 'tr.none': 'Trình duyệt này chưa có dịch tích hợp. Hãy dùng Chrome hoặc Edge mới, hoặc nhấp chuột phải rồi chọn Dịch sang tiếng Việt.', 'tr.busy': 'Đang dịch', 'tr.fail': 'Chưa dịch được, hãy thử lại.', 'tr.dl': 'Đang tải gói dịch, lần đầu có thể hơi lâu',
       'g.en': 'Văn học Anh – Mỹ', 'g.ru': 'Văn học Nga', 'g.fr': 'Văn học Pháp', 'g.eu': 'Thế giới khác', 'g.ancient': 'Cổ điển',
       'g.crime': 'Trinh thám & kinh dị', 'g.kids': 'Phiêu lưu & thiếu nhi', 'g.biz': 'Kinh tế & chứng khoán', 'g.phil': 'Triết học & khoa học', 'g.vi': 'Văn học Việt Nam'
@@ -60,9 +61,10 @@
       'ch.n': 'chapters',
       'ui.close': 'Close', 'ch.untitled': 'Part',
       'cat.title': 'Free bookshelf',
-      'cat.sub': 'Works out of copyright. Tap Read now to open it here; chapters follow the original.',
+      'cat.sub': 'Works out of copyright, from Project Gutenberg and Wikisource.',
       'cat.all': 'All', 'cat.wiki': 'Read on Wikisource',
       'cat.busy': 'Loading', 'cat.read': 'Read now', 'cat.cont': 'Continue', 'cat.more': 'Show more', 'cat.fail': 'Could not load this book right now, please try again later.',
+      'cat.prev': 'Previous book', 'cat.next': 'Next book', 'cat.search': 'Search books...', 'cat.empty': 'No books match that search.',
       'tr.on': 'Translate to Vietnamese', 'tr.off': 'Show original', 'tr.none': 'This browser has no built-in translation. Use a recent Chrome or Edge, or right-click and choose Translate.', 'tr.busy': 'Translating', 'tr.fail': 'Could not translate, please try again.', 'tr.dl': 'Downloading the translation pack, the first time can take a moment',
       'g.en': 'British & American', 'g.ru': 'Russian', 'g.fr': 'French', 'g.eu': 'Rest of the world', 'g.ancient': 'Classics',
       'g.crime': 'Mystery & horror', 'g.kids': 'Adventure & young readers', 'g.biz': 'Economics & markets', 'g.phil': 'Philosophy & science', 'g.vi': 'Vietnamese literature'
@@ -84,6 +86,7 @@
       el.setAttribute('aria-label', v);
       if (el.hasAttribute('title')) el.setAttribute('title', v);
     });
+    document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
     document.querySelectorAll('.lang-toggle button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     renderShelf();
     renderCatalog();
@@ -388,7 +391,9 @@
     { q: 'Chí Phèo', g: 'vi', t: 'Chí Phèo', a: 'Nam Cao' }
   ];
   const catBusy = new Set();
-  const catOpen = new Set();
+  let catActive = 'all';
+  let catQuery = '';
+  let catIdx = 0;
   const coverOf = (it) => `https://www.gutenberg.org/cache/epub/${it.id}/pg${it.id}.cover.medium.jpg`;
   const fileOf = (it) => `gb${it.id}.txt`;
   const onShelf = (it) => books.find((b) => b.fileName === fileOf(it) || b.fileName === `pg${it.id}.epub`);
@@ -409,20 +414,9 @@
     }
   }
 
-  function bookRow(it) {
-    const li = document.createElement('li');
-    li.className = 'crow';
-    const cv = document.createElement('div');
-    cv.className = 'cthumb';
-    cv.setAttribute('aria-hidden', 'true');
-    fillCover(cv, it.t, it.a, it.id ? coverOf(it) : '');
-    const info = document.createElement('div');
-    info.className = 'cinfo';
-    const title = document.createElement('h3');
-    title.textContent = lang === 'vi' && it.v ? it.v : it.t;
-    const sub = document.createElement('p');
-    sub.textContent = it.a + (lang === 'vi' && it.v ? ' · ' + it.t : '');
-    info.append(title, sub);
+  // Primary action for a catalog entry: a "Read now / Continue" button that loads the
+  // prepared text, or a plain link to Wikisource for entries that only carry a search term.
+  function actionFor(it) {
     let act;
     if (it.id) {
       const mine = onShelf(it);
@@ -440,40 +434,128 @@
       act.rel = 'noopener noreferrer';
       act.textContent = t('cat.wiki');
     }
-    li.append(cv, info, act);
-    return li;
+    return act;
   }
 
-  // One collapsed row per category, like the FAQ; the list is only built when it is opened.
-  function renderCatalog() {
-    const box = $('cat-grid');
+  function titleOf(it) { return lang === 'vi' && it.v ? it.v : it.t; }
+
+  function filteredCatalog() {
+    const q = catQuery.trim().toLowerCase();
+    // A search term looks across every category; the pill only narrows when the box is empty.
+    return CATALOG.filter((it) => {
+      if (!q) return catActive === 'all' || it.g === catActive;
+      return titleOf(it).toLowerCase().includes(q) || it.t.toLowerCase().includes(q) || (it.a || '').toLowerCase().includes(q);
+    });
+  }
+
+  function renderPills() {
+    const box = $('cat-pills');
     if (!box) return;
     box.textContent = '';
-    CATEGORIES.forEach((k) => {
-      const items = CATALOG.filter((it) => it.g === k);
-      if (!items.length) return;
-      const d = document.createElement('details');
-      d.className = 'cat-sec';
-      d.open = catOpen.has(k);
-      const sm = document.createElement('summary');
-      const name = document.createElement('span');
-      name.textContent = t('g.' + k);
-      const n = document.createElement('small');
-      n.textContent = items.length;
-      sm.append(name, n);
-      d.appendChild(sm);
-      const fill = () => {
-        if (d.querySelector('ul')) return;
-        const ul = document.createElement('ul');
-        ul.className = 'cgrid';
-        items.forEach((it) => ul.appendChild(bookRow(it)));
-        d.appendChild(ul);
-      };
-      if (d.open) fill();
-      d.addEventListener('toggle', () => { if (d.open) { catOpen.add(k); fill(); } else catOpen.delete(k); });
+    [['all', 'cat.all'], ...CATEGORIES.map((k) => [k, 'g.' + k])].forEach(([key, labelKey]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pill';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-pressed', String(catActive === key));
+      b.textContent = t(labelKey);
+      b.addEventListener('click', () => {
+        if (catActive === key) return;
+        catActive = key;
+        catIdx = 0;
+        renderCatalog();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function setActiveSpine(idx, list) {
+    const spines = $('cat-shelf').children;
+    if (!spines.length) return;
+    catIdx = Math.max(0, Math.min(idx, spines.length - 1));
+    Array.from(spines).forEach((el, i) => el.classList.toggle('active', i === catIdx));
+    spines[catIdx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    renderFeat(list[catIdx]);
+  }
+
+  function renderFeat(it) {
+    const box = $('cat-feat');
+    box.textContent = '';
+    if (!it) return;
+    const h = document.createElement('h3');
+    h.textContent = titleOf(it);
+    const p = document.createElement('p');
+    p.textContent = (it.a || '') + ' · ' + t('g.' + it.g);
+    box.append(h, p, actionFor(it));
+  }
+
+  function renderShelfStrip(list) {
+    const box = $('cat-shelf');
+    box.textContent = '';
+    list.forEach((it, i) => {
+      const d = document.createElement('div');
+      d.className = 'spine' + (i === catIdx ? ' active' : '');
+      d.setAttribute('role', 'listitem');
+      d.style.setProperty('--h', Array.from(it.t).reduce((n, c) => n + c.charCodeAt(0), 0) % 360);
+      if (i === catIdx) {
+        fillCover(d, it.t, it.a, it.id ? coverOf(it) : '');
+      } else {
+        const span = document.createElement('span');
+        span.textContent = titleOf(it);
+        d.appendChild(span);
+      }
+      d.addEventListener('click', () => setActiveSpine(i, list));
       box.appendChild(d);
     });
   }
+
+  function renderCardGrid(list) {
+    const box = $('cat-grid');
+    box.textContent = '';
+    list.forEach((it) => {
+      const li = document.createElement('li');
+      li.className = 'card';
+      const cv = document.createElement('div');
+      cv.className = 'cover';
+      cv.setAttribute('aria-hidden', 'true');
+      fillCover(cv, it.t, it.a, it.id ? coverOf(it) : '');
+      const h = document.createElement('h3');
+      h.textContent = titleOf(it);
+      const p = document.createElement('p');
+      p.textContent = it.a || '';
+      li.append(cv, h, p, actionFor(it));
+      box.appendChild(li);
+    });
+  }
+
+  function renderCatalog() {
+    renderPills();
+    const list = filteredCatalog();
+    const empty = $('cat-empty');
+    const hero = $('catalog');
+    if (!list.length) {
+      hero.classList.add('is-empty');
+      $('cat-shelf').textContent = '';
+      $('cat-feat').textContent = '';
+      $('cat-grid').textContent = '';
+      if (empty) empty.hidden = false;
+      return;
+    }
+    hero.classList.remove('is-empty');
+    if (empty) empty.hidden = true;
+    if (catIdx >= list.length) catIdx = 0;
+    renderShelfStrip(list);
+    renderFeat(list[catIdx]);
+    renderCardGrid(list);
+  }
+
+  $('sh-prev').addEventListener('click', () => setActiveSpine(catIdx - 1, filteredCatalog()));
+  $('sh-next').addEventListener('click', () => setActiveSpine(catIdx + 1, filteredCatalog()));
+  $('cat-search').addEventListener('input', (e) => {
+    catQuery = e.target.value;
+    catIdx = 0;
+    renderCatalog();
+  });
 
   function renderSources() {
     const box = $('src-list');
