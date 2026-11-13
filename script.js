@@ -921,3 +921,59 @@ fetch('/changelog.json', { cache: 'no-cache' })
     renderChangelog();
   })
   .catch(() => { /* the card simply stays hidden */ });
+
+// ---------------------------------------------------------------------------
+// Featured projects: a tab bar on top scrolls a one-at-a-time slide track below,
+// same pill + horizontal-scroller pattern as the category filter in vinhx library.
+// ---------------------------------------------------------------------------
+(() => {
+  const tabs = $('proj-tabs');
+  const track = $('proj-track');
+  const dotsBox = $('proj-dots');
+  if (!tabs || !track || !dotsBox) return;
+
+  const tabEls = Array.from(tabs.querySelectorAll('.proj-tab'));
+  const slideEls = Array.from(track.children);
+  const accentOf = (el) => getComputedStyle(el).getPropertyValue('--accent').trim();
+
+  slideEls.forEach(() => {
+    const dot = document.createElement('i');
+    dotsBox.appendChild(dot);
+  });
+  const dotEls = Array.from(dotsBox.children);
+
+  let active = 0;
+  let scrolling = false;
+
+  function setActive(i) {
+    active = i;
+    tabEls.forEach((el, j) => el.setAttribute('aria-selected', String(j === i)));
+    dotEls.forEach((el, j) => {
+      el.classList.toggle('on', j === i);
+      if (j === i) el.style.setProperty('--dot-accent', accentOf(slideEls[i]));
+    });
+  }
+
+  tabEls.forEach((el, i) => {
+    el.addEventListener('click', () => {
+      scrolling = true;
+      setActive(i);
+      slideEls[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      setTimeout(() => { scrolling = false; }, 500);
+    });
+  });
+
+  // Swiping the track by hand (touch or trackpad) should move the tabs too.
+  let raf = null;
+  track.addEventListener('scroll', () => {
+    if (scrolling) return;
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = null;
+      const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+      if (i !== active && i >= 0 && i < slideEls.length) setActive(i);
+    });
+  });
+
+  setActive(0);
+})();
