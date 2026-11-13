@@ -676,17 +676,36 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   gap: 12px;
 }
 .proj-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+/* Each project gets its own accent, carried from its own page's palette
+   (note's yellow sticky, convert's blue, library's warm paper, Discord's blurple)
+   instead of one flat neutral tile for every row. */
+.proj-note { --accent: #f2c14e; }
+.proj-convert { --accent: #4f8ff7; }
+.proj-library { --accent: #c9a063; }
+.proj-hub { --accent: #5865f2; }
+
 .proj {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 7px 10px;
+  padding: 7px 10px 7px 13px;
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 10px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.2s var(--ease-out), box-shadow 0.2s, background 0.2s;
 }
-.proj:hover { border-color: rgba(255, 255, 255, 0.2); }
+.proj::before {
+  content: ''; position: absolute; left: 4px; top: 10px; bottom: 10px; width: 3px; border-radius: 3px;
+  background: var(--accent, rgba(255, 255, 255, 0.2)); opacity: 0.55; transition: opacity 0.2s;
+}
+.proj:hover {
+  border-color: color-mix(in srgb, var(--accent, #fff) 45%, rgba(255, 255, 255, 0.2));
+  background: rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--accent, #fff) 55%, transparent);
+}
+.proj:hover::before { opacity: 1; }
 .proj-tile {
   flex: none;
   display: grid;
@@ -694,10 +713,14 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   width: 30px;
   height: 30px;
   border-radius: 8px;
-  background: #0a0b0e;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.85);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent, #fff) 22%, #0a0b0e), #0a0b0e);
+  border: 1px solid color-mix(in srgb, var(--accent, #fff) 30%, rgba(255, 255, 255, 0.1));
+  color: color-mix(in srgb, var(--accent, #fff) 70%, #fff);
   font-size: 0.8rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+.proj:hover .proj-tile {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent, #fff) 36%, #0a0b0e), #0a0b0e);
 }
 .proj-text { flex: 1; min-width: 0; }
 .project-heading {
