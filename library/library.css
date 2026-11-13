@@ -25,13 +25,30 @@
 
 /* ---- browse hero: pastel gradient nook with a pull-out spine shelf ---- */
 .shelfHero {
-  position: relative; margin: 26px 0 34px; padding: 22px 16px 24px; border-radius: 22px; overflow: hidden;
-  /* muted, low-saturation sky fading into a soft sage — easier on the eyes than a bright blue */
+  position: relative; z-index: 0; margin: 26px 0 34px; padding: 22px 16px 24px; border-radius: 22px; overflow: hidden;
+  /* an open blue sky easing into a pale green horizon, a nostalgic desktop-wallpaper mood
+     done as an original gradient + hand-drawn clouds below, not a photo */
   background:
-    radial-gradient(60% 50% at 50% 0%, rgba(250, 244, 227, 0.55), transparent 70%),
-    linear-gradient(180deg, #cfdde2 0%, #dde3d4 55%, #d2ddc5 100%);
+    radial-gradient(60% 45% at 50% 0%, rgba(255, 255, 255, 0.35), transparent 70%),
+    linear-gradient(180deg, #5b9bd8 0%, #8ebfe6 26%, #cfe4ef 52%, #e4efd6 72%, #cfe3b8 100%);
 }
 .shelfHero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(70, 60, 40, 0.05)); pointer-events: none; }
+
+/* a few simple, original clouds — soft overlapping blobs, not a copy of any photo or artwork */
+.cloud { position: absolute; z-index: -1; pointer-events: none; background: #fff; border-radius: 50px; opacity: 0.8; }
+.cloud::before, .cloud::after { content: ''; position: absolute; background: inherit; border-radius: 50%; }
+.cloud-a { top: 14px; left: 8%; width: 64px; height: 20px; animation: driftA 46s linear infinite; }
+.cloud-a::before { width: 34px; height: 34px; top: -16px; left: 6px; }
+.cloud-a::after { width: 26px; height: 26px; top: -10px; left: 34px; }
+.cloud-b { top: 46px; right: 10%; width: 48px; height: 16px; opacity: 0.68; animation: driftB 58s linear infinite; }
+.cloud-b::before { width: 26px; height: 26px; top: -12px; left: 4px; }
+.cloud-b::after { width: 20px; height: 20px; top: -8px; left: 26px; }
+.cloud-c { top: 78px; left: 38%; width: 40px; height: 14px; opacity: 0.55; animation: driftA 64s linear infinite reverse; }
+.cloud-c::before { width: 22px; height: 22px; top: -10px; left: 4px; }
+.cloud-c::after { width: 16px; height: 16px; top: -7px; left: 22px; }
+@keyframes driftA { from { transform: translateX(-6px); } 50% { transform: translateX(10px); } to { transform: translateX(-6px); } }
+@keyframes driftB { from { transform: translateX(8px); } 50% { transform: translateX(-10px); } to { transform: translateX(8px); } }
+@media (prefers-reduced-motion: reduce) { .cloud { animation: none; } }
 
 .pillrow { position: relative; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .pillrow::-webkit-scrollbar { display: none; }

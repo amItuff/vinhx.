@@ -675,56 +675,80 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   flex-direction: column;
   gap: 12px;
 }
-.proj-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
-.proj {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 10px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  transition: border-color 0.2s;
+/* Each project gets its own accent, carried from its own page's palette
+   (note's yellow sticky, convert's blue, library's warm paper, Discord's blurple)
+   instead of one flat neutral tile for every row. */
+.proj-note { --accent: #f2c14e; }
+.proj-convert { --accent: #4f8ff7; }
+.proj-library { --accent: #c9a063; }
+.proj-hub { --accent: #5865f2; }
+
+/* Tabs on top pick which project the track below shows — the same pill + slide
+   pattern as the category filter in vinhx library. */
+.proj-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 1px; }
+.proj-tabs::-webkit-scrollbar { display: none; }
+.proj-tab {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px 7px 10px;
+  border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.35);
+  color: var(--text-sub); font: inherit; font-size: 0.76rem; font-weight: 600; cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
-.proj:hover { border-color: rgba(255, 255, 255, 0.2); }
+.proj-tab .ic { width: 0.95em; height: 0.95em; color: var(--accent); }
+.proj-tab:hover { border-color: color-mix(in srgb, var(--accent) 45%, rgba(255, 255, 255, 0.15)); color: #fff; }
+.proj-tab[aria-selected="true"] {
+  background: color-mix(in srgb, var(--accent) 22%, rgba(0, 0, 0, 0.5));
+  border-color: var(--accent); color: #fff;
+}
+
+.proj-track {
+  display: flex; margin-top: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  border-radius: 12px;
+}
+.proj-track::-webkit-scrollbar { display: none; }
+.proj-slide {
+  flex: 0 0 100%; scroll-snap-align: start; display: flex; align-items: center; gap: 14px;
+  padding: 16px; background:
+    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
+    rgba(0, 0, 0, 0.35);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, rgba(255, 255, 255, 0.08)); border-radius: 12px;
+}
 .proj-tile {
   flex: none;
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: #0a0b0e;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 0.8rem;
+  width: 46px;
+  height: 46px;
+  border-radius: 11px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 30%, #0a0b0e), #0a0b0e);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, rgba(255, 255, 255, 0.1));
+  color: color-mix(in srgb, var(--accent) 75%, #fff);
+  font-size: 1.1rem;
 }
 .proj-text { flex: 1; min-width: 0; }
 .project-heading {
   font-family: var(--font-display);
-  font-size: 0.88rem;
+  font-size: 1.02rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   color: #fff;
 }
 .project-heading span { color: #8e929b; }
 .project-paragraph {
-  margin-top: 1px;
-  font-size: 0.72rem;
-  line-height: 1.35;
+  margin-top: 3px;
+  font-size: 0.78rem;
+  line-height: 1.4;
   color: #9ca3af;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-.proj-actions { flex: none; display: flex; align-items: center; gap: 6px; }
+.proj-actions { flex: none; display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
 @media (max-width: 560px) {
-  .proj { gap: 10px; }
-  .proj:has(.p-btn-features) { flex-wrap: wrap; }
-  .proj:has(.p-btn-features) .proj-text { flex-basis: calc(100% - 52px); }
-  .proj:has(.p-btn-features) .proj-actions { flex-basis: 100%; }
-  .proj:has(.p-btn-features) .p-btn { flex: 1; }
+  .proj-slide { flex-wrap: wrap; }
+  .proj-slide .proj-text { flex-basis: calc(100% - 60px); }
+  .proj-slide .proj-actions { flex-basis: 100%; flex-direction: row; }
+  .proj-slide .proj-actions .p-btn { flex: 1; }
 }
+.proj-dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+.proj-dots i { width: 6px; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.18); transition: background 0.2s, width 0.2s; }
+.proj-dots i.on { width: 16px; background: var(--dot-accent, #fff); }
 .p-btn {
   padding: 5px 11px;
   border-radius: 6px;

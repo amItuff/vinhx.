@@ -40,9 +40,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- icons load without blocking first paint -->
-  <link rel="stylesheet" href="style.css?v=14" />
+  <link rel="stylesheet" href="style.css?v=15" />
   <script src="https://w.soundcloud.com/player/api.js" defer></script>
-  <script src="script.js?v=15" defer></script>
+  <script src="script.js?v=16" defer></script>
 </head>
 <body>
 
@@ -152,8 +152,23 @@
     <div class="glass-card reveal-card">
       <div class="section-badge" data-i18n="projects.badge">Dự án nổi bật</div>
 
-      <ul class="proj-list">
-        <li class="proj">
+      <div class="proj-tabs" id="proj-tabs" role="tablist" aria-label="Dự án">
+        <button type="button" class="proj-tab proj-note" role="tab" aria-selected="true" data-i="0">
+          <svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#r-note-sticky"></use></svg>note
+        </button>
+        <button type="button" class="proj-tab proj-convert" role="tab" aria-selected="false" data-i="1">
+          <svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#s-arrows-rotate"></use></svg>convert
+        </button>
+        <button type="button" class="proj-tab proj-library" role="tab" aria-selected="false" data-i="2">
+          <svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#s-book-open"></use></svg>library
+        </button>
+        <button type="button" class="proj-tab proj-hub" role="tab" aria-selected="false" data-i="3">
+          <svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#b-discord"></use></svg>hub
+        </button>
+      </div>
+
+      <div class="proj-track" id="proj-track">
+        <article class="proj-slide proj-note" role="tabpanel">
           <span class="proj-tile" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#r-note-sticky"></use></svg></span>
           <div class="proj-text">
             <h3 class="project-heading">vinhx <span>note</span></h3>
@@ -162,8 +177,8 @@
           <div class="proj-actions">
             <a href="/note" class="p-btn p-btn-demo"><span data-i18n="p3.open">Mở</span></a>
           </div>
-        </li>
-        <li class="proj">
+        </article>
+        <article class="proj-slide proj-convert" role="tabpanel">
           <span class="proj-tile" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#s-arrows-rotate"></use></svg></span>
           <div class="proj-text">
             <h3 class="project-heading">vinhx <span>convert</span></h3>
@@ -172,8 +187,8 @@
           <div class="proj-actions">
             <a href="/convert" class="p-btn p-btn-demo"><span data-i18n="p4.open">Mở</span></a>
           </div>
-        </li>
-        <li class="proj">
+        </article>
+        <article class="proj-slide proj-library" role="tabpanel">
           <span class="proj-tile" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#s-book-open"></use></svg></span>
           <div class="proj-text">
             <h3 class="project-heading">vinhx <span>library</span></h3>
@@ -182,8 +197,8 @@
           <div class="proj-actions">
             <a href="/library" class="p-btn p-btn-demo"><span data-i18n="p5.open">Mở</span></a>
           </div>
-        </li>
-        <li class="proj">
+        </article>
+        <article class="proj-slide proj-hub" role="tabpanel">
           <span class="proj-tile" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#b-discord"></use></svg></span>
           <div class="proj-text">
             <h3 class="project-heading">vinhx <span>hub</span></h3>
@@ -193,8 +208,10 @@
             <a href="https://discord.gg/AZTwmpecTE" target="_blank" rel="noopener noreferrer" class="p-btn p-btn-demo"><span data-i18n="p.join">Vào server</span></a>
             <button id="open-bot-features-btn" type="button" class="p-btn p-btn-features"><span data-i18n="p.features">Tính năng</span></button>
           </div>
-        </li>
-      </ul>
+        </article>
+      </div>
+
+      <div class="proj-dots" id="proj-dots" aria-hidden="true"></div>
     </div>
 
     <!-- faq -->
