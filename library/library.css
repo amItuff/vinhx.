@@ -23,33 +23,6 @@
 .bact .btn { padding: 7px 12px; }
 .empty { margin-top: 18px; padding: 18px; text-align: center; font-size: 0.84rem; line-height: 1.6; color: var(--sub); border: 1px dashed var(--line); border-radius: 12px; }
 
-/* ---- browse hero: pastel gradient nook with a pull-out spine shelf ---- */
-.shelfHero {
-  position: relative; z-index: 0; margin: 26px 0 34px; padding: 22px 16px 24px; border-radius: 22px; overflow: hidden;
-  /* an open blue sky easing into a pale green horizon, a nostalgic desktop-wallpaper mood
-     done as an original gradient + hand-drawn clouds below, not a photo */
-  background:
-    radial-gradient(60% 45% at 50% 0%, rgba(255, 255, 255, 0.35), transparent 70%),
-    linear-gradient(180deg, #5b9bd8 0%, #8ebfe6 26%, #cfe4ef 52%, #e4efd6 72%, #cfe3b8 100%);
-}
-.shelfHero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(70, 60, 40, 0.05)); pointer-events: none; }
-
-/* a few simple, original clouds — soft overlapping blobs, not a copy of any photo or artwork */
-.cloud { position: absolute; z-index: -1; pointer-events: none; background: #fff; border-radius: 50px; opacity: 0.8; }
-.cloud::before, .cloud::after { content: ''; position: absolute; background: inherit; border-radius: 50%; }
-.cloud-a { top: 14px; left: 8%; width: 64px; height: 20px; animation: driftA 46s linear infinite; }
-.cloud-a::before { width: 34px; height: 34px; top: -16px; left: 6px; }
-.cloud-a::after { width: 26px; height: 26px; top: -10px; left: 34px; }
-.cloud-b { top: 46px; right: 10%; width: 48px; height: 16px; opacity: 0.68; animation: driftB 58s linear infinite; }
-.cloud-b::before { width: 26px; height: 26px; top: -12px; left: 4px; }
-.cloud-b::after { width: 20px; height: 20px; top: -8px; left: 26px; }
-.cloud-c { top: 78px; left: 38%; width: 40px; height: 14px; opacity: 0.55; animation: driftA 64s linear infinite reverse; }
-.cloud-c::before { width: 22px; height: 22px; top: -10px; left: 4px; }
-.cloud-c::after { width: 16px; height: 16px; top: -7px; left: 22px; }
-@keyframes driftA { from { transform: translateX(-6px); } 50% { transform: translateX(10px); } to { transform: translateX(-6px); } }
-@keyframes driftB { from { transform: translateX(8px); } 50% { transform: translateX(-10px); } to { transform: translateX(8px); } }
-@media (prefers-reduced-motion: reduce) { .cloud { animation: none; } }
-
 .pillrow { position: relative; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .pillrow::-webkit-scrollbar { display: none; }
 .pill {
@@ -296,3 +269,49 @@ body[data-theme="sepia"] .rbanner .bbg, body[data-theme="light"] .rbanner .bbg {
 
 /* category accordion (same pattern as the FAQ on the home page) */
 
+
+/* ---- shelf redesign: a plain printed catalogue, not a widget ----
+   flat paper, serif type, hairline rules. No gradients, glass, clouds or lifted shadows. */
+body[data-view="shelf"] { --rule: rgba(43, 34, 24, 0.28); }
+body[data-view="shelf"] .shelfHero { margin: 34px 0 30px; padding: 14px 0 0; border-top: 3px double var(--rule); background: none; border-radius: 0; overflow: visible; }
+body[data-view="shelf"] .shelfHero::after { display: none; }
+body[data-view="shelf"] .shelfHero .sr { position: static; width: auto; height: auto; clip: auto; margin: 0 0 10px; font: 600 1.05rem/1.3 'Literata', Georgia, serif; color: var(--ink); }
+
+/* categories: text tabs, the active one underlined */
+body[data-view="shelf"] .pillrow { gap: 18px; border-bottom: 1px solid var(--line); padding-bottom: 0; }
+body[data-view="shelf"] .pill { padding: 6px 0 8px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; backdrop-filter: none; color: var(--sub); font: 500 0.82rem 'Be Vietnam Pro', sans-serif; margin-bottom: -1px; }
+body[data-view="shelf"] .pill:hover { background: none; color: var(--ink); }
+body[data-view="shelf"] .pill[aria-pressed="true"] { background: none; color: var(--ink); border-color: var(--accent); font-weight: 600; }
+
+/* spines stand on one ruled line */
+body[data-view="shelf"] .spinewrap { margin-top: 20px; }
+body[data-view="shelf"] .spinearrow { width: 28px; height: 28px; border-radius: 2px; border: 1px solid var(--line); background: none; color: var(--ink); }
+body[data-view="shelf"] .spinearrow:hover:not(:disabled) { background: rgba(43, 34, 24, 0.08); }
+body[data-view="shelf"] .shelf { gap: 3px; padding: 6px 2px 0; min-height: 138px; border-bottom: 2px solid var(--ink); }
+body[data-view="shelf"] .spine { width: 26px; height: 112px; border-radius: 1px; box-shadow: none; background: hsl(var(--h) 20% 36%); transition: height 0.15s ease, width 0.15s ease; }
+body[data-view="shelf"] .spine:not(.active)::before { background: none; }
+body[data-view="shelf"] .spine span { text-shadow: none; font-family: 'Literata', Georgia, serif; font-weight: 400; color: #f6efe0; }
+body[data-view="shelf"] .spine:hover:not(.active) { height: 122px; }
+body[data-view="shelf"] .spine.active { width: 72px; height: 132px; transform: none; box-shadow: none; outline: 1px solid var(--ink); outline-offset: 2px; }
+
+/* the picked book: left-aligned caption, like a catalogue entry */
+body[data-view="shelf"] .feat { text-align: left; margin-top: 12px; min-height: 48px; }
+body[data-view="shelf"] .feat h3 { font-family: 'Literata', Georgia, serif; font-size: 1.1rem; letter-spacing: 0; }
+body[data-view="shelf"] .feat p { color: var(--sub); }
+
+/* search: one underlined line */
+body[data-view="shelf"] .searchbar { margin-top: 18px; padding: 8px 2px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: none; color: var(--sub); }
+body[data-view="shelf"] .searchbar input { color: var(--ink); font-size: 0.92rem; }
+body[data-view="shelf"] .searchbar input::placeholder { color: var(--sub); }
+
+/* covers: flat, hairline edge, no drop shadow */
+body[data-view="shelf"] .cardgrid { gap: 22px 16px; }
+body[data-view="shelf"] .card .cover, body[data-view="shelf"] .cover { border-radius: 1px 3px 3px 1px; box-shadow: inset 0 0 0 1px rgba(43, 34, 24, 0.2); background: hsl(var(--h) 20% 34%); }
+body[data-view="shelf"] .tcover { box-shadow: inset 0 0 0 1px rgba(58, 46, 33, 0.28) !important; }
+body[data-view="shelf"] .card h3 { font-weight: 600; }
+
+/* books you opened: ruled list rows instead of boxed cards */
+body[data-view="shelf"] .books { gap: 0; border-top: 1px solid var(--line); }
+body[data-view="shelf"] .book { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: none; padding: 14px 0; }
+body[data-view="shelf"] .book::before, body[data-view="shelf"] .bbg { display: none; }
+body[data-view="shelf"] .empty { border: 1px solid var(--line); border-radius: 0; background: none; }
