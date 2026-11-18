@@ -10,7 +10,7 @@ const MAX_CHARS = 2000;
 const SYSTEM = 'Bạn là trợ lý trên website cá nhân của vinhx (lập trình viên Discord bot, script Python, web tối giản). Trả lời ngắn gọn, thân thiện, cùng ngôn ngữ với người dùng.';
 
 const KEYS = {
-  gemini: () => process.env.GEMINI_API_KEY || 'AQ.Ab8RN6LWN7u-JLOHnqswLmQvf_hT-BAesU-5W16mBMc_ZZa6_Q',
+  gemini: () => process.env.GEMINI_API_KEY,
   openai: () => process.env.OPENAI_API_KEY,
   claude: () => process.env.ANTHROPIC_API_KEY
 };
