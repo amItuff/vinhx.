@@ -26,7 +26,11 @@
       'a.download': 'Tải về', 'a.remove': 'Bỏ file này',
       f1: 'Xử lý bằng chính trình duyệt, không tải file lên máy chủ',
       f2: 'Định dạng xuất ra tùy trình duyệt của bạn hỗ trợ (Chrome và Edge đầy đủ nhất)',
-      f3: 'Chưa hỗ trợ xuất MP3 hoặc GIF động',
+      f3: 'Xuất được MP3 (từ âm thanh hoặc video) và GIF động (từ video)',
+      'o.bitrate': 'Chất lượng MP3', 'o.mp3Only': 'Chỉ lấy âm thanh (MP3)', 'o.gif': 'GIF động',
+      'o.fps': 'Số khung hình mỗi giây', 'o.gifw': 'Chiều rộng (px)',
+      'o.gifNote': 'GIF lấy tối đa 20 giây đầu của video, không có tiếng.',
+      'err.lib': 'Không tải được bộ mã hóa, kiểm tra mạng rồi thử lại',
       'st.ready': 'Sẵn sàng', 'st.working': 'Đang chuyển đổi...', 'st.done': 'Xong',
       'err.type': 'Không phải ảnh, âm thanh hay video',
       'err.decode': 'Trình duyệt không đọc được file này',
@@ -52,7 +56,11 @@
       'a.download': 'Download', 'a.remove': 'Remove this file',
       f1: 'Processed by your own browser, files are never uploaded',
       f2: 'Output formats depend on what your browser supports (Chrome and Edge are the most complete)',
-      f3: 'MP3 output and animated GIFs are not supported yet',
+      f3: 'MP3 (from audio or video) and animated GIF (from video) are supported',
+      'o.bitrate': 'MP3 quality', 'o.mp3Only': 'Audio only (MP3)', 'o.gif': 'Animated GIF',
+      'o.fps': 'Frames per second', 'o.gifw': 'Width (px)',
+      'o.gifNote': 'The GIF uses the first 20 seconds of the video and has no sound.',
+      'err.lib': 'Could not load the encoder, check your connection and try again',
       'st.ready': 'Ready', 'st.working': 'Converting...', 'st.done': 'Done',
       'err.type': 'Not an image, audio or video file',
       'err.decode': 'This browser could not read the file',
@@ -126,8 +134,17 @@
   }
   function fillFormats() {
     fillSelect(imgFmt, imageTargets);
-    fillSelect(audFmt, [{ id: 'wav', label: 'WAV' }]);
-    fillSelect(vidFmt, [...videoTargets, { id: 'wav', label: t('o.wavOnly') }]);
+    fillSelect(audFmt, [{ id: 'wav', label: 'WAV' }, { id: 'mp3', label: 'MP3' }]);
+    fillSelect(vidFmt, [...videoTargets, { id: 'gif', label: t('o.gif') }, { id: 'mp3', label: t('o.mp3Only') }, { id: 'wav', label: t('o.wavOnly') }]);
+    syncOpts();
+  }
+
+  // show only the options that matter for the chosen output format
+  function syncOpts() {
+    const v = vidFmt.value;
+    $('mp3-opts').hidden = audFmt.value !== 'mp3';
+    $('gif-opts').hidden = v !== 'gif';
+    $('vid-rec').hidden = v === 'gif' || v === 'mp3' || v === 'wav';
   }
 
   // ---------------------------------------------------------------------------
@@ -318,7 +335,69 @@
     return new Blob([data], { type: 'audio/wav' });
   }
 
-  async function convertToWav(it, mono) {
+  // ---- MP3 (lamejs, loaded on first use) ----
+  let lamePromise = null;
+  function loadLame() {
+    if (window.lamejs) return Promise.resolve();
+    if (!lamePromise) {
+      lamePromise = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = '/convert/vendor/lame.min.js?v=1';
+        s.onload = resolve;
+        s.onerror = () => { lamePromise = null; reject(new Error('err.lib')); };
+        document.head.appendChild(s);
+      });
+    }
+    return lamePromise;
+  }
+
+  // MP3 only allows certain sample rates; resample anything else to 44.1 kHz
+  async function ensureMp3Rate(buf) {
+    if ([48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000].includes(buf.sampleRate)) return buf;
+    const rate = 44100;
+    const off = new OfflineAudioContext(Math.min(buf.numberOfChannels, 2), Math.ceil(buf.duration * rate), rate);
+    const src = off.createBufferSource();
+    src.buffer = buf;
+    src.connect(off.destination);
+    src.start();
+    return off.startRendering();
+  }
+
+  async function encodeMp3(buffer, mono, kbps, onProgress) {
+    await loadLame();
+    const buf = await ensureMp3Rate(buffer);
+    const channels = mono ? 1 : Math.min(buf.numberOfChannels, 2);
+    const left = new Int16Array(buf.length);
+    const right = channels === 2 ? new Int16Array(buf.length) : null;
+    const toI16 = (f) => { const s = Math.max(-1, Math.min(1, f)); return s < 0 ? s * 0x8000 : s * 0x7fff; };
+    const chans = [];
+    for (let c = 0; c < buf.numberOfChannels; c++) chans.push(buf.getChannelData(c));
+    for (let i = 0; i < buf.length; i++) {
+      if (mono) {
+        let s = 0;
+        for (let k = 0; k < chans.length; k++) s += chans[k][i];
+        left[i] = toI16(s / chans.length);
+      } else {
+        left[i] = toI16(chans[0][i]);
+        if (right) right[i] = toI16(chans[1][i]);
+      }
+    }
+    const enc = new window.lamejs.Mp3Encoder(channels, buf.sampleRate, kbps);
+    const out = [];
+    const BLOCK = 1152;
+    for (let i = 0; i < buf.length; i += BLOCK) {
+      const chunk = right
+        ? enc.encodeBuffer(left.subarray(i, i + BLOCK), right.subarray(i, i + BLOCK))
+        : enc.encodeBuffer(left.subarray(i, i + BLOCK));
+      if (chunk.length) out.push(chunk);
+      if ((i / BLOCK) % 400 === 0) { onProgress(0.9 + 0.09 * (i / buf.length)); await new Promise((r) => setTimeout(r)); }
+    }
+    const tail = enc.flush();
+    if (tail.length) out.push(tail);
+    return new Blob(out, { type: 'audio/mpeg' });
+  }
+
+  async function convertAudio(it, mono, fmt) {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) throw new Error('err.encode');
     const ctx = new AC();
@@ -326,6 +405,10 @@
       const raw = await it.file.arrayBuffer();
       const buf = await ctx.decodeAudioData(raw);
       setProgress(it, 0.9);
+      if (fmt === 'mp3') {
+        const kbps = it.kind === 'audio' ? Number($('aud-br').value) || 128 : 128;
+        return { blob: await encodeMp3(buf, mono, kbps, (p) => setProgress(it, p)), ext: 'mp3' };
+      }
       return { blob: encodeWav(buf, mono), ext: 'wav' };
     } catch (e) {
       throw new Error(e && e.message && e.message.startsWith('err.') ? e.message : 'err.decode');
@@ -334,8 +417,71 @@
     }
   }
 
+  // ---- animated GIF from a video (gifenc, loaded on first use) ----
+  const GIF_MAX_SECONDS = 20;
+  function seekTo(video, time) {
+    return new Promise((resolve) => {
+      const done = () => { video.removeEventListener('seeked', done); clearTimeout(to); resolve(); };
+      const to = setTimeout(done, 3000);
+      video.addEventListener('seeked', done);
+      video.currentTime = time;
+    });
+  }
+
+  async function convertGif(it) {
+    let lib;
+    try { lib = await import('/convert/vendor/gifenc.esm.js'); } catch (_) { throw new Error('err.lib'); }
+    const { GIFEncoder, quantize, applyPalette } = lib;
+
+    const url = URL.createObjectURL(it.file);
+    const video = document.createElement('video');
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.src = url;
+    try {
+      await new Promise((resolve, reject) => {
+        video.onloadeddata = resolve;
+        video.onerror = () => reject(new Error('err.decode'));
+      });
+      const vw = video.videoWidth;
+      const vh = video.videoHeight;
+      if (!vw || !vh) throw new Error('err.decode');
+      const dur = Math.min(Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 1, GIF_MAX_SECONDS);
+      const fps = Number($('gif-fps').value) || 12;
+      const maxW = parseInt($('gif-w').value, 10) || 480;
+      const w = Math.max(16, Math.min(maxW, vw));
+      const h = Math.max(16, Math.round(vh * (w / vw)));
+      const frames = Math.max(1, Math.floor(dur * fps));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      const gif = GIFEncoder();
+      for (let i = 0; i < frames; i++) {
+        await seekTo(video, Math.min(i / fps, Math.max(0, video.duration - 0.05 || 0)));
+        ctx.drawImage(video, 0, 0, w, h);
+        const { data } = ctx.getImageData(0, 0, w, h);
+        const palette = quantize(data, 256);
+        gif.writeFrame(applyPalette(data, palette), w, h, { palette, delay: Math.round(1000 / fps) });
+        setProgress(it, (i + 1) / frames);
+        if (i % 4 === 0) await new Promise((r) => setTimeout(r));
+      }
+      gif.finish();
+      return { blob: new Blob([gif.bytes()], { type: 'image/gif' }), ext: 'gif' };
+    } catch (e) {
+      throw new Error(e && e.message && e.message.startsWith('err.') ? e.message : 'err.video');
+    } finally {
+      video.removeAttribute('src');
+      video.load();
+      URL.revokeObjectURL(url);
+    }
+  }
+
   async function convertVideo(it) {
-    if (vidFmt.value === 'wav') return convertToWav(it, false);
+    if (vidFmt.value === 'wav' || vidFmt.value === 'mp3') return convertAudio(it, false, vidFmt.value);
+    if (vidFmt.value === 'gif') return convertGif(it);
     const target = videoTargets.find((x) => x.id === vidFmt.value) || videoTargets[0];
     if (!target) throw new Error('err.encode');
 
@@ -411,7 +557,7 @@
     renderList();
     try {
       const out = it.kind === 'image' ? await convertImage(it)
-        : it.kind === 'audio' ? await convertToWav(it, $('aud-mono').checked)
+        : it.kind === 'audio' ? await convertAudio(it, $('aud-mono').checked, audFmt.value)
         : await convertVideo(it);
       it.blob = out.blob;
       it.name = `${baseName(it.file.name)}.${out.ext}`;
@@ -535,6 +681,8 @@
   window.addEventListener('dragover', (e) => e.preventDefault());
   window.addEventListener('drop', (e) => { if (!drop.contains(e.target)) e.preventDefault(); });
 
+  audFmt.addEventListener('change', syncOpts);
+  vidFmt.addEventListener('change', syncOpts);
   $('img-q').addEventListener('input', () => { $('img-q-val').textContent = $('img-q').value; });
   $('go').addEventListener('click', runAll);
   $('zip').addEventListener('click', downloadZip);

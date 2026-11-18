@@ -28,7 +28,9 @@
       'r.back': 'Về thư viện', 'r.mark': 'Đánh dấu', 'r.toc': 'Mục lục và đánh dấu', 'r.aa': 'Chữ và giao diện',
       'r.prev': 'Chương trước', 'r.next': 'Chương sau', 'r.chapter': 'Chương',
       'mark.added': 'Đã đánh dấu', 'mark.removed': 'Đã bỏ đánh dấu', 'mark.none': 'Chưa có đánh dấu nào. Bấm biểu tượng đánh dấu để lưu vị trí đang đọc.',
-      's.chapters': 'Mục lục', 's.marks': 'Đánh dấu',
+      's.chapters': 'Mục lục', 's.marks': 'Đánh dấu', 's.search': 'Tìm',
+      'q.ph': 'Tìm trong sách...', 'q.none': 'Không thấy kết quả', 'q.min': 'Gõ ít nhất 2 ký tự', 'q.cap': 'Chỉ hiện 100 kết quả đầu tiên',
+      'mark.note': 'Ghi chú', 'mark.notePh': 'Ghi chú của bạn...', 'mark.export': 'Xuất đánh dấu (.txt)', 'mark.exported': 'Đã xuất đánh dấu',
       'aa.size': 'Cỡ chữ', 'aa.lh': 'Giãn dòng', 'aa.theme': 'Nền', 'aa.book': 'Sách', 'aa.dark': 'Tối', 'aa.sepia': 'Vàng', 'aa.light': 'Sáng', 'aa.font': 'Kiểu chữ', 'aa.sans': 'Không chân', 'aa.serif': 'Có chân',
       'ch.n': 'chương',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
@@ -56,7 +58,9 @@
       'r.back': 'Back to library', 'r.mark': 'Bookmark', 'r.toc': 'Contents and bookmarks', 'r.aa': 'Text and theme',
       'r.prev': 'Previous chapter', 'r.next': 'Next chapter', 'r.chapter': 'Chapter',
       'mark.added': 'Bookmarked', 'mark.removed': 'Bookmark removed', 'mark.none': 'No bookmarks yet. Tap the bookmark icon to save where you are.',
-      's.chapters': 'Contents', 's.marks': 'Bookmarks',
+      's.chapters': 'Contents', 's.marks': 'Bookmarks', 's.search': 'Search',
+      'q.ph': 'Search in this book...', 'q.none': 'No results', 'q.min': 'Type at least 2 characters', 'q.cap': 'Showing the first 100 results',
+      'mark.note': 'Note', 'mark.notePh': 'Your note...', 'mark.export': 'Export bookmarks (.txt)', 'mark.exported': 'Bookmarks exported',
       'aa.size': 'Text size', 'aa.lh': 'Line spacing', 'aa.theme': 'Theme', 'aa.book': 'Book', 'aa.dark': 'Dark', 'aa.sepia': 'Sepia', 'aa.light': 'Light', 'aa.font': 'Typeface', 'aa.sans': 'Sans', 'aa.serif': 'Serif',
       'ch.n': 'chapters',
       'ui.close': 'Close', 'ch.untitled': 'Part',
@@ -1082,17 +1086,115 @@
       const snip = document.createElement('span');
       snip.textContent = m.s;
       go.append(head, snip);
+      if (m.n) { const nt = document.createElement('em'); nt.className = 'mnote'; nt.textContent = m.n; go.appendChild(nt); }
       go.addEventListener('click', () => { hideSheet(); saveProgress(); renderChapter(m.ch, null, m.i); saveProgress(); });
+      const ed = document.createElement('button');
+      ed.type = 'button';
+      ed.className = 'icon-btn';
+      ed.setAttribute('aria-label', t('mark.note'));
+      ed.title = t('mark.note');
+      ed.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>';
+      ed.addEventListener('click', () => editNote(m, li));
       const rm = document.createElement('button');
       rm.type = 'button';
       rm.className = 'icon-btn';
       rm.setAttribute('aria-label', t('b.delete'));
       rm.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
       rm.addEventListener('click', () => { marks = marks.filter((x) => x !== m); saveMarks(); markBookmarked(); renderSheets(); });
-      li.append(go, rm);
+      li.append(go, ed, rm);
       ml.appendChild(li);
     });
   }
+
+
+  // --- notes on bookmarks ---
+  function editNote(m, li) {
+    if (li.querySelector('.nedit')) return;
+    const box = document.createElement('input');
+    box.type = 'text';
+    box.className = 'nedit';
+    box.maxLength = 300;
+    box.value = m.n || '';
+    box.placeholder = t('mark.notePh');
+    const finish = (keep) => {
+      if (keep) { m.n = box.value.trim(); if (!m.n) delete m.n; saveMarks(); }
+      renderSheets();
+    };
+    box.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); finish(true); } else if (e.key === 'Escape') { e.stopPropagation(); finish(false); } });
+    box.addEventListener('blur', () => finish(true));
+    li.style.flexWrap = 'wrap';
+    li.appendChild(box);
+    box.focus();
+  }
+
+  // --- export bookmarks as a plain text file ---
+  $('mark-export').addEventListener('click', () => {
+    if (!current || !marks.length) return;
+    const lines = [current.title, '='.repeat(Math.min(60, current.title.length)), ''];
+    marks.slice().sort((a, b) => a.ch - b.ch || a.i - b.i).forEach((m) => {
+      const ch = current.chapters[m.ch];
+      const full = ch && ch.blocks[m.i] ? ch.blocks[m.i].t : m.s;
+      lines.push(`[${ch ? ch.title : ''}]`, full.length > 400 ? full.slice(0, 400) + '…' : full);
+      if (m.n) lines.push('> ' + m.n);
+      lines.push(new Date(m.t).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-US'), '');
+    });
+    const url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (current.title.replace(/[\\/:*?"<>|]+/g, ' ').trim().slice(0, 60) || 'book') + ' - bookmarks.txt';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    showToast(t('mark.exported'));
+  });
+
+  // --- search inside the open book (ignores case and Vietnamese accents) ---
+  const fold = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+  let qTimer = null;
+  function runSearch() {
+    const list = $('q-list');
+    list.textContent = '';
+    const raw = $('q').value.trim();
+    const note = (msg) => { const li = document.createElement('li'); li.className = 'none'; li.textContent = msg; list.appendChild(li); };
+    if (!current) return;
+    if (raw.length < 2) { if (raw.length) note(t('q.min')); return; }
+    const q = fold(raw);
+    let n = 0;
+    outer: for (let c = 0; c < current.chapters.length; c++) {
+      const blocks = current.chapters[c].blocks;
+      for (let i = 0; i < blocks.length; i++) {
+        const text = blocks[i].t;
+        const at = fold(text).indexOf(q);
+        if (at < 0) continue;
+        if (++n > 100) break outer;
+        const li = document.createElement('li');
+        li.className = 'mrow';
+        const go = document.createElement('button');
+        go.type = 'button';
+        const head = document.createElement('b');
+        head.textContent = current.chapters[c].title;
+        const snip = document.createElement('span');
+        const from = Math.max(0, at - 40);
+        snip.textContent = (from ? '…' : '') + text.slice(from, at + raw.length + 70) + (at + raw.length + 70 < text.length ? '…' : '');
+        go.append(head, snip);
+        go.addEventListener('click', () => {
+          hideSheet(); saveProgress(); renderChapter(c, null, i); saveProgress();
+          requestAnimationFrame(() => { const el = page.querySelector(`[data-i="${i}"]`); if (el) { el.classList.add('found'); setTimeout(() => el.classList.remove('found'), 2600); } });
+        });
+        li.appendChild(go);
+        list.appendChild(li);
+      }
+    }
+    if (!n) note(t('q.none'));
+    else if (n > 100) note(t('q.cap'));
+  }
+  $('q').addEventListener('input', () => { clearTimeout(qTimer); qTimer = setTimeout(runSearch, 200); });
+  $('r-search').addEventListener('click', () => {
+    renderSheets();
+    showSheet($('sheet-toc'));
+    const tab = document.querySelector('#toc-tabs button[data-tab="search"]');
+    if (tab) tab.click();
+    $('q').focus();
+  });
 
   $('r-toc').addEventListener('click', () => { renderSheets(); showSheet($('sheet-toc')); });
   $('r-aa').addEventListener('click', () => showSheet($('sheet-aa')));
@@ -1100,6 +1202,8 @@
     document.querySelectorAll('#toc-tabs button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
     $('toc-list').hidden = b.dataset.tab !== 'chapters';
     $('mark-list').hidden = b.dataset.tab !== 'marks';
+    $('mark-tools').hidden = b.dataset.tab !== 'marks' || !marks.length;
+    $('search-pane').hidden = b.dataset.tab !== 'search';
   }));
 
   $('aa-size').addEventListener('input', (e) => { prefs.size = Number(e.target.value); savePrefs(); applyPrefs(); });

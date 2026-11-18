@@ -38,7 +38,9 @@ html {
   font-size: 16px;
   scrollbar-gutter: stable; /* no layout jump when a popup locks scrolling */
 }
-html.modal-open .bg-layer { visibility: hidden; } /* stop painting the GIF behind a popup */
+html.modal-open .bg-layer { visibility: hidden; }
+.bg-layer.ready { animation: bgIn 0.9s ease both; }
+@keyframes bgIn { from { opacity: 0.35; } to { opacity: 1; } } /* stop painting the GIF behind a popup */
 html.is-locked { overflow: hidden; }
 
 body {
@@ -54,7 +56,8 @@ body {
   position: fixed;
   inset: 0;
   z-index: -2;
-  background: url('https://i.pinimg.com/originals/b9/4e/18/b94e18ea40626f10bc67eaba042ec415.gif') center center / cover no-repeat;
+  /* dark placeholder; the animated GIF is attached by script.js after the page has loaded */
+  background: radial-gradient(70% 55% at 50% 100%, #2a1608 0%, #0b0907 55%, #050608 100%) center center / cover no-repeat;
   transform: translate3d(0, 0, 0);
   will-change: transform;
 }

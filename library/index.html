@@ -17,9 +17,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/base.css?v=5" />
-  <link rel="stylesheet" href="/library/library.css?v=13" />
-  <script src="/library/library.js?v=12" defer></script>
+  <link rel="stylesheet" href="/assets/base.css?v=6" />
+  <link rel="stylesheet" href="/library/library.css?v=14" />
+  <script src="/library/library.js?v=13" defer></script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body data-view="shelf" data-theme="book">
   <header class="bar">
@@ -74,6 +75,14 @@
     </ul>
   </main>
 
+  <footer class="site-foot shelf-foot" aria-label="vinhx">
+    <a href="/">vinhx.info</a><span aria-hidden="true">·</span>
+    <a href="/note">note</a><span aria-hidden="true">·</span>
+    <a href="/convert">convert</a><span aria-hidden="true">·</span>
+    <a href="/library">library</a><span aria-hidden="true">·</span>
+    <a href="https://vinhxhub.vercel.app/" target="_blank" rel="noopener noreferrer">hub</a>
+  </footer>
+
   <!-- reader -->
   <section id="reader" class="reader" hidden>
     <div class="rbar">
@@ -81,6 +90,7 @@
       <div class="rtitle"><b id="r-title"></b><span id="r-chap"></span></div>
       <div class="rtools">
         <button id="r-trans" class="icon-btn" type="button" data-i18n-label="tr.on" aria-label="Dịch sang tiếng Việt" title="Dịch sang tiếng Việt" aria-pressed="false" hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></button>
+        <button id="r-search" class="icon-btn" type="button" data-i18n-label="s.search" aria-label="Tìm trong sách" title="Tìm trong sách"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
         <button id="r-mark" class="icon-btn" type="button" data-i18n-label="r.mark" aria-label="Đánh dấu" title="Đánh dấu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v16l-5-4-5 4z"/></svg></button>
         <button id="r-toc" class="icon-btn" type="button" data-i18n-label="r.toc" aria-label="Mục lục và đánh dấu" title="Mục lục và đánh dấu"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
         <button id="r-aa" class="icon-btn" type="button" data-i18n-label="r.aa" aria-label="Chữ và giao diện" title="Chữ và giao diện"><b aria-hidden="true">Aa</b></button>
@@ -106,12 +116,18 @@
         <div class="seg" id="toc-tabs" role="tablist">
           <button type="button" role="tab" data-tab="chapters" aria-pressed="true" data-i18n="s.chapters">Mục lục</button>
           <button type="button" role="tab" data-tab="marks" aria-pressed="false" data-i18n="s.marks">Đánh dấu</button>
+          <button type="button" role="tab" data-tab="search" aria-pressed="false" data-i18n="s.search">Tìm</button>
         </div>
         <button type="button" class="icon-btn" data-close data-i18n-label="ui.close" aria-label="Đóng"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
       <h2 id="toc-title" class="sr" data-i18n="s.chapters">Mục lục</h2>
       <ol id="toc-list" class="tlist"></ol>
       <ul id="mark-list" class="tlist" hidden></ul>
+      <div id="mark-tools" class="mtools" hidden><button id="mark-export" class="btn" type="button" data-i18n="mark.export">Xuất đánh dấu (.txt)</button></div>
+      <div id="search-pane" class="spane" hidden>
+        <input id="q" type="search" class="qin" data-i18n-ph="q.ph" placeholder="Tìm trong sách..." autocomplete="off" />
+        <ul id="q-list" class="tlist"></ul>
+      </div>
     </div>
   </div>
 

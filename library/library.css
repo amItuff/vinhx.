@@ -315,3 +315,14 @@ body[data-view="shelf"] .books { gap: 0; border-top: 1px solid var(--line); }
 body[data-view="shelf"] .book { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: none; padding: 14px 0; }
 body[data-view="shelf"] .book::before, body[data-view="shelf"] .bbg { display: none; }
 body[data-view="shelf"] .empty { border: 1px solid var(--line); border-radius: 0; background: none; }
+
+/* in-book search, bookmark notes and export */
+.page .found { background: var(--rmark); box-shadow: -6px 0 0 var(--rmark), 6px 0 0 var(--rmark); animation: foundFade 2.6s ease-out forwards; }
+@keyframes foundFade { 0%, 70% { background: var(--rmark); } 100% { background: transparent; box-shadow: none; } }
+.spane { padding: 8px 10px 0; }
+.spane[hidden], .mtools[hidden] { display: none; }
+.qin, .nedit { width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--rline, rgba(255, 255, 255, 0.18)); background: transparent; color: inherit; font: inherit; font-size: 0.86rem; -webkit-user-select: text; user-select: text; }
+.nedit { flex: 0 0 100%; margin: 2px 0 6px; }
+.tlist .mnote { font-size: 0.76rem; font-style: italic; opacity: 0.85; }
+.tlist .mrow .icon-btn { width: 32px; height: 32px; flex: none; padding: 0; }
+.mtools { padding: 0 14px 14px; }

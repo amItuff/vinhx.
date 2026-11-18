@@ -487,3 +487,10 @@ select { width: 100%; flex: none; appearance: none; cursor: pointer; }
   .toast { transform: translate(-50%, 0); }
   .status[data-state="saving"] .dot { animation: none; }
 }
+
+/* shared footer linking the projects together */
+.site-foot { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 10px; padding: 22px 16px 30px; font-size: 0.78rem; color: var(--sub); }
+.site-foot a { color: inherit; text-decoration: none; }
+.site-foot a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+body[data-view="shelf"] .site-foot a:hover { color: var(--ink); }
+body[data-view="read"] .shelf-foot { display: none; }

@@ -65,11 +65,11 @@ const STRINGS = {
     'faq.q4': 'File trong vinhx convert có bị tải lên máy chủ không?',
     'faq.q4a': 'Không. Mọi thứ xử lý ngay trong trình duyệt. Video đổi theo thời gian thực nên cần giữ tab mở.',
     'faq.q5': 'Vì sao có định dạng không xuất được?',
-    'faq.q5a': 'Tùy trình duyệt hỗ trợ, Chrome và Edge đầy đủ nhất. Chưa hỗ trợ MP3 và GIF động.',
+    'faq.q5a': 'Tùy trình duyệt hỗ trợ, Chrome và Edge đầy đủ nhất. MP3 (từ âm thanh hoặc video) và GIF động (từ video, tối đa 20 giây) đã được hỗ trợ.',
     'faq.q6': 'Web có theo dõi mình không?',
-    'faq.q6a': 'Không có cookie theo dõi hay quảng cáo. Chỉ lưu ngôn ngữ và bản nháp thư trên máy bạn. Phông Google, Discord (Lanyard) và SoundCloud có chính sách riêng.',
+    'faq.q6a': 'Không có cookie theo dõi hay quảng cáo. Chỉ lưu ngôn ngữ và bản nháp thư trên máy bạn. Trang đếm lượt xem ẩn danh bằng Vercel Analytics (không cookie, không ghi nhận nội dung ghi chú). Phông Google, Discord (Lanyard) và SoundCloud có chính sách riêng.',
     'faq.q7': 'Báo lỗi hoặc liên hệ ở đâu?',
-    'faq.q7a': 'Dùng nút thư ở góc phải dưới, hoặc vào server Discord ở phần dự án.',
+    'faq.q7a': 'Dùng nút thư ở góc phải dưới, hoặc mở vinhx hub ở phần dự án (có link vào server Discord).',
     'p3.desc': 'Ghi chú mã hóa, chia sẻ bằng một link.',
     'p3.open': 'Mở',
     'p4.desc': 'Đổi định dạng ảnh, âm thanh, video ngay trên máy.',
@@ -84,13 +84,14 @@ const STRINGS = {
     'log.less': 'Thu gọn',
     'p2.desc': 'Công cụ Discord: nhiệm vụ, treo voice, bảo mật.',
     'p.join': 'Vào server',
+    'p.hub': 'Mở hub',
     'p.features': 'Tính năng',
     'discord.profile': 'Hồ sơ',
     'fb.label': 'Mạng xã hội',
     'fb.connect': 'Kết nối',
     'player.label': 'Đang phát',
     'bot.title': 'Tính năng bot Discord',
-    'bot.join': 'Vào server Discord',
+    'bot.join': 'Mở vinhx hub',
     'f1.desc': 'Hoàn thành nhiệm vụ Discord và tự động claim quà.',
     'f2.desc': 'Tùy chỉnh game & giờ chơi mở khóa huy hiệu, còn lại giữ nguyên hết.',
     'f3.name': 'Treo Stream Voice',
@@ -169,11 +170,11 @@ const STRINGS = {
     'faq.q4': 'Are my files uploaded when I use vinhx convert?',
     'faq.q4a': 'No. Everything is processed in your browser. Video is converted in real time, so keep the tab open.',
     'faq.q5': 'Why can some formats not be exported?',
-    'faq.q5a': 'It depends on your browser; Chrome and Edge are the most complete. MP3 and animated GIF are not supported yet.',
+    'faq.q5a': 'It depends on your browser; Chrome and Edge are the most complete. MP3 (from audio or video) and animated GIF (from video, up to 20 seconds) are supported.',
     'faq.q6': 'Does this site track me?',
-    'faq.q6a': 'No tracking cookies or ads. Only your language and mail draft are stored on your device. Google Fonts, Discord (Lanyard) and SoundCloud have their own policies.',
+    'faq.q6a': 'No tracking cookies or ads. Only your language and mail draft are stored on your device. Page views are counted anonymously with Vercel Analytics (no cookies, note contents are never recorded). Google Fonts, Discord (Lanyard) and SoundCloud have their own policies.',
     'faq.q7': 'Where can I report a bug or get in touch?',
-    'faq.q7a': 'Use the mail button at the bottom right, or join the Discord server from the projects section.',
+    'faq.q7a': 'Use the mail button at the bottom right, or open vinhx hub from the projects section (it links to the Discord server).',
     'p3.desc': 'Encrypted notes, shared with one link.',
     'p3.open': 'Open',
     'p4.desc': 'Convert images, audio and video on your device.',
@@ -188,13 +189,14 @@ const STRINGS = {
     'log.less': 'Show less',
     'p2.desc': 'Discord toolkit: quests, voice, security.',
     'p.join': 'Join server',
+    'p.hub': 'Open hub',
     'p.features': 'Features',
     'discord.profile': 'Profile',
     'fb.label': 'Social network',
     'fb.connect': 'Connect',
     'player.label': 'Now playing',
     'bot.title': 'Discord bot features',
-    'bot.join': 'Join Discord server',
+    'bot.join': 'Open vinhx hub',
     'f1.desc': 'Completes Discord quests and claims the rewards for you.',
     'f2.desc': 'Set a custom game and playtime to unlock badges; nothing else changes.',
     'f3.name': '24/7 Voice Stream',
@@ -976,4 +978,23 @@ fetch('/changelog.json', { cache: 'no-cache' })
   });
 
   setActive(0);
+})();
+
+
+// ---------------------------------------------------------------------------
+// Background GIF: attached after the page has loaded, and skipped on Save-Data,
+// slow (2g) connections and reduced-motion, which keep the dark placeholder.
+// To self-host it, drop the file in /assets and point BG_GIF at it.
+// ---------------------------------------------------------------------------
+(() => {
+  const BG_GIF = 'https://i.pinimg.com/originals/b9/4e/18/b94e18ea40626f10bc67eaba042ec415.gif';
+  const layer = document.querySelector('.bg-layer');
+  const conn = navigator.connection;
+  if (!layer || reduceMotion || (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '')))) return;
+  const attach = () => {
+    const img = new Image();
+    img.onload = () => { layer.style.backgroundImage = `url("${BG_GIF}")`; layer.classList.add('ready'); };
+    img.src = BG_GIF;
+  };
+  if (document.readyState === 'complete') attach(); else window.addEventListener('load', attach, { once: true });
 })();
