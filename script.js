@@ -55,14 +55,6 @@ const STRINGS = {
     'about.text': 'Mình là <strong>Vinh (vinhx)</strong>. Chuyên viết bot Discord, script tự động hóa bằng Python và xây dựng giao diện web tối giản, tốc độ cao.',
     'about.contact': 'Gửi tin nhắn',
     'projects.badge': 'Dự án nổi bật',
-    'chat.badge': 'Trò chuyện với AI',
-    'chat.all': 'Cả ba',
-    'chat.send': 'Gửi',
-    'chat.ph': 'Hỏi gì đó…',
-    'chat.hello': 'Chọn Gemini, ChatGPT hoặc Claude (hoặc cả ba) rồi hỏi mình bất cứ điều gì.',
-    'chat.off': 'chưa bật',
-    'chat.err': 'Lỗi, thử lại sau.',
-    'chat.rate': 'Hỏi nhanh quá, đợi một chút.',
     'faq.badge': 'Câu hỏi thường gặp',
     'faq.q1': 'Ghi chú trên vinhx note có an toàn không?',
     'faq.q1a': 'Có. Nội dung được mã hóa trên trình duyệt trước khi lưu, máy chủ chỉ giữ bản mã hóa. Ai có link thì đọc được nên đừng đăng công khai. Quên mật khẩu thứ hai thì không khôi phục được.',
@@ -167,14 +159,6 @@ const STRINGS = {
     'about.text': 'I\'m <strong>Vinh (vinhx)</strong>. I build Discord bots, Python automation scripts and minimal, fast websites.',
     'about.contact': 'Send a message',
     'projects.badge': 'Featured projects',
-    'chat.badge': 'Chat with AI',
-    'chat.all': 'All three',
-    'chat.send': 'Send',
-    'chat.ph': 'Ask anything…',
-    'chat.hello': 'Pick Gemini, ChatGPT or Claude (or all three) and ask anything.',
-    'chat.off': 'not enabled',
-    'chat.err': 'Something went wrong, try again.',
-    'chat.rate': 'Too fast, wait a moment.',
     'faq.badge': 'FAQ',
     'faq.q1': 'Is vinhx note safe?',
     'faq.q1a': 'Yes. Text is encrypted in your browser before it is saved, so the server only holds the encrypted copy. Anyone with the link can read it, so do not post it publicly. A forgotten second password cannot be recovered.',
@@ -992,86 +976,4 @@ fetch('/changelog.json', { cache: 'no-cache' })
   });
 
   setActive(0);
-})();
-
-
-// ---------------------------------------------------------------------------
-// Chat box: talks to /api/chat (Gemini / ChatGPT / Claude). "All three" asks every enabled model at once.
-// ---------------------------------------------------------------------------
-(() => {
-  const log = $('chat-log');
-  const form = $('chat-form');
-  const input = $('chat-input');
-  const send = $('chat-send');
-  const models = $('chat-models');
-  if (!log || !form || !input || !models) return;
-
-  const NAMES = { gemini: 'Gemini', openai: 'ChatGPT', claude: 'Claude' };
-  const btns = Array.from(models.querySelectorAll('.chat-model'));
-  const history = { gemini: [], openai: [], claude: [] };
-  let enabled = { gemini: true, openai: false, claude: false };
-  let current = 'gemini';
-  let busy = false;
-
-  function bubble(cls, who, text) {
-    const el = document.createElement('div');
-    el.className = 'chat-msg ' + cls;
-    if (who) { const w = document.createElement('b'); w.textContent = who; el.appendChild(w); }
-    const p = document.createElement('p');
-    p.textContent = text;
-    el.appendChild(p);
-    log.appendChild(el);
-    log.scrollTop = log.scrollHeight;
-    return p;
-  }
-
-  function mark() {
-    btns.forEach((b) => {
-      const p = b.dataset.p;
-      b.setAttribute('aria-pressed', String(p === current));
-      b.classList.toggle('off', p !== 'all' && !enabled[p]);
-    });
-  }
-
-  btns.forEach((b) => b.addEventListener('click', () => {
-    const p = b.dataset.p;
-    if (p !== 'all' && !enabled[p]) { bubble('sys', '', NAMES[p] + ' ' + t('chat.off')); return; }
-    current = p; mark(); input.focus();
-  }));
-
-  fetch('/api/chat').then((r) => r.json()).then((j) => {
-    enabled = { gemini: !!j.gemini, openai: !!j.openai, claude: !!j.claude };
-    if (!enabled[current]) current = ['gemini', 'openai', 'claude'].find((k) => enabled[k]) || 'gemini';
-    mark();
-  }).catch(() => {});
-  mark();
-  bubble('sys', '', t('chat.hello'));
-
-  async function ask(p, q) {
-    const out = bubble('bot', NAMES[p], '…');
-    history[p].push({ role: 'user', content: q });
-    try {
-      const r = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider: p, messages: history[p] }) });
-      if (!r.ok) throw new Error(String(r.status));
-      const j = await r.json();
-      out.textContent = j.text;
-      history[p].push({ role: 'assistant', content: j.text });
-    } catch (e) {
-      history[p].pop();
-      out.textContent = e.message === '429' ? t('chat.rate') : e.message === '503' ? NAMES[p] + ' ' + t('chat.off') : t('chat.err');
-    }
-    log.scrollTop = log.scrollHeight;
-  }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const q = input.value.trim();
-    if (!q || busy) return;
-    const targets = current === 'all' ? ['gemini', 'openai', 'claude'].filter((k) => enabled[k]) : [current];
-    if (!targets.length) return;
-    busy = true; send.disabled = true; input.value = '';
-    bubble('me', '', q);
-    await Promise.all(targets.map((p) => ask(p, q)));
-    busy = false; send.disabled = false; input.focus();
-  });
 })();

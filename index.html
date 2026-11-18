@@ -42,7 +42,7 @@
   <!-- icons load without blocking first paint -->
   <link rel="stylesheet" href="style.css?v=15" />
   <script src="https://w.soundcloud.com/player/api.js" defer></script>
-  <script src="script.js?v=17" defer></script>
+  <script src="script.js?v=16" defer></script>
 </head>
 <body>
 
@@ -216,22 +216,6 @@
       </div>
 
       <div class="proj-dots" id="proj-dots" aria-hidden="true"></div>
-    </div>
-
-    <!-- chat -->
-    <div class="glass-card reveal-card chat-card" id="chat-card">
-      <div class="section-badge" data-i18n="chat.badge">Trò chuyện với AI</div>
-      <div class="chat-models" id="chat-models" role="tablist" aria-label="AI">
-        <button type="button" class="chat-model" data-p="gemini" aria-pressed="true">Gemini</button>
-        <button type="button" class="chat-model" data-p="openai" aria-pressed="false">ChatGPT</button>
-        <button type="button" class="chat-model" data-p="claude" aria-pressed="false">Claude</button>
-        <button type="button" class="chat-model" data-p="all" aria-pressed="false" data-i18n="chat.all">Cả ba</button>
-      </div>
-      <div class="chat-log" id="chat-log" aria-live="polite"></div>
-      <form class="chat-form" id="chat-form" autocomplete="off">
-        <input id="chat-input" type="text" maxlength="2000" data-i18n-placeholder="chat.ph" placeholder="Hỏi gì đó…" aria-label="Tin nhắn" />
-        <button type="submit" class="chat-send" id="chat-send" data-i18n="chat.send">Gửi</button>
-      </form>
     </div>
 
     <!-- faq -->
