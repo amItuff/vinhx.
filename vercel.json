@@ -92,7 +92,7 @@
   ],
   "redirects": [
     {
-      "source": "/(og-image|og-note|og-convert|og-library).png",
+      "source": "/(og-image|og-note|og-convert|og-library|og-hub).png",
       "destination": "/assets/$1.png",
       "permanent": true
     },
