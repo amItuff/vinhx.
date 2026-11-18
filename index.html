@@ -42,7 +42,7 @@
   <!-- icons load without blocking first paint -->
   <link rel="stylesheet" href="style.css?v=15" />
   <script src="https://w.soundcloud.com/player/api.js" defer></script>
-  <script src="script.js?v=18" defer></script>
+  <script src="script.js?v=17" defer></script>
 </head>
 <body>
 
@@ -219,10 +219,19 @@
     </div>
 
     <!-- chat -->
-    <div class="glass-card reveal-card chat-card">
+    <div class="glass-card reveal-card chat-card" id="chat-card">
       <div class="section-badge" data-i18n="chat.badge">Trò chuyện với AI</div>
-      <p class="chat-blurb" data-i18n="chat.blurb">Hỏi Gemini, ChatGPT hoặc Claude, hoặc cả ba cùng lúc. Lịch sử lưu trên máy bạn.</p>
-      <button type="button" id="chat-open" class="p-btn p-btn-demo"><span data-i18n="chat.open">Mở khung chat</span></button>
+      <div class="chat-models" id="chat-models" role="tablist" aria-label="AI">
+        <button type="button" class="chat-model" data-p="gemini" aria-pressed="true">Gemini</button>
+        <button type="button" class="chat-model" data-p="openai" aria-pressed="false">ChatGPT</button>
+        <button type="button" class="chat-model" data-p="claude" aria-pressed="false">Claude</button>
+        <button type="button" class="chat-model" data-p="all" aria-pressed="false" data-i18n="chat.all">Cả ba</button>
+      </div>
+      <div class="chat-log" id="chat-log" aria-live="polite"></div>
+      <form class="chat-form" id="chat-form" autocomplete="off">
+        <input id="chat-input" type="text" maxlength="2000" data-i18n-placeholder="chat.ph" placeholder="Hỏi gì đó…" aria-label="Tin nhắn" />
+        <button type="submit" class="chat-send" id="chat-send" data-i18n="chat.send">Gửi</button>
+      </form>
     </div>
 
     <!-- faq -->
@@ -530,39 +539,6 @@
     allow="autoplay"
     src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/parsg/par-sg-cigarette-ft-cigar&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false">
   </iframe>
-
-  <div id="chat-overlay" class="chat-overlay" hidden role="dialog" aria-modal="true" aria-label="Chat">
-    <div class="chat-app" id="chat-app">
-      <aside class="chat-side" id="chat-side">
-        <div class="chat-side-top">
-          <span class="chat-brand">vinhx <span>chat</span></span>
-          <button type="button" class="chat-ico" id="chat-collapse" aria-label="Thu gọn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg></button>
-        </div>
-        <button type="button" class="chat-new" id="chat-new"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="chat.new">Chat mới</span></button>
-        <div class="chat-label" data-i18n="chat.recent">Gần đây</div>
-        <ul class="chat-recents" id="chat-recents"></ul>
-        <div class="chat-label" data-i18n="chat.model">Mô hình</div>
-        <div class="chat-models" id="chat-models">
-          <button type="button" class="chat-model" data-p="gemini" aria-pressed="true">Gemini</button>
-          <button type="button" class="chat-model" data-p="openai" aria-pressed="false">ChatGPT</button>
-          <button type="button" class="chat-model" data-p="claude" aria-pressed="false">Claude</button>
-          <button type="button" class="chat-model" data-p="all" aria-pressed="false" data-i18n="chat.all">Cả ba</button>
-        </div>
-      </aside>
-      <section class="chat-main">
-        <header class="chat-head">
-          <button type="button" class="chat-ico chat-menu" id="chat-menu" aria-label="Menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-          <span class="chat-title" id="chat-title"></span>
-          <button type="button" class="chat-ico" id="chat-close" aria-label="Đóng"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-        </header>
-        <div class="chat-log" id="chat-log" aria-live="polite"></div>
-        <form class="chat-form" id="chat-form" autocomplete="off">
-          <input id="chat-input" type="text" maxlength="2000" data-i18n-placeholder="chat.ph" placeholder="Hỏi gì đó…" aria-label="Tin nhắn" />
-          <button type="submit" class="chat-send" id="chat-send" data-i18n="chat.send">Gửi</button>
-        </form>
-      </section>
-    </div>
-  </div>
 
 </body>
 </html>

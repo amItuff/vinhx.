@@ -10,7 +10,7 @@ const MAX_CHARS = 2000;
 const SYSTEM = 'Bạn là trợ lý trên website cá nhân của vinhx (lập trình viên Discord bot, script Python, web tối giản). Trả lời ngắn gọn, thân thiện, cùng ngôn ngữ với người dùng.';
 
 const KEYS = {
-  gemini: () => process.env.GEMINI_API_KEY,
+  gemini: () => process.env.GEMINI_API_KEY || 'AQ.Ab8RN6LWN7u-JLOHnqswLmQvf_hT-BAesU-5W16mBMc_ZZa6_Q',
   openai: () => process.env.OPENAI_API_KEY,
   claude: () => process.env.ANTHROPIC_API_KEY
 };
@@ -20,7 +20,7 @@ async function post(url, headers, body) {
   const timer = setTimeout(() => ctl.abort(), 25000);
   try {
     const r = await fetch(url, { method: 'POST', signal: ctl.signal, headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(body) });
-    if (!r.ok) { const e = new Error('upstream ' + r.status); e.upstream = r.status; throw e; }
+    if (!r.ok) throw new Error('upstream ' + r.status);
     return await r.json();
   } finally { clearTimeout(timer); }
 }
@@ -70,8 +70,8 @@ module.exports = async (req, res) => {
   try {
     const text = (await CALL[provider](msgs.map((m) => ({ role: m.role, content: m.content })))).trim();
     return res.end(JSON.stringify({ text: text || '…' }));
-  } catch (e) {
+  } catch (_) {
     res.statusCode = 502;
-    return res.end(JSON.stringify({ error: 'upstream', status: e.upstream || 0 }));
+    return res.end('{"error":"upstream"}');
   }
 };

@@ -56,18 +56,12 @@ const STRINGS = {
     'about.contact': 'Gửi tin nhắn',
     'projects.badge': 'Dự án nổi bật',
     'chat.badge': 'Trò chuyện với AI',
-    'chat.blurb': 'Hỏi Gemini, ChatGPT hoặc Claude, hoặc cả ba cùng lúc. Lịch sử lưu trên máy bạn.',
-    'chat.open': 'Mở khung chat',
-    'chat.new': 'Chat mới',
-    'chat.recent': 'Gần đây',
-    'chat.model': 'Mô hình',
     'chat.all': 'Cả ba',
     'chat.send': 'Gửi',
     'chat.ph': 'Hỏi gì đó…',
-    'chat.hello': 'Hỏi mình bất cứ điều gì.',
-    'chat.untitled': 'Chat mới',
+    'chat.hello': 'Chọn Gemini, ChatGPT hoặc Claude (hoặc cả ba) rồi hỏi mình bất cứ điều gì.',
     'chat.off': 'chưa bật',
-    'chat.err': 'Lỗi',
+    'chat.err': 'Lỗi, thử lại sau.',
     'chat.rate': 'Hỏi nhanh quá, đợi một chút.',
     'faq.badge': 'Câu hỏi thường gặp',
     'faq.q1': 'Ghi chú trên vinhx note có an toàn không?',
@@ -174,18 +168,12 @@ const STRINGS = {
     'about.contact': 'Send a message',
     'projects.badge': 'Featured projects',
     'chat.badge': 'Chat with AI',
-    'chat.blurb': 'Ask Gemini, ChatGPT or Claude, or all three at once. History stays on your device.',
-    'chat.open': 'Open chat',
-    'chat.new': 'New chat',
-    'chat.recent': 'Recents',
-    'chat.model': 'Model',
     'chat.all': 'All three',
     'chat.send': 'Send',
     'chat.ph': 'Ask anything…',
-    'chat.hello': 'Ask me anything.',
-    'chat.untitled': 'New chat',
+    'chat.hello': 'Pick Gemini, ChatGPT or Claude (or all three) and ask anything.',
     'chat.off': 'not enabled',
-    'chat.err': 'Error',
+    'chat.err': 'Something went wrong, try again.',
     'chat.rate': 'Too fast, wait a moment.',
     'faq.badge': 'FAQ',
     'faq.q1': 'Is vinhx note safe?',
@@ -1008,55 +996,23 @@ fetch('/changelog.json', { cache: 'no-cache' })
 
 
 // ---------------------------------------------------------------------------
-// Chat: a Claude-style app (sidebar with recents + model picker, chat on the right) in an overlay.
-// Talks to /api/chat for Gemini / ChatGPT / Claude; "All three" asks every enabled model at once.
-// Conversations stay in this browser's localStorage.
+// Chat box: talks to /api/chat (Gemini / ChatGPT / Claude). "All three" asks every enabled model at once.
 // ---------------------------------------------------------------------------
 (() => {
-  const overlay = $('chat-overlay');
-  const openBtn = $('chat-open');
-  if (!overlay || !openBtn) return;
-  const app = $('chat-app');
   const log = $('chat-log');
   const form = $('chat-form');
   const input = $('chat-input');
   const send = $('chat-send');
-  const recents = $('chat-recents');
-  const titleEl = $('chat-title');
-  const modelBtns = Array.from(document.querySelectorAll('#chat-models .chat-model'));
+  const models = $('chat-models');
+  if (!log || !form || !input || !models) return;
 
   const NAMES = { gemini: 'Gemini', openai: 'ChatGPT', claude: 'Claude' };
-  const STORE = 'vinhx-chats';
-  let convs = [];
-  try { convs = JSON.parse(localStorage.getItem(STORE) || '[]'); if (!Array.isArray(convs)) convs = []; } catch (_) { convs = []; }
-  const save = () => { try { localStorage.setItem(STORE, JSON.stringify(convs.slice(0, 30))); } catch (_) {} };
-
+  const btns = Array.from(models.querySelectorAll('.chat-model'));
+  const history = { gemini: [], openai: [], claude: [] };
   let enabled = { gemini: true, openai: false, claude: false };
   let current = 'gemini';
-  let cur = null;       // active conversation
   let busy = false;
-  let lastFocus = null;
 
-  function markModels() {
-    modelBtns.forEach((b) => {
-      const p = b.dataset.p;
-      b.setAttribute('aria-pressed', String(p === current));
-      b.classList.toggle('off', p !== 'all' && !enabled[p]);
-    });
-  }
-  modelBtns.forEach((b) => b.addEventListener('click', () => {
-    const p = b.dataset.p;
-    if (p !== 'all' && !enabled[p]) { sys(NAMES[p] + ' ' + t('chat.off')); return; }
-    current = p; markModels(); input.focus();
-  }));
-
-  function sys(text) {
-    const el = document.createElement('div');
-    el.className = 'chat-msg sys';
-    el.textContent = text;
-    log.appendChild(el);
-    log.scrollTop = log.scrollHeight;
-  }
   function bubble(cls, who, text) {
     const el = document.createElement('div');
     el.className = 'chat-msg ' + cls;
@@ -1069,54 +1025,40 @@ fetch('/changelog.json', { cache: 'no-cache' })
     return p;
   }
 
-  function renderRecents() {
-    recents.textContent = '';
-    convs.forEach((c) => {
-      const li = document.createElement('li');
-      li.className = c === cur ? 'on' : '';
-      const b = document.createElement('button');
-      b.type = 'button'; b.className = 'chat-rec'; b.textContent = c.title || t('chat.untitled');
-      b.addEventListener('click', () => { show(c); app.classList.remove('side-open'); });
-      const x = document.createElement('button');
-      x.type = 'button'; x.className = 'chat-del'; x.textContent = '×'; x.setAttribute('aria-label', 'Delete');
-      x.addEventListener('click', () => {
-        convs = convs.filter((k) => k !== c); save();
-        if (cur === c) newChat(); else renderRecents();
-      });
-      li.append(b, x);
-      recents.appendChild(li);
+  function mark() {
+    btns.forEach((b) => {
+      const p = b.dataset.p;
+      b.setAttribute('aria-pressed', String(p === current));
+      b.classList.toggle('off', p !== 'all' && !enabled[p]);
     });
   }
 
-  function show(c) {
-    cur = c;
-    log.textContent = '';
-    titleEl.textContent = c.title || t('chat.untitled');
-    if (!c.msgs.length) sys(t('chat.hello'));
-    c.msgs.forEach((m) => (m.role === 'user' ? bubble('me', '', m.content) : bubble('bot', NAMES[m.provider] || '', m.content)));
-    renderRecents();
-  }
-  function newChat() {
-    show({ id: Date.now(), title: '', msgs: [] });
-    input.focus();
-  }
+  btns.forEach((b) => b.addEventListener('click', () => {
+    const p = b.dataset.p;
+    if (p !== 'all' && !enabled[p]) { bubble('sys', '', NAMES[p] + ' ' + t('chat.off')); return; }
+    current = p; mark(); input.focus();
+  }));
 
-  // messages one provider should see: every user turn plus that provider's own answers
-  const ctxFor = (c, p) => c.msgs.filter((m) => m.role === 'user' || m.provider === p).map((m) => ({ role: m.role, content: m.content }));
+  fetch('/api/chat').then((r) => r.json()).then((j) => {
+    enabled = { gemini: !!j.gemini, openai: !!j.openai, claude: !!j.claude };
+    if (!enabled[current]) current = ['gemini', 'openai', 'claude'].find((k) => enabled[k]) || 'gemini';
+    mark();
+  }).catch(() => {});
+  mark();
+  bubble('sys', '', t('chat.hello'));
 
-  async function ask(c, p) {
+  async function ask(p, q) {
     const out = bubble('bot', NAMES[p], '…');
+    history[p].push({ role: 'user', content: q });
     try {
-      const r = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider: p, messages: ctxFor(c, p) }) });
-      if (!r.ok) {
-        let st = 0; try { st = (await r.json()).status || 0; } catch (_) {}
-        const e = new Error(String(r.status)); e.up = st; throw e;
-      }
+      const r = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider: p, messages: history[p] }) });
+      if (!r.ok) throw new Error(String(r.status));
       const j = await r.json();
       out.textContent = j.text;
-      c.msgs.push({ role: 'assistant', provider: p, content: j.text });
+      history[p].push({ role: 'assistant', content: j.text });
     } catch (e) {
-      out.textContent = e.message === '429' ? t('chat.rate') : e.message === '503' ? NAMES[p] + ' ' + t('chat.off') : t('chat.err') + ' (' + (e.up || e.message) + ')';
+      history[p].pop();
+      out.textContent = e.message === '429' ? t('chat.rate') : e.message === '503' ? NAMES[p] + ' ' + t('chat.off') : t('chat.err');
     }
     log.scrollTop = log.scrollHeight;
   }
@@ -1128,45 +1070,8 @@ fetch('/changelog.json', { cache: 'no-cache' })
     const targets = current === 'all' ? ['gemini', 'openai', 'claude'].filter((k) => enabled[k]) : [current];
     if (!targets.length) return;
     busy = true; send.disabled = true; input.value = '';
-    const c = cur;
-    if (!c.msgs.length) {
-      c.title = q.length > 40 ? q.slice(0, 40) + '…' : q;
-      titleEl.textContent = c.title;
-      log.textContent = '';
-      convs.unshift(c);
-    }
-    c.msgs.push({ role: 'user', content: q });
     bubble('me', '', q);
-    renderRecents(); save();
-    await Promise.all(targets.map((p) => ask(c, p)));
-    save();
+    await Promise.all(targets.map((p) => ask(p, q)));
     busy = false; send.disabled = false; input.focus();
   });
-
-  function open() {
-    lastFocus = document.activeElement;
-    overlay.hidden = false;
-    root.classList.add('modal-open', 'is-locked');
-    if (!cur) newChat();
-    input.focus();
-  }
-  function close() {
-    overlay.hidden = true;
-    root.classList.remove('modal-open', 'is-locked');
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
-  }
-  openBtn.addEventListener('click', open);
-  $('chat-close').addEventListener('click', close);
-  $('chat-new').addEventListener('click', () => { newChat(); app.classList.remove('side-open'); });
-  $('chat-collapse').addEventListener('click', () => app.classList.toggle('collapsed'));
-  $('chat-menu').addEventListener('click', () => app.classList.toggle('side-open'));
-  overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) close(); });
-
-  fetch('/api/chat').then((r) => r.json()).then((j) => {
-    enabled = { gemini: !!j.gemini, openai: !!j.openai, claude: !!j.claude };
-    if (!enabled[current]) current = ['gemini', 'openai', 'claude'].find((k) => enabled[k]) || 'gemini';
-    markModels();
-  }).catch(() => {});
-  markModels();
 })();
