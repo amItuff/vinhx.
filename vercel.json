@@ -1,7 +1,10 @@
 {
   "framework": null,
-  "buildCommand": "node scripts/changelog.js",
-  "outputDirectory": ".",
+  "buildCommand": "node scripts/build.js",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/contact.js": { "includeFiles": "assets/{mail-banner,logo-96}.png" }
+  },
   "rewrites": [
     {
       "source": "/note/:id",

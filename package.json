@@ -4,5 +4,10 @@
   "description": "vinhx.info: static pages plus a few Vercel functions",
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "html-minifier-terser": "^7.2.0",
+    "javascript-obfuscator": "^4.2.2"
   }
 }

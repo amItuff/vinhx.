@@ -10,6 +10,8 @@ const WEBHOOK = process.env.CONTACT_WEBHOOK_URL || '';
 const TO = process.env.CONTACT_TO || 'nguyenngoctrivinh72@gmail.com';
 const FROM = process.env.CONTACT_FROM || 'vinhx.info <onboarding@resend.dev>';
 
+const fs = require('fs');
+const path = require('path');
 const { over } = require('./_limit');
 
 const MAX_FILES = 5;
@@ -74,6 +76,18 @@ function parseFiles(list) {
 const SITE = 'https://vinhx.info';
 const LOGO = SITE + '/assets/logo-192.png';
 const BANNER = SITE + '/assets/mail-banner.png';
+// Banner and logo travel inside the same request (attachment://...), so the card never depends on Discord
+// fetching images from the site (or on its cache of an older failed fetch).
+async function asset(name) {
+  for (const p of [path.join(process.cwd(), 'assets', name), path.join(__dirname, '..', 'assets', name)]) {
+    try { return fs.readFileSync(p); } catch (_) { /* try the next place */ }
+  }
+  try {
+    const r = await fetch(`${SITE}/assets/${name}?v=3`);
+    if (r.ok) return Buffer.from(await r.arrayBuffer());
+  } catch (_) { /* fall back to plain URLs */ }
+  return null;
+}
 const fmtSize = (n) => (n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' KB' : (n / 1048576).toFixed(1) + ' MB');
 
 async function viaResend(m, files) {
@@ -113,25 +127,32 @@ async function viaWebhook(m, files) {
   if (files.length) fields.push({ name: `Đính kèm (${files.length})`, value: files.map((f) => `• ${f.name} · ${fmtSize(f.buf.length)}`).join('\n').slice(0, 1000) });
   fields.push({ name: '\u200b', value: `[Trả lời bằng Gmail](${gmail})` });
 
+  const [banner, logo] = await Promise.all([asset('mail-banner.png'), asset('logo-96.png')]);
+  const bannerUrl = banner ? 'attachment://vx-banner.png' : BANNER + '?v=3';
+  const logoUrl = logo ? 'attachment://vx-logo.png' : LOGO + '?v=3';
+
   const form = new FormData();
   form.append('payload_json', JSON.stringify({
     username: 'vinhx.info mail',
-    avatar_url: LOGO,
+    avatar_url: LOGO + '?v=3',
     allowed_mentions: { parse: [] },
     embeds: [
-      { color: 0x0b57d0, image: { url: BANNER } },
+      { color: 0x0b57d0, image: { url: bannerUrl } },
       {
         color: 0x0b57d0,
-        author: { name: m.email.slice(0, 200), icon_url: LOGO },
+        author: { name: m.email.slice(0, 200), icon_url: logoUrl },
         title: m.subject.slice(0, 250),
         description: m.message.slice(0, 3800),
         fields,
-        footer: { text: 'vinhx.info · Hộp thư', icon_url: LOGO },
+        footer: { text: 'vinhx.info · Hộp thư', icon_url: logoUrl },
         timestamp: new Date().toISOString()
       }
     ]
   }));
-  files.forEach((f, i) => form.append(`files[${i}]`, new Blob([f.buf], { type: f.mime }), f.name));
+  const all = files.map((f) => ({ name: f.name, buf: f.buf, mime: f.mime }));
+  if (banner) all.push({ name: 'vx-banner.png', buf: banner, mime: 'image/png' });
+  if (logo) all.push({ name: 'vx-logo.png', buf: logo, mime: 'image/png' });
+  all.forEach((f, i) => form.append(`files[${i}]`, new Blob([f.buf], { type: f.mime }), f.name));
   const res = await fetch(WEBHOOK, { method: 'POST', body: form });
   if (!res.ok) console.error('contact: webhook failed', res.status, (await res.text().catch(() => '')).slice(0, 300));
   return res.ok;
