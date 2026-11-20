@@ -12,9 +12,9 @@ const FROM = process.env.CONTACT_FROM || 'vinhx.info <onboarding@resend.dev>';
 
 const { over } = require('./_limit');
 
-const MAX_FILES = 3;
-const MAX_FILE_BYTES = 2 * 1024 * 1024;
-const MAX_TOTAL_BYTES = 3.2 * 1024 * 1024;
+const MAX_FILES = 5;
+const MAX_FILE_BYTES = 3 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 3.2 * 1024 * 1024; // stays under Vercel's 4.5 MB body limit once base64-encoded
 const PER_HOUR = 5;
 
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
@@ -22,19 +22,51 @@ const B64_RE = /^[A-Za-z0-9+/]+={0,2}$/;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+// Allowed attachments: the file extension picks the type, and the first bytes must really match it,
+// so a renamed program or script is refused. Anything not listed here is rejected.
+const starts = (b, ...sig) => sig.every((x, i) => b[i] === x);
+const ZIP = (b) => starts(b, 0x50, 0x4b, 0x03, 0x04);
+const OLE = (b) => starts(b, 0xd0, 0xcf, 0x11, 0xe0);
+const RIFF = (b, kind) => starts(b, 0x52, 0x49, 0x46, 0x46) && b.slice(8, 12).toString('latin1') === kind;
+const TEXT = (b) => !b.slice(0, 4096).includes(0);
+const TYPES = {
+  jpg: ['image/jpeg', (b) => starts(b, 0xff, 0xd8, 0xff)],
+  jpeg: ['image/jpeg', (b) => starts(b, 0xff, 0xd8, 0xff)],
+  png: ['image/png', (b) => starts(b, 0x89, 0x50, 0x4e, 0x47)],
+  gif: ['image/gif', (b) => b.slice(0, 4).toString('latin1') === 'GIF8'],
+  webp: ['image/webp', (b) => RIFF(b, 'WEBP')],
+  pdf: ['application/pdf', (b) => b.slice(0, 4).toString('latin1') === '%PDF'],
+  doc: ['application/msword', OLE],
+  docx: ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', ZIP],
+  xls: ['application/vnd.ms-excel', OLE],
+  xlsx: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', ZIP],
+  ppt: ['application/vnd.ms-powerpoint', OLE],
+  pptx: ['application/vnd.openxmlformats-officedocument.presentationml.presentation', ZIP],
+  csv: ['text/csv', TEXT],
+  txt: ['text/plain', TEXT],
+  mp3: ['audio/mpeg', (b) => b.slice(0, 3).toString('latin1') === 'ID3' || (b[0] === 0xff && (b[1] & 0xe0) === 0xe0)],
+  wav: ['audio/wav', (b) => RIFF(b, 'WAVE')],
+  m4a: ['audio/mp4', (b) => b.slice(4, 8).toString('latin1') === 'ftyp'],
+  mp4: ['video/mp4', (b) => b.slice(4, 8).toString('latin1') === 'ftyp'],
+  mov: ['video/quicktime', (b) => b.slice(4, 8).toString('latin1') === 'ftyp' || b.slice(4, 8).toString('latin1') === 'moov'],
+  webm: ['video/webm', (b) => starts(b, 0x1a, 0x45, 0xdf, 0xa3)]
+};
+
 function parseFiles(list) {
   if (list === undefined) return [];
   if (!Array.isArray(list) || list.length > MAX_FILES) return null;
   const out = [];
   let total = 0;
   for (const f of list) {
-    if (!f || typeof f.data !== 'string' || !B64_RE.test(f.data) || f.type !== 'image/jpeg') return null;
+    if (!f || typeof f.data !== 'string' || !B64_RE.test(f.data)) return null;
+    const name = String(f.name || 'file').replace(/[^\p{L}\p{N}._\- ]+/gu, '_').slice(0, 80) || 'file';
+    const ext = (name.split('.').pop() || '').toLowerCase();
+    const type = TYPES[ext];
+    if (!type) return null;
     const buf = Buffer.from(f.data, 'base64');
-    if (!buf.length || buf.length > MAX_FILE_BYTES) return null;
-    if (!(buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff)) return null; // real JPEG only
+    if (!buf.length || buf.length > MAX_FILE_BYTES || !type[1](buf)) return null;
     total += buf.length;
-    const name = String(f.name || 'image.jpg').replace(/[^\w.\- ]+/g, '_').slice(0, 60) || 'image.jpg';
-    out.push({ name: /\.jpe?g$/i.test(name) ? name : name + '.jpg', buf });
+    out.push({ name, buf, mime: type[0] });
   }
   return total > MAX_TOTAL_BYTES ? null : out;
 }
@@ -69,7 +101,7 @@ async function viaWebhook(m, files) {
       color: 0x0b57d0
     }]
   }));
-  files.forEach((f, i) => form.append(`files[${i}]`, new Blob([f.buf], { type: 'image/jpeg' }), f.name));
+  files.forEach((f, i) => form.append(`files[${i}]`, new Blob([f.buf], { type: f.mime }), f.name));
   const res = await fetch(WEBHOOK, { method: 'POST', body: form });
   if (!res.ok) console.error('contact: webhook failed', res.status, (await res.text().catch(() => '')).slice(0, 300));
   return res.ok;

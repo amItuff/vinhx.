@@ -1336,7 +1336,17 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 }
 .gd-input::placeholder, .gd-text::placeholder { color: #9aa0a6; }
 .gd-input:focus-visible, .gd-text:focus-visible { outline: none; }
-.gd-text { height: 210px; resize: none; padding: 12px 0; line-height: 1.55; }
+.gd-text { height: 210px; resize: none; padding: 12px 0; line-height: 1.55; overflow-y: auto; overflow-wrap: anywhere; display: block; }
+.gd-text:empty::before { content: attr(data-ph); color: #9aa0a6; pointer-events: none; }
+.gd-text ul, .gd-text ol { margin: 4px 0 4px 1.3em; }
+.gd-text a { color: #8ab4f8; }
+.gd-fmt { display: flex; align-items: center; gap: 2px; padding: 6px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap; }
+.gd-fmt[hidden] { display: none; }
+.gd-f { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 6px; border: none; border-radius: 6px; background: transparent; color: #c4c7c5; font: inherit; font-size: 0.9rem; cursor: pointer; }
+.gd-f:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+.gd-sep { width: 1px; height: 18px; margin: 0 4px; background: rgba(255, 255, 255, 0.14); }
+.gd-tool[aria-pressed="true"] { background: rgba(138, 180, 248, 0.18); color: #fff; }
+.gd-ext { display: grid; place-items: center; width: 30px; height: 30px; flex: none; border-radius: 5px; background: #3c4043; color: #e8eaed; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.02em; }
 .gd-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
 .gd-files { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }

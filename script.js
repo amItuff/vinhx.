@@ -113,21 +113,23 @@ const STRINGS = {
     'mail.subjectPh': 'Tiêu đề',
     'mail.bodyPh': 'Nội dung tin nhắn',
     'mail.min': 'Thu nhỏ',
-    'mail.attach': 'Đính kèm ảnh',
+    'mail.attach': 'Đính kèm tệp (ảnh, Word, Excel, PDF...)',
     'mail.photo': 'Chèn ảnh',
     'mail.discard': 'Bỏ thư',
-    'mail.drop': 'Thả ảnh vào đây để đính kèm',
-    'mail.limit': 'Tối đa 3 ảnh.',
-    'mail.tooBig': 'Ảnh quá nặng, tổng tối đa khoảng 3 MB.',
+    'mail.drop': 'Thả tệp vào đây để đính kèm',
+    'mail.fmt': 'Định dạng', 'mail.bold': 'Đậm', 'mail.italic': 'Nghiêng', 'mail.underline': 'Gạch chân', 'mail.ul': 'Danh sách chấm', 'mail.ol': 'Danh sách số', 'mail.link': 'Chèn link', 'mail.clear': 'Xóa định dạng',
+    'mail.linkPrompt': 'Dán link (https://...)', 'mail.badType': 'Loại tệp này chưa được hỗ trợ.',
+    'mail.limit': 'Tối đa 5 tệp.',
+    'mail.tooBig': 'Tệp quá nặng, tổng tối đa khoảng 3 MB.',
     'mail.imgFail': 'Không đọc được ảnh này.',
     'mail.badEmail': 'Nhập email hợp lệ.',
     'mail.needSubject': 'Nhập tiêu đề.',
     'mail.needBody': 'Nhập nội dung.',
-    'mail.noAttach': 'Chưa gửi được ảnh đính kèm.',
-    'mail.sendNoFiles': 'Gửi không kèm ảnh',
+    'mail.noAttach': 'Chưa gửi được tệp đính kèm.',
+    'mail.sendNoFiles': 'Gửi không kèm tệp',
     'mail.rate': 'Bạn gửi quá nhiều, thử lại sau.',
-    'mail.badFiles': 'Ảnh không hợp lệ, thử ảnh khác.',
-    'mail.deliveryFail': 'Máy chủ không chuyển được thư kèm ảnh.',
+    'mail.badFiles': 'Tệp không hợp lệ, thử tệp khác.',
+    'mail.deliveryFail': 'Máy chủ không chuyển được thư kèm tệp.',
     'mail.send': 'Gửi',
     'mail.sending': 'Đang gửi...',
     'mail.sent': 'Đã gửi thành công!',
@@ -218,21 +220,23 @@ const STRINGS = {
     'mail.subjectPh': 'Subject',
     'mail.bodyPh': 'Your message',
     'mail.min': 'Minimize',
-    'mail.attach': 'Attach images',
+    'mail.attach': 'Attach files (images, Word, Excel, PDF...)',
     'mail.photo': 'Insert image',
     'mail.discard': 'Discard',
-    'mail.drop': 'Drop images here to attach',
-    'mail.limit': 'Up to 3 images.',
-    'mail.tooBig': 'Images are too large, about 3 MB in total at most.',
+    'mail.drop': 'Drop files here to attach',
+    'mail.fmt': 'Formatting', 'mail.bold': 'Bold', 'mail.italic': 'Italic', 'mail.underline': 'Underline', 'mail.ul': 'Bulleted list', 'mail.ol': 'Numbered list', 'mail.link': 'Insert link', 'mail.clear': 'Clear formatting',
+    'mail.linkPrompt': 'Paste a link (https://...)', 'mail.badType': 'That file type is not supported.',
+    'mail.limit': 'Up to 5 files.',
+    'mail.tooBig': 'Files are too large, about 3 MB in total at most.',
     'mail.imgFail': 'Could not read that image.',
     'mail.badEmail': 'Enter a valid email.',
     'mail.needSubject': 'Enter a subject.',
     'mail.needBody': 'Enter a message.',
-    'mail.noAttach': 'Image attachments could not be sent.',
-    'mail.sendNoFiles': 'Send without images',
+    'mail.noAttach': 'Attachments could not be sent.',
+    'mail.sendNoFiles': 'Send without files',
     'mail.rate': 'Too many messages, try again later.',
-    'mail.badFiles': 'Invalid image, try another one.',
-    'mail.deliveryFail': 'The server could not deliver the message with images.',
+    'mail.badFiles': 'Invalid file, try another one.',
+    'mail.deliveryFail': 'The server could not deliver the message with files.',
     'mail.send': 'Send',
     'mail.sending': 'Sending...',
     'mail.sent': 'Sent, thank you!',
@@ -422,7 +426,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ---------------------------------------------------------------------------
-// Contact form: Gmail-style compose window with image attachments
+// Contact form: Gmail-style compose window with rich text and file attachments
 // ---------------------------------------------------------------------------
 const gmailModal = $('gmail-modal-container');
 const mailFab = $('open-gmail-modal');
@@ -432,37 +436,130 @@ const submitBtn = $('form-submit-btn');
 const noFilesBtn = $('gd-nofiles');
 const filesList = $('gd-files');
 const fileInput = $('gd-file');
+const photoInput = $('gd-photo-file');
 const dropHint = $('gd-drop');
+const editor = $('gd-editor');
+const fmtBar = $('gd-fmt');
 const DRAFT_KEY = 'mailDraft';
-const MAX_FILES = 3;
+const MAX_FILES = 5;
 const MAX_TOTAL = 3 * 1024 * 1024; // keeps the request under Vercel's 4.5 MB body limit once base64-encoded
+const FILE_EXT = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'csv', 'txt', 'mp3', 'wav', 'm4a', 'mp4', 'mov', 'webm'];
 let attachments = [];
 let sending = false;
 
 $('gd-to').textContent = 'Vinh';
-['gd-attach', 'gd-photo'].forEach((id) => { $(id).hidden = true; }); // shown only once the server confirms it can deliver images
+['gd-attach', 'gd-photo'].forEach((id) => { $(id).hidden = true; }); // shown only once the server confirms it can deliver files
+
+// --- rich text: the editor keeps HTML; the hidden "message" field gets Discord-style markdown ---
+function toMarkdown(root) {
+  const esc = (s) => s.replace(/([\\*_`~|])/g, '\\$1');
+  let out = '';
+  const block = (n) => /^(DIV|P|LI|UL|OL|BLOCKQUOTE|H[1-6])$/.test(n.nodeName);
+  function walk(node, ctx) {
+    node.childNodes.forEach((n) => {
+      if (n.nodeType === 3) { out += esc(n.nodeValue.replace(/ /g, ' ')); return; }
+      if (n.nodeType !== 1) return;
+      const tag = n.nodeName;
+      if (tag === 'BR') { out += '\n'; return; }
+      if (tag === 'UL' || tag === 'OL') {
+        if (out && !out.endsWith('\n')) out += '\n';
+        let i = 0;
+        n.childNodes.forEach((li) => {
+          if (li.nodeName !== 'LI') return;
+          out += (tag === 'OL' ? `${++i}. ` : '- ');
+          walk(li, ctx);
+          if (!out.endsWith('\n')) out += '\n';
+        });
+        return;
+      }
+      let pre = '', post = '';
+      if (tag === 'B' || tag === 'STRONG') pre = post = '**';
+      else if (tag === 'I' || tag === 'EM') pre = post = '*';
+      else if (tag === 'U') pre = post = '__';
+      else if (tag === 'S' || tag === 'STRIKE') pre = post = '~~';
+      if (/font-weight:\s*(bold|[6-9]00)/i.test(n.getAttribute('style') || '')) pre = post = '**';
+      if (tag === 'A' && /^https?:\/\//i.test(n.getAttribute('href') || '')) {
+        out += '[';
+        walk(n, ctx);
+        out += `](${n.getAttribute('href')})`;
+        return;
+      }
+      if (block(n) && out && !out.endsWith('\n')) out += '\n';
+      const start = out.length;
+      out += pre;
+      walk(n, ctx);
+      if (pre && out.slice(start + pre.length).trim() === '') out = out.slice(0, start); // never emit empty "****"
+      else out += post;
+      if (block(n) && !out.endsWith('\n')) out += '\n';
+    });
+  }
+  walk(root, {});
+  return out.replace(/\n{3,}/g, '\n\n').trim();
+}
+function syncMessage() { contactForm.elements.message.value = toMarkdown(editor); }
+const editorEmpty = () => !editor.textContent.trim() && !editor.querySelector('img');
 
 function saveDraft() {
   try {
     const f = contactForm.elements;
-    const d = { email: f.email.value, subject: f.subject.value, message: f.message.value };
-    if (d.email || d.subject || d.message) localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    const d = { email: f.email.value, subject: f.subject.value, html: editor.innerHTML };
+    if (d.email || d.subject || !editorEmpty()) localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
     else localStorage.removeItem(DRAFT_KEY);
   } catch (_) {}
 }
 function loadDraft() {
   try {
-    const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+    const d = JSON.parse(localStorage.getItem('mailDraft') || 'null');
     if (!d) return;
     const f = contactForm.elements;
     if (!f.email.value) f.email.value = d.email || '';
     if (!f.subject.value) f.subject.value = d.subject || '';
-    if (!f.message.value) f.message.value = d.message || '';
+    if (editorEmpty()) {
+      if (d.html) {
+        // the draft is only ever our own sanitised markup, but rebuild it as plain text + basic tags anyway
+        const tmp = document.createElement('div');
+        tmp.innerHTML = d.html;
+        tmp.querySelectorAll('*').forEach((el) => {
+          if (!/^(B|STRONG|I|EM|U|S|A|UL|OL|LI|BR|DIV|P|SPAN)$/.test(el.nodeName)) el.replaceWith(document.createTextNode(el.textContent));
+          else Array.from(el.attributes).forEach((at) => { if (!(el.nodeName === 'A' && at.name === 'href' && /^https?:\/\//i.test(at.value))) el.removeAttribute(at.name); });
+        });
+        editor.innerHTML = tmp.innerHTML;
+      } else if (d.message) editor.textContent = d.message;
+      syncMessage();
+    }
   } catch (_) {}
 }
-contactForm.addEventListener('input', saveDraft);
+contactForm.addEventListener('input', () => { syncMessage(); saveDraft(); });
 
-let attachState = 'unknown'; // 'on' once /api/contact says images can be delivered
+// formatting bar (opened with the "Aa" button, like Gmail)
+$('gd-fmt-toggle').addEventListener('click', () => {
+  const open = fmtBar.hidden;
+  fmtBar.hidden = !open;
+  $('gd-fmt-toggle').setAttribute('aria-pressed', String(open));
+  editor.focus();
+});
+fmtBar.addEventListener('mousedown', (e) => e.preventDefault()); // keep the selection in the editor
+fmtBar.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-cmd]');
+  if (!btn) return;
+  const cmd = btn.dataset.cmd;
+  if (document.activeElement !== editor) editor.focus();
+  if (cmd === 'createLink') {
+    const url = (window.prompt(t('mail.linkPrompt'), 'https://') || '').trim();
+    if (/^https?:\/\/\S+$/i.test(url)) document.execCommand('createLink', false, url);
+  } else document.execCommand(cmd, false, null);
+  syncMessage(); saveDraft();
+});
+// paste as plain text (no stray styles from Word or web pages)
+editor.addEventListener('paste', (e) => {
+  const files = Array.from((e.clipboardData && e.clipboardData.files) || []);
+  if (files.length) { e.preventDefault(); addFiles(files); return; }
+  e.preventDefault();
+  const text = (e.clipboardData && e.clipboardData.getData('text/plain')) || '';
+  document.execCommand('insertText', false, text);
+});
+
+let attachState = 'unknown'; // 'on' once /api/contact says files can be delivered
 function applyAttachState() {
   const on = attachState === 'on';
   ['gd-attach', 'gd-photo'].forEach((id) => { $(id).hidden = !on; });
@@ -479,11 +576,12 @@ async function checkAttachSupport() {
 
 function openGmail() {
   checkAttachSupport();
+  try { document.execCommand('defaultParagraphSeparator', false, 'div'); } catch (_) {}
   mailFab.classList.add('is-hidden');
   gmailModal.classList.remove('hidden', 'min');
   loadDraft();
   const f = contactForm.elements;
-  const first = !f.email.value ? f.email : !f.subject.value ? f.subject : f.message;
+  const first = !f.email.value ? f.email : !f.subject.value ? f.subject : editor;
   setTimeout(() => first.focus({ preventScroll: true }), 60);
 }
 function closeGmail() {
@@ -493,6 +591,7 @@ function closeGmail() {
 }
 function discardGmail() {
   contactForm.reset();
+  editor.innerHTML = '';
   clearAttachments();
   try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
   setStatus('', '');
@@ -515,6 +614,8 @@ function setStatus(key, color) {
 
 // --- attachments -----------------------------------------------------------
 const fmtKB = (n) => (n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' KB' : (n / 1048576).toFixed(1) + ' MB');
+const extOf = (name) => ((name || '').split('.').pop() || '').toLowerCase();
+const isRaster = (f) => /^image\/(jpeg|png|webp|bmp|avif)$/.test(f.type);
 
 async function shrinkImage(file) {
   const bmp = await createImageBitmap(file);
@@ -539,9 +640,9 @@ function renderAttachments() {
   attachments.forEach((a) => {
     const li = document.createElement('li');
     li.className = 'gd-file';
-    const img = document.createElement('img');
-    img.src = a.url;
-    img.alt = '';
+    let thumb;
+    if (a.url) { thumb = document.createElement('img'); thumb.src = a.url; thumb.alt = ''; }
+    else { thumb = document.createElement('span'); thumb.className = 'gd-ext'; thumb.textContent = extOf(a.name).slice(0, 4).toUpperCase(); }
     const name = document.createElement('b');
     name.textContent = a.name;
     const size = document.createElement('em');
@@ -551,35 +652,41 @@ function renderAttachments() {
     rm.setAttribute('aria-label', t('ui.close'));
     rm.innerHTML = '<svg class="ic" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#s-xmark"></use></svg>';
     rm.addEventListener('click', () => {
-      URL.revokeObjectURL(a.url);
+      if (a.url) URL.revokeObjectURL(a.url);
       attachments = attachments.filter((x) => x !== a);
       renderAttachments();
     });
-    li.append(img, name, size, rm);
+    li.append(thumb, name, size, rm);
     filesList.appendChild(li);
   });
   noFilesBtn.hidden = true;
 }
 
 function clearAttachments() {
-  attachments.forEach((a) => URL.revokeObjectURL(a.url));
+  attachments.forEach((a) => { if (a.url) URL.revokeObjectURL(a.url); });
   attachments = [];
   renderAttachments();
 }
 
-async function addImages(list) {
+async function addFiles(list, imagesOnly) {
   if (attachState !== 'on') return;
-  const imgs = Array.from(list).filter((f) => f.type.startsWith('image/'));
-  if (!imgs.length) return;
+  const files = Array.from(list).filter((f) => (imagesOnly ? f.type.startsWith('image/') : true));
+  if (!files.length) return;
   setStatus('', '');
-  for (const f of imgs) {
+  for (const f of files) {
     if (attachments.length >= MAX_FILES) { setStatus('mail.limit', '#f28b82'); break; }
+    const ext = extOf(f.name) || (f.type.startsWith('image/') ? f.type.slice(6) : '');
+    if (!FILE_EXT.includes(ext) && !isRaster(f)) { setStatus('mail.badType', '#f28b82'); continue; }
     try {
-      const blob = await shrinkImage(f);
+      let blob = f;
+      let name = (f.name || 'file').replace(/[\\/:*?"<>|]+/g, '_');
+      if (isRaster(f)) { // photos are resized to JPEG so they stay small
+        blob = await shrinkImage(f);
+        name = name.replace(/\.[^.]+$/, '') + '.jpg';
+      } else if (!extOf(name)) name += '.' + ext;
       const total = attachments.reduce((s, x) => s + x.blob.size, 0) + blob.size;
-      if (total > MAX_TOTAL) { setStatus('mail.tooBig', '#f28b82'); break; }
-      const base = (f.name || 'image').replace(/\.[^.]+$/, '') || 'image';
-      attachments.push({ name: base + '.jpg', blob, url: URL.createObjectURL(blob) });
+      if (total > MAX_TOTAL) { setStatus('mail.tooBig', '#f28b82'); continue; }
+      attachments.push({ name, blob, url: blob.type.startsWith('image/') ? URL.createObjectURL(blob) : '' });
     } catch (_) {
       setStatus('mail.imgFail', '#f28b82');
     }
@@ -588,8 +695,9 @@ async function addImages(list) {
 }
 
 $('gd-attach').addEventListener('click', () => fileInput.click());
-$('gd-photo').addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', () => { addImages(fileInput.files); fileInput.value = ''; });
+$('gd-photo').addEventListener('click', () => photoInput.click());
+fileInput.addEventListener('change', () => { addFiles(fileInput.files); fileInput.value = ''; });
+photoInput.addEventListener('change', () => { addFiles(photoInput.files, true); photoInput.value = ''; });
 
 let dragDepth = 0;
 const hasFiles = (e) => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
@@ -601,11 +709,7 @@ gmailModal.addEventListener('drop', (e) => {
   e.preventDefault();
   dragDepth = 0;
   dropHint.hidden = true;
-  addImages(e.dataTransfer.files);
-});
-contactForm.elements.message.addEventListener('paste', (e) => {
-  const files = Array.from((e.clipboardData && e.clipboardData.files) || []);
-  if (files.some((f) => f.type.startsWith('image/'))) { e.preventDefault(); addImages(files); }
+  addFiles(e.dataTransfer.files);
 });
 
 // --- sending ---------------------------------------------------------------
@@ -620,9 +724,10 @@ function blobToBase64(blob) {
 
 function validate() {
   const f = contactForm.elements;
+  syncMessage();
   if (!f.email.value || !f.email.checkValidity()) { f.email.focus(); setStatus('mail.badEmail', '#f28b82'); return false; }
   if (!f.subject.value.trim()) { f.subject.focus(); setStatus('mail.needSubject', '#f28b82'); return false; }
-  if (!f.message.value.trim()) { f.message.focus(); setStatus('mail.needBody', '#f28b82'); return false; }
+  if (!f.message.value.trim()) { editor.focus(); setStatus('mail.needBody', '#f28b82'); return false; }
   return true;
 }
 
@@ -637,10 +742,10 @@ async function sendText() { // Formspree, text only
   return { ok: false, text: data?.errors ? data.errors.map((er) => er.message).join(', ') : '' };
 }
 
-async function sendWithImages() { // own endpoint, supports attachments
+async function sendWithFiles() { // own endpoint, supports attachments
   const f = contactForm.elements;
   const files = [];
-  for (const a of attachments) files.push({ name: a.name, type: 'image/jpeg', data: await blobToBase64(a.blob) });
+  for (const a of attachments) files.push({ name: a.name, type: a.blob.type, data: await blobToBase64(a.blob) });
   const res = await fetch('/api/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -654,6 +759,7 @@ async function sendWithImages() { // own endpoint, supports attachments
 function finishSent() {
   setStatus('mail.sent', '#81c995');
   contactForm.reset();
+  editor.innerHTML = '';
   clearAttachments();
   try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
   setTimeout(() => { closeGmail(); setStatus('', ''); }, 1800);
@@ -666,7 +772,7 @@ async function submitMail(withFiles) {
   noFilesBtn.hidden = true;
   setStatus('mail.sending', '#fdd663');
   try {
-    const r = withFiles && attachments.length ? await sendWithImages() : await sendText();
+    const r = withFiles && attachments.length ? await sendWithFiles() : await sendText();
     if (r.ok) { finishSent(); return; }
     if (withFiles && (r.status === 503 || r.status === 404)) {
       setStatus('mail.noAttach', '#f28b82');
