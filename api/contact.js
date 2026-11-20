@@ -71,7 +71,13 @@ function parseFiles(list) {
   return total > MAX_TOTAL_BYTES ? null : out;
 }
 
+const SITE = 'https://vinhx.info';
+const LOGO = SITE + '/assets/logo-192.png';
+const BANNER = SITE + '/assets/mail-banner.png';
+const fmtSize = (n) => (n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' KB' : (n / 1048576).toFixed(1) + ' MB');
+
 async function viaResend(m, files) {
+  const reply = `mailto:${encodeURIComponent(m.email)}?subject=${encodeURIComponent('Re: ' + m.subject)}`;
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
@@ -81,7 +87,13 @@ async function viaResend(m, files) {
       reply_to: m.email,
       subject: `[vinhx.info] ${m.subject}`,
       text: `From: ${m.email}\n\n${m.message}`,
-      html: `<p><b>From:</b> ${esc(m.email)}</p><div style="white-space:pre-wrap">${esc(m.message)}</div>`,
+      html: `<div style="max-width:560px;margin:0 auto;font-family:Arial,sans-serif;color:#202124;border:1px solid #e0e0e0;border-radius:12px;overflow:hidden">
+<img src="${BANNER}" alt="vinhx.info" width="560" style="display:block;width:100%">
+<div style="padding:20px 22px"><h2 style="margin:0 0 6px;font-size:20px">${esc(m.subject)}</h2>
+<p style="margin:0 0 14px;color:#5f6368;font-size:13px">Từ <b>${esc(m.email)}</b> · tới Vinh</p>
+<div style="white-space:pre-wrap;font-size:15px;line-height:1.55">${esc(m.message)}</div>
+<p style="margin:20px 0 0"><a href="${reply}" style="background:#0b57d0;color:#fff;text-decoration:none;padding:9px 20px;border-radius:18px;font-size:14px">Trả lời</a></p></div>
+<div style="padding:12px 22px;background:#f6f8fc;color:#5f6368;font-size:12px"><img src="${LOGO}" width="16" height="16" style="vertical-align:middle;border-radius:4px"> vinhx.info · hộp thư</div></div>`,
       attachments: files.map((f) => ({ filename: f.name, content: f.buf.toString('base64') }))
     })
   });
@@ -89,17 +101,35 @@ async function viaResend(m, files) {
   return res.ok;
 }
 
+// Discord: a banner on top, then a mail "card" (sender, subject, body, attachments, reply link)
 async function viaWebhook(m, files) {
+  const now = Math.floor(Date.now() / 1000);
+  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(m.email)}&su=${encodeURIComponent('Re: ' + m.subject)}`;
+  const fields = [
+    { name: 'Từ', value: m.email.slice(0, 200), inline: true },
+    { name: 'Tới', value: 'Vinh', inline: true },
+    { name: 'Thời gian', value: `<t:${now}:f>`, inline: true }
+  ];
+  if (files.length) fields.push({ name: `Đính kèm (${files.length})`, value: files.map((f) => `• ${f.name} · ${fmtSize(f.buf.length)}`).join('\n').slice(0, 1000) });
+  fields.push({ name: '\u200b', value: `[Trả lời bằng Gmail](${gmail})` });
+
   const form = new FormData();
   form.append('payload_json', JSON.stringify({
-    username: 'vinhx.info contact',
+    username: 'vinhx.info mail',
+    avatar_url: LOGO,
     allowed_mentions: { parse: [] },
-    embeds: [{
-      title: m.subject.slice(0, 250),
-      description: m.message.slice(0, 3800),
-      fields: [{ name: 'From', value: m.email.slice(0, 200) }],
-      color: 0x0b57d0
-    }]
+    embeds: [
+      { color: 0x0b57d0, image: { url: BANNER } },
+      {
+        color: 0x0b57d0,
+        author: { name: m.email.slice(0, 200), icon_url: LOGO },
+        title: m.subject.slice(0, 250),
+        description: m.message.slice(0, 3800),
+        fields,
+        footer: { text: 'vinhx.info · Hộp thư', icon_url: LOGO },
+        timestamp: new Date().toISOString()
+      }
+    ]
   }));
   files.forEach((f, i) => form.append(`files[${i}]`, new Blob([f.buf], { type: f.mime }), f.name));
   const res = await fetch(WEBHOOK, { method: 'POST', body: form });
