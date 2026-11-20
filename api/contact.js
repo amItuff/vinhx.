@@ -110,7 +110,7 @@ async function viaWebhook(m, files) {
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method === 'GET') { // lets the page (and the owner) check whether attachments are set up
-    return res.status(200).json({ configured: !!(RESEND_KEY || WEBHOOK), provider: RESEND_KEY ? 'resend' : WEBHOOK ? 'discord-webhook' : null });
+    return res.status(200).json({ configured: !!(RESEND_KEY || WEBHOOK), provider: WEBHOOK ? 'discord-webhook' : RESEND_KEY ? 'resend' : null });
   }
   if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST'); return res.status(405).json({ error: 'method_not_allowed' }); }
   if (!RESEND_KEY && !WEBHOOK) return res.status(503).json({ error: 'not_configured' });
@@ -131,8 +131,8 @@ module.exports = async (req, res) => {
     if (await over(req, 'contact', PER_HOUR, 3600)) return res.status(429).json({ error: 'rate_limited' });
 
     const m = { email, subject, message };
-    const ok = RESEND_KEY ? await viaResend(m, files) : await viaWebhook(m, files);
-    if (!ok) return res.status(502).json({ error: 'delivery_failed', provider: RESEND_KEY ? 'resend' : 'discord-webhook' });
+    const ok = WEBHOOK ? await viaWebhook(m, files) : await viaResend(m, files); // Discord webhook first, Resend as the fallback
+    if (!ok) return res.status(502).json({ error: 'delivery_failed', provider: WEBHOOK ? 'discord-webhook' : 'resend' });
     return res.status(200).json({ ok: true });
   } catch (err) {
     console.error('contact: error', err && err.message);

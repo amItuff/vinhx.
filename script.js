@@ -135,6 +135,7 @@ const STRINGS = {
     'mail.sent': 'Đã gửi thành công!',
     'mail.error': 'Lỗi gửi thư. Vui lòng thử lại!',
     'mail.network': 'Lỗi kết nối!',
+    'mail.off': 'Hộp thư tạm thời chưa hoạt động. Hãy nhắn qua Discord hoặc Facebook nhé.',
     'ui.mute': 'Bật/Tắt âm thanh',
     'ui.copyEmail': 'Sao chép email',
     'ui.prev': 'Bài trước',
@@ -242,6 +243,7 @@ const STRINGS = {
     'mail.sent': 'Sent, thank you!',
     'mail.error': 'Couldn\'t send. Please try again.',
     'mail.network': 'Network error.',
+    'mail.off': 'The inbox is temporarily unavailable. Please message me on Discord or Facebook.',
     'ui.mute': 'Mute / unmute',
     'ui.copyEmail': 'Copy email',
     'ui.prev': 'Previous track',
@@ -731,21 +733,10 @@ function validate() {
   return true;
 }
 
-async function sendText() { // Formspree, text only
-  const res = await fetch(contactForm.action, {
-    method: 'POST',
-    body: new FormData(contactForm),
-    headers: { Accept: 'application/json' }
-  });
-  if (res.ok) return { ok: true };
-  const data = await res.json().catch(() => null);
-  return { ok: false, text: data?.errors ? data.errors.map((er) => er.message).join(', ') : '' };
-}
-
-async function sendWithFiles() { // own endpoint, supports attachments
+async function sendMail(withFiles) { // posts to /api/contact, which relays to the Discord webhook
   const f = contactForm.elements;
   const files = [];
-  for (const a of attachments) files.push({ name: a.name, type: a.blob.type, data: await blobToBase64(a.blob) });
+  for (const a of withFiles ? attachments : []) files.push({ name: a.name, type: a.blob.type, data: await blobToBase64(a.blob) });
   const res = await fetch('/api/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -772,20 +763,14 @@ async function submitMail(withFiles) {
   noFilesBtn.hidden = true;
   setStatus('mail.sending', '#fdd663');
   try {
-    const r = withFiles && attachments.length ? await sendWithFiles() : await sendText();
+    const r = await sendMail(withFiles);
     if (r.ok) { finishSent(); return; }
-    if (withFiles && (r.status === 503 || r.status === 404)) {
-      setStatus('mail.noAttach', '#f28b82');
-      noFilesBtn.hidden = false;
-    } else if (r.status === 429) {
-      setStatus('mail.rate', '#f28b82');
-    } else if (withFiles && (r.code || r.status)) {
-      const key = r.status === 413 ? 'mail.tooBig' : r.code === 'bad_files' ? 'mail.badFiles' : r.code === 'delivery_failed' ? 'mail.deliveryFail' : r.code === 'bad_email' ? 'mail.badEmail' : 'mail.error';
+    if (r.status === 503 || r.status === 404) setStatus('mail.off', '#f28b82');
+    else if (r.status === 429) setStatus('mail.rate', '#f28b82');
+    else {
+      const key = r.status === 413 ? 'mail.tooBig' : r.code === 'bad_files' ? 'mail.badFiles' : r.code === 'bad_email' ? 'mail.badEmail' : r.code === 'delivery_failed' ? 'mail.deliveryFail' : 'mail.error';
       setStatus(key, '#f28b82');
-      if (key === 'mail.deliveryFail' || key === 'mail.error') noFilesBtn.hidden = false;
-    } else {
-      formStatus.style.color = '#f28b82';
-      formStatus.textContent = r.text || t('mail.error');
+      if (attachments.length && (key === 'mail.deliveryFail' || key === 'mail.error' || key === 'mail.badFiles' || key === 'mail.tooBig')) noFilesBtn.hidden = false;
     }
   } catch (_) {
     setStatus('mail.network', '#f28b82');
