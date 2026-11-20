@@ -839,12 +839,7 @@ setInterval(() => { if (!document.hidden) fetchPresence(); }, 30000);
 // ---------------------------------------------------------------------------
 // Music player (SoundCloud widget)
 // ---------------------------------------------------------------------------
-const PLAYLIST = [
-  { title: 'PAR SG - cigarette ft. Cigar', url: 'https://soundcloud.com/parsg/par-sg-cigarette-ft-cigar' },
-  { title: 'Hành Tinh Buồn Tênh', url: 'https://soundcloud.com/viet-music-chill/hanh-tinh-buon-tenh' },
-  { title: 'Lofi Hip Hop Chill Beats', url: 'https://soundcloud.com/chillhopdotcom/chillhop-essentials-spring-2023' }
-];
-
+// The whole set plays inside the widget and moves on to the next track by itself.
 const widget = window.SC ? SC.Widget($('sc-hidden-frame')) : null;
 const diskImage = $('disk-image');
 const diskBox = document.querySelector('.disk-container');
@@ -855,6 +850,7 @@ const muteBtn = $('floating-audio-toggle');
 const muteIcon = $('float-audio-icon');
 
 let trackIndex = 0;
+let trackTotal = 0;
 let isMuted = false;
 let volume = 85;
 let durationMs = 162000;
@@ -864,9 +860,17 @@ const fmtTime = (ms) => {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 };
 
+// title and "n / total" come from the widget, so they follow the playlist whatever it contains
 function showTrack() {
-  $('track-name').textContent = PLAYLIST[trackIndex].title;
-  $('track-counter').textContent = `${trackIndex + 1} / ${PLAYLIST.length}`;
+  widget.getSounds((list) => {
+    trackTotal = (list || []).length;
+    widget.getCurrentSoundIndex((i) => {
+      trackIndex = i || 0;
+      const s = list && list[trackIndex];
+      if (s && s.title) $('track-name').textContent = s.title;
+      $('track-counter').textContent = trackTotal ? `${trackIndex + 1} / ${trackTotal}` : '– / –';
+    });
+  });
 }
 
 function refreshMeta() {
@@ -875,21 +879,6 @@ function refreshMeta() {
   });
   widget.getCurrentSound((sound) => {
     if (sound?.artwork_url) diskImage.src = sound.artwork_url.replace('-large', '-t500x500');
-  });
-}
-
-function loadTrack(i) {
-  trackIndex = (i + PLAYLIST.length) % PLAYLIST.length;
-  showTrack();
-  progressVal.style.transform = 'scaleX(0)';
-  $('time-curr').textContent = '0:00';
-  widget.load(PLAYLIST[trackIndex].url, {
-    auto_play: true,
-    show_artwork: true,
-    callback: () => {
-      widget.setVolume(isMuted ? 0 : volume);
-      refreshMeta();
-    }
   });
 }
 
@@ -902,6 +891,8 @@ if (widget) {
   });
 
   widget.bind(SC.Widget.Events.PLAY, () => {
+    showTrack();
+    refreshMeta();
     setIcon(playIcon, 's-pause');
     diskImage.classList.add('running');
     diskBox.classList.add('playing');
@@ -918,11 +909,15 @@ if (widget) {
     if (durationMs > 0) progressVal.style.transform = `scaleX(${Math.min(1, data.currentPosition / durationMs)})`;
   });
 
-  widget.bind(SC.Widget.Events.FINISH, () => loadTrack(trackIndex + 1));
+  // the widget advances on its own; after the last track go back to the first one
+  widget.bind(SC.Widget.Events.FINISH, () => {
+    progressVal.style.transform = 'scaleX(0)';
+    if (trackTotal && trackIndex >= trackTotal - 1) { widget.skip(0); widget.play(); }
+  });
 
   $('ctrl-play').addEventListener('click', () => { soundStarted = true; widget.toggle(); });
-  $('ctrl-next').addEventListener('click', () => loadTrack(trackIndex + 1));
-  $('ctrl-prev').addEventListener('click', () => loadTrack(trackIndex - 1));
+  $('ctrl-next').addEventListener('click', () => { soundStarted = true; if (trackTotal && trackIndex >= trackTotal - 1) widget.skip(0); else widget.next(); widget.play(); });
+  $('ctrl-prev').addEventListener('click', () => { soundStarted = true; if (trackIndex <= 0) widget.skip(Math.max(0, trackTotal - 1)); else widget.prev(); widget.play(); });
 
   $('progress-bar-slot').addEventListener('click', function (e) {
     const rect = this.getBoundingClientRect();
