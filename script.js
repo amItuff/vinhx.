@@ -135,6 +135,8 @@ const STRINGS = {
     'mail.sent': 'Đã gửi thành công!',
     'mail.error': 'Lỗi gửi thư. Vui lòng thử lại!',
     'mail.network': 'Lỗi kết nối!',
+    'mail.captcha': 'Hãy xác nhận bạn không phải robot.',
+    'mail.captchaFail': 'Xác minh không thành công, thử lại.',
     'mail.off': 'Hộp thư tạm thời chưa hoạt động. Hãy nhắn qua Discord hoặc Facebook nhé.',
     'ui.mute': 'Bật/Tắt âm thanh',
     'ui.copyEmail': 'Sao chép email',
@@ -243,6 +245,8 @@ const STRINGS = {
     'mail.sent': 'Sent, thank you!',
     'mail.error': 'Couldn\'t send. Please try again.',
     'mail.network': 'Network error.',
+    'mail.captcha': 'Please confirm you are not a robot.',
+    'mail.captchaFail': 'Verification failed, please try again.',
     'mail.off': 'The inbox is temporarily unavailable. Please message me on Discord or Facebook.',
     'ui.mute': 'Mute / unmute',
     'ui.copyEmail': 'Copy email',
@@ -448,6 +452,9 @@ const MAX_TOTAL = 3 * 1024 * 1024; // keeps the request under Vercel's 4.5 MB bo
 const FILE_EXT = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'csv', 'txt', 'mp3', 'wav', 'm4a', 'mp4', 'mov', 'webm'];
 let attachments = [];
 let sending = false;
+let captchaKey = '';     // Cloudflare Turnstile site key when the server has the captcha switched on
+let captchaToken = '';
+let captchaId = null;
 
 $('gd-to').textContent = 'Vinh';
 ['gd-attach', 'gd-photo'].forEach((id) => { $(id).hidden = true; }); // shown only once the server confirms it can deliver files
@@ -572,8 +579,39 @@ async function checkAttachSupport() {
     const res = await fetch('/api/contact', { cache: 'no-store' });
     const data = res.ok ? await res.json() : null;
     attachState = data && data.configured ? 'on' : 'off';
+    captchaKey = (data && data.turnstile) || '';
   } catch (_) { attachState = 'off'; }
   applyAttachState();
+  setupCaptcha();
+}
+
+// Turnstile is loaded only when the server reports a site key, and only once the mail window is opened
+let captchaScript = null;
+function setupCaptcha() {
+  if (!captchaKey || captchaId !== null) return;
+  const box = $('gd-captcha');
+  const render = () => {
+    if (captchaId !== null || !window.turnstile) return;
+    box.hidden = false;
+    captchaId = window.turnstile.render(box, {
+      sitekey: captchaKey, theme: 'dark', size: 'compact',
+      callback: (tok) => { captchaToken = tok; if (formStatus.dataset.k === 'mail.captcha') setStatus('', ''); },
+      'expired-callback': () => { captchaToken = ''; },
+      'error-callback': () => { captchaToken = ''; }
+    });
+  };
+  if (window.turnstile) { render(); return; }
+  if (!captchaScript) {
+    captchaScript = document.createElement('script');
+    captchaScript.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    captchaScript.async = true;
+    captchaScript.onload = render;
+    document.head.appendChild(captchaScript);
+  }
+}
+function resetCaptcha() {
+  captchaToken = '';
+  if (captchaId !== null && window.turnstile) { try { window.turnstile.reset(captchaId); } catch (_) {} }
 }
 
 function openGmail() {
@@ -610,6 +648,7 @@ document.querySelector('.gd-head').addEventListener('click', () => { if (gmailMo
 gmailModal.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeGmail(); });
 
 function setStatus(key, color) {
+  formStatus.dataset.k = key;
   formStatus.style.color = color;
   formStatus.textContent = key ? t(key) : '';
 }
@@ -730,6 +769,7 @@ function validate() {
   if (!f.email.value || !f.email.checkValidity()) { f.email.focus(); setStatus('mail.badEmail', '#f28b82'); return false; }
   if (!f.subject.value.trim()) { f.subject.focus(); setStatus('mail.needSubject', '#f28b82'); return false; }
   if (!f.message.value.trim()) { editor.focus(); setStatus('mail.needBody', '#f28b82'); return false; }
+  if (captchaKey && !captchaToken) { setStatus('mail.captcha', '#f28b82'); return false; }
   return true;
 }
 
@@ -740,7 +780,7 @@ async function sendMail(withFiles) { // posts to /api/contact, which relays to t
   const res = await fetch('/api/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: f.email.value.trim(), subject: f.subject.value.trim(), message: f.message.value, hp: f._gotcha.value, files })
+    body: JSON.stringify({ email: f.email.value.trim(), subject: f.subject.value.trim(), message: f.message.value, hp: f._gotcha.value, cf: captchaToken, files })
   });
   if (res.ok) return { ok: true };
   const data = await res.json().catch(() => ({}));
@@ -749,6 +789,7 @@ async function sendMail(withFiles) { // posts to /api/contact, which relays to t
 
 function finishSent() {
   setStatus('mail.sent', '#81c995');
+  resetCaptcha();
   contactForm.reset();
   editor.innerHTML = '';
   clearAttachments();
@@ -767,6 +808,7 @@ async function submitMail(withFiles) {
     if (r.ok) { finishSent(); return; }
     if (r.status === 503 || r.status === 404) setStatus('mail.off', '#f28b82');
     else if (r.status === 429) setStatus('mail.rate', '#f28b82');
+    else if (r.code === 'captcha') { setStatus('mail.captchaFail', '#f28b82'); resetCaptcha(); }
     else {
       const key = r.status === 413 ? 'mail.tooBig' : r.code === 'bad_files' ? 'mail.badFiles' : r.code === 'bad_email' ? 'mail.badEmail' : r.code === 'delivery_failed' ? 'mail.deliveryFail' : 'mail.error';
       setStatus(key, '#f28b82');

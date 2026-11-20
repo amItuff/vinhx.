@@ -1613,3 +1613,6 @@ body.is-entered .avatar-orbit.intro { transform: none; }
   .side-projects .proj-slide .proj-actions { flex-basis: 100%; flex-direction: row; }
   .side-projects .proj-slide .proj-actions .p-btn { flex: 1; padding: 8px 11px; }
 }
+
+.gd-captcha { padding: 4px 0 8px; min-height: 0; }
+.gd-captcha[hidden] { display: none; }

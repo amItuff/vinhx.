@@ -374,3 +374,9 @@ body[data-view="read"] .sky { display: none; }
 @media (max-width: 560px) { .c2, .c4 { width: 120px; } .c1 { left: -20px; } }
 body[data-view="shelf"] .feat h3 { color: #0e2342; }
 body[data-view="shelf"] .feat p { color: #20436e; }
+
+/* backup / install */
+.backup { margin-top: 30px; }
+.backup h2 { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+body[data-view="shelf"] .backup h2 { font-family: 'Literata', Georgia, serif; color: var(--ink); }
+.bk-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }

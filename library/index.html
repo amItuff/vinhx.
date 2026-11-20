@@ -7,6 +7,10 @@
   <title>vinhx library — đọc sách, đánh dấu, dịch</title>
   <meta name="description" content="Thư viện cá nhân ngay trên trình duyệt: mở file EPUB hoặc TXT, đánh dấu trang, nhớ tiến độ và dịch sang tiếng Việt. Sách không được tải lên máy chủ." />
   <link rel="canonical" href="https://vinhx.info/library" />
+  <link rel="manifest" href="/library/manifest.webmanifest" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
   <meta property="og:title" content="vinhx library" />
   <meta property="og:description" content="Đọc sách EPUB/TXT của bạn, đánh dấu, nhớ tiến độ." />
   <meta property="og:url" content="https://vinhx.info/library" />
@@ -19,8 +23,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/base.css?v=6" />
-  <link rel="stylesheet" href="/library/library.css?v=15" />
-  <script src="/library/library.js?v=14" defer></script>
+  <link rel="stylesheet" href="/library/library.css?v=16" />
+  <script src="/library/library.js?v=15" defer></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body data-view="shelf" data-theme="book">
@@ -69,6 +73,17 @@
       <h2 data-i18n="src.title">Nguồn thư viện</h2>
       <ul id="src-list"></ul>
       <p class="small" data-i18n="src.note">Chỉ gồm tác phẩm đã hết bản quyền.</p>
+    </section>
+
+    <section class="backup" id="backup">
+      <h2 data-i18n="bk.title">Sao lưu và chuyển máy</h2>
+      <p class="small" data-i18n="bk.note">Tiến độ đọc và đánh dấu chỉ nằm trên trình duyệt này. Xuất ra file để mang sang máy khác, rồi nhập lại ở đó.</p>
+      <div class="bk-actions">
+        <button id="bk-export" class="btn" type="button" data-i18n="bk.export">Xuất tiến độ và đánh dấu</button>
+        <button id="bk-import" class="btn" type="button" data-i18n="bk.import">Nhập từ file</button>
+        <button id="install-btn" class="btn primary" type="button" hidden data-i18n="bk.install">Cài như ứng dụng</button>
+      </div>
+      <input id="bk-file" type="file" accept="application/json,.json" hidden />
     </section>
 
     <ul class="facts">

@@ -28,6 +28,10 @@
       'r.back': 'Về thư viện', 'r.mark': 'Đánh dấu', 'r.toc': 'Mục lục và đánh dấu', 'r.aa': 'Chữ và giao diện',
       'r.prev': 'Chương trước', 'r.next': 'Chương sau', 'r.chapter': 'Chương',
       'mark.added': 'Đã đánh dấu', 'mark.removed': 'Đã bỏ đánh dấu', 'mark.none': 'Chưa có đánh dấu nào. Bấm biểu tượng đánh dấu để lưu vị trí đang đọc.',
+      'bk.title': 'Sao lưu và chuyển máy', 'bk.note': 'Tiến độ đọc và đánh dấu chỉ nằm trên trình duyệt này. Xuất ra file để mang sang máy khác, rồi nhập lại ở đó.',
+      'bk.export': 'Xuất tiến độ và đánh dấu', 'bk.import': 'Nhập từ file', 'bk.install': 'Cài như ứng dụng',
+      'bk.none': 'Chưa có tiến độ hay đánh dấu nào để xuất.', 'bk.exported': 'Đã xuất file sao lưu', 'bk.bad': 'File này không phải bản sao lưu của vinhx library.',
+      'bk.done': 'Đã nhập', 'bk.books': 'sách', 'bk.skipped': 'bỏ qua (sách chưa có)',
       's.chapters': 'Mục lục', 's.marks': 'Đánh dấu', 's.search': 'Tìm',
       'q.ph': 'Tìm trong sách...', 'q.none': 'Không thấy kết quả', 'q.min': 'Gõ ít nhất 2 ký tự', 'q.cap': 'Chỉ hiện 100 kết quả đầu tiên',
       'mark.note': 'Ghi chú', 'mark.notePh': 'Ghi chú của bạn...', 'mark.export': 'Xuất đánh dấu (.txt)', 'mark.exported': 'Đã xuất đánh dấu',
@@ -58,6 +62,10 @@
       'r.back': 'Back to library', 'r.mark': 'Bookmark', 'r.toc': 'Contents and bookmarks', 'r.aa': 'Text and theme',
       'r.prev': 'Previous chapter', 'r.next': 'Next chapter', 'r.chapter': 'Chapter',
       'mark.added': 'Bookmarked', 'mark.removed': 'Bookmark removed', 'mark.none': 'No bookmarks yet. Tap the bookmark icon to save where you are.',
+      'bk.title': 'Backup and moving devices', 'bk.note': 'Reading progress and bookmarks live only in this browser. Export them to a file, then import it on another device.',
+      'bk.export': 'Export progress and bookmarks', 'bk.import': 'Import from file', 'bk.install': 'Install as an app',
+      'bk.none': 'No progress or bookmarks to export yet.', 'bk.exported': 'Backup file saved', 'bk.bad': 'That file is not a vinhx library backup.',
+      'bk.done': 'Imported', 'bk.books': 'books', 'bk.skipped': 'skipped (book not found)',
       's.chapters': 'Contents', 's.marks': 'Bookmarks', 's.search': 'Search',
       'q.ph': 'Search in this book...', 'q.none': 'No results', 'q.min': 'Type at least 2 characters', 'q.cap': 'Showing the first 100 results',
       'mark.note': 'Note', 'mark.notePh': 'Your note...', 'mark.export': 'Export bookmarks (.txt)', 'mark.exported': 'Bookmarks exported',
@@ -1247,6 +1255,109 @@
     if (e.key === 'ArrowRight') $('r-next').click();
     else if (e.key === 'ArrowLeft') $('r-prev').click();
   });
+
+
+  // ---------------------------------------------------------------------------
+  // Backup: export / import reading progress, bookmarks and reading settings
+  // ---------------------------------------------------------------------------
+  const PREF_KEYS = { size: 'number', lh: 'number', theme: 'string', font: 'string', rate: 'number', vol: 'number', mode: 'string' };
+
+  async function addCatalogBook(it) { // same as "Read now" but without opening it
+    const res = await fetch(`/library/books/${it.id}.json.gz`);
+    if (!res.ok) throw new Error('http');
+    const data = await gunzipJson(await res.arrayBuffer());
+    const chapters = data.ch.map((c, i) => ({ title: c.t || `${t('r.chapter')} ${i + 1}`, blocks: c.p.map((p) => ({ t: p })) }));
+    const book = { id: uid(), sig: 'gb' + it.id, title: it.t, author: it.a, kind: 'txt', lang: data.lang || 'en', cover: coverOf(it), fileName: fileOf(it), size: 0, added: Date.now(), chapters };
+    await putOne('books', book);
+    return book;
+  }
+
+  async function exportBackup() {
+    const out = { app: 'vinhx-library', v: 1, exported: new Date().toISOString(), prefs: {}, books: [] };
+    for (const k of Object.keys(PREF_KEYS)) if (prefs[k] !== undefined) out.prefs[k] = prefs[k];
+    for (const b of books) {
+      let m = [];
+      try { m = (await getOne('kv', 'm:' + b.id)) || []; } catch (_) {}
+      const p = progressMap[b.id] || null;
+      if (!p && !m.length) continue;
+      out.books.push({ sig: b.sig, title: b.title, author: b.author || '', p, marks: m });
+    }
+    if (!out.books.length) { showToast(t('bk.none')); return; }
+    const url = URL.createObjectURL(new Blob([JSON.stringify(out, null, 1)], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `vinhx-library-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    showToast(t('bk.exported'));
+  }
+
+  const num = (x) => (typeof x === 'number' && Number.isFinite(x) ? x : null);
+  async function importBackup(file) {
+    let data;
+    try {
+      if (file.size > 5 * 1024 * 1024) throw new Error('big');
+      data = JSON.parse(await file.text());
+      if (!data || data.app !== 'vinhx-library' || !Array.isArray(data.books) || data.books.length > 1000) throw new Error('bad');
+    } catch (_) { showToast(t('bk.bad')); return; }
+
+    let done = 0, skipped = 0;
+    for (const e of data.books) {
+      if (!e || typeof e !== 'object') continue;
+      const sig = typeof e.sig === 'string' ? e.sig.slice(0, 300) : '';
+      let book = books.find((b) => b.sig === sig) || books.find((b) => e.title && b.title === e.title && (b.author || '') === (e.author || ''));
+      const m = /^gb(\d+)$/.exec(sig);
+      if (!book && m) {
+        const it = CATALOG.find((c) => c.id === Number(m[1]));
+        if (it) { try { book = await addCatalogBook(it); books.push(book); } catch (_) { /* offline or missing file */ } }
+      }
+      if (!book) { skipped++; continue; }
+      const p = e.p && num(e.p.ch) !== null ? { ch: Math.max(0, Math.min(book.chapters.length - 1, Math.floor(e.p.ch))), frac: Math.max(0, Math.min(1, num(e.p.frac) || 0)), t: num(e.p.t) || 0 } : null;
+      const cur = progressMap[book.id];
+      if (p && (!cur || p.t > (cur.t || 0))) { progressMap[book.id] = p; await putOne('kv', p, 'p:' + book.id).catch(() => {}); }
+      if (Array.isArray(e.marks)) {
+        let mine = [];
+        try { mine = (await getOne('kv', 'm:' + book.id)) || []; } catch (_) {}
+        const seen = new Set(mine.map(markKey));
+        for (const x of e.marks.slice(0, 500)) {
+          if (!x || num(x.ch) === null || num(x.i) === null || !book.chapters[x.ch]) continue;
+          const mk = { ch: Math.floor(x.ch), i: Math.floor(x.i), s: String(x.s || '').slice(0, 200), t: num(x.t) || Date.now() };
+          if (typeof x.n === 'string' && x.n.trim()) mk.n = x.n.slice(0, 300);
+          if (seen.has(markKey(mk))) continue;
+          seen.add(markKey(mk)); mine.push(mk);
+        }
+        await putOne('kv', mine, 'm:' + book.id).catch(() => {});
+      }
+      done++;
+    }
+    if (data.prefs && typeof data.prefs === 'object') {
+      for (const [k, ty] of Object.entries(PREF_KEYS)) if (typeof data.prefs[k] === ty) prefs[k] = data.prefs[k];
+      savePrefs(); applyPrefs();
+    }
+    await loadShelf();
+    renderShelf();
+    showToast(`${t('bk.done')} ${done} ${t('bk.books')}${skipped ? `, ${skipped} ${t('bk.skipped')}` : ''}`);
+  }
+  $('bk-export').addEventListener('click', exportBackup);
+  $('bk-import').addEventListener('click', () => $('bk-file').click());
+  $('bk-file').addEventListener('change', () => { const f = $('bk-file').files[0]; $('bk-file').value = ''; if (f) importBackup(f); });
+
+  // ---------------------------------------------------------------------------
+  // Install as an app (PWA) and offline support
+  // ---------------------------------------------------------------------------
+  let installEvent = null;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installEvent = e; $('install-btn').hidden = false; });
+  window.addEventListener('appinstalled', () => { installEvent = null; $('install-btn').hidden = true; });
+  $('install-btn').addEventListener('click', async () => {
+    if (!installEvent) return;
+    installEvent.prompt();
+    try { await installEvent.userChoice; } catch (_) {}
+    installEvent = null;
+    $('install-btn').hidden = true;
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => { navigator.serviceWorker.register('/library-sw.js', { scope: '/library' }).catch(() => {}); });
+  }
 
   // ---------------------------------------------------------------------------
   applyPrefs();
