@@ -1568,3 +1568,38 @@ body.is-entered .avatar-orbit.intro { transform: none; }
 .faq-item summary:hover { color: #fff; }
 .faq-item summary:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.45); outline-offset: 2px; border-radius: 4px; }
 .faq-item p { padding: 0 26px 12px 0; font-size: 0.78rem; line-height: 1.6; color: #9ca3af; }
+
+
+/* ================= DESKTOP: featured projects as a left sidebar ================= */
+@media (min-width: 1000px) {
+  .cards-view {
+    display: grid; grid-template-columns: 320px minmax(0, 560px); justify-content: center; column-gap: 18px;
+    row-gap: 0; grid-auto-rows: min-content; align-items: start; max-width: 1040px; padding-top: 56px;
+  }
+  .cards-view > * { grid-column: 2; margin-bottom: 14px; }
+  .cards-view > .side-projects {
+    grid-column: 1; grid-row: 1 / span 99; margin-bottom: 0; position: sticky; top: 24px;
+    max-height: calc(100vh - 48px); overflow-y: auto; scrollbar-width: none;
+  }
+  .side-projects::-webkit-scrollbar { display: none; }
+
+  /* the pills become a vertical menu, like an app sidebar */
+  .side-projects .proj-tabs { flex-direction: column; overflow: visible; gap: 4px; padding: 0; }
+  .side-projects .proj-tab {
+    width: 100%; padding: 11px 12px; border-radius: 10px; border-color: transparent; background: transparent;
+    font-size: 0.88rem; color: #b6bac3;
+  }
+  .side-projects .proj-tab .ic { width: 1.1em; height: 1.1em; }
+  .side-projects .proj-tab:hover { background: rgba(255, 255, 255, 0.05); border-color: transparent; }
+  .side-projects .proj-tab[aria-selected="true"] {
+    background: color-mix(in srgb, var(--accent) 16%, rgba(0, 0, 0, 0.4));
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: #fff;
+  }
+  .side-projects .proj-dots { display: none; }
+
+  /* detail card under the menu: stacked, because the sidebar is narrow */
+  .side-projects .proj-slide { padding: 10px 10px 14px; }
+  .side-projects .proj-slide .proj-text { flex-basis: calc(100% - 78px); }
+  .side-projects .proj-slide .proj-actions { flex-basis: 100%; flex-direction: row; }
+  .side-projects .proj-slide .proj-actions .p-btn { flex: 1; padding: 8px 11px; }
+}

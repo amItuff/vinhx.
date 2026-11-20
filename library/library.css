@@ -326,3 +326,51 @@ body[data-view="shelf"] .empty { border: 1px solid var(--line); border-radius: 0
 .tlist .mnote { font-size: 0.76rem; font-style: italic; opacity: 0.85; }
 .tlist .mrow .icon-btn { width: 32px; height: 32px; flex: none; padding: 0; }
 .mtools { padding: 0 14px 14px; }
+
+/* ---- shelf theme: blue sky with a few drifting clouds; navy ink on light surfaces ---- */
+body[data-view="shelf"] {
+  --sub: #3a5a82; --line: rgba(18, 41, 74, 0.2); --rule: rgba(18, 41, 74, 0.38); --ink: #12294a; --paper: #eef6fd; --accent: #1c63b0;
+  background: linear-gradient(180deg, #6ea7dd 0, #9cc7ee 380px, #c6dff4 820px, #e6f1fa 100%) fixed;
+  color: var(--ink);
+}
+body[data-view="shelf"] .bar .brand, body[data-view="shelf"] .lib h1 { color: #0e2342; }
+body[data-view="shelf"] .lib .lead, body[data-view="shelf"] .lib .small, body[data-view="shelf"] .lib .hint { color: #20436e; }
+body[data-view="shelf"] .lang-toggle { background: rgba(255, 255, 255, 0.35); border-color: rgba(18, 41, 74, 0.25); }
+body[data-view="shelf"] .lang-toggle button[aria-pressed="true"] { background: #12294a; color: #eef6fd; }
+body[data-view="shelf"] .shelfHero { border-top-color: rgba(18, 41, 74, 0.45); }
+body[data-view="shelf"] .shelf { border-bottom-color: #12294a; }
+body[data-view="shelf"] .btn.primary { background: #12294a; border-color: #12294a; color: #fff; }
+body[data-view="shelf"] .btn.primary:hover:not(:disabled) { background: #1c63b0; border-color: #1c63b0; }
+body[data-view="shelf"] .btn { border-color: #12294a; color: #12294a; }
+body[data-view="shelf"] .btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.45); }
+body[data-view="shelf"] .spinearrow { background: rgba(255, 255, 255, 0.5); border-color: rgba(18, 41, 74, 0.3); }
+body[data-view="shelf"] .spine.active { outline-color: #12294a; }
+body[data-view="shelf"] .pill[aria-pressed="true"] { border-color: #12294a; color: #0e2342; }
+body[data-view="shelf"] .searchbar { border-bottom-color: rgba(18, 41, 74, 0.45); }
+body[data-view="shelf"] .book { border-bottom-color: rgba(18, 41, 74, 0.2); }
+body[data-view="shelf"] .books { border-top-color: rgba(18, 41, 74, 0.2); }
+body[data-view="shelf"] .sources a { color: #0e4f9a; }
+body[data-view="shelf"] .bbar { background: rgba(18, 41, 74, 0.15); }
+body[data-view="shelf"] .bbar i { background: #1c63b0; }
+body[data-view="shelf"] .lib .facts li::before { background: #1c63b0; }
+body[data-view="shelf"] .toast { background: #12294a; color: #fff; }
+body[data-view="shelf"] .site-foot { color: #20436e; }
+body[data-view="shelf"] .site-foot a:hover { color: #0e2342; }
+
+.sky { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+body[data-view="read"] .sky { display: none; }
+.cloud { position: absolute; display: block; background: #fff; border-radius: 999px; opacity: 0.9; }
+.cloud::before, .cloud::after { content: ''; position: absolute; background: inherit; border-radius: 50%; }
+.cloud::before { width: 46%; height: 190%; left: 12%; top: -90%; }
+.cloud::after { width: 36%; height: 150%; left: 46%; top: -55%; }
+.c1 { top: 9%; left: 6%; width: 150px; height: 38px; animation: skyA 70s ease-in-out infinite; }
+.c2 { top: 22%; right: 4%; width: 190px; height: 46px; opacity: 0.8; animation: skyB 90s ease-in-out infinite; }
+.c3 { top: 46%; left: 14%; width: 120px; height: 30px; opacity: 0.7; animation: skyB 80s ease-in-out infinite reverse; }
+.c4 { top: 64%; right: 10%; width: 160px; height: 40px; opacity: 0.75; animation: skyA 100s ease-in-out infinite; }
+.c5 { top: 84%; left: 4%; width: 140px; height: 34px; opacity: 0.8; animation: skyB 75s ease-in-out infinite; }
+@keyframes skyA { 0%, 100% { transform: translateX(-14px); } 50% { transform: translateX(26px); } }
+@keyframes skyB { 0%, 100% { transform: translateX(18px); } 50% { transform: translateX(-24px); } }
+@media (prefers-reduced-motion: reduce) { .cloud { animation: none; } }
+@media (max-width: 560px) { .c2, .c4 { width: 120px; } .c1 { left: -20px; } }
+body[data-view="shelf"] .feat h3 { color: #0e2342; }
+body[data-view="shelf"] .feat p { color: #20436e; }
