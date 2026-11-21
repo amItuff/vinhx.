@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07080b" />
+  <title>Cắt nhạc online miễn phí | vinhx convert</title>
+  <meta name="description" content="Cắt một đoạn từ file nhạc hoặc ghi âm và lưu thành MP3 hoặc WAV ngay trên trình duyệt. Nhập giây bắt đầu và độ dài. Không tải file lên máy chủ." />
+  <link rel="canonical" href="https://vinhx.info/convert/cat-nhac" />
+  <meta property="og:title" content="Cắt nhạc online miễn phí | vinhx convert" />
+  <meta property="og:description" content="Cắt một đoạn từ file nhạc hoặc ghi âm và lưu thành MP3 hoặc WAV ngay trên trình duyệt. Nhập giây bắt đầu và độ dài. Không tải file lên máy chủ." />
+  <meta property="og:url" content="https://vinhx.info/convert/cat-nhac" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:image" content="https://vinhx.info/assets/og-convert.png?v=2" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/logo-48.png" />
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"vinhx","item":"https://vinhx.info/"},{"@type":"ListItem","position":2,"name":"convert","item":"https://vinhx.info/convert"},{"@type":"ListItem","position":3,"name":"Cắt nhạc","item":"https://vinhx.info/convert/cat-nhac"}]},{"@type":"WebApplication","name":"Cắt nhạc | vinhx convert","url":"https://vinhx.info/convert/cat-nhac","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"VND"},"description":"Cắt một đoạn từ file nhạc hoặc ghi âm và lưu thành MP3 hoặc WAV ngay trên trình duyệt. Nhập giây bắt đầu và độ dài. Không tải file lên máy chủ."},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Cắt làm nhạc chuông được không?","acceptedAnswer":{"@type":"Answer","text":"Được. Cắt khoảng 20 đến 30 giây rồi lưu thành MP3."}},{"@type":"Question","name":"Cắt xong có giảm chất lượng không?","acceptedAnswer":{"@type":"Answer","text":"Nếu lưu WAV thì không. Lưu MP3 thì file được mã hóa lại theo mức kbps bạn chọn."}},{"@type":"Question","name":"File của tôi có bị tải lên máy chủ không?","acceptedAnswer":{"@type":"Answer","text":"Không. Mọi thứ chạy ngay trong trình duyệt của bạn, file không rời khỏi máy và không ai khác thấy được."}}]}]}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/base.css?v=6" />
+  <link rel="stylesheet" href="/convert/convert.css?v=5" />
+  <script src="/convert/convert.js?v=5" defer></script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body data-tool="trim">
+  <header class="bar">
+    <a class="brand" href="/">vinhx<span>/convert</span></a>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button type="button" data-lang="vi">VI</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <main class="cv">
+    <a class="crumb" href="/convert" data-i18n="ui.back">Tất cả công cụ Convert</a>
+    <p class="kicker" data-i18n="kicker">Công cụ miễn phí</p>
+    <h1 data-i18n="title">Cắt nhạc, cắt file âm thanh MP3 online</h1>
+    <p class="lead" data-i18n="lead">Cắt lấy đúng đoạn bạn cần từ bài hát, bài giảng hay ghi âm, làm nhạc chuông hoặc đoạn trích. Không cần cài phần mềm.</p>
+
+    <div class="tools" id="tools" role="group" aria-label="Công cụ" hidden>
+      <button type="button" class="tool" data-tool="convert" data-i18n="t.convert">Đổi định dạng</button>
+      <button type="button" class="tool" data-tool="compress" data-i18n="t.compress">Nén ảnh</button>
+      <button type="button" class="tool" data-tool="gif" data-i18n="t.gif">Video thành GIF</button>
+      <button type="button" class="tool" data-tool="pdf" data-i18n="t.pdf">Gộp PDF</button>
+    </div>
+    <p id="tool-hint" class="small tool-hint" hidden></p>
+
+    <label id="drop" class="drop" tabindex="0">
+      <input id="file" type="file" multiple accept="image/*,audio/*,video/*,application/pdf,.pdf" hidden />
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+      <strong data-i18n="drop.title">Thả file vào đây hoặc bấm để chọn</strong>
+      <span class="small" data-i18n="drop.sub">Ảnh, âm thanh, video. Chọn được nhiều file cùng lúc.</span>
+    </label>
+
+    <section id="opts" class="opts" hidden>
+      <div id="opt-image" class="opt" hidden>
+        <h2 data-i18n="o.image">Ảnh</h2>
+        <label class="fl" for="img-fmt" data-i18n="o.format">Định dạng</label>
+        <select id="img-fmt"></select>
+        <label class="fl" for="img-q"><span data-i18n="o.quality">Chất lượng</span> <b id="img-q-val">90</b>%</label>
+        <input id="img-q" type="range" min="40" max="100" value="90" />
+        <label class="fl" for="img-w" data-i18n="o.maxw">Chiều rộng tối đa (px, để trống = giữ nguyên)</label>
+        <input id="img-w" type="number" min="16" max="16000" inputmode="numeric" placeholder="1920" />
+        <div id="pdf-opts" hidden>
+          <label class="fl" for="pdf-page" data-i18n="o.page">Khổ trang PDF</label>
+          <select id="pdf-page"><option value="fit" data-i18n="o.pageFit">Vừa với ảnh</option><option value="a4" data-i18n="o.pageA4">A4</option></select>
+        </div>
+      </div>
+      <div id="opt-pdf" class="opt" hidden>
+        <h2 data-i18n="o.pdf">PDF</h2>
+        <label class="fl" for="pdf-mode" data-i18n="o.pdfMode">Việc cần làm</label>
+        <select id="pdf-mode">
+          <option value="merge" data-i18n="o.pdfMerge">Gộp thành một file</option>
+          <option value="pages" data-i18n="o.pdfPages">Chọn trang và xoay (từng file)</option>
+        </select>
+        <p id="pdf-merge-note" class="small" data-i18n="o.pdfNote">Các file PDF (và ảnh, nếu bạn chọn xuất PDF) được gộp thành một file theo thứ tự trong danh sách. Dùng mũi tên để đổi thứ tự.</p>
+        <div id="pdf-pages-opts" hidden>
+          <label class="fl" for="pdf-range" data-i18n="o.range">Trang cần giữ (ví dụ 1-3,5; để trống = tất cả)</label>
+          <input id="pdf-range" type="text" inputmode="numeric" autocomplete="off" placeholder="1-3,5" />
+          <label class="fl" for="pdf-rot" data-i18n="o.rot">Xoay trang</label>
+          <select id="pdf-rot"><option value="0" data-i18n="o.rot0">Không xoay</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select>
+        </div>
+      </div>
+      <div id="opt-audio" class="opt" hidden>
+        <h2 data-i18n="o.audio">Âm thanh</h2>
+        <label class="fl" for="aud-fmt" data-i18n="o.format">Định dạng</label>
+        <select id="aud-fmt"></select>
+        <div id="mp3-opts" hidden>
+          <label class="fl" for="aud-br" data-i18n="o.bitrate">Chất lượng MP3</label>
+          <select id="aud-br">
+            <option value="320">320 kbps</option>
+            <option value="192">192 kbps</option>
+            <option value="128" selected>128 kbps</option>
+            <option value="96">96 kbps (nhỏ nhất)</option>
+          </select>
+        </div>
+        <label class="fl" for="aud-start" data-i18n="o.audStart">Cắt từ giây thứ (tuỳ chọn)</label>
+        <input id="aud-start" type="number" min="0" step="0.5" value="" placeholder="0" inputmode="decimal" />
+        <label class="fl" for="aud-len" data-i18n="o.audLen">Độ dài đoạn cắt (giây, để trống = đến hết)</label>
+        <input id="aud-len" type="number" min="0.5" step="0.5" value="" placeholder="30" inputmode="decimal" />
+        <label class="check"><input id="aud-mono" type="checkbox" /><span data-i18n="o.mono">Gộp thành mono (nhỏ hơn một nửa)</span></label>
+      </div>
+      <div id="opt-video" class="opt" hidden>
+        <h2 data-i18n="o.video">Video</h2>
+        <label class="fl" for="vid-fmt" data-i18n="o.format">Định dạng</label>
+        <select id="vid-fmt"></select>
+        <div id="gif-opts" hidden>
+          <label class="fl" for="gif-fps" data-i18n="o.fps">Số khung hình mỗi giây</label>
+          <select id="gif-fps"><option value="8">8</option><option value="12" selected>12</option><option value="15">15</option></select>
+          <label class="fl" for="gif-w" data-i18n="o.gifw">Chiều rộng (px)</label>
+          <input id="gif-w" type="number" min="64" max="1280" value="480" inputmode="numeric" />
+          <label class="fl" for="gif-start" data-i18n="o.gifStart">Bắt đầu từ giây thứ</label>
+          <input id="gif-start" type="number" min="0" step="0.5" value="0" inputmode="decimal" />
+          <label class="fl" for="gif-len" data-i18n="o.gifLen">Độ dài (giây, tối đa 20)</label>
+          <input id="gif-len" type="number" min="0.5" max="20" step="0.5" value="10" inputmode="decimal" />
+          <p class="small" data-i18n="o.gifNote">GIF lấy tối đa 20 giây đầu của video, không có tiếng.</p>
+        </div>
+        <div id="vid-rec">
+        <label class="fl" for="vid-q" data-i18n="o.quality">Chất lượng</label>
+        <select id="vid-q">
+          <option value="5000000" data-i18n="o.qHigh">Cao</option>
+          <option value="2500000" data-i18n="o.qMid" selected>Vừa</option>
+          <option value="1000000" data-i18n="o.qLow">Thấp (nhỏ nhất)</option>
+        </select>
+        <p class="small" data-i18n="o.videoNote">Video được ghi lại theo thời gian thực nên đổi mất đúng bằng độ dài video. Giữ tab này mở.</p>
+        </div>
+      </div>
+    </section>
+
+    <ul id="list" class="flist" aria-live="polite"></ul>
+
+    <div id="bar" class="cv-actions" hidden>
+      <button id="go" class="btn primary" type="button" data-i18n="a.go">Chuyển đổi</button>
+      <button id="zip" class="btn" type="button" data-i18n="a.zip" disabled>Tải tất cả (.zip)</button>
+      <button id="clear" class="btn" type="button" data-i18n="a.clear">Xóa danh sách</button>
+    </div>
+
+    <ul class="facts">
+      <li data-i18n="f1">Xử lý bằng chính trình duyệt, không tải file lên máy chủ</li>
+      <li data-i18n="f2">Định dạng xuất ra tùy trình duyệt của bạn hỗ trợ (Chrome và Edge đầy đủ nhất)</li>
+      <li data-i18n="f3">Xuất được MP3 (từ âm thanh hoặc video) và GIF động (từ video)</li>
+      <li data-i18n="f4">Nén ảnh hàng loạt và gộp nhiều PDF hoặc ảnh thành một file PDF</li>
+    </ul>
+
+    
+
+    <section class="tp-more">
+      <h2 data-i18n="ui.how">Cách dùng</h2>
+      <ol class="tsteps">
+        <li data-i18n="tp.s0">Thả file âm thanh vào khung.</li>
+        <li data-i18n="tp.s1">Nhập &quot;Cắt từ giây thứ&quot; và &quot;Độ dài đoạn cắt&quot; (để trống độ dài là cắt đến hết).</li>
+        <li data-i18n="tp.s2">Chọn MP3 hoặc WAV, bấm Chuyển đổi và tải về.</li>
+      </ol>
+      <h2 data-i18n="ui.faq">Câu hỏi thường gặp</h2>
+      <div class="tfaq">
+        <details><summary data-i18n="tp.q0">Cắt làm nhạc chuông được không?</summary><p data-i18n="tp.a0">Được. Cắt khoảng 20 đến 30 giây rồi lưu thành MP3.</p></details>
+        <details><summary data-i18n="tp.q1">Cắt xong có giảm chất lượng không?</summary><p data-i18n="tp.a1">Nếu lưu WAV thì không. Lưu MP3 thì file được mã hóa lại theo mức kbps bạn chọn.</p></details>
+        <details><summary data-i18n="tp.q2">File của tôi có bị tải lên máy chủ không?</summary><p data-i18n="tp.a2">Không. Mọi thứ chạy ngay trong trình duyệt của bạn, file không rời khỏi máy và không ai khác thấy được.</p></details>
+      </div>
+      <h2 data-i18n="ui.more">Công cụ khác</h2>
+      <div class="tgrid">
+        <a class="tcard slim" href="/convert/nen-anh"><b data-i18n="tn.nen-anh">Nén ảnh</b></a>
+        <a class="tcard slim" href="/convert/doi-kich-thuoc-anh"><b data-i18n="tn.doi-kich-thuoc-anh">Đổi kích thước ảnh</b></a>
+        <a class="tcard slim" href="/convert/anh-sang-pdf"><b data-i18n="tn.anh-sang-pdf">Ảnh sang PDF</b></a>
+        <a class="tcard slim" href="/convert/gop-pdf"><b data-i18n="tn.gop-pdf">Gộp PDF</b></a>
+        <a class="tcard slim" href="/convert/tach-pdf"><b data-i18n="tn.tach-pdf">Chọn trang và xoay PDF</b></a>
+        <a class="tcard slim" href="/convert/webp-sang-jpg"><b data-i18n="tn.webp-sang-jpg">WebP sang JPG</b></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot" aria-label="vinhx">
+    <a href="/">vinhx.info</a><span aria-hidden="true">·</span>
+    <a href="/note">note</a><span aria-hidden="true">·</span>
+    <a href="/convert">convert</a><span aria-hidden="true">·</span>
+    <a href="/library">library</a><span aria-hidden="true">·</span>
+    <a href="https://vinhxhub.vercel.app/" target="_blank" rel="noopener noreferrer">hub</a>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="application/json" id="tool-i18n">{"vi":{"title":"Cắt nhạc, cắt file âm thanh MP3 online","lead":"Cắt lấy đúng đoạn bạn cần từ bài hát, bài giảng hay ghi âm, làm nhạc chuông hoặc đoạn trích. Không cần cài phần mềm.","kicker":"Công cụ miễn phí","doc":"Cắt nhạc online miễn phí | vinhx convert","ui.how":"Cách dùng","ui.faq":"Câu hỏi thường gặp","ui.more":"Công cụ khác","ui.back":"Tất cả công cụ Convert","tp.s0":"Thả file âm thanh vào khung.","tp.s1":"Nhập \"Cắt từ giây thứ\" và \"Độ dài đoạn cắt\" (để trống độ dài là cắt đến hết).","tp.s2":"Chọn MP3 hoặc WAV, bấm Chuyển đổi và tải về.","tp.q0":"Cắt làm nhạc chuông được không?","tp.a0":"Được. Cắt khoảng 20 đến 30 giây rồi lưu thành MP3.","tp.q1":"Cắt xong có giảm chất lượng không?","tp.a1":"Nếu lưu WAV thì không. Lưu MP3 thì file được mã hóa lại theo mức kbps bạn chọn.","tp.q2":"File của tôi có bị tải lên máy chủ không?","tp.a2":"Không. Mọi thứ chạy ngay trong trình duyệt của bạn, file không rời khỏi máy và không ai khác thấy được.","tn.nen-anh":"Nén ảnh","tn.doi-kich-thuoc-anh":"Đổi kích thước ảnh","tn.anh-sang-pdf":"Ảnh sang PDF","tn.gop-pdf":"Gộp PDF","tn.tach-pdf":"Chọn trang và xoay PDF","tn.webp-sang-jpg":"WebP sang JPG","tn.webp-sang-png":"WebP sang PNG","tn.png-sang-jpg":"PNG sang JPG","tn.jpg-sang-png":"JPG sang PNG","tn.video-sang-gif":"Video sang GIF","tn.mp4-sang-mp3":"MP4 sang MP3","tn.wav-sang-mp3":"WAV sang MP3","tn.cat-nhac":"Cắt nhạc"},"en":{"title":"Cut music and audio files online","lead":"Cut exactly the part you need from a song, lecture or recording, for a ringtone or a clip. No software to install.","kicker":"Free tool","doc":"Cut audio online, free | vinhx convert","ui.how":"How to use","ui.faq":"FAQ","ui.more":"More tools","ui.back":"All Convert tools","tp.s0":"Drop an audio file into the box.","tp.s1":"Enter \"Cut from second\" and \"Length of the cut\" (leave the length empty to cut to the end).","tp.s2":"Choose MP3 or WAV, press Convert and download.","tp.q0":"Can I make a ringtone?","tp.a0":"Yes. Cut about 20 to 30 seconds and save as MP3.","tp.q1":"Does cutting reduce quality?","tp.a1":"Not with WAV. With MP3 the clip is re-encoded at the kbps you pick.","tp.q2":"Are my files uploaded to a server?","tp.a2":"No. Everything runs in your own browser. Your files never leave your device and nobody else can see them.","tn.nen-anh":"Compress images","tn.doi-kich-thuoc-anh":"Resize images","tn.anh-sang-pdf":"Images to PDF","tn.gop-pdf":"Merge PDF","tn.tach-pdf":"Pick and rotate PDF pages","tn.webp-sang-jpg":"WebP to JPG","tn.webp-sang-png":"WebP to PNG","tn.png-sang-jpg":"PNG to JPG","tn.jpg-sang-png":"JPG to PNG","tn.video-sang-gif":"Video to GIF","tn.mp4-sang-mp3":"MP4 to MP3","tn.wav-sang-mp3":"WAV to MP3","tn.cat-nhac":"Cut audio"}}</script>
+</body>
+</html>

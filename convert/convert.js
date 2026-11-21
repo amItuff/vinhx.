@@ -41,6 +41,10 @@
       'st.merged': 'đã gộp vào file PDF', 'st.kept': 'đã nhỏ sẵn, giữ nguyên',
       'err.pdf': 'Không đọc được PDF này (có thể bị khóa mật khẩu hoặc hỏng)', 'err.pdf1': 'Cần ít nhất 2 file PDF để gộp',
       'a.up': 'Chuyển lên', 'a.down': 'Chuyển xuống',
+      'o.pdfMode': 'Việc cần làm', 'o.pdfMerge': 'Gộp thành một file', 'o.pdfPages': 'Chọn trang và xoay (từng file)',
+      'o.range': 'Trang cần giữ (ví dụ 1-3,5; để trống = tất cả)', 'o.rot': 'Xoay trang', 'o.rot0': 'Không xoay',
+      'o.audStart': 'Cắt từ giây thứ (tuỳ chọn)', 'o.audLen': 'Độ dài đoạn cắt (giây, để trống = đến hết)',
+      'err.range': 'Số trang không hợp lệ hoặc vượt quá số trang của file', 'err.cut': 'Đoạn cắt nằm ngoài độ dài của file',
       f4: 'Nén ảnh hàng loạt và gộp nhiều PDF hoặc ảnh thành một file PDF',
       'err.lib': 'Không tải được bộ mã hóa, kiểm tra mạng rồi thử lại',
       'st.ready': 'Sẵn sàng', 'st.working': 'Đang chuyển đổi...', 'st.done': 'Xong',
@@ -83,6 +87,10 @@
       'st.merged': 'merged into the PDF', 'st.kept': 'already small, kept as is',
       'err.pdf': 'This PDF could not be read (it may be password-protected or damaged)', 'err.pdf1': 'Add at least 2 PDF files to merge',
       'a.up': 'Move up', 'a.down': 'Move down',
+      'o.pdfMode': 'What to do', 'o.pdfMerge': 'Merge into one file', 'o.pdfPages': 'Pick pages and rotate (each file)',
+      'o.range': 'Pages to keep (for example 1-3,5; empty = all)', 'o.rot': 'Rotate pages', 'o.rot0': 'No rotation',
+      'o.audStart': 'Cut from second (optional)', 'o.audLen': 'Length of the cut (seconds, empty = to the end)',
+      'err.range': 'Invalid page numbers, or beyond the number of pages in the file', 'err.cut': 'The cut is outside the length of the file',
       f4: 'Batch image compression, and merging PDFs or images into one PDF',
       'err.lib': 'Could not load the encoder, check your connection and try again',
       'st.ready': 'Ready', 'st.working': 'Converting...', 'st.done': 'Done',
@@ -95,6 +103,12 @@
     }
   };
 
+  // tool pages (/convert/<tool>) carry their own text (title, steps, FAQ) as JSON in the page
+  try {
+    const raw = document.getElementById('tool-i18n');
+    if (raw) { const x = JSON.parse(raw.textContent); Object.keys(x).forEach((l) => Object.assign(STRINGS[l] || (STRINGS[l] = {}), x[l])); }
+  } catch (_) { /* ignore */ }
+
   let lang;
   try { lang = localStorage.getItem('lang'); } catch (_) { lang = null; }
   if (!STRINGS[lang]) lang = (navigator.language || 'vi').toLowerCase().startsWith('vi') ? 'vi' : 'en';
@@ -105,10 +119,11 @@
     root.lang = lang;
     try { localStorage.setItem('lang', lang); } catch (_) {}
     document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    if (STRINGS[lang].doc) document.title = STRINGS[lang].doc;
     document.querySelectorAll('.lang-toggle button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     renderList();
     fillFormats();
-    if (typeof setTool === 'function' && tool && tool !== 'convert') { $('tool-hint').textContent = t('th.' + tool); }
+    if (!pageTool && typeof setTool === 'function' && STRINGS[lang]['th.' + tool]) { $('tool-hint').textContent = t('th.' + tool); }
   }
   document.querySelectorAll('.lang-toggle button').forEach((b) => b.addEventListener('click', () => applyLang(b.dataset.lang)));
 
@@ -143,6 +158,7 @@
   }
 
   const imgFmt = $('img-fmt');
+  const pdfMode = () => $('pdf-mode').value;
   const audFmt = $('aud-fmt');
   const vidFmt = $('vid-fmt');
 
@@ -170,6 +186,8 @@
     $('mp3-opts').hidden = audFmt.value !== 'mp3';
     $('gif-opts').hidden = v !== 'gif';
     $('pdf-opts').hidden = imgFmt.value !== 'pdf';
+    $('pdf-pages-opts').hidden = pdfMode() !== 'pages';
+    $('pdf-merge-note').hidden = pdfMode() !== 'merge';
     $('vid-rec').hidden = v === 'gif' || v === 'mp3' || v === 'wav';
   }
 
@@ -452,13 +470,29 @@
     return new Blob(out, { type: 'audio/mpeg' });
   }
 
+  // optional cut: keep [start, start+length) of the decoded audio
+  function cutBuffer(ctx, buf) {
+    const startS = parseFloat($('aud-start').value);
+    const lenS = parseFloat($('aud-len').value);
+    const hasStart = Number.isFinite(startS) && startS > 0;
+    const hasLen = Number.isFinite(lenS) && lenS > 0;
+    if (!hasStart && !hasLen) return buf;
+    const from = Math.floor((hasStart ? startS : 0) * buf.sampleRate);
+    const to = Math.min(buf.length, hasLen ? from + Math.floor(lenS * buf.sampleRate) : buf.length);
+    if (from >= buf.length || to <= from) throw new Error('err.cut');
+    const out = ctx.createBuffer(buf.numberOfChannels, to - from, buf.sampleRate);
+    for (let c = 0; c < buf.numberOfChannels; c++) out.copyToChannel(buf.getChannelData(c).subarray(from, to), c);
+    return out;
+  }
+
   async function convertAudio(it, mono, fmt) {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) throw new Error('err.encode');
     const ctx = new AC();
     try {
       const raw = await it.file.arrayBuffer();
-      const buf = await ctx.decodeAudioData(raw);
+      let buf = await ctx.decodeAudioData(raw);
+      if (it.kind === 'audio') buf = cutBuffer(ctx, buf);
       setProgress(it, 0.9);
       if (fmt === 'mp3') {
         const kbps = it.kind === 'audio' ? Number($('aud-br').value) || 128 : 128;
@@ -644,6 +678,40 @@
     return { bytes: new Uint8Array(await blob.arrayBuffer()), png, w, h };
   }
 
+  // "1-3,5" -> [0,1,2,4]; empty means every page. Returns null when it cannot be read.
+  function parseRange(text, count) {
+    const raw = text.replace(/\s+/g, '');
+    if (!raw) return Array.from({ length: count }, (_, i) => i);
+    const out = [];
+    for (const part of raw.split(',')) {
+      const m = /^(\d+)(?:-(\d+))?$/.exec(part);
+      if (!m) return null;
+      const a = Number(m[1]);
+      const b = m[2] ? Number(m[2]) : a;
+      if (a < 1 || b < a || b > count) return null;
+      for (let n = a; n <= b; n++) out.push(n - 1);
+    }
+    return out.length ? out : null;
+  }
+
+  async function convertPdf(it) {
+    try { await loadPdfLib(); } catch (_) { throw new Error('err.lib'); }
+    const { PDFDocument, degrees } = window.PDFLib;
+    let src;
+    try { src = await PDFDocument.load(await it.file.arrayBuffer()); } catch (_) { throw new Error('err.pdf'); }
+    const idx = parseRange($('pdf-range').value, src.getPageCount());
+    if (!idx) throw new Error('err.range');
+    const rot = Number($('pdf-rot').value) || 0;
+    const out = await PDFDocument.create();
+    const pages = await out.copyPages(src, idx);
+    pages.forEach((pg) => {
+      if (rot) pg.setRotation(degrees((pg.getRotation().angle + rot) % 360));
+      out.addPage(pg);
+    });
+    setProgress(it, 0.9);
+    return { blob: new Blob([await out.save()], { type: 'application/pdf' }), ext: 'pdf', suffix: '-edit' };
+  }
+
   async function runPdfGroup(group) {
     group.forEach((it) => {
       it.state = 'working'; it.progress = 0; it.error = ''; it.merged = false; it.kept = false; it.blob = null;
@@ -706,10 +774,11 @@
     renderList();
     try {
       const out = it.kind === 'image' ? await convertImage(it)
+        : it.kind === 'pdf' ? await convertPdf(it)
         : it.kind === 'audio' ? await convertAudio(it, $('aud-mono').checked, audFmt.value)
         : await convertVideo(it);
       it.blob = out.blob;
-      it.name = `${baseName(it.file.name)}.${out.ext}`;
+      it.name = `${baseName(it.file.name)}${out.suffix || ''}.${out.ext}`;
       it.state = 'done';
     } catch (e) {
       it.state = 'error';
@@ -723,7 +792,7 @@
     busy = true;
     renderAll();
     const used = new Set();
-    const inPdf = (it) => it.kind === 'pdf' || (it.kind === 'image' && imgFmt.value === 'pdf');
+    const inPdf = (it) => (it.kind === 'pdf' && pdfMode() === 'merge') || (it.kind === 'image' && imgFmt.value === 'pdf');
     const runnable = (it) => !(it.state === 'error' && (!it.kind || it.error === 'err.big'));
     const group = items.filter((it) => inPdf(it) && runnable(it));
     let groupDone = false;
@@ -843,6 +912,7 @@
   window.addEventListener('drop', (e) => { if (!drop.contains(e.target)) e.preventDefault(); });
 
   imgFmt.addEventListener('change', syncOpts);
+  $('pdf-mode').addEventListener('change', syncOpts);
   audFmt.addEventListener('change', syncOpts);
   vidFmt.addEventListener('change', syncOpts);
   $('img-q').addEventListener('input', () => { $('img-q-val').textContent = $('img-q').value; });
@@ -857,12 +927,23 @@
   window.addEventListener('beforeunload', (e) => { if (busy) { e.preventDefault(); e.returnValue = ''; } });
 
   // ---- tool shortcuts: preset the options and the file picker for a common job ----
+  const ALL = 'image/*,audio/*,video/*,application/pdf,.pdf';
   const TOOLS = {
-    convert: { accept: 'image/*,audio/*,video/*,application/pdf,.pdf' },
+    convert: { accept: ALL },
     compress: { accept: 'image/*', img: 'same' },
+    resize: { accept: 'image/*', img: 'same', focus: 'img-w' },
     gif: { accept: 'video/*', vid: 'gif' },
-    pdf: { accept: 'application/pdf,.pdf,image/*', img: 'pdf' }
+    pdf: { accept: 'application/pdf,.pdf,image/*', img: 'pdf', pdf: 'merge' },
+    pdfpages: { accept: 'application/pdf,.pdf', pdf: 'pages' },
+    webpjpg: { accept: 'image/webp,.webp,image/*', img: 'jpeg' },
+    webppng: { accept: 'image/webp,.webp,image/*', img: 'png' },
+    pngjpg: { accept: 'image/png,.png,image/*', img: 'jpeg' },
+    jpgpng: { accept: 'image/jpeg,.jpg,.jpeg,image/*', img: 'png' },
+    videomp3: { accept: 'video/*', vid: 'mp3' },
+    wavmp3: { accept: 'audio/*', aud: 'mp3' },
+    trim: { accept: 'audio/*', aud: 'mp3', focus: 'aud-start' }
   };
+  const pageTool = document.body.dataset.tool || ''; // set on /convert/<tool> pages
   let tool = 'convert';
   function setTool(name, openPicker) {
     if (!TOOLS[name]) name = 'convert';
@@ -871,18 +952,22 @@
     input.accept = cfg.accept;
     if (cfg.img) imgFmt.value = cfg.img;
     if (cfg.vid) vidFmt.value = cfg.vid;
+    if (cfg.aud) audFmt.value = cfg.aud;
+    if (cfg.pdf) $('pdf-mode').value = cfg.pdf;
     syncOpts();
+    const chips = ['convert', 'compress', 'gif', 'pdf'];
     document.querySelectorAll('.tool').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tool === name)));
     const hint = $('tool-hint');
-    hint.hidden = name === 'convert';
-    hint.textContent = name === 'convert' ? '' : t('th.' + name);
-    try { history.replaceState(null, '', name === 'convert' ? location.pathname : '#' + name); } catch (_) { /* ignore */ }
+    const showHint = !pageTool && chips.includes(name) && name !== 'convert';
+    hint.hidden = !showHint;
+    hint.textContent = showHint ? t('th.' + name) : '';
+    if (!pageTool) { try { history.replaceState(null, '', name === 'convert' ? location.pathname : '#' + name); } catch (_) { /* ignore */ } }
     if (openPicker) input.click();
   }
   document.querySelectorAll('.tool').forEach((b) => b.addEventListener('click', () => setTool(b.dataset.tool, true)));
 
   probeCapabilities();
   applyLang(lang);
-  setTool(location.hash.slice(1), false);
+  setTool(pageTool || location.hash.slice(1), false);
   renderAll();
 })();

@@ -39,6 +39,14 @@
   background: rgba(0, 0, 0, 0.4);
   font-size: 0.82rem;
 }
+.opt input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.4);
+  font-size: 0.82rem;
+}
 .opt input[type="range"] { width: 100%; accent-color: #fff; }
 .opt .check { margin-top: 6px; }
 
@@ -78,3 +86,24 @@
 .tool-hint { margin: 0 0 12px; line-height: 1.55; }
 .fbtns .icon-btn:disabled { opacity: 0.3; cursor: default; }
 @media (max-width: 560px) { .tool { flex: 1 1 calc(50% - 8px); text-align: center; } }
+
+/* tool grid, tool pages */
+.alltools { margin-top: 34px; }
+.alltools h2, .tp-more h2 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; margin: 26px 0 12px; }
+.tgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.tcard { display: grid; gap: 4px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.025); color: inherit; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+.tcard:hover { border-color: rgba(255, 255, 255, 0.28); background: rgba(255, 255, 255, 0.05); }
+.tcard b { font-size: 0.86rem; font-weight: 600; }
+.tcard span { font-size: 0.74rem; line-height: 1.5; color: rgba(255, 255, 255, 0.5); }
+.tcard.slim { padding: 10px 14px; }
+.crumb { display: inline-block; margin-bottom: 14px; font-size: 0.76rem; color: rgba(255, 255, 255, 0.5); text-decoration: none; }
+.crumb::before { content: '← '; }
+.crumb:hover { color: #fff; }
+.tsteps { margin: 0 0 6px 20px; display: grid; gap: 8px; font-size: 0.86rem; line-height: 1.6; color: rgba(255, 255, 255, 0.72); }
+.tfaq { display: grid; gap: 8px; }
+.tfaq details { border-radius: 11px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.025); }
+.tfaq summary { cursor: pointer; padding: 12px 14px; font-size: 0.85rem; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+.tfaq summary::-webkit-details-marker { display: none; }
+.tfaq summary::after { content: '+'; color: rgba(255, 255, 255, 0.5); }
+.tfaq details[open] summary::after { content: '–'; }
+.tfaq p { padding: 0 14px 14px; font-size: 0.8rem; line-height: 1.65; color: rgba(255, 255, 255, 0.6); }

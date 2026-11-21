@@ -2,18 +2,70 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://vinhx.info/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-21</lastmod>
   </url>
   <url>
     <loc>https://vinhx.info/convert</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-21</lastmod>
   </url>
   <url>
     <loc>https://vinhx.info/library</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-21</lastmod>
   </url>
   <url>
     <loc>https://vinhx.info/freelance</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/nen-anh</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/doi-kich-thuoc-anh</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/anh-sang-pdf</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/gop-pdf</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/tach-pdf</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/webp-sang-jpg</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/webp-sang-png</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/png-sang-jpg</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/jpg-sang-png</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/video-sang-gif</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/mp4-sang-mp3</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/wav-sang-mp3</loc>
+    <lastmod>2026-11-21</lastmod>
+  </url>
+  <url>
+    <loc>https://vinhx.info/convert/cat-nhac</loc>
     <lastmod>2026-11-21</lastmod>
   </url>
 </urlset>

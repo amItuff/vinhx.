@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/base.css?v=6" />
-  <link rel="stylesheet" href="/convert/convert.css?v=4" />
-  <script src="/convert/convert.js?v=4" defer></script>
+  <link rel="stylesheet" href="/convert/convert.css?v=5" />
+  <script src="/convert/convert.js?v=5" defer></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
@@ -70,7 +70,18 @@
       </div>
       <div id="opt-pdf" class="opt" hidden>
         <h2 data-i18n="o.pdf">PDF</h2>
-        <p class="small" data-i18n="o.pdfNote">Các file PDF (và ảnh, nếu bạn chọn xuất PDF) được gộp thành một file theo thứ tự trong danh sách. Dùng mũi tên để đổi thứ tự.</p>
+        <label class="fl" for="pdf-mode" data-i18n="o.pdfMode">Việc cần làm</label>
+        <select id="pdf-mode">
+          <option value="merge" data-i18n="o.pdfMerge">Gộp thành một file</option>
+          <option value="pages" data-i18n="o.pdfPages">Chọn trang và xoay (từng file)</option>
+        </select>
+        <p id="pdf-merge-note" class="small" data-i18n="o.pdfNote">Các file PDF (và ảnh, nếu bạn chọn xuất PDF) được gộp thành một file theo thứ tự trong danh sách. Dùng mũi tên để đổi thứ tự.</p>
+        <div id="pdf-pages-opts" hidden>
+          <label class="fl" for="pdf-range" data-i18n="o.range">Trang cần giữ (ví dụ 1-3,5; để trống = tất cả)</label>
+          <input id="pdf-range" type="text" inputmode="numeric" autocomplete="off" placeholder="1-3,5" />
+          <label class="fl" for="pdf-rot" data-i18n="o.rot">Xoay trang</label>
+          <select id="pdf-rot"><option value="0" data-i18n="o.rot0">Không xoay</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select>
+        </div>
       </div>
       <div id="opt-audio" class="opt" hidden>
         <h2 data-i18n="o.audio">Âm thanh</h2>
@@ -85,6 +96,10 @@
             <option value="96">96 kbps (nhỏ nhất)</option>
           </select>
         </div>
+        <label class="fl" for="aud-start" data-i18n="o.audStart">Cắt từ giây thứ (tuỳ chọn)</label>
+        <input id="aud-start" type="number" min="0" step="0.5" value="" placeholder="0" inputmode="decimal" />
+        <label class="fl" for="aud-len" data-i18n="o.audLen">Độ dài đoạn cắt (giây, để trống = đến hết)</label>
+        <input id="aud-len" type="number" min="0.5" step="0.5" value="" placeholder="30" inputmode="decimal" />
         <label class="check"><input id="aud-mono" type="checkbox" /><span data-i18n="o.mono">Gộp thành mono (nhỏ hơn một nửa)</span></label>
       </div>
       <div id="opt-video" class="opt" hidden>
@@ -128,6 +143,27 @@
       <li data-i18n="f3">Xuất được MP3 (từ âm thanh hoặc video) và GIF động (từ video)</li>
       <li data-i18n="f4">Nén ảnh hàng loạt và gộp nhiều PDF hoặc ảnh thành một file PDF</li>
     </ul>
+
+    <!--tools:start-->
+<section class="alltools" aria-labelledby="alltools-h">
+  <h2 id="alltools-h" data-i18n="ui.all">Tất cả công cụ</h2>
+  <div class="tgrid">
+    <a class="tcard" href="/convert/nen-anh"><b data-i18n="tn.nen-anh">Nén ảnh</b><span data-i18n="td.nen-anh">Nén ảnh hàng loạt ngay trên trình duyệt: giảm dung lượng JPG, PNG, WebP mà vẫn nét.</span></a>
+    <a class="tcard" href="/convert/doi-kich-thuoc-anh"><b data-i18n="tn.doi-kich-thuoc-anh">Đổi kích thước ảnh</b><span data-i18n="td.doi-kich-thuoc-anh">Thu nhỏ nhiều ảnh theo chiều rộng tối đa ngay trên trình duyệt, giữ đúng tỉ lệ.</span></a>
+    <a class="tcard" href="/convert/anh-sang-pdf"><b data-i18n="tn.anh-sang-pdf">Ảnh sang PDF</b><span data-i18n="td.anh-sang-pdf">Chuyển JPG, PNG, WebP sang PDF và gộp nhiều ảnh thành một file PDF ngay trên trình duyệt.</span></a>
+    <a class="tcard" href="/convert/gop-pdf"><b data-i18n="tn.gop-pdf">Gộp PDF</b><span data-i18n="td.gop-pdf">Gộp nhiều file PDF (và ảnh) thành một file PDF ngay trên trình duyệt.</span></a>
+    <a class="tcard" href="/convert/tach-pdf"><b data-i18n="tn.tach-pdf">Chọn trang và xoay PDF</b><span data-i18n="td.tach-pdf">Giữ lại những trang PDF bạn cần (ví dụ 1-3,5) và xoay trang 90, 180, 270 độ ngay trên trình duyệt.</span></a>
+    <a class="tcard" href="/convert/webp-sang-jpg"><b data-i18n="tn.webp-sang-jpg">WebP sang JPG</b><span data-i18n="td.webp-sang-jpg">Đổi ảnh WebP sang JPG hàng loạt ngay trên trình duyệt, không tải ảnh lên máy chủ.</span></a>
+    <a class="tcard" href="/convert/webp-sang-png"><b data-i18n="tn.webp-sang-png">WebP sang PNG</b><span data-i18n="td.webp-sang-png">Đổi ảnh WebP sang PNG hàng loạt, giữ nền trong suốt, ngay trên trình duyệt.</span></a>
+    <a class="tcard" href="/convert/png-sang-jpg"><b data-i18n="tn.png-sang-jpg">PNG sang JPG</b><span data-i18n="td.png-sang-jpg">Đổi ảnh PNG sang JPG hàng loạt ngay trên trình duyệt để file nhẹ hơn nhiều.</span></a>
+    <a class="tcard" href="/convert/jpg-sang-png"><b data-i18n="tn.jpg-sang-png">JPG sang PNG</b><span data-i18n="td.jpg-sang-png">Đổi ảnh JPG sang PNG hàng loạt ngay trên trình duyệt, không tải ảnh lên máy chủ.</span></a>
+    <a class="tcard" href="/convert/video-sang-gif"><b data-i18n="tn.video-sang-gif">Video sang GIF</b><span data-i18n="td.video-sang-gif">Cắt một đoạn video (tối đa 20 giây) và đổi thành ảnh GIF động ngay trên trình duyệt.</span></a>
+    <a class="tcard" href="/convert/mp4-sang-mp3"><b data-i18n="tn.mp4-sang-mp3">MP4 sang MP3</b><span data-i18n="td.mp4-sang-mp3">Lấy âm thanh từ video MP4, WebM, MOV và lưu thành MP3 ngay trên trình duyệt.</span></a>
+    <a class="tcard" href="/convert/wav-sang-mp3"><b data-i18n="tn.wav-sang-mp3">WAV sang MP3</b><span data-i18n="td.wav-sang-mp3">Đổi file âm thanh WAV sang MP3 ngay trên trình duyệt, chọn chất lượng 96 đến 320 kbps.</span></a>
+    <a class="tcard" href="/convert/cat-nhac"><b data-i18n="tn.cat-nhac">Cắt nhạc</b><span data-i18n="td.cat-nhac">Cắt một đoạn từ file nhạc hoặc ghi âm và lưu thành MP3 hoặc WAV ngay trên trình duyệt.</span></a>
+  </div>
+</section>
+<!--tools:end-->
   </main>
 
   <footer class="site-foot" aria-label="vinhx">
@@ -139,5 +175,6 @@
   </footer>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="application/json" id="tool-i18n">{"vi":{"tn.nen-anh":"Nén ảnh","td.nen-anh":"Nén ảnh hàng loạt ngay trên trình duyệt: giảm dung lượng JPG, PNG, WebP mà vẫn nét.","tn.doi-kich-thuoc-anh":"Đổi kích thước ảnh","td.doi-kich-thuoc-anh":"Thu nhỏ nhiều ảnh theo chiều rộng tối đa ngay trên trình duyệt, giữ đúng tỉ lệ.","tn.anh-sang-pdf":"Ảnh sang PDF","td.anh-sang-pdf":"Chuyển JPG, PNG, WebP sang PDF và gộp nhiều ảnh thành một file PDF ngay trên trình duyệt.","tn.gop-pdf":"Gộp PDF","td.gop-pdf":"Gộp nhiều file PDF (và ảnh) thành một file PDF ngay trên trình duyệt.","tn.tach-pdf":"Chọn trang và xoay PDF","td.tach-pdf":"Giữ lại những trang PDF bạn cần (ví dụ 1-3,5) và xoay trang 90, 180, 270 độ ngay trên trình duyệt.","tn.webp-sang-jpg":"WebP sang JPG","td.webp-sang-jpg":"Đổi ảnh WebP sang JPG hàng loạt ngay trên trình duyệt, không tải ảnh lên máy chủ.","tn.webp-sang-png":"WebP sang PNG","td.webp-sang-png":"Đổi ảnh WebP sang PNG hàng loạt, giữ nền trong suốt, ngay trên trình duyệt.","tn.png-sang-jpg":"PNG sang JPG","td.png-sang-jpg":"Đổi ảnh PNG sang JPG hàng loạt ngay trên trình duyệt để file nhẹ hơn nhiều.","tn.jpg-sang-png":"JPG sang PNG","td.jpg-sang-png":"Đổi ảnh JPG sang PNG hàng loạt ngay trên trình duyệt, không tải ảnh lên máy chủ.","tn.video-sang-gif":"Video sang GIF","td.video-sang-gif":"Cắt một đoạn video (tối đa 20 giây) và đổi thành ảnh GIF động ngay trên trình duyệt.","tn.mp4-sang-mp3":"MP4 sang MP3","td.mp4-sang-mp3":"Lấy âm thanh từ video MP4, WebM, MOV và lưu thành MP3 ngay trên trình duyệt.","tn.wav-sang-mp3":"WAV sang MP3","td.wav-sang-mp3":"Đổi file âm thanh WAV sang MP3 ngay trên trình duyệt, chọn chất lượng 96 đến 320 kbps.","tn.cat-nhac":"Cắt nhạc","td.cat-nhac":"Cắt một đoạn từ file nhạc hoặc ghi âm và lưu thành MP3 hoặc WAV ngay trên trình duyệt.","ui.all":"Tất cả công cụ"},"en":{"tn.nen-anh":"Compress images","td.nen-anh":"Batch-compress images right in your browser: smaller JPG, PNG and WebP that still look sharp.","tn.doi-kich-thuoc-anh":"Resize images","td.doi-kich-thuoc-anh":"Resize many images to a max width right in your browser, keeping the aspect ratio.","tn.anh-sang-pdf":"Images to PDF","td.anh-sang-pdf":"Turn JPG, PNG and WebP into one PDF right in your browser.","tn.gop-pdf":"Merge PDF","td.gop-pdf":"Merge several PDF files (and images) into one PDF right in your browser.","tn.tach-pdf":"Pick and rotate PDF pages","td.tach-pdf":"Keep just the PDF pages you need (for example 1-3,5) and rotate them 90, 180 or 270 degrees in your browser.","tn.webp-sang-jpg":"WebP to JPG","td.webp-sang-jpg":"Convert WebP images to JPG in bulk right in your browser.","tn.webp-sang-png":"WebP to PNG","td.webp-sang-png":"Convert WebP images to PNG in bulk, keeping transparent backgrounds, in your browser.","tn.png-sang-jpg":"PNG to JPG","td.png-sang-jpg":"Convert PNG images to JPG in bulk in your browser for much smaller files.","tn.jpg-sang-png":"JPG to PNG","td.jpg-sang-png":"Convert JPG images to PNG in bulk in your browser.","tn.video-sang-gif":"Video to GIF","td.video-sang-gif":"Cut a clip (up to 20 seconds) from a video and turn it into an animated GIF right in your browser.","tn.mp4-sang-mp3":"MP4 to MP3","td.mp4-sang-mp3":"Pull the audio out of MP4, WebM and MOV videos and save it as MP3 in your browser.","tn.wav-sang-mp3":"WAV to MP3","td.wav-sang-mp3":"Convert WAV audio to MP3 in your browser with 96 to 320 kbps quality.","tn.cat-nhac":"Cut audio","td.cat-nhac":"Cut a part out of a song or recording and save it as MP3 or WAV in your browser.","ui.all":"All tools"}}</script>
 </body>
 </html>

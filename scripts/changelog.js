@@ -61,6 +61,7 @@ try {
   const PAGES = {
     'https://vinhx.info/': ['index.html', 'style.css', 'script.js'],
     'https://vinhx.info/convert': ['convert'],
+    ...Object.fromEntries(fs.readdirSync(path.join(root, 'convert'), { withFileTypes: true }).filter((d) => d.isDirectory() && d.name !== 'vendor').map((d) => ['https://vinhx.info/convert/' + d.name, ['convert/' + d.name, 'convert/convert.js']])),
     'https://vinhx.info/freelance': ['freelance'],
     'https://vinhx.info/library': ['library/index.html', 'library/library.js', 'library/library.css', 'library/books']
   };
