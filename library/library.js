@@ -28,7 +28,7 @@
       'r.back': 'Về thư viện', 'r.mark': 'Đánh dấu', 'r.toc': 'Mục lục và đánh dấu', 'r.aa': 'Chữ và giao diện',
       'r.prev': 'Chương trước', 'r.next': 'Chương sau', 'r.chapter': 'Chương',
       'mark.added': 'Đã đánh dấu', 'mark.removed': 'Đã bỏ đánh dấu', 'mark.none': 'Chưa có đánh dấu nào. Bấm biểu tượng đánh dấu để lưu vị trí đang đọc.',
-      'bk.title': 'Sao lưu và chuyển máy', 'bk.note': 'Tiến độ đọc và đánh dấu chỉ nằm trên trình duyệt này. Xuất ra file để mang sang máy khác, rồi nhập lại ở đó.',
+      'bk.title': 'Sao lưu và đồng bộ', 'bk.note': 'Tiến độ đọc và đánh dấu chỉ nằm trên trình duyệt này. Xuất ra file để mang sang máy khác, hoặc dùng mã đồng bộ bên dưới.',
       'bk.export': 'Xuất tiến độ và đánh dấu', 'bk.import': 'Nhập từ file', 'bk.install': 'Cài như ứng dụng',
       'bk.none': 'Chưa có tiến độ hay đánh dấu nào để xuất.', 'bk.exported': 'Đã xuất file sao lưu', 'bk.bad': 'File này không phải bản sao lưu của vinhx library.',
       'bk.done': 'Đã nhập', 'bk.books': 'sách', 'bk.skipped': 'bỏ qua (sách chưa có)',
@@ -37,6 +37,14 @@
       'mark.note': 'Ghi chú', 'mark.notePh': 'Ghi chú của bạn...', 'mark.export': 'Xuất đánh dấu (.txt)', 'mark.exported': 'Đã xuất đánh dấu',
       'aa.size': 'Cỡ chữ', 'aa.lh': 'Giãn dòng', 'aa.theme': 'Nền', 'aa.book': 'Sách', 'aa.dark': 'Tối', 'aa.sepia': 'Vàng', 'aa.light': 'Sáng', 'aa.font': 'Kiểu chữ', 'aa.sans': 'Không chân', 'aa.serif': 'Có chân',
       'ch.n': 'chương',
+      'sy.title': 'Đồng bộ giữa các máy', 'sy.note': 'Tiến độ và đánh dấu được mã hóa ngay trên máy bạn bằng mã đồng bộ, máy chủ chỉ giữ dữ liệu đã mã hóa và không đọc được. Giữ kín mã này.',
+      'sy.create': 'Tạo mã đồng bộ', 'sy.join': 'Kết nối', 'sy.ph': 'Nhập mã từ máy kia', 'sy.yours': 'Mã của bạn', 'sy.copy': 'Chép mã', 'sy.copied': 'Đã chép mã',
+      'sy.now': 'Đồng bộ ngay', 'sy.leave': 'Ngắt kết nối', 'sy.wipe': 'Xóa dữ liệu trên máy chủ', 'sy.wipeAgain': 'Bấm lại để xóa',
+      'sy.busy': 'Đang đồng bộ...', 'sy.ok': 'Đã đồng bộ lúc', 'sy.never': 'Chưa đồng bộ lần nào', 'sy.bad': 'Mã không đúng định dạng', 'sy.nf': 'Không tìm thấy mã này. Kiểm tra lại mã ở máy kia.',
+      'sy.off': 'Máy chủ chưa bật tính năng đồng bộ.', 'sy.net': 'Chưa đồng bộ được, sẽ tự thử lại.', 'sy.limit': 'Thao tác quá nhiều, hãy thử lại sau.', 'sy.joined': 'Đã kết nối', 'sy.left': 'Đã ngắt kết nối', 'sy.wiped': 'Đã xóa dữ liệu trên máy chủ',
+      'sy.more': 'Còn sách chưa tải về, bấm Đồng bộ ngay để tải tiếp.',
+      'st.title': 'Thói quen đọc', 'st.today': 'Hôm nay', 'st.min': 'phút', 'st.goal': 'Mục tiêu mỗi ngày', 'st.streak': 'ngày liên tiếp', 'st.week': 'Tuần này', 'st.hit': 'Đạt mục tiêu hôm nay!',
+      'tts.on': 'Nghe đọc', 'tts.play': 'Phát', 'tts.pause': 'Tạm dừng', 'tts.prev': 'Đoạn trước', 'tts.next': 'Đoạn sau', 'tts.speed': 'Tốc độ', 'tts.voice': 'Giọng đọc', 'tts.sleep': 'Hẹn giờ tắt', 'tts.off': 'Không', 'tts.chapter': 'Hết chương', 'tts.none': 'Trình duyệt này chưa hỗ trợ nghe đọc.', 'tts.auto': 'Tự động', 'tts.min': 'phút', 'tts.close': 'Đóng nghe đọc',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
       'cat.title': 'Kệ sách miễn phí',
       'cat.sub': 'Tác phẩm đã hết bản quyền, lấy từ Project Gutenberg và Wikisource.',
@@ -62,7 +70,7 @@
       'r.back': 'Back to library', 'r.mark': 'Bookmark', 'r.toc': 'Contents and bookmarks', 'r.aa': 'Text and theme',
       'r.prev': 'Previous chapter', 'r.next': 'Next chapter', 'r.chapter': 'Chapter',
       'mark.added': 'Bookmarked', 'mark.removed': 'Bookmark removed', 'mark.none': 'No bookmarks yet. Tap the bookmark icon to save where you are.',
-      'bk.title': 'Backup and moving devices', 'bk.note': 'Reading progress and bookmarks live only in this browser. Export them to a file, then import it on another device.',
+      'bk.title': 'Backup and sync', 'bk.note': 'Reading progress and bookmarks live only in this browser. Export them to a file for another device, or use the sync code below.',
       'bk.export': 'Export progress and bookmarks', 'bk.import': 'Import from file', 'bk.install': 'Install as an app',
       'bk.none': 'No progress or bookmarks to export yet.', 'bk.exported': 'Backup file saved', 'bk.bad': 'That file is not a vinhx library backup.',
       'bk.done': 'Imported', 'bk.books': 'books', 'bk.skipped': 'skipped (book not found)',
@@ -71,6 +79,14 @@
       'mark.note': 'Note', 'mark.notePh': 'Your note...', 'mark.export': 'Export bookmarks (.txt)', 'mark.exported': 'Bookmarks exported',
       'aa.size': 'Text size', 'aa.lh': 'Line spacing', 'aa.theme': 'Theme', 'aa.book': 'Book', 'aa.dark': 'Dark', 'aa.sepia': 'Sepia', 'aa.light': 'Light', 'aa.font': 'Typeface', 'aa.sans': 'Sans', 'aa.serif': 'Serif',
       'ch.n': 'chapters',
+      'sy.title': 'Sync between devices', 'sy.note': 'Progress and bookmarks are encrypted on your device with the sync code. The server only keeps encrypted data it cannot read. Keep the code private.',
+      'sy.create': 'Create a sync code', 'sy.join': 'Connect', 'sy.ph': 'Enter the code from your other device', 'sy.yours': 'Your code', 'sy.copy': 'Copy code', 'sy.copied': 'Code copied',
+      'sy.now': 'Sync now', 'sy.leave': 'Disconnect', 'sy.wipe': 'Delete data on the server', 'sy.wipeAgain': 'Click again to delete',
+      'sy.busy': 'Syncing...', 'sy.ok': 'Synced at', 'sy.never': 'Not synced yet', 'sy.bad': 'That code is not in the right format', 'sy.nf': 'Code not found. Check the code on your other device.',
+      'sy.off': 'Sync is not switched on on the server.', 'sy.net': 'Could not sync, will retry automatically.', 'sy.limit': 'Too many requests, try again later.', 'sy.joined': 'Connected', 'sy.left': 'Disconnected', 'sy.wiped': 'Server data deleted',
+      'sy.more': 'Some books are still to download. Press Sync now to continue.',
+      'st.title': 'Reading habit', 'st.today': 'Today', 'st.min': 'min', 'st.goal': 'Daily goal', 'st.streak': 'day streak', 'st.week': 'This week', 'st.hit': 'Goal reached today!',
+      'tts.on': 'Read aloud', 'tts.play': 'Play', 'tts.pause': 'Pause', 'tts.prev': 'Previous paragraph', 'tts.next': 'Next paragraph', 'tts.speed': 'Speed', 'tts.voice': 'Voice', 'tts.sleep': 'Sleep timer', 'tts.off': 'Off', 'tts.chapter': 'End of chapter', 'tts.none': 'This browser does not support read aloud.', 'tts.auto': 'Automatic', 'tts.min': 'min', 'tts.close': 'Close read aloud',
       'ui.close': 'Close', 'ch.untitled': 'Part',
       'cat.title': 'Free bookshelf',
       'cat.sub': 'Works out of copyright, from Project Gutenberg and Wikisource.',
@@ -825,7 +841,7 @@
   let marks = [];
   let saveTimer = null;
 
-  const prefs = { size: 18, lh: 1.7, theme: 'book', font: 'serif', rate: 1, voice: '', trans: false, vol: 1, mode: 'book' };
+  const prefs = { size: 18, lh: 1.7, theme: 'book', font: 'serif', rate: 1, voice: '', trans: false, vol: 1, mode: 'book', goal: 15 };
   try { Object.assign(prefs, JSON.parse(localStorage.getItem('libPrefs') || '{}')); } catch (_) {}
   const savePrefs = () => { try { localStorage.setItem('libPrefs', JSON.stringify(prefs)); } catch (_) {} };
   if ((prefs.v || 1) < 3) { prefs.theme = 'book'; prefs.font = 'serif'; prefs.v = 3; savePrefs(); } // new dim default look, applied once
@@ -974,6 +990,7 @@
   }
 
   function renderChapter(idx, frac, focusPara) {
+    if (ttsOn && !ttsAdvancing) ttsStop(); else if (!ttsAdvancing) { ttsChunks = []; }
     trRun++;
     chIdx = Math.max(0, Math.min(current.chapters.length - 1, idx));
     const ch = current.chapters[chIdx];
@@ -1021,6 +1038,7 @@
     const p = { ch: chIdx, frac: scrollFrac(), t: Date.now() };
     progressMap[current.id] = p;
     putOne('kv', p, 'p:' + current.id).catch(() => {});
+    scheduleSyncPush();
   }
   function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveProgress, 500); }
 
@@ -1051,6 +1069,7 @@
 
   function closeBook() {
     saveProgress();
+    ttsOpen = false; ttsStop(); flushStats();
     trRun++;
     current = null;
     document.body.dataset.view = 'shelf';
@@ -1062,6 +1081,7 @@
     history.replaceState(null, '', location.pathname);
     window.scrollTo(0, 0);
     renderShelf();
+    renderStats();
   }
 
   $('r-back').addEventListener('click', closeBook);
@@ -1086,7 +1106,7 @@
     page.querySelectorAll('.marked').forEach((e) => e.classList.remove('marked'));
     marks.filter((m) => m.ch === chIdx).forEach((m) => { const el = page.querySelector(`[data-i="${m.i}"]`); if (el) el.classList.add('marked'); });
   }
-  function saveMarks() { putOne('kv', marks, 'm:' + current.id).catch(() => {}); }
+  function saveMarks() { putOne('kv', marks, 'm:' + current.id).catch(() => {}); scheduleSyncPush(); }
 
   $('r-mark').addEventListener('click', () => {
     if (!current) return;
@@ -1280,7 +1300,7 @@
   // ---------------------------------------------------------------------------
   // Backup: export / import reading progress, bookmarks and reading settings
   // ---------------------------------------------------------------------------
-  const PREF_KEYS = { size: 'number', lh: 'number', theme: 'string', font: 'string', rate: 'number', vol: 'number', mode: 'string' };
+  const PREF_KEYS = { size: 'number', lh: 'number', theme: 'string', font: 'string', rate: 'number', vol: 'number', mode: 'string', goal: 'number' };
 
   async function addCatalogBook(it) { // same as "Read now" but without opening it
     const res = await fetch(`/library/books/${it.id}.json.gz`);
@@ -1292,8 +1312,8 @@
     return book;
   }
 
-  async function exportBackup() {
-    const out = { app: 'vinhx-library', v: 1, exported: new Date().toISOString(), prefs: {}, books: [] };
+  async function buildBackup() {
+    const out = { app: 'vinhx-library', v: 2, exported: new Date().toISOString(), prefs: {}, books: [], stats: { days: statsDays } };
     for (const k of Object.keys(PREF_KEYS)) if (prefs[k] !== undefined) out.prefs[k] = prefs[k];
     for (const b of books) {
       let m = [];
@@ -1302,7 +1322,12 @@
       if (!p && !m.length) continue;
       out.books.push({ sig: b.sig, title: b.title, author: b.author || '', p, marks: m });
     }
-    if (!out.books.length) { showToast(t('bk.none')); return; }
+    return out;
+  }
+
+  async function exportBackup() {
+    const out = await buildBackup();
+    if (!out.books.length && !Object.keys(statsDays).length) { showToast(t('bk.none')); return; }
     const url = URL.createObjectURL(new Blob([JSON.stringify(out, null, 1)], { type: 'application/json' }));
     const a = document.createElement('a');
     a.href = url;
@@ -1313,15 +1338,12 @@
   }
 
   const num = (x) => (typeof x === 'number' && Number.isFinite(x) ? x : null);
-  async function importBackup(file) {
-    let data;
-    try {
-      if (file.size > 5 * 1024 * 1024) throw new Error('big');
-      data = JSON.parse(await file.text());
-      if (!data || data.app !== 'vinhx-library' || !Array.isArray(data.books) || data.books.length > 1000) throw new Error('bad');
-    } catch (_) { showToast(t('bk.bad')); return; }
+  const validBackup = (data) => !!data && typeof data === 'object' && data.app === 'vinhx-library' && Array.isArray(data.books) && data.books.length <= 1000;
 
-    let done = 0, skipped = 0;
+  // Merges a backup into this device: newest progress wins, bookmarks are joined, reading time takes the larger value.
+  // opts.prefs: also take the reading preferences (file import yes, background sync no); opts.maxAdd: cap on books fetched.
+  async function mergeBackup(data, opts = {}) {
+    let done = 0, skipped = 0, added = 0, more = false;
     for (const e of data.books) {
       if (!e || typeof e !== 'object') continue;
       const sig = typeof e.sig === 'string' ? e.sig.slice(0, 300) : '';
@@ -1329,7 +1351,8 @@
       const m = /^gb(\d+)$/.exec(sig);
       if (!book && m) {
         const it = CATALOG.find((c) => c.id === Number(m[1]));
-        if (it) { try { book = await addCatalogBook(it); books.push(book); } catch (_) { /* offline or missing file */ } }
+        if (it && added >= (opts.maxAdd || Infinity)) { more = true; continue; }
+        if (it) { try { book = await addCatalogBook(it); books.push(book); added++; } catch (_) { /* offline or missing file */ } }
       }
       if (!book) { skipped++; continue; }
       const p = e.p && num(e.p.ch) !== null ? { ch: Math.max(0, Math.min(book.chapters.length - 1, Math.floor(e.p.ch))), frac: Math.max(0, Math.min(1, num(e.p.frac) || 0)), t: num(e.p.t) || 0 } : null;
@@ -1339,28 +1362,460 @@
         let mine = [];
         try { mine = (await getOne('kv', 'm:' + book.id)) || []; } catch (_) {}
         const seen = new Set(mine.map(markKey));
+        let grew = false;
         for (const x of e.marks.slice(0, 500)) {
           if (!x || num(x.ch) === null || num(x.i) === null || !book.chapters[x.ch]) continue;
           const mk = { ch: Math.floor(x.ch), i: Math.floor(x.i), s: String(x.s || '').slice(0, 200), t: num(x.t) || Date.now() };
           if (typeof x.n === 'string' && x.n.trim()) mk.n = x.n.slice(0, 300);
           if (seen.has(markKey(mk))) continue;
-          seen.add(markKey(mk)); mine.push(mk);
+          seen.add(markKey(mk)); mine.push(mk); grew = true;
         }
-        await putOne('kv', mine, 'm:' + book.id).catch(() => {});
+        if (grew) await putOne('kv', mine, 'm:' + book.id).catch(() => {});
       }
       done++;
     }
-    if (data.prefs && typeof data.prefs === 'object') {
+    if (data.stats && data.stats.days && typeof data.stats.days === 'object') {
+      let changed = false;
+      for (const [k, v] of Object.entries(data.stats.days)) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(k) || num(v) === null) continue;
+        const secs = Math.max(0, Math.min(86400, Math.floor(v)));
+        if (secs > (statsDays[k] || 0)) { statsDays[k] = secs; changed = true; }
+      }
+      if (changed) { pruneStats(); await putOne('kv', statsDays, 'stats').catch(() => {}); }
+    }
+    if (opts.prefs && data.prefs && typeof data.prefs === 'object') {
       for (const [k, ty] of Object.entries(PREF_KEYS)) if (typeof data.prefs[k] === ty) prefs[k] = data.prefs[k];
       savePrefs(); applyPrefs();
     }
+    if (current) { try { marks = (await getOne('kv', 'm:' + current.id)) || marks; } catch (_) {} }
+    return { done, skipped, more };
+  }
+
+  async function importBackup(file) {
+    let data;
+    try {
+      if (file.size > 5 * 1024 * 1024) throw new Error('big');
+      data = JSON.parse(await file.text());
+      if (!validBackup(data)) throw new Error('bad');
+    } catch (_) { showToast(t('bk.bad')); return; }
+    const { done, skipped } = await mergeBackup(data, { prefs: true });
     await loadShelf();
     renderShelf();
+    renderStats();
     showToast(`${t('bk.done')} ${done} ${t('bk.books')}${skipped ? `, ${skipped} ${t('bk.skipped')}` : ''}`);
   }
   $('bk-export').addEventListener('click', exportBackup);
   $('bk-import').addEventListener('click', () => $('bk-file').click());
   $('bk-file').addEventListener('change', () => { const f = $('bk-file').files[0]; $('bk-file').value = ''; if (f) importBackup(f); });
+
+  // ---------------------------------------------------------------------------
+  // Reading habit: minutes read per day (counted only while the tab is visible and you are active)
+  // ---------------------------------------------------------------------------
+  let statsDays = {};     // 'YYYY-MM-DD' -> seconds
+  let statsDirty = false;
+  let statsTimer = null;
+  let lastAct = 0;
+  const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const shiftDay = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return dayKey(d); };
+
+  function pruneStats() {
+    const keys = Object.keys(statsDays).sort();
+    keys.slice(0, Math.max(0, keys.length - 400)).forEach((k) => { delete statsDays[k]; });
+  }
+  async function loadStats() {
+    try { statsDays = (await getOne('kv', 'stats')) || {}; } catch (_) { statsDays = {}; }
+    if (typeof statsDays !== 'object' || Array.isArray(statsDays)) statsDays = {};
+  }
+  function flushStats() {
+    clearTimeout(statsTimer); statsTimer = null;
+    if (!statsDirty) return;
+    statsDirty = false;
+    pruneStats();
+    putOne('kv', statsDays, 'stats').catch(() => {});
+    scheduleSyncPush();
+  }
+  ['scroll', 'keydown', 'pointerdown', 'touchstart', 'wheel'].forEach((ev) => window.addEventListener(ev, () => { lastAct = Date.now(); }, { passive: true }));
+  setInterval(() => {
+    if (!current || document.hidden) return;
+    if (Date.now() - lastAct > 90000 && !ttsOn) return; // idle: not reading
+    const k = dayKey();
+    statsDays[k] = Math.min(86400, (statsDays[k] || 0) + 5);
+    statsDirty = true;
+    if (!statsTimer) statsTimer = setTimeout(flushStats, 30000);
+  }, 5000);
+  window.addEventListener('pagehide', flushStats);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) flushStats(); });
+
+  const minutesOf = (k) => Math.floor((statsDays[k] || 0) / 60);
+  function streakDays() {
+    let n = 0;
+    let i = (statsDays[dayKey()] || 0) >= 60 ? 0 : -1; // today may still be in progress
+    while ((statsDays[shiftDay(i)] || 0) >= 60) { n++; i--; }
+    return n;
+  }
+  function renderStats() {
+    const box = $('stats');
+    if (!box) return;
+    const goal = Math.max(5, Number(prefs.goal) || 15);
+    const today = minutesOf(dayKey());
+    $('st-today').textContent = String(today);
+    $('st-goal-val').textContent = String(goal);
+    $('st-bar').style.width = Math.min(100, (today / goal) * 100) + '%';
+    $('st-streak').textContent = String(streakDays());
+    $('st-hit').hidden = today < goal;
+    const days = [];
+    let weekTotal = 0;
+    for (let i = 6; i >= 0; i--) { const k = shiftDay(-i); const m = minutesOf(k); weekTotal += m; days.push([k, m]); }
+    $('st-week').textContent = String(weekTotal);
+    const peak = Math.max(goal, ...days.map((d) => d[1]));
+    const chart = $('st-chart');
+    chart.textContent = '';
+    days.forEach(([k, m], idx) => {
+      const col = document.createElement('div');
+      col.className = 'st-col' + (idx === 6 ? ' now' : '');
+      col.title = `${k}: ${m} ${t('st.min')}`;
+      const bar = document.createElement('i');
+      bar.style.height = Math.max(m > 0 ? 6 : 2, (m / peak) * 100) + '%';
+      if (m >= goal) bar.className = 'hit';
+      const lab = document.createElement('span');
+      lab.textContent = String(new Date(k + 'T12:00:00').getDate());
+      col.append(bar, lab);
+      chart.appendChild(col);
+    });
+    $('st-goal').value = String(goal);
+  }
+  $('st-goal').addEventListener('change', () => { prefs.goal = Number($('st-goal').value) || 15; savePrefs(); renderStats(); scheduleSyncPush(); });
+  setInterval(() => { if (!current && !document.hidden) renderStats(); }, 60000);
+
+  // ---------------------------------------------------------------------------
+  // Sync between devices. The code never leaves the browser: an id (hash of the code) is used to look
+  // the data up and a key derived from the code encrypts it, so /api/sync only stores ciphertext.
+  // ---------------------------------------------------------------------------
+  const SYNC_LS = 'vxLibSync';
+  const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 32 symbols without look-alikes (no I, O, 0, 1)
+  const enc = new TextEncoder();
+  const hex = (buf) => Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, '0')).join('');
+  const toB64 = (buf) => { let s = ''; const u = new Uint8Array(buf); for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); };
+  const fromB64 = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  let syncBusy = false;
+  let syncTimer = null;
+  let syncAt = 0;
+
+  const getSync = () => { try { const x = JSON.parse(localStorage.getItem(SYNC_LS) || 'null'); return x && typeof x.code === 'string' ? x : null; } catch (_) { return null; } };
+  const setSync = (x) => { try { if (x) localStorage.setItem(SYNC_LS, JSON.stringify(x)); else localStorage.removeItem(SYNC_LS); } catch (_) {} };
+  const genCode = () => {
+    const r = crypto.getRandomValues(new Uint8Array(16));
+    return Array.from(r, (b) => CODE_CHARS[b & 31]).join('').replace(/(.{4})(?=.)/g, '$1-');
+  };
+  const normCode = (txt) => {
+    const c = String(txt || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    return c.length === 16 && [...c].every((ch) => CODE_CHARS.includes(ch)) ? c.replace(/(.{4})(?=.)/g, '$1-') : '';
+  };
+  async function syncKeys(code) {
+    const id = hex(await crypto.subtle.digest('SHA-256', enc.encode('vx-lib-id|' + code))).slice(0, 32);
+    const mat = await crypto.subtle.importKey('raw', enc.encode(code), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: enc.encode('vx-lib-key|v1'), iterations: 150000, hash: 'SHA-256' }, mat, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+    return { id, key };
+  }
+  async function seal(key, obj) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify(obj)));
+    return { iv: toB64(iv), ct: toB64(ct) };
+  }
+  async function unseal(key, d) {
+    const raw = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64(d.iv) }, key, fromB64(d.ct));
+    return JSON.parse(new TextDecoder().decode(raw));
+  }
+  async function syncApi(method, qs, body) {
+    const r = await fetch('/api/sync' + qs, { method, headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined });
+    let json = null;
+    try { json = await r.json(); } catch (_) {}
+    return { status: r.status, json: json || {} };
+  }
+  // what is compared to decide whether anything changed (the export time and book order do not matter)
+  const stableBackup = (d) => JSON.stringify({ p: d.prefs && d.prefs.goal, s: d.stats && d.stats.days, b: d.books.map((b) => ({ g: b.sig, p: b.p, m: (b.marks || []).map(markKey).sort() })).sort((x, y) => (x.g < y.g ? -1 : 1)) });
+
+  function syncStatus(text, bad) {
+    const el = $('sy-status');
+    if (!el) return;
+    el.textContent = text;
+    el.classList.toggle('bad', !!bad);
+  }
+  function renderSync() {
+    const st = getSync();
+    $('sy-off').hidden = !!st;
+    $('sy-on').hidden = !st;
+    if (st) {
+      $('sy-show').textContent = st.code;
+      syncStatus(st.last ? `${t('sy.ok')} ${new Date(st.last).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : t('sy.never'));
+    }
+  }
+
+  // pull, merge, push. Returns 'ok' | 'notfound' | 'off' | 'limit' | 'net'
+  async function syncNow() {
+    const st = getSync();
+    if (!st || syncBusy) return 'net';
+    syncBusy = true;
+    syncStatus(t('sy.busy'));
+    let result = 'net';
+    try {
+      const { id, key } = await syncKeys(st.code);
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const r = await syncApi('GET', '?id=' + id);
+        if (r.status === 503) { result = 'off'; break; }
+        if (r.status === 429) { result = 'limit'; break; }
+        if (r.status !== 200 && r.status !== 404) break;
+        let remote = null;
+        let rev = 0;
+        let more = false;
+        if (r.status === 200) {
+          rev = r.json.data.rev;
+          try { remote = await unseal(key, r.json.data); } catch (_) { break; }
+          if (!validBackup(remote)) break;
+          more = (await mergeBackup(remote, { maxAdd: 25 })).more;
+        } else if (st.known) { result = 'notfound'; break; } // it existed before and is gone: do not silently re-create
+        const mine = await buildBackup();
+        if (remote && stableBackup(remote) === stableBackup(mine) && !more) { result = 'ok'; break; }
+        const put = await syncApi('PUT', '', { id, base: rev, data: await seal(key, mine) });
+        if (put.status === 409) continue;
+        if (put.status === 503) { result = 'off'; break; }
+        if (put.status === 429) { result = 'limit'; break; }
+        if (put.status !== 200) break;
+        result = more ? 'more' : 'ok';
+        break;
+      }
+    } catch (_) { result = 'net'; }
+    syncBusy = false;
+    if (result === 'ok' || result === 'more') {
+      syncAt = Date.now();
+      setSync({ code: st.code, known: true, last: syncAt });
+      loadShelf().then(() => { if (!current) renderShelf(); renderStats(); });
+    }
+    renderSync();
+    if (result === 'more') syncStatus(t('sy.more'), true);
+    else if (result === 'off') syncStatus(t('sy.off'), true);
+    else if (result === 'limit') syncStatus(t('sy.limit'), true);
+    else if (result === 'notfound') syncStatus(t('sy.nf'), true);
+    else if (result === 'net') syncStatus(t('sy.net'), true);
+    return result;
+  }
+
+  function scheduleSyncPush() {
+    if (!getSync()) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => { syncNow(); }, 25000);
+  }
+
+  $('sy-create').addEventListener('click', async () => {
+    if (!window.crypto || !crypto.subtle) { showToast(t('sy.off')); return; }
+    setSync({ code: genCode(), known: false, last: 0 });
+    renderSync();
+    const r = await syncNow();
+    if (r !== 'ok' && r !== 'more') { setSync(null); renderSync(); showToast(r === 'off' ? t('sy.off') : r === 'limit' ? t('sy.limit') : t('sy.net')); }
+  });
+  $('sy-join').addEventListener('click', async () => {
+    if (!window.crypto || !crypto.subtle) { showToast(t('sy.off')); return; }
+    const code = normCode($('sy-code').value);
+    if (!code) { showToast(t('sy.bad')); return; }
+    try {
+      const { id } = await syncKeys(code);
+      const r = await syncApi('GET', '?id=' + id);
+      if (r.status === 404) { showToast(t('sy.nf')); return; }
+      if (r.status === 503) { showToast(t('sy.off')); return; }
+      if (r.status === 429) { showToast(t('sy.limit')); return; }
+      if (r.status !== 200) { showToast(t('sy.net')); return; }
+    } catch (_) { showToast(t('sy.net')); return; }
+    setSync({ code, known: true, last: 0 });
+    $('sy-code').value = '';
+    renderSync();
+    showToast(t('sy.joined'));
+    syncNow();
+  });
+  $('sy-code').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('sy-join').click(); });
+  $('sy-now').addEventListener('click', () => { syncNow(); });
+  $('sy-copy').addEventListener('click', async () => {
+    const st = getSync();
+    if (!st) return;
+    try { await navigator.clipboard.writeText(st.code); showToast(t('sy.copied')); } catch (_) { showToast(st.code); }
+  });
+  $('sy-leave').addEventListener('click', () => { clearTimeout(syncTimer); setSync(null); renderSync(); showToast(t('sy.left')); });
+  let wipeArmed = null;
+  $('sy-wipe').addEventListener('click', async () => {
+    const st = getSync();
+    if (!st) return;
+    if (!wipeArmed) {
+      $('sy-wipe').textContent = t('sy.wipeAgain');
+      wipeArmed = setTimeout(() => { wipeArmed = null; $('sy-wipe').textContent = t('sy.wipe'); }, 3000);
+      return;
+    }
+    clearTimeout(wipeArmed); wipeArmed = null;
+    $('sy-wipe').textContent = t('sy.wipe');
+    try { const { id } = await syncKeys(st.code); await syncApi('DELETE', '?id=' + id); } catch (_) {}
+    clearTimeout(syncTimer); setSync(null); renderSync(); showToast(t('sy.wiped'));
+  });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && getSync() && Date.now() - syncAt > 60000) syncNow(); });
+
+  // ---------------------------------------------------------------------------
+  // Read aloud: the device's own speech voices, paragraph by paragraph, with speed, voice and a sleep timer
+  // ---------------------------------------------------------------------------
+  const synth = window.speechSynthesis;
+  const ttsOk = !!(synth && window.SpeechSynthesisUtterance);
+  let ttsOn = false;          // speaking right now
+  let ttsOpen = false;        // control bar visible
+  let ttsIdx = 0;             // paragraph being read
+  let ttsChunks = [];         // sentences of that paragraph
+  let ttsC = 0;               // chunk being read
+  let ttsToken = 0;
+  let ttsSleepAt = 0;         // timestamp, 0 = no timer
+  let ttsSleepChapter = false;
+  let ttsAdvancing = false;
+
+  const splitChunks = (text) => {
+    const parts = text.match(/[^.!?…。]+[.!?…。]+["”’')\]]*\s*|[^.!?…。]+$/g) || [text];
+    const out = [];
+    let cur = '';
+    parts.forEach((p) => {
+      if (cur && (cur + p).length > 220) { out.push(cur.trim()); cur = ''; }
+      cur += p;
+      while (cur.length > 300) { const cut = cur.lastIndexOf(' ', 260); const at = cut > 80 ? cut : 260; out.push(cur.slice(0, at).trim()); cur = cur.slice(at); }
+    });
+    if (cur.trim()) out.push(cur.trim());
+    return out;
+  };
+
+  function ttsVoices() {
+    if (!ttsOk) return [];
+    const all = synth.getVoices() || [];
+    const want = ((page.lang || (current && current.lang) || 'en') + '').slice(0, 2).toLowerCase();
+    const match = all.filter((v) => (v.lang || '').slice(0, 2).toLowerCase() === want);
+    // natural-sounding voices first (Edge/Windows "Natural" voices such as HoaiMy and NamMinh, Google, Apple), so "Automatic" picks the best one
+    const score = (v) => (/natural|neural|online/i.test(v.name) ? 3 : 0) + (/hoaimy|namminh|google|siri|premium|enhanced/i.test(v.name) ? 2 : 0) + (v.localService ? 0 : 1);
+    return (match.length ? match : all).slice().sort((x, y) => score(y) - score(x));
+  }
+  function fillVoices() {
+    const sel = $('tts-voice');
+    if (!sel) return;
+    const list = ttsVoices();
+    sel.textContent = '';
+    const auto = document.createElement('option');
+    auto.value = ''; auto.textContent = t('tts.auto');
+    sel.appendChild(auto);
+    list.forEach((v) => { const o = document.createElement('option'); o.value = v.name; o.textContent = `${v.name} (${v.lang})`; sel.appendChild(o); });
+    sel.value = list.some((v) => v.name === prefs.voice) ? prefs.voice : '';
+  }
+  if (ttsOk && synth.addEventListener) synth.addEventListener('voiceschanged', fillVoices);
+
+  function clearSpeaking() { page.querySelectorAll('.speaking').forEach((el) => el.classList.remove('speaking')); }
+  function ttsStop() {
+    ttsToken++;
+    ttsOn = false;
+    ttsSleepAt = 0;
+    if (ttsOk) synth.cancel();
+    clearSpeaking();
+    updateTtsUi();
+  }
+  function ttsPause() {
+    ttsToken++;
+    ttsOn = false;
+    if (ttsOk) synth.cancel();
+    updateTtsUi();
+  }
+  function ttsLoadParagraph() {
+    const ch = current.chapters[chIdx];
+    while (ttsIdx < ch.blocks.length) {
+      const txt = (textOf(ttsIdx) || '').trim();
+      if (txt) { ttsChunks = splitChunks(txt); ttsC = 0; return true; }
+      ttsIdx++;
+    }
+    return false;
+  }
+  function ttsSpeak() {
+    if (!ttsOn || !current) return;
+    if (!ttsChunks.length || ttsC >= ttsChunks.length) {
+      if (ttsChunks.length) ttsIdx++;
+      ttsChunks = [];
+      if (!ttsLoadParagraph()) {
+        // end of the chapter: stop, or carry on into the next one
+        if (ttsSleepChapter || chIdx >= current.chapters.length - 1) { ttsStop(); return; }
+        ttsAdvancing = true;
+        saveProgress();
+        renderChapter(chIdx + 1, 0);
+        window.scrollTo(0, 0);
+        ttsAdvancing = false;
+        saveProgress();
+        ttsIdx = 0;
+        ttsChunks = [];
+        if (!ttsLoadParagraph()) { ttsStop(); return; }
+      }
+    }
+    if (ttsSleepAt && Date.now() >= ttsSleepAt) { ttsStop(); return; }
+    clearSpeaking();
+    const el = page.querySelector(`[data-i="${ttsIdx}"]`);
+    if (el) { el.classList.add('speaking'); if (ttsC === 0) { const r = el.getBoundingClientRect(); if (r.top < 80 || r.bottom > innerHeight - 90) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
+    const u = new SpeechSynthesisUtterance(ttsChunks[ttsC]);
+    u.lang = page.lang || current.lang || 'en';
+    u.rate = Math.max(0.5, Math.min(2.5, Number(prefs.rate) || 1));
+    const vs = ttsVoices();
+    const v = vs.find((x) => x.name === prefs.voice) || (vs[0] && (vs[0].lang || '').slice(0, 2).toLowerCase() === (u.lang || '').slice(0, 2).toLowerCase() ? vs[0] : null);
+    if (v) { u.voice = v; u.lang = v.lang; }
+    const tok = ++ttsToken;
+    const next = () => { if (tok !== ttsToken || !ttsOn) return; ttsC++; ttsSpeak(); };
+    u.onend = next;
+    u.onerror = (e) => { if (tok !== ttsToken) return; if (e && (e.error === 'interrupted' || e.error === 'canceled')) return; next(); };
+    synth.cancel();
+    synth.speak(u);
+  }
+  function ttsPlay() {
+    if (!ttsOk || !current) { showToast(t('tts.none')); return; }
+    if (!ttsChunks.length) { ttsIdx = firstVisibleIndex(); ttsLoadParagraph(); }
+    ttsOn = true;
+    updateTtsUi();
+    ttsSpeak();
+  }
+  function ttsSkip(dir) {
+    if (!ttsOk || !current) return;
+    const ch = current.chapters[chIdx];
+    ttsIdx = Math.max(0, Math.min(ch.blocks.length - 1, ttsIdx + dir));
+    ttsChunks = [];
+    ttsLoadParagraph();
+    if (ttsOn) { ttsToken++; synth.cancel(); ttsSpeak(); } else { clearSpeaking(); const el = page.querySelector(`[data-i="${ttsIdx}"]`); if (el) { el.classList.add('speaking'); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
+  }
+  function updateTtsUi() {
+    const bar = $('tts-bar');
+    if (!bar) return;
+    bar.hidden = !(ttsOpen && current);
+    document.body.classList.toggle('has-tts', ttsOpen && !!current);
+    $('r-tts').setAttribute('aria-pressed', String(ttsOpen));
+    $('tts-play').setAttribute('aria-label', ttsOn ? t('tts.pause') : t('tts.play'));
+    $('tts-play').title = ttsOn ? t('tts.pause') : t('tts.play');
+    $('tts-play').classList.toggle('playing', ttsOn);
+    $('tts-play').firstElementChild.innerHTML = ttsOn ? '<path d="M8 5v14M16 5v14"/>' : '<path d="M7 4l13 8-13 8z" fill="currentColor"/>';
+    $('tts-speed').setAttribute('aria-label', t('tts.speed')); $('tts-voice').setAttribute('aria-label', t('tts.voice')); $('tts-sleep').setAttribute('aria-label', t('tts.sleep'));
+    const sl = $('tts-sleep');
+    [['0', t('tts.off')], ['15', '15 ' + t('tts.min')], ['30', '30 ' + t('tts.min')], ['60', '60 ' + t('tts.min')], ['ch', t('tts.chapter')]].forEach(([, txt], i) => { if (sl.options[i]) sl.options[i].textContent = txt; });
+    $('tts-prev').setAttribute('aria-label', t('tts.prev')); $('tts-next').setAttribute('aria-label', t('tts.next')); $('tts-close').setAttribute('aria-label', t('tts.close'));
+  }
+  $('r-tts').addEventListener('click', () => {
+    if (!ttsOk) { showToast(t('tts.none')); return; }
+    ttsOpen = !ttsOpen;
+    if (ttsOpen) { fillVoices(); $('tts-speed').value = String(prefs.rate || 1); } else ttsStop();
+    updateTtsUi();
+  });
+  $('tts-close').addEventListener('click', () => { ttsOpen = false; ttsStop(); });
+  $('tts-play').addEventListener('click', () => { if (ttsOn) ttsPause(); else ttsPlay(); });
+  $('tts-prev').addEventListener('click', () => ttsSkip(-1));
+  $('tts-next').addEventListener('click', () => ttsSkip(1));
+  $('tts-speed').addEventListener('change', () => { prefs.rate = Number($('tts-speed').value) || 1; savePrefs(); });
+  $('tts-voice').addEventListener('change', () => { prefs.voice = $('tts-voice').value; savePrefs(); });
+  $('tts-sleep').addEventListener('change', () => {
+    const v = $('tts-sleep').value;
+    ttsSleepChapter = v === 'ch';
+    ttsSleepAt = /^\d+$/.test(v) && Number(v) > 0 ? Date.now() + Number(v) * 60000 : 0;
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!ttsOpen || e.target.closest('input, textarea, select')) return;
+    if (e.code === 'Space' && e.shiftKey) { e.preventDefault(); if (ttsOn) ttsPause(); else ttsPlay(); }
+  });
 
   // ---------------------------------------------------------------------------
   // Install as an app (PWA) and offline support
@@ -1382,7 +1837,10 @@
   // ---------------------------------------------------------------------------
   applyPrefs();
   applyLang(lang);
+  renderSync();
+  loadStats().then(renderStats);
   loadShelf().then(() => {
+    if (getSync()) syncNow();
     const id = location.hash.slice(1);
     if (id && books.some((b) => b.id === id)) openBook(id);
   });

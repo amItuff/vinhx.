@@ -16,7 +16,7 @@ T = {
   'lead': 'Mình là Vinh (vinhx). Mình viết bot Discord, script tự động hóa bằng Python và xây giao diện web tối giản, tải nhanh. Mô tả việc bạn cần, mình báo giá và làm từng bước có demo.',
   'cta': 'Nhờ báo giá', 'cta2': 'Xem sản phẩm đã làm',
   'sv.h': 'Mình làm được gì', 'sv.note': 'Giá chỉ để tham khảo. Giá chính xác được báo sau khi xem yêu cầu của bạn.',
-  'from': 'Từ', 'ask': 'Nhờ báo giá gói này',
+  'from': 'Từ', 'ask': 'Nhờ báo giá',
   'pf.h': 'Sản phẩm đã làm', 'pf.lead': 'Đây là những thứ chạy thật ngay trên web này. Bạn dùng thử được luôn.',
   'pf.open': 'Mở',
   'pr.h': 'Quy trình làm việc',
@@ -33,7 +33,7 @@ T = {
   'lead': "I'm Vinh (vinhx). I write Discord bots, Python automation scripts and minimal, fast web interfaces. Tell me what you need, I'll quote it and build it step by step with demos.",
   'cta': 'Get a quote', 'cta2': 'See finished work',
   'sv.h': 'What I can build', 'sv.note': 'Prices are a guide only. An exact quote comes after I see your requirements.',
-  'from': 'From', 'ask': 'Ask for a quote on this',
+  'from': 'From', 'ask': 'Get a quote',
   'pf.h': 'Finished work', 'pf.lead': 'These run for real on this site. You can try them right now.',
   'pf.open': 'Open',
   'pr.h': 'How we work',
@@ -152,7 +152,7 @@ w(f'''<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/base.css?v=6" />
-  <link rel="stylesheet" href="/freelance/freelance.css?v=1" />
+  <link rel="stylesheet" href="/freelance/freelance.css?v=3" />
   <script src="/freelance/freelance.js?v=1" defer></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -167,28 +167,31 @@ w(f'''<!DOCTYPE html>
 
   <main class="fl">
     <section class="hero">
-      <p class="kicker" data-i18n="kicker">{e(tt('kicker', V))}</p>
-      <p class="live"><span class="dot" aria-hidden="true"></span><span data-i18n="status">{e(tt('status', V))}</span></p>
+      <p class="eyebrow"><span data-i18n="kicker">{e(tt('kicker', V))}</span> · <span data-i18n="status">{e(tt('status', V))}</span></p>
       <h1 data-i18n="h1">{e(tt('h1', V))}</h1>
       <p class="lead" data-i18n="lead">{e(tt('lead', V))}</p>
       <div class="hero-act">
-        <a class="btn primary big" href="/?mail=other" data-i18n="cta">{e(tt('cta', V))}</a>
-        <a class="btn big" href="#works" data-i18n="cta2">{e(tt('cta2', V))}</a>
+        <a class="btn primary" href="/?mail=other" data-i18n="cta">{e(tt('cta', V))}</a>
+        <a class="btn" href="#works" data-i18n="cta2">{e(tt('cta2', V))}</a>
       </div>
     </section>
 
     <section aria-labelledby="sv-h">
       <h2 id="sv-h" data-i18n="sv.h">{e(tt('sv.h', V))}</h2>
-      <div class="grid">''')
+      <div class="rows">''')
 for key, price, d in SERVICES:
     name, desc, items = d['vi']
     w(f'''
-        <article class="card" id="{key}">
-          <h3 data-i18n="sv.{key}.t">{e(name)}</h3>
-          <p class="cd" data-i18n="sv.{key}.d">{e(desc)}</p>
-          <ul>''' + ''.join(f'<li data-i18n="sv.{key}.{n}">{e(x)}</li>' for n, x in enumerate(items)) + f'''</ul>
-          <p class="price"><span data-i18n="from">{e(tt('from', V))}</span> <b>{price}</b></p>
-          <a class="btn" href="/?mail={key}" data-i18n="ask">{e(tt('ask', V))}</a>
+        <article class="row" id="{key}">
+          <div class="rt">
+            <h3 data-i18n="sv.{key}.t">{e(name)}</h3>
+            <p class="cd" data-i18n="sv.{key}.d">{e(desc)}</p>
+            <ul>''' + ''.join(f'<li data-i18n="sv.{key}.{n}">{e(x)}</li>' for n, x in enumerate(items)) + f'''</ul>
+          </div>
+          <div class="rp">
+            <p class="price"><span data-i18n="from">{e(tt('from', V))}</span> <b>{price}</b></p>
+            <a class="btn" href="/?mail={key}" data-i18n="ask">{e(tt('ask', V))}</a>
+          </div>
         </article>''')
 w(f'''
       </div>
@@ -231,7 +234,7 @@ w(f'''
     <section class="end">
       <h2 data-i18n="end.h">{e(tt('end.h', V))}</h2>
       <p data-i18n="end.p">{e(tt('end.p', V))}</p>
-      <a class="btn primary big" href="/?mail=other" data-i18n="end.cta">{e(tt('end.cta', V))}</a>
+      <a class="btn primary" href="/?mail=other" data-i18n="end.cta">{e(tt('end.cta', V))}</a>
     </section>
   </main>
 

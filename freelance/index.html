@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/base.css?v=6" />
-  <link rel="stylesheet" href="/freelance/freelance.css?v=1" />
+  <link rel="stylesheet" href="/freelance/freelance.css?v=3" />
   <script src="/freelance/freelance.js?v=1" defer></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -39,46 +39,61 @@
 
   <main class="fl">
     <section class="hero">
-      <p class="kicker" data-i18n="kicker">Nhận làm freelance</p>
-      <p class="live"><span class="dot" aria-hidden="true"></span><span data-i18n="status">Đang nhận việc mới</span></p>
+      <p class="eyebrow"><span data-i18n="kicker">Nhận làm freelance</span> · <span data-i18n="status">Đang nhận việc mới</span></p>
       <h1 data-i18n="h1">Bot, script và web gọn nhẹ, làm đúng thứ bạn cần</h1>
       <p class="lead" data-i18n="lead">Mình là Vinh (vinhx). Mình viết bot Discord, script tự động hóa bằng Python và xây giao diện web tối giản, tải nhanh. Mô tả việc bạn cần, mình báo giá và làm từng bước có demo.</p>
       <div class="hero-act">
-        <a class="btn primary big" href="/?mail=other" data-i18n="cta">Nhờ báo giá</a>
-        <a class="btn big" href="#works" data-i18n="cta2">Xem sản phẩm đã làm</a>
+        <a class="btn primary" href="/?mail=other" data-i18n="cta">Nhờ báo giá</a>
+        <a class="btn" href="#works" data-i18n="cta2">Xem sản phẩm đã làm</a>
       </div>
     </section>
 
     <section aria-labelledby="sv-h">
       <h2 id="sv-h" data-i18n="sv.h">Mình làm được gì</h2>
-      <div class="grid">
-        <article class="card" id="web">
-          <h3 data-i18n="sv.web.t">Web cá nhân, landing page</h3>
-          <p class="cd" data-i18n="sv.web.d">Trang giới thiệu tĩnh, tải nhanh, hiển thị tốt trên điện thoại, có form liên hệ.</p>
-          <ul><li data-i18n="sv.web.0">Thiết kế theo phong cách bạn chọn</li><li data-i18n="sv.web.1">Tối ưu tốc độ và SEO cơ bản</li><li data-i18n="sv.web.2">Đăng lên Vercel, gắn tên miền riêng</li><li data-i18n="sv.web.3">Hướng dẫn tự sửa nội dung</li></ul>
-          <p class="price"><span data-i18n="from">Từ</span> <b>500.000đ</b></p>
-          <a class="btn" href="/?mail=web" data-i18n="ask">Nhờ báo giá gói này</a>
+      <div class="rows">
+        <article class="row" id="web">
+          <div class="rt">
+            <h3 data-i18n="sv.web.t">Web cá nhân, landing page</h3>
+            <p class="cd" data-i18n="sv.web.d">Trang giới thiệu tĩnh, tải nhanh, hiển thị tốt trên điện thoại, có form liên hệ.</p>
+            <ul><li data-i18n="sv.web.0">Thiết kế theo phong cách bạn chọn</li><li data-i18n="sv.web.1">Tối ưu tốc độ và SEO cơ bản</li><li data-i18n="sv.web.2">Đăng lên Vercel, gắn tên miền riêng</li><li data-i18n="sv.web.3">Hướng dẫn tự sửa nội dung</li></ul>
+          </div>
+          <div class="rp">
+            <p class="price"><span data-i18n="from">Từ</span> <b>500.000đ</b></p>
+            <a class="btn" href="/?mail=web" data-i18n="ask">Nhờ báo giá</a>
+          </div>
         </article>
-        <article class="card" id="bot">
-          <h3 data-i18n="sv.bot.t">Bot Discord</h3>
-          <p class="cd" data-i18n="sv.bot.d">Bot theo đúng nhu cầu của server bạn, viết bằng Python hoặc JavaScript.</p>
-          <ul><li data-i18n="sv.bot.0">Lệnh slash, ticket, vai trò tự động</li><li data-i18n="sv.bot.1">Kiểm duyệt, nhật ký, thông báo</li><li data-i18n="sv.bot.2">Lưu dữ liệu, bảng xếp hạng</li><li data-i18n="sv.bot.3">Hướng dẫn chạy 24/7</li></ul>
-          <p class="price"><span data-i18n="from">Từ</span> <b>300.000đ</b></p>
-          <a class="btn" href="/?mail=bot" data-i18n="ask">Nhờ báo giá gói này</a>
+        <article class="row" id="bot">
+          <div class="rt">
+            <h3 data-i18n="sv.bot.t">Bot Discord</h3>
+            <p class="cd" data-i18n="sv.bot.d">Bot theo đúng nhu cầu của server bạn, viết bằng Python hoặc JavaScript.</p>
+            <ul><li data-i18n="sv.bot.0">Lệnh slash, ticket, vai trò tự động</li><li data-i18n="sv.bot.1">Kiểm duyệt, nhật ký, thông báo</li><li data-i18n="sv.bot.2">Lưu dữ liệu, bảng xếp hạng</li><li data-i18n="sv.bot.3">Hướng dẫn chạy 24/7</li></ul>
+          </div>
+          <div class="rp">
+            <p class="price"><span data-i18n="from">Từ</span> <b>300.000đ</b></p>
+            <a class="btn" href="/?mail=bot" data-i18n="ask">Nhờ báo giá</a>
+          </div>
         </article>
-        <article class="card" id="auto">
-          <h3 data-i18n="sv.auto.t">Script tự động hóa</h3>
-          <p class="cd" data-i18n="sv.auto.d">Việc lặp đi lặp lại giao cho Python làm thay bạn.</p>
-          <ul><li data-i18n="sv.auto.0">Xử lý Excel, CSV, PDF hàng loạt</li><li data-i18n="sv.auto.1">Lấy dữ liệu từ web hoặc API</li><li data-i18n="sv.auto.2">Báo cáo tự gửi qua Discord hoặc email</li><li data-i18n="sv.auto.3">Có hướng dẫn chạy từng bước</li></ul>
-          <p class="price"><span data-i18n="from">Từ</span> <b>200.000đ</b></p>
-          <a class="btn" href="/?mail=auto" data-i18n="ask">Nhờ báo giá gói này</a>
+        <article class="row" id="auto">
+          <div class="rt">
+            <h3 data-i18n="sv.auto.t">Script tự động hóa</h3>
+            <p class="cd" data-i18n="sv.auto.d">Việc lặp đi lặp lại giao cho Python làm thay bạn.</p>
+            <ul><li data-i18n="sv.auto.0">Xử lý Excel, CSV, PDF hàng loạt</li><li data-i18n="sv.auto.1">Lấy dữ liệu từ web hoặc API</li><li data-i18n="sv.auto.2">Báo cáo tự gửi qua Discord hoặc email</li><li data-i18n="sv.auto.3">Có hướng dẫn chạy từng bước</li></ul>
+          </div>
+          <div class="rp">
+            <p class="price"><span data-i18n="from">Từ</span> <b>200.000đ</b></p>
+            <a class="btn" href="/?mail=auto" data-i18n="ask">Nhờ báo giá</a>
+          </div>
         </article>
-        <article class="card" id="tool">
-          <h3 data-i18n="sv.tool.t">Công cụ chạy trên trình duyệt</h3>
-          <p class="cd" data-i18n="sv.tool.d">Web app nhỏ như Convert hay Library: xử lý ngay trên máy người dùng.</p>
-          <ul><li data-i18n="sv.tool.0">Đổi định dạng, xử lý file không cần máy chủ</li><li data-i18n="sv.tool.1">Dữ liệu ở lại máy người dùng</li><li data-i18n="sv.tool.2">Cài được như ứng dụng (PWA)</li><li data-i18n="sv.tool.3">Giao diện hai ngôn ngữ</li></ul>
-          <p class="price"><span data-i18n="from">Từ</span> <b>400.000đ</b></p>
-          <a class="btn" href="/?mail=tool" data-i18n="ask">Nhờ báo giá gói này</a>
+        <article class="row" id="tool">
+          <div class="rt">
+            <h3 data-i18n="sv.tool.t">Công cụ chạy trên trình duyệt</h3>
+            <p class="cd" data-i18n="sv.tool.d">Web app nhỏ như Convert hay Library: xử lý ngay trên máy người dùng.</p>
+            <ul><li data-i18n="sv.tool.0">Đổi định dạng, xử lý file không cần máy chủ</li><li data-i18n="sv.tool.1">Dữ liệu ở lại máy người dùng</li><li data-i18n="sv.tool.2">Cài được như ứng dụng (PWA)</li><li data-i18n="sv.tool.3">Giao diện hai ngôn ngữ</li></ul>
+          </div>
+          <div class="rp">
+            <p class="price"><span data-i18n="from">Từ</span> <b>400.000đ</b></p>
+            <a class="btn" href="/?mail=tool" data-i18n="ask">Nhờ báo giá</a>
+          </div>
         </article>
       </div>
       <p class="small note" data-i18n="sv.note">Giá chỉ để tham khảo. Giá chính xác được báo sau khi xem yêu cầu của bạn.</p>
@@ -122,7 +137,7 @@
     <section class="end">
       <h2 data-i18n="end.h">Có việc cần làm?</h2>
       <p data-i18n="end.p">Gửi mô tả, ảnh tham khảo hoặc file đính kèm qua form liên hệ. Mình đọc và trả lời bạn.</p>
-      <a class="btn primary big" href="/?mail=other" data-i18n="end.cta">Gửi yêu cầu</a>
+      <a class="btn primary" href="/?mail=other" data-i18n="end.cta">Gửi yêu cầu</a>
     </section>
   </main>
 

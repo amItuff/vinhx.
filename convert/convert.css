@@ -80,7 +80,7 @@
 }
 
 .tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
-.tool { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: rgba(255, 255, 255, 0.78); font: inherit; font-size: 0.78rem; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.tool { padding: 7px 13px; border-radius: 6px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: rgba(255, 255, 255, 0.78); font: inherit; font-size: 0.78rem; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
 .tool:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
 .tool[aria-pressed="true"] { background: #fff; color: #0a0a0a; border-color: #fff; font-weight: 600; }
 .tool-hint { margin: 0 0 12px; line-height: 1.55; }
@@ -107,3 +107,6 @@
 .tfaq summary::after { content: '+'; color: rgba(255, 255, 255, 0.5); }
 .tfaq details[open] summary::after { content: '–'; }
 .tfaq p { padding: 0 14px 14px; font-size: 0.8rem; line-height: 1.65; color: rgba(255, 255, 255, 0.6); }
+
+/* quieter small labels: normal case, no wide tracking */
+.cv .kicker { letter-spacing: 0; text-transform: none; font-family: inherit; font-size: 0.78rem; margin-bottom: 8px; }
