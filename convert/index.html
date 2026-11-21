@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07080b" />
-  <title>vinhx convert — đổi định dạng ảnh, âm thanh, video</title>
-  <meta name="description" content="Đổi định dạng ảnh, âm thanh và video ngay trên trình duyệt. File không bao giờ được tải lên máy chủ." />
+  <title>vinhx convert — đổi định dạng, nén ảnh, video sang GIF, gộp PDF</title>
+  <meta name="description" content="Đổi định dạng ảnh, âm thanh, video, nén ảnh, cắt video thành GIF, gộp PDF ngay trên trình duyệt. File không bao giờ được tải lên máy chủ." />
   <link rel="canonical" href="https://vinhx.info/convert" />
   <meta property="og:title" content="vinhx convert" />
   <meta property="og:description" content="Đổi định dạng ảnh, âm thanh, video ngay trên máy. Không tải file lên đâu cả." />
@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/base.css?v=6" />
-  <link rel="stylesheet" href="/convert/convert.css?v=3" />
-  <script src="/convert/convert.js?v=3" defer></script>
+  <link rel="stylesheet" href="/convert/convert.css?v=4" />
+  <script src="/convert/convert.js?v=4" defer></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
@@ -39,8 +39,16 @@
     <h1 data-i18n="title">Đổi định dạng ảnh, âm thanh và video</h1>
     <p class="lead" data-i18n="lead">Mọi thứ chạy ngay trên máy của bạn. File không được tải lên máy chủ nào.</p>
 
+    <div class="tools" id="tools" role="group" aria-label="Công cụ">
+      <button type="button" class="tool" data-tool="convert" data-i18n="t.convert">Đổi định dạng</button>
+      <button type="button" class="tool" data-tool="compress" data-i18n="t.compress">Nén ảnh</button>
+      <button type="button" class="tool" data-tool="gif" data-i18n="t.gif">Video thành GIF</button>
+      <button type="button" class="tool" data-tool="pdf" data-i18n="t.pdf">Gộp PDF</button>
+    </div>
+    <p id="tool-hint" class="small tool-hint" hidden></p>
+
     <label id="drop" class="drop" tabindex="0">
-      <input id="file" type="file" multiple accept="image/*,audio/*,video/*" hidden />
+      <input id="file" type="file" multiple accept="image/*,audio/*,video/*,application/pdf,.pdf" hidden />
       <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
       <strong data-i18n="drop.title">Thả file vào đây hoặc bấm để chọn</strong>
       <span class="small" data-i18n="drop.sub">Ảnh, âm thanh, video. Chọn được nhiều file cùng lúc.</span>
@@ -55,6 +63,14 @@
         <input id="img-q" type="range" min="40" max="100" value="90" />
         <label class="fl" for="img-w" data-i18n="o.maxw">Chiều rộng tối đa (px, để trống = giữ nguyên)</label>
         <input id="img-w" type="number" min="16" max="16000" inputmode="numeric" placeholder="1920" />
+        <div id="pdf-opts" hidden>
+          <label class="fl" for="pdf-page" data-i18n="o.page">Khổ trang PDF</label>
+          <select id="pdf-page"><option value="fit" data-i18n="o.pageFit">Vừa với ảnh</option><option value="a4" data-i18n="o.pageA4">A4</option></select>
+        </div>
+      </div>
+      <div id="opt-pdf" class="opt" hidden>
+        <h2 data-i18n="o.pdf">PDF</h2>
+        <p class="small" data-i18n="o.pdfNote">Các file PDF (và ảnh, nếu bạn chọn xuất PDF) được gộp thành một file theo thứ tự trong danh sách. Dùng mũi tên để đổi thứ tự.</p>
       </div>
       <div id="opt-audio" class="opt" hidden>
         <h2 data-i18n="o.audio">Âm thanh</h2>
@@ -80,6 +96,10 @@
           <select id="gif-fps"><option value="8">8</option><option value="12" selected>12</option><option value="15">15</option></select>
           <label class="fl" for="gif-w" data-i18n="o.gifw">Chiều rộng (px)</label>
           <input id="gif-w" type="number" min="64" max="1280" value="480" inputmode="numeric" />
+          <label class="fl" for="gif-start" data-i18n="o.gifStart">Bắt đầu từ giây thứ</label>
+          <input id="gif-start" type="number" min="0" step="0.5" value="0" inputmode="decimal" />
+          <label class="fl" for="gif-len" data-i18n="o.gifLen">Độ dài (giây, tối đa 20)</label>
+          <input id="gif-len" type="number" min="0.5" max="20" step="0.5" value="10" inputmode="decimal" />
           <p class="small" data-i18n="o.gifNote">GIF lấy tối đa 20 giây đầu của video, không có tiếng.</p>
         </div>
         <div id="vid-rec">
@@ -106,6 +126,7 @@
       <li data-i18n="f1">Xử lý bằng chính trình duyệt, không tải file lên máy chủ</li>
       <li data-i18n="f2">Định dạng xuất ra tùy trình duyệt của bạn hỗ trợ (Chrome và Edge đầy đủ nhất)</li>
       <li data-i18n="f3">Xuất được MP3 (từ âm thanh hoặc video) và GIF động (từ video)</li>
+      <li data-i18n="f4">Nén ảnh hàng loạt và gộp nhiều PDF hoặc ảnh thành một file PDF</li>
     </ul>
   </main>
 

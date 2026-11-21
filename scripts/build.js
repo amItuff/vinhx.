@@ -17,7 +17,7 @@ const NO_OBF = process.argv.includes('--no-obf');
 try { execFileSync('node', [path.join(__dirname, 'changelog.js')], { cwd: ROOT, stdio: 'inherit' }); } catch (_) { /* never fail the deploy */ }
 
 const SKIP = new Set(['node_modules', '.git', '.vercel', 'dist', 'api', 'scripts', 'package.json', 'package-lock.json', 'vercel.json', '.gitignore', '.vercelignore', 'README.md']);
-const JS_FILES = new Set(['script.js', 'convert/convert.js', 'library/library.js', 'note/note.js', 'note/qr.js']);
+const JS_FILES = new Set(['script.js', 'convert/convert.js', 'library/library.js', 'library/covers.js', 'note/note.js', 'note/qr.js']);
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });

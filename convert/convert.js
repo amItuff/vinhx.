@@ -11,10 +11,10 @@
   const STRINGS = {
     vi: {
       kicker: 'Chuyển đổi tệp',
-      title: 'Đổi định dạng ảnh, âm thanh và video',
+      title: 'Đổi định dạng, nén ảnh, cắt video thành GIF, gộp PDF',
       lead: 'Mọi thứ chạy ngay trên máy của bạn. File không được tải lên máy chủ nào.',
       'drop.title': 'Thả file vào đây hoặc bấm để chọn',
-      'drop.sub': 'Ảnh, âm thanh, video. Chọn được nhiều file cùng lúc.',
+      'drop.sub': 'Ảnh, âm thanh, video, PDF. Chọn được nhiều file cùng lúc.',
       'o.image': 'Ảnh', 'o.audio': 'Âm thanh', 'o.video': 'Video',
       'o.format': 'Định dạng', 'o.quality': 'Chất lượng',
       'o.maxw': 'Chiều rộng tối đa (px, để trống = giữ nguyên)',
@@ -29,10 +29,22 @@
       f3: 'Xuất được MP3 (từ âm thanh hoặc video) và GIF động (từ video)',
       'o.bitrate': 'Chất lượng MP3', 'o.mp3Only': 'Chỉ lấy âm thanh (MP3)', 'o.gif': 'GIF động',
       'o.fps': 'Số khung hình mỗi giây', 'o.gifw': 'Chiều rộng (px)',
-      'o.gifNote': 'GIF lấy tối đa 20 giây đầu của video, không có tiếng.',
+      'o.same': 'Giữ nguyên định dạng (nén nhỏ lại)', 'o.toPdf': 'PDF (gộp thành 1 file)', 'o.pdf': 'PDF',
+      'o.pdfNote': 'Các file PDF (và ảnh, nếu bạn chọn xuất PDF) được gộp thành một file theo thứ tự trong danh sách. Dùng mũi tên để đổi thứ tự.',
+      'o.page': 'Khổ trang PDF', 'o.pageFit': 'Vừa với ảnh', 'o.pageA4': 'A4',
+      'o.gifStart': 'Bắt đầu từ giây thứ', 'o.gifLen': 'Độ dài (giây, tối đa 20)',
+      'o.gifNote': 'GIF cắt đúng đoạn bạn chọn (tối đa 20 giây), không có tiếng.',
+      't.convert': 'Đổi định dạng', 't.compress': 'Nén ảnh', 't.gif': 'Video thành GIF', 't.pdf': 'Gộp PDF',
+      'th.compress': 'Giữ nguyên định dạng rồi kéo thanh chất lượng xuống để file nhẹ hơn. Giảm thêm bằng cách đặt chiều rộng tối đa. File không bao giờ nặng hơn bản gốc.',
+      'th.gif': 'Thả video vào, chọn giây bắt đầu và độ dài đoạn muốn cắt, rồi bấm Chuyển đổi.',
+      'th.pdf': 'Thả nhiều file PDF (hoặc ảnh) vào, chúng được gộp thành một file PDF theo thứ tự trong danh sách.',
+      'st.merged': 'đã gộp vào file PDF', 'st.kept': 'đã nhỏ sẵn, giữ nguyên',
+      'err.pdf': 'Không đọc được PDF này (có thể bị khóa mật khẩu hoặc hỏng)', 'err.pdf1': 'Cần ít nhất 2 file PDF để gộp',
+      'a.up': 'Chuyển lên', 'a.down': 'Chuyển xuống',
+      f4: 'Nén ảnh hàng loạt và gộp nhiều PDF hoặc ảnh thành một file PDF',
       'err.lib': 'Không tải được bộ mã hóa, kiểm tra mạng rồi thử lại',
       'st.ready': 'Sẵn sàng', 'st.working': 'Đang chuyển đổi...', 'st.done': 'Xong',
-      'err.type': 'Không phải ảnh, âm thanh hay video',
+      'err.type': 'Không phải ảnh, âm thanh, video hay PDF',
       'err.decode': 'Trình duyệt không đọc được file này',
       'err.encode': 'Trình duyệt không xuất được định dạng này',
       'err.video': 'Không chuyển đổi được video này',
@@ -41,10 +53,10 @@
     },
     en: {
       kicker: 'File converter',
-      title: 'Convert images, audio and video',
+      title: 'Convert, compress, make GIFs and merge PDFs',
       lead: 'Everything runs on your own device. Files are never uploaded to any server.',
       'drop.title': 'Drop files here or click to choose',
-      'drop.sub': 'Images, audio, video. You can pick several at once.',
+      'drop.sub': 'Images, audio, video, PDF. You can pick several at once.',
       'o.image': 'Images', 'o.audio': 'Audio', 'o.video': 'Video',
       'o.format': 'Format', 'o.quality': 'Quality',
       'o.maxw': 'Max width (px, empty = keep original)',
@@ -59,10 +71,22 @@
       f3: 'MP3 (from audio or video) and animated GIF (from video) are supported',
       'o.bitrate': 'MP3 quality', 'o.mp3Only': 'Audio only (MP3)', 'o.gif': 'Animated GIF',
       'o.fps': 'Frames per second', 'o.gifw': 'Width (px)',
-      'o.gifNote': 'The GIF uses the first 20 seconds of the video and has no sound.',
+      'o.same': 'Keep format (compress)', 'o.toPdf': 'PDF (merge into one file)', 'o.pdf': 'PDF',
+      'o.pdfNote': 'PDF files (and images, if you choose PDF output) are merged into one file in list order. Use the arrows to reorder.',
+      'o.page': 'PDF page size', 'o.pageFit': 'Fit the image', 'o.pageA4': 'A4',
+      'o.gifStart': 'Start at second', 'o.gifLen': 'Length (seconds, max 20)',
+      'o.gifNote': 'The GIF covers exactly the part you pick (up to 20 seconds) and has no sound.',
+      't.convert': 'Convert', 't.compress': 'Compress images', 't.gif': 'Video to GIF', 't.pdf': 'Merge PDF',
+      'th.compress': 'Keep the format and drag quality down to shrink the file. Set a max width to shrink it further. A file never ends up bigger than the original.',
+      'th.gif': 'Drop a video, pick the start second and length of the clip, then press Convert.',
+      'th.pdf': 'Drop several PDFs (or images); they are merged into one PDF in list order.',
+      'st.merged': 'merged into the PDF', 'st.kept': 'already small, kept as is',
+      'err.pdf': 'This PDF could not be read (it may be password-protected or damaged)', 'err.pdf1': 'Add at least 2 PDF files to merge',
+      'a.up': 'Move up', 'a.down': 'Move down',
+      f4: 'Batch image compression, and merging PDFs or images into one PDF',
       'err.lib': 'Could not load the encoder, check your connection and try again',
       'st.ready': 'Ready', 'st.working': 'Converting...', 'st.done': 'Done',
-      'err.type': 'Not an image, audio or video file',
+      'err.type': 'Not an image, audio, video or PDF file',
       'err.decode': 'This browser could not read the file',
       'err.encode': 'This browser cannot export that format',
       'err.video': 'This video could not be converted',
@@ -84,6 +108,7 @@
     document.querySelectorAll('.lang-toggle button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     renderList();
     fillFormats();
+    if (typeof setTool === 'function' && tool && tool !== 'convert') { $('tool-hint').textContent = t('th.' + tool); }
   }
   document.querySelectorAll('.lang-toggle button').forEach((b) => b.addEventListener('click', () => applyLang(b.dataset.lang)));
 
@@ -133,7 +158,7 @@
     if (options.some((o) => o.id === keep)) sel.value = keep;
   }
   function fillFormats() {
-    fillSelect(imgFmt, imageTargets);
+    fillSelect(imgFmt, [...imageTargets, { id: 'same', label: t('o.same') }, { id: 'pdf', label: t('o.toPdf') }]);
     fillSelect(audFmt, [{ id: 'wav', label: 'WAV' }, { id: 'mp3', label: 'MP3' }]);
     fillSelect(vidFmt, [...videoTargets, { id: 'gif', label: t('o.gif') }, { id: 'mp3', label: t('o.mp3Only') }, { id: 'wav', label: t('o.wavOnly') }]);
     syncOpts();
@@ -144,6 +169,7 @@
     const v = vidFmt.value;
     $('mp3-opts').hidden = audFmt.value !== 'mp3';
     $('gif-opts').hidden = v !== 'gif';
+    $('pdf-opts').hidden = imgFmt.value !== 'pdf';
     $('vid-rec').hidden = v === 'gif' || v === 'mp3' || v === 'wav';
   }
 
@@ -160,10 +186,12 @@
     if (ty.startsWith('image/')) return 'image';
     if (ty.startsWith('audio/')) return 'audio';
     if (ty.startsWith('video/')) return 'video';
+    if (ty === 'application/pdf') return 'pdf';
     const ext = (file.name.split('.').pop() || '').toLowerCase();
     if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'avif', 'svg', 'heic', 'heif'].includes(ext)) return 'image';
     if (['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac', 'opus'].includes(ext)) return 'audio';
     if (['mp4', 'webm', 'mov', 'mkv', 'm4v'].includes(ext)) return 'video';
+    if (ext === 'pdf') return 'pdf';
     return null;
   };
 
@@ -188,7 +216,7 @@
     renderList();
     const kinds = new Set(items.filter((i) => i.kind).map((i) => i.kind));
     $('opts').hidden = kinds.size === 0;
-    ['image', 'audio', 'video'].forEach((k) => { $('opt-' + k).hidden = !kinds.has(k); });
+    ['image', 'audio', 'video', 'pdf'].forEach((k) => { $('opt-' + k).hidden = !kinds.has(k); });
     $('bar').hidden = items.length === 0;
     $('go').disabled = busy || !items.some((i) => i.state !== 'error');
     $('zip').disabled = busy || !items.some((i) => i.blob);
@@ -210,20 +238,36 @@
       meta.className = 'fmeta';
       if (it.state === 'error') { meta.classList.add('err'); meta.textContent = t(it.error); }
       else if (it.state === 'working') meta.textContent = t('st.working');
+      else if (it.state === 'done' && it.merged) { meta.classList.add('ok'); meta.textContent = `${t('st.done')} · ${t('st.merged')}`; }
       else if (it.state === 'done') {
         meta.classList.add('ok');
-        meta.textContent = `${t('st.done')} · ${fmtSize(it.file.size)} → ${fmtSize(it.blob.size)}`;
+        const saved = it.file.size > 0 ? Math.round((1 - it.blob.size / it.file.size) * 100) : 0;
+        meta.textContent = `${t('st.done')} · ${fmtSize(it.file.size)} → ${fmtSize(it.blob.size)}` + (saved >= 1 ? ` (-${saved}%)` : '') + (it.kept ? ` · ${t('st.kept')}` : '');
       } else meta.textContent = `${t('st.ready')} · ${fmtSize(it.file.size)}`;
 
       const btns = document.createElement('div');
       btns.className = 'fbtns';
-      if (it.state === 'done') {
+      if (it.state === 'done' && it.blob) {
         const a = document.createElement('a');
         a.className = 'btn';
         a.textContent = t('a.download');
         a.download = it.name;
         a.href = it.url || (it.url = URL.createObjectURL(it.blob));
         btns.appendChild(a);
+      }
+      if (!busy && items.length > 1) {
+        const idx = items.indexOf(it);
+        [['a.up', -1, 'M6 15l6-6 6 6'], ['a.down', 1, 'M6 9l6 6 6-6']].forEach(([key, dir, path]) => {
+          const mv = document.createElement('button');
+          mv.type = 'button';
+          mv.className = 'icon-btn';
+          mv.setAttribute('aria-label', t(key));
+          mv.title = t(key);
+          mv.disabled = idx + dir < 0 || idx + dir >= items.length;
+          mv.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`;
+          mv.addEventListener('click', () => { items.splice(idx, 1); items.splice(idx + dir, 0, it); renderList(); });
+          btns.appendChild(mv);
+        });
       }
       if (!busy) {
         const rm = document.createElement('button');
@@ -278,7 +322,13 @@
   }
 
   async function convertImage(it) {
-    const target = imageTargets.find((x) => x.id === imgFmt.value) || imageTargets[0];
+    let target = imageTargets.find((x) => x.id === imgFmt.value) || imageTargets[0];
+    const same = imgFmt.value === 'same';
+    if (same) {
+      const ty = it.file.type;
+      const want = ty === 'image/jpeg' ? 'jpeg' : ty === 'image/png' ? 'png' : ty === 'image/avif' ? 'avif' : 'webp';
+      target = imageTargets.find((x) => x.id === want) || imageTargets.find((x) => x.id === 'webp') || imageTargets[0];
+    }
     let src;
     try { src = await loadBitmap(it.file); } catch (_) { throw new Error('err.decode'); }
 
@@ -301,6 +351,11 @@
     const quality = Number($('img-q').value) / 100;
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, target.mime, quality));
     if (!blob || blob.type !== target.mime) throw new Error('err.encode');
+    // compressing must never make a file bigger: keep the original if the result is not smaller
+    if (same && it.file.type === target.mime && blob.size >= it.file.size && !(maxW > 0 && maxW < w0)) {
+      it.kept = true;
+      return { blob: it.file, ext: (it.file.name.split('.').pop() || target.ext).toLowerCase() };
+    }
     return { blob, ext: target.ext };
   }
 
@@ -447,7 +502,10 @@
       const vw = video.videoWidth;
       const vh = video.videoHeight;
       if (!vw || !vh) throw new Error('err.decode');
-      const dur = Math.min(Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 1, GIF_MAX_SECONDS);
+      const total = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 1;
+      const start = Math.min(Math.max(0, parseFloat($('gif-start').value) || 0), Math.max(0, total - 0.2));
+      const len = Math.min(GIF_MAX_SECONDS, Math.max(0.5, parseFloat($('gif-len').value) || 10));
+      const dur = Math.max(0.2, Math.min(len, total - start));
       const fps = Number($('gif-fps').value) || 12;
       const maxW = parseInt($('gif-w').value, 10) || 480;
       const w = Math.max(16, Math.min(maxW, vw));
@@ -460,7 +518,7 @@
       const ctx = canvas.getContext('2d', { willReadFrequently: true });
       const gif = GIFEncoder();
       for (let i = 0; i < frames; i++) {
-        await seekTo(video, Math.min(i / fps, Math.max(0, video.duration - 0.05 || 0)));
+        await seekTo(video, Math.min(start + i / fps, Math.max(0, total - 0.05)));
         ctx.drawImage(video, 0, 0, w, h);
         const { data } = ctx.getImageData(0, 0, w, h);
         const palette = quantize(data, 256);
@@ -548,12 +606,103 @@
     }
   }
 
+  // ---- PDF: merge PDFs (and images) into one file (pdf-lib, loaded on first use) ----
+  let pdfPromise = null;
+  function loadPdfLib() {
+    if (window.PDFLib) return Promise.resolve();
+    if (!pdfPromise) {
+      pdfPromise = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = '/convert/vendor/pdf-lib.min.js?v=1';
+        s.onload = resolve;
+        s.onerror = () => { pdfPromise = null; reject(new Error('err.lib')); };
+        document.head.appendChild(s);
+      });
+    }
+    return pdfPromise;
+  }
+
+  // Draw through a canvas so phone photos come out the right way up, and cap the size to keep the PDF light.
+  async function imageForPdf(file) {
+    const src = await loadBitmap(file);
+    const w0 = src.width || src.naturalWidth;
+    const h0 = src.height || src.naturalHeight;
+    if (!w0 || !h0) throw new Error('err.decode');
+    const cap = parseInt($('img-w').value, 10) > 0 ? parseInt($('img-w').value, 10) : 2400;
+    const k = Math.min(1, cap / Math.max(w0, h0));
+    const w = Math.max(1, Math.round(w0 * k));
+    const h = Math.max(1, Math.round(h0 * k));
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    const ctx = c.getContext('2d');
+    const png = file.type === 'image/png' || file.type === 'image/webp' || file.type === 'image/gif';
+    if (!png) { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); }
+    ctx.drawImage(src, 0, 0, w, h);
+    if (src.close) src.close();
+    const blob = await new Promise((resolve) => c.toBlob(resolve, png ? 'image/png' : 'image/jpeg', 0.9));
+    if (!blob) throw new Error('err.encode');
+    return { bytes: new Uint8Array(await blob.arrayBuffer()), png, w, h };
+  }
+
+  async function runPdfGroup(group) {
+    group.forEach((it) => {
+      it.state = 'working'; it.progress = 0; it.error = ''; it.merged = false; it.kept = false; it.blob = null;
+      if (it.url) { URL.revokeObjectURL(it.url); it.url = null; }
+    });
+    renderList();
+    let current = null;
+    try {
+      try { await loadPdfLib(); } catch (_) { throw new Error('err.lib'); }
+      const { PDFDocument } = window.PDFLib;
+      const out = await PDFDocument.create();
+      const a4 = $('pdf-page').value === 'a4';
+      for (let i = 0; i < group.length; i++) {
+        const it = current = group[i];
+        if (it.kind === 'pdf') {
+          let src;
+          try { src = await PDFDocument.load(await it.file.arrayBuffer()); } catch (_) { throw new Error('err.pdf'); }
+          (await out.copyPages(src, src.getPageIndices())).forEach((pg) => out.addPage(pg));
+        } else {
+          let img;
+          try { img = await imageForPdf(it.file); } catch (e) { throw new Error(e && e.message === 'err.encode' ? 'err.encode' : 'err.decode'); }
+          const emb = img.png ? await out.embedPng(img.bytes) : await out.embedJpg(img.bytes);
+          if (a4) {
+            const PW = 595.28, PH = 841.89, M = 24;
+            const k = Math.min((PW - 2 * M) / img.w, (PH - 2 * M) / img.h);
+            const dw = img.w * k, dh = img.h * k;
+            out.addPage([PW, PH]).drawImage(emb, { x: (PW - dw) / 2, y: (PH - dh) / 2, width: dw, height: dh });
+          } else {
+            const pg = out.addPage([img.w * 0.75, img.h * 0.75]);
+            pg.drawImage(emb, { x: 0, y: 0, width: pg.getWidth(), height: pg.getHeight() });
+          }
+        }
+        group.forEach((g) => setProgress(g, (i + 1) / (group.length + 1)));
+        await new Promise((r) => setTimeout(r));
+      }
+      const bytes = await out.save();
+      const first = group[0];
+      first.blob = new Blob([bytes], { type: 'application/pdf' });
+      first.name = 'vinhx-merged.pdf';
+      first.state = 'done';
+      group.slice(1).forEach((g) => { g.state = 'done'; g.merged = true; });
+    } catch (e) {
+      const msg = e && e.message && e.message.startsWith('err.') ? e.message : 'err.pdf';
+      group.forEach((g) => { g.state = 'ready'; });
+      const bad = msg === 'err.lib' || !current ? group[0] : current;
+      bad.state = 'error';
+      bad.error = msg;
+    }
+    renderList();
+  }
+
   async function runItem(it) {
     it.state = 'working';
     it.progress = 0;
     it.error = '';
     if (it.url) { URL.revokeObjectURL(it.url); it.url = null; }
     it.blob = null;
+    it.merged = false;
+    it.kept = false;
     renderList();
     try {
       const out = it.kind === 'image' ? await convertImage(it)
@@ -574,9 +723,21 @@
     busy = true;
     renderAll();
     const used = new Set();
+    const inPdf = (it) => it.kind === 'pdf' || (it.kind === 'image' && imgFmt.value === 'pdf');
+    const runnable = (it) => !(it.state === 'error' && (!it.kind || it.error === 'err.big'));
+    const group = items.filter((it) => inPdf(it) && runnable(it));
+    let groupDone = false;
     for (const it of items.slice()) {
-      if (it.state === 'error' && !it.kind) continue;
-      if (it.state === 'error' && it.error === 'err.big') continue;
+      if (!runnable(it)) continue;
+      if (inPdf(it)) {
+        if (groupDone) continue;
+        groupDone = true;
+        if (group.length === 1 && group[0].kind === 'pdf') { group[0].state = 'error'; group[0].error = 'err.pdf1'; renderList(); }
+        else await runPdfGroup(group);
+        const first = group[0];
+        if (first.blob) { used.add(first.name); }
+        continue;
+      }
       await runItem(it);
       if (it.blob) { // unique names inside the zip
         let n = it.name; let k = 1;
@@ -681,6 +842,7 @@
   window.addEventListener('dragover', (e) => e.preventDefault());
   window.addEventListener('drop', (e) => { if (!drop.contains(e.target)) e.preventDefault(); });
 
+  imgFmt.addEventListener('change', syncOpts);
   audFmt.addEventListener('change', syncOpts);
   vidFmt.addEventListener('change', syncOpts);
   $('img-q').addEventListener('input', () => { $('img-q-val').textContent = $('img-q').value; });
@@ -694,7 +856,33 @@
   });
   window.addEventListener('beforeunload', (e) => { if (busy) { e.preventDefault(); e.returnValue = ''; } });
 
+  // ---- tool shortcuts: preset the options and the file picker for a common job ----
+  const TOOLS = {
+    convert: { accept: 'image/*,audio/*,video/*,application/pdf,.pdf' },
+    compress: { accept: 'image/*', img: 'same' },
+    gif: { accept: 'video/*', vid: 'gif' },
+    pdf: { accept: 'application/pdf,.pdf,image/*', img: 'pdf' }
+  };
+  let tool = 'convert';
+  function setTool(name, openPicker) {
+    if (!TOOLS[name]) name = 'convert';
+    tool = name;
+    const cfg = TOOLS[name];
+    input.accept = cfg.accept;
+    if (cfg.img) imgFmt.value = cfg.img;
+    if (cfg.vid) vidFmt.value = cfg.vid;
+    syncOpts();
+    document.querySelectorAll('.tool').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tool === name)));
+    const hint = $('tool-hint');
+    hint.hidden = name === 'convert';
+    hint.textContent = name === 'convert' ? '' : t('th.' + name);
+    try { history.replaceState(null, '', name === 'convert' ? location.pathname : '#' + name); } catch (_) { /* ignore */ }
+    if (openPicker) input.click();
+  }
+  document.querySelectorAll('.tool').forEach((b) => b.addEventListener('click', () => setTool(b.dataset.tool, true)));
+
   probeCapabilities();
   applyLang(lang);
+  setTool(location.hash.slice(1), false);
   renderAll();
 })();

@@ -440,10 +440,32 @@
   const fileOf = (it) => `gb${it.id}.txt`;
   const onShelf = (it) => books.find((b) => b.fileName === fileOf(it) || b.fileName === `pg${it.id}.epub`);
 
-  // Typeset cover: title and author on paper; the real cover image (if it loads) sits on top.
-  function fillCover(box, title, author, url) {
+  // Cover: a generated landscape (library/covers.js) with the title and author typeset over it.
+  // A real cover image is only used for books you added yourself (the EPUB's own cover).
+  const artOfItem = (it) => (window.VXCover ? window.VXCover.get(it.id || it.t, it.g) : null);
+  function artOfBook(b) {
+    if (!window.VXCover) return null;
+    if (b.cover && !/gutenberg\.org/.test(b.cover)) return null;
+    const c = CATALOG.find((x) => 'gb' + x.id === b.sig);
+    return window.VXCover.get(c ? c.id : (b.sig || b.id), c && c.g);
+  }
+  function bgOf(b) {
+    const art = artOfBook(b);
+    if (!art && !b.cover) return null;
+    const bg = document.createElement('div');
+    bg.className = 'bbg' + (art ? ' art' : '');
+    bg.style.backgroundImage = art ? art.uri : `url("${b.cover}")`;
+    return bg;
+  }
+  function fillCover(box, title, author, url, art) {
     box.textContent = '';
     box.classList.add('tcover');
+    if (art) {
+      box.classList.add('tc-art');
+      box.style.backgroundImage = art.uri;
+      box.style.setProperty('--ti', art.title);
+      box.style.setProperty('--au', art.author);
+    }
     const tt = document.createElement('span'); tt.className = 'tc-t'; tt.textContent = title;
     const ta = document.createElement('span'); ta.className = 'tc-a'; ta.textContent = author || '';
     box.append(tt, ta);
@@ -531,15 +553,11 @@
     box.append(h, p, actionFor(it));
   }
 
-  // A real cover photo cropped to the spine's width, sitting under the title text; removes
-  // itself if it fails to load so the hue-tinted spine stays the fallback.
-  function addSpineCover(box, url) {
-    if (!url) return;
-    const im = document.createElement('img');
-    im.alt = ''; im.decoding = 'async'; im.loading = 'lazy'; im.className = 'spine-cover';
-    im.addEventListener('error', () => im.remove());
-    im.src = url;
-    box.appendChild(im);
+  // The generated art, cropped to the spine's width, sitting under the vertical title.
+  function addSpineCover(box, art) {
+    if (!art) return;
+    box.classList.add('has-art');
+    box.style.backgroundImage = art.uri;
   }
 
   function renderShelfStrip(list) {
@@ -551,12 +569,12 @@
       d.setAttribute('role', 'listitem');
       d.style.setProperty('--h', Array.from(it.t).reduce((n, c) => n + c.charCodeAt(0), 0) % 360);
       if (i === catIdx) {
-        fillCover(d, it.t, it.a, it.id ? coverOf(it) : '');
+        fillCover(d, it.t, it.a, '', artOfItem(it));
       } else {
         const span = document.createElement('span');
         span.textContent = titleOf(it);
         d.appendChild(span);
-        if (it.id) addSpineCover(d, coverOf(it));
+        addSpineCover(d, artOfItem(it));
       }
       d.addEventListener('click', () => setActiveSpine(i, list));
       box.appendChild(d);
@@ -572,7 +590,7 @@
       const cv = document.createElement('div');
       cv.className = 'cover';
       cv.setAttribute('aria-hidden', 'true');
-      fillCover(cv, it.t, it.a, it.id ? coverOf(it) : '');
+      fillCover(cv, it.t, it.a, '', artOfItem(it));
       const h = document.createElement('h3');
       h.textContent = titleOf(it);
       const p = document.createElement('p');
@@ -722,14 +740,15 @@
       const li = document.createElement('li');
       li.className = 'book';
       li.style.setProperty('--h', Array.from(b.id).reduce((n, c) => n + c.charCodeAt(0), 0) % 360);
-      if (b.cover) { const bg = document.createElement('div'); bg.className = 'bbg'; bg.style.backgroundImage = `url("${b.cover}")`; li.appendChild(bg); }
+      const bgl = bgOf(b);
+      if (bgl) li.appendChild(bgl);
 
       const cover = document.createElement('div');
       cover.className = 'cover';
       cover.setAttribute('aria-hidden', 'true');
       const hue = Array.from(b.id).reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
       cover.style.setProperty('--h', hue);
-      fillCover(cover, b.title, b.author, b.cover);
+      fillCover(cover, b.title, b.author, artOfBook(b) ? '' : b.cover, artOfBook(b));
 
       const info = document.createElement('div');
       info.className = 'binfo';
@@ -933,10 +952,11 @@
     const d = document.createElement('header');
     d.className = 'rbanner';
     d.style.setProperty('--h', Array.from(b.id).reduce((n, c) => n + c.charCodeAt(0), 0) % 360);
-    if (b.cover) { const bg = document.createElement('div'); bg.className = 'bbg'; bg.style.backgroundImage = `url("${b.cover}")`; d.appendChild(bg); }
+    const bgr = bgOf(b);
+    if (bgr) { d.appendChild(bgr); if (bgr.classList.contains('art')) d.classList.add('has-art'); }
     const th = document.createElement('div');
     th.className = 'rb-cover';
-    fillCover(th, b.title, b.author, b.cover);
+    fillCover(th, b.title, b.author, artOfBook(b) ? '' : b.cover, artOfBook(b));
     const tx = document.createElement('div');
     const h = document.createElement('p'); h.className = 'rb-title'; h.textContent = b.title;
     const m = document.createElement('p'); m.className = 'rb-meta'; m.textContent = `${b.author ? b.author + ' · ' : ''}${b.chapters.length} ${t('ch.n')}`;

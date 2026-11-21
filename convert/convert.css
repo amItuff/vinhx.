@@ -70,3 +70,11 @@
   .cv { padding-bottom: 40px; }
   .cv-actions .btn { flex: 1 1 100%; }
 }
+
+.tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.tool { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: rgba(255, 255, 255, 0.78); font: inherit; font-size: 0.78rem; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+.tool:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.tool[aria-pressed="true"] { background: #fff; color: #0a0a0a; border-color: #fff; font-weight: 600; }
+.tool-hint { margin: 0 0 12px; line-height: 1.55; }
+.fbtns .icon-btn:disabled { opacity: 0.3; cursor: default; }
+@media (max-width: 560px) { .tool { flex: 1 1 calc(50% - 8px); text-align: center; } }
