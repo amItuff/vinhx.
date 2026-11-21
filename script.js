@@ -54,6 +54,7 @@ const STRINGS = {
     'about.status': 'Nhận làm freelance',
     'about.text': 'Mình là <strong>Vinh (vinhx)</strong>. Chuyên viết bot Discord, script tự động hóa bằng Python và xây dựng giao diện web tối giản, tốc độ cao.',
     'about.contact': 'Gửi tin nhắn',
+    'about.services': 'Dịch vụ',
     'projects.badge': 'Dự án nổi bật',
     'faq.badge': 'Câu hỏi thường gặp',
     'faq.q1': 'Ghi chú trên vinhx note có an toàn không?',
@@ -164,6 +165,7 @@ const STRINGS = {
     'about.status': 'Available for freelance',
     'about.text': 'I\'m <strong>Vinh (vinhx)</strong>. I build Discord bots, Python automation scripts and minimal, fast websites.',
     'about.contact': 'Send a message',
+    'about.services': 'Services',
     'projects.badge': 'Featured projects',
     'faq.badge': 'FAQ',
     'faq.q1': 'Is vinhx note safe?',
@@ -1125,4 +1127,38 @@ fetch('/changelog.json', { cache: 'no-cache' })
     img.src = BG_GIF;
   };
   if (document.readyState === 'complete') attach(); else window.addEventListener('load', attach, { once: true });
+})();
+
+// --- "?mail=web|bot|auto|tool|other" (links from /freelance): open the compose window with a starting subject and outline ---
+(() => {
+  let key;
+  try { key = new URLSearchParams(location.search).get('mail'); } catch (_) { return; }
+  const PLANS = {
+    web: { vi: ['Báo giá: web cá nhân / landing page', ['Mình muốn làm một trang web. Thông tin ban đầu:', 'Mục đích của trang:', 'Phong cách mong muốn (kèm link tham khảo nếu có):', 'Thời gian cần xong:']],
+           en: ['Quote: personal site / landing page', ["I'd like a website. Some details:", 'What the page is for:', 'Style I like (with reference links if any):', 'When I need it:']] },
+    bot: { vi: ['Báo giá: bot Discord', ['Mình cần một bot Discord. Thông tin ban đầu:', 'Server dùng để làm gì:', 'Các tính năng cần có:', 'Thời gian cần xong:']],
+           en: ['Quote: Discord bot', ['I need a Discord bot. Some details:', 'What the server is for:', 'Features I need:', 'When I need it:']] },
+    auto: { vi: ['Báo giá: script tự động hóa', ['Mình muốn tự động hóa một việc. Thông tin ban đầu:', 'Việc đang làm thủ công:', 'File / nguồn dữ liệu đầu vào:', 'Kết quả mong muốn:']],
+            en: ['Quote: automation script', ['I want to automate a task. Some details:', 'The manual task today:', 'Input files / data source:', 'The result I want:']] },
+    tool: { vi: ['Báo giá: công cụ chạy trên trình duyệt', ['Mình cần một công cụ web nhỏ. Thông tin ban đầu:', 'Công cụ dùng để làm gì:', 'Người dùng sẽ làm những bước nào:', 'Thời gian cần xong:']],
+            en: ['Quote: in-browser tool', ['I need a small web tool. Some details:', 'What it is for:', 'The steps a user would take:', 'When I need it:']] },
+    other: { vi: ['Mình có việc cần làm', ['Chào Vinh, mình muốn nhờ bạn làm:', 'Mô tả công việc:', 'Thời gian cần xong:']],
+             en: ['I have a job for you', ["Hi Vinh, I'd like to ask you to build:", 'Job description:', 'When I need it:']] }
+  };
+  if (!key || !PLANS[key]) return;
+  const [subject, lines] = PLANS[key][lang === 'en' ? 'en' : 'vi'];
+  try { history.replaceState(null, '', location.pathname + location.hash); } catch (_) {}
+  const run = () => {
+    enterSite(false);
+    openGmail();
+    contactForm.elements.subject.value = subject;
+    if (!editor.textContent.trim()) {
+      editor.textContent = '';
+      lines.forEach((l, n) => { const d = document.createElement('div'); d.textContent = l; editor.appendChild(d); if (n === 0) editor.appendChild(document.createElement('br')); });
+      syncMessage();
+    }
+    const f = contactForm.elements;
+    setTimeout(() => (f.email.value ? editor : f.email).focus({ preventScroll: true }), 80);
+  };
+  setTimeout(run, 400);
 })();

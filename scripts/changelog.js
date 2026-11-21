@@ -61,6 +61,7 @@ try {
   const PAGES = {
     'https://vinhx.info/': ['index.html', 'style.css', 'script.js'],
     'https://vinhx.info/convert': ['convert'],
+    'https://vinhx.info/freelance': ['freelance'],
     'https://vinhx.info/library': ['library/index.html', 'library/library.js', 'library/library.css', 'library/books']
   };
   let xml = fs.readFileSync(SITEMAP, 'utf8');

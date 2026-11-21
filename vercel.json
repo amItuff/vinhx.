@@ -21,6 +21,14 @@
     {
       "source": "/library",
       "destination": "/library/index.html"
+    },
+    {
+      "source": "/freelance",
+      "destination": "/freelance/index.html"
+    },
+    {
+      "source": "/convert/:tool",
+      "destination": "/convert/:tool/index.html"
     }
   ],
   "headers": [
