@@ -443,4 +443,4 @@ body[data-theme="sepia"] .rbanner .bbg.art, body[data-theme="light"] .rbanner .b
 body.has-tts .rnav { padding-bottom: 150px; }
 .page .speaking { background: var(--rmark); box-shadow: -6px 0 0 var(--rmark), 6px 0 0 var(--rmark); }
 #r-tts[aria-pressed="true"] { background: var(--rread); }
-@media (max-width: 560px) { #tts-voice { display: none; } .ttsbar select { max-width: 78px; } }
+@media (max-width: 560px) { .ttsbar { flex-wrap: wrap; justify-content: center; width: calc(100% - 20px); } .ttsbar select { max-width: 30%; } #tts-voice { flex: 1 1 100%; max-width: none; order: 9; } }

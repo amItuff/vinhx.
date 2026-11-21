@@ -3,7 +3,8 @@
   "buildCommand": "node scripts/build.js",
   "outputDirectory": "dist",
   "functions": {
-    "api/contact.js": { "includeFiles": "assets/{mail-banner,logo-96}.png" }
+    "api/contact.js": { "includeFiles": "assets/{mail-banner,logo-96}.png" },
+    "api/tts.js": { "maxDuration": 60 }
   },
   "rewrites": [
     {

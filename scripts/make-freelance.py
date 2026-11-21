@@ -152,7 +152,7 @@ w(f'''<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/base.css?v=6" />
-  <link rel="stylesheet" href="/freelance/freelance.css?v=3" />
+  <link rel="stylesheet" href="/freelance/freelance.css?v=4" />
   <script src="/freelance/freelance.js?v=1" defer></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>

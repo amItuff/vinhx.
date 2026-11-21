@@ -44,6 +44,7 @@
       'sy.off': 'Máy chủ chưa bật tính năng đồng bộ.', 'sy.net': 'Chưa đồng bộ được, sẽ tự thử lại.', 'sy.limit': 'Thao tác quá nhiều, hãy thử lại sau.', 'sy.joined': 'Đã kết nối', 'sy.left': 'Đã ngắt kết nối', 'sy.wiped': 'Đã xóa dữ liệu trên máy chủ',
       'sy.more': 'Còn sách chưa tải về, bấm Đồng bộ ngay để tải tiếp.',
       'st.title': 'Thói quen đọc', 'st.today': 'Hôm nay', 'st.min': 'phút', 'st.goal': 'Mục tiêu mỗi ngày', 'st.streak': 'ngày liên tiếp', 'st.week': 'Tuần này', 'st.hit': 'Đạt mục tiêu hôm nay!',
+      'tts.remote': 'VieNeu (máy chủ)', 'tts.remoteFail': 'Giọng VieNeu chưa phản hồi, tạm dùng giọng của trình duyệt.',
       'tts.on': 'Nghe đọc', 'tts.play': 'Phát', 'tts.pause': 'Tạm dừng', 'tts.prev': 'Đoạn trước', 'tts.next': 'Đoạn sau', 'tts.speed': 'Tốc độ', 'tts.voice': 'Giọng đọc', 'tts.sleep': 'Hẹn giờ tắt', 'tts.off': 'Không', 'tts.chapter': 'Hết chương', 'tts.none': 'Trình duyệt này chưa hỗ trợ nghe đọc.', 'tts.auto': 'Tự động', 'tts.min': 'phút', 'tts.close': 'Đóng nghe đọc',
       'ui.close': 'Đóng', 'ch.untitled': 'Phần',
       'cat.title': 'Kệ sách miễn phí',
@@ -86,6 +87,7 @@
       'sy.off': 'Sync is not switched on on the server.', 'sy.net': 'Could not sync, will retry automatically.', 'sy.limit': 'Too many requests, try again later.', 'sy.joined': 'Connected', 'sy.left': 'Disconnected', 'sy.wiped': 'Server data deleted',
       'sy.more': 'Some books are still to download. Press Sync now to continue.',
       'st.title': 'Reading habit', 'st.today': 'Today', 'st.min': 'min', 'st.goal': 'Daily goal', 'st.streak': 'day streak', 'st.week': 'This week', 'st.hit': 'Goal reached today!',
+      'tts.remote': 'VieNeu (server)', 'tts.remoteFail': 'The VieNeu voice did not respond, using the browser voice for now.',
       'tts.on': 'Read aloud', 'tts.play': 'Play', 'tts.pause': 'Pause', 'tts.prev': 'Previous paragraph', 'tts.next': 'Next paragraph', 'tts.speed': 'Speed', 'tts.voice': 'Voice', 'tts.sleep': 'Sleep timer', 'tts.off': 'Off', 'tts.chapter': 'End of chapter', 'tts.none': 'This browser does not support read aloud.', 'tts.auto': 'Automatic', 'tts.min': 'min', 'tts.close': 'Close read aloud',
       'ui.close': 'Close', 'ch.untitled': 'Part',
       'cat.title': 'Free bookshelf',
@@ -1692,6 +1694,46 @@
     const score = (v) => (/natural|neural|online/i.test(v.name) ? 3 : 0) + (/hoaimy|namminh|google|siri|premium|enhanced/i.test(v.name) ? 2 : 0) + (v.localService ? 0 : 1);
     return (match.length ? match : all).slice().sort((x, y) => score(y) - score(x));
   }
+  // VieNeu-TTS server behind /api/tts (optional): found out once, the first time the read-aloud bar opens
+  const ttsRemote = { configured: false, voices: [], default: '', asked: false, failedAt: 0 };
+  let ttsAudio = null;
+  const ttsCache = new Map();
+  async function askRemote() {
+    if (ttsRemote.asked) return;
+    ttsRemote.asked = true;
+    try {
+      const r = await fetch('/api/tts');
+      const j = await r.json();
+      ttsRemote.configured = !!j.configured;
+      ttsRemote.voices = Array.isArray(j.voices) ? j.voices : [];
+      ttsRemote.default = j.default || '';
+    } catch (_) { /* stays off */ }
+    fillVoices();
+  }
+  // which VieNeu voice to use for the current text, or null for the browser voice
+  function remoteVoice() {
+    if (!ttsRemote.configured || Date.now() - ttsRemote.failedAt < 300000) return null;
+    if (prefs.voice && prefs.voice.startsWith('vx:')) return prefs.voice.slice(3);
+    if (!prefs.voice && /^vi/i.test(page.lang || (current && current.lang) || '')) return ttsRemote.default || ttsRemote.voices[0] || '';
+    return null;
+  }
+  function remoteFetch(text, voice) {
+    const key = voice + '|' + text;
+    if (ttsCache.has(key)) return ttsCache.get(key);
+    const p = fetch('/api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, voice }) })
+      .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.blob(); });
+    ttsCache.set(key, p);
+    p.catch(() => ttsCache.delete(key));
+    if (ttsCache.size > 8) ttsCache.delete(ttsCache.keys().next().value);
+    return p;
+  }
+  // the sentence that will be read after this one, fetched while the current one plays
+  function peekNext() {
+    if (ttsC + 1 < ttsChunks.length) return ttsChunks[ttsC + 1];
+    const nx = current && current.chapters[chIdx].blocks[ttsIdx + 1] ? (textOf(ttsIdx + 1) || '').trim() : '';
+    return nx ? splitChunks(nx)[0] : '';
+  }
+
   function fillVoices() {
     const sel = $('tts-voice');
     if (!sel) return;
@@ -1700,8 +1742,14 @@
     const auto = document.createElement('option');
     auto.value = ''; auto.textContent = t('tts.auto');
     sel.appendChild(auto);
+    if (ttsRemote.configured) {
+      const grp = document.createElement('optgroup');
+      grp.label = t('tts.remote');
+      (ttsRemote.voices.length ? ttsRemote.voices : [ttsRemote.default || '']).forEach((n) => { const o = document.createElement('option'); o.value = 'vx:' + n; o.textContent = n || 'VieNeu'; grp.appendChild(o); });
+      sel.appendChild(grp);
+    }
     list.forEach((v) => { const o = document.createElement('option'); o.value = v.name; o.textContent = `${v.name} (${v.lang})`; sel.appendChild(o); });
-    sel.value = list.some((v) => v.name === prefs.voice) ? prefs.voice : '';
+    sel.value = Array.from(sel.options).some((o) => o.value === prefs.voice) ? prefs.voice : '';
   }
   if (ttsOk && synth.addEventListener) synth.addEventListener('voiceschanged', fillVoices);
 
@@ -1710,6 +1758,7 @@
     ttsToken++;
     ttsOn = false;
     ttsSleepAt = 0;
+    if (ttsAudio) ttsAudio.pause();
     if (ttsOk) synth.cancel();
     clearSpeaking();
     updateTtsUi();
@@ -1717,6 +1766,7 @@
   function ttsPause() {
     ttsToken++;
     ttsOn = false;
+    if (ttsAudio) ttsAudio.pause();
     if (ttsOk) synth.cancel();
     updateTtsUi();
   }
@@ -1752,14 +1802,38 @@
     clearSpeaking();
     const el = page.querySelector(`[data-i="${ttsIdx}"]`);
     if (el) { el.classList.add('speaking'); if (ttsC === 0) { const r = el.getBoundingClientRect(); if (r.top < 80 || r.bottom > innerHeight - 90) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
+    const tok = ++ttsToken;
+    const next = () => { if (tok !== ttsToken || !ttsOn) return; ttsC++; ttsSpeak(); };
+    const rv = remoteVoice();
+    if (rv !== null) {
+      if (!ttsAudio) ttsAudio = new Audio();
+      const audio = ttsAudio;
+      const fallback = () => {
+        if (tok !== ttsToken) return;
+        ttsRemote.failedAt = Date.now();
+        showToast(t('tts.remoteFail'));
+        ttsC = Math.max(0, ttsC); // read this sentence again with the browser voice
+        ttsSpeak();
+      };
+      remoteFetch(ttsChunks[ttsC], rv).then((blob) => {
+        if (tok !== ttsToken) return;
+        const url = URL.createObjectURL(blob);
+        audio.onended = () => { URL.revokeObjectURL(url); next(); };
+        audio.onerror = () => { URL.revokeObjectURL(url); fallback(); };
+        audio.src = url;
+        audio.playbackRate = Math.max(0.5, Math.min(2, Number(prefs.rate) || 1));
+        audio.play().catch(fallback);
+        const ahead = peekNext();
+        if (ahead) remoteFetch(ahead, rv).catch(() => {});
+      }).catch(fallback);
+      return;
+    }
     const u = new SpeechSynthesisUtterance(ttsChunks[ttsC]);
     u.lang = page.lang || current.lang || 'en';
     u.rate = Math.max(0.5, Math.min(2.5, Number(prefs.rate) || 1));
     const vs = ttsVoices();
     const v = vs.find((x) => x.name === prefs.voice) || (vs[0] && (vs[0].lang || '').slice(0, 2).toLowerCase() === (u.lang || '').slice(0, 2).toLowerCase() ? vs[0] : null);
     if (v) { u.voice = v; u.lang = v.lang; }
-    const tok = ++ttsToken;
-    const next = () => { if (tok !== ttsToken || !ttsOn) return; ttsC++; ttsSpeak(); };
     u.onend = next;
     u.onerror = (e) => { if (tok !== ttsToken) return; if (e && (e.error === 'interrupted' || e.error === 'canceled')) return; next(); };
     synth.cancel();
@@ -1769,6 +1843,11 @@
     if (!ttsOk || !current) { showToast(t('tts.none')); return; }
     if (!ttsChunks.length) { ttsIdx = firstVisibleIndex(); ttsLoadParagraph(); }
     ttsOn = true;
+    if (ttsRemote.configured) { // a click is what lets the browser play sound later, so touch the audio element now
+      if (!ttsAudio) ttsAudio = new Audio();
+      ttsAudio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=';
+      ttsAudio.play().catch(() => {});
+    }
     updateTtsUi();
     ttsSpeak();
   }
@@ -1798,14 +1877,14 @@
   $('r-tts').addEventListener('click', () => {
     if (!ttsOk) { showToast(t('tts.none')); return; }
     ttsOpen = !ttsOpen;
-    if (ttsOpen) { fillVoices(); $('tts-speed').value = String(prefs.rate || 1); } else ttsStop();
+    if (ttsOpen) { fillVoices(); askRemote(); $('tts-speed').value = String(prefs.rate || 1); } else ttsStop();
     updateTtsUi();
   });
   $('tts-close').addEventListener('click', () => { ttsOpen = false; ttsStop(); });
   $('tts-play').addEventListener('click', () => { if (ttsOn) ttsPause(); else ttsPlay(); });
   $('tts-prev').addEventListener('click', () => ttsSkip(-1));
   $('tts-next').addEventListener('click', () => ttsSkip(1));
-  $('tts-speed').addEventListener('change', () => { prefs.rate = Number($('tts-speed').value) || 1; savePrefs(); });
+  $('tts-speed').addEventListener('change', () => { prefs.rate = Number($('tts-speed').value) || 1; savePrefs(); if (ttsAudio && ttsOn) ttsAudio.playbackRate = prefs.rate; });
   $('tts-voice').addEventListener('change', () => { prefs.voice = $('tts-voice').value; savePrefs(); });
   $('tts-sleep').addEventListener('change', () => {
     const v = $('tts-sleep').value;
